@@ -1,0 +1,8 @@
+.*\.pyc$
+^regisry/virt_regisry/*
+^regisry/tmp/*
+^regisry/fab-tmp/*
+^regisry/scratch/*
+^regisry/log/*
+^regisry/virtualenv*
+^.*appsettings*
