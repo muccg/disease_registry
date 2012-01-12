@@ -128,6 +128,12 @@ MODULE_INSTALLED_APPS = {
     },
 }
 
+INSTALLED_APPS.extend( [
+    'groups',
+    'patients',
+    'genetic'
+])
+
 INSTALLED_APPS.extend(MODULE_INSTALLED_APPS[INSTALL_NAME].keys())
 
 
