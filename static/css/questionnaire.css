@@ -1,0 +1,109 @@
+/*
+#container {
+    margin-top: 5em;
+}
+*/
+#blurb {
+    font-style: italic;
+    margin-bottom: 1em;
+}
+
+form {
+    display: table; /* IE6,7 doesn't understand this */
+    margin-bottom: 1em;
+}
+
+form .row {
+    display: table-row; /* IE6,7 doesn't understand this */
+}
+
+form .row.required label {
+    font-weight: bold;
+}
+
+form .cell, form label {
+    display: table-cell;
+    vertical-align: top;
+    padding: 0.6ex 0.6ex;
+}
+
+form label {
+    padding-right: 1em;
+}
+
+form label:after {
+    content: ":";
+}
+
+form .help-text {
+    font-size: 80%;
+    color: #888;
+}
+
+form .row.odd {
+    background: #eee;
+}
+
+form .row.error .cell, form .row.error label {
+    padding-top: 0;
+}
+
+form .row.error input, form .row.error select, form .row.error textarea {
+    border: solid 2px #400;
+}
+
+form .row.error-message {
+    border-bottom: none;
+    color: #400;
+    font-style: italic;
+}
+
+form .row.error-message .cell {
+    padding-bottom: 0;
+}
+
+form fieldset {
+    margin-bottom: 1em;
+}
+
+div.patient {
+    margin-bottom: 1em;
+    font-size: 1.1em;
+}
+
+div.patient span.familyname, div.patient span.givennames {
+    font-weight: bold;
+}
+
+div.subform {
+    width: 100%;
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+    border: 1px solid grey;
+}
+div.subform div.label {
+    padding: 3px;
+    background-color: #DDD;
+    border-bottom: 1px solid grey;
+    font-weight: bold;
+}
+div.subform div.content div.row {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+div.requirednote {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    font-size: 0.9em;
+}
+
+div.requirednote span {
+    font-weight: bold;
+}
+
+ul.errorlist li {
+    color: #400;
+    font-style: italic;
+}
+/* vim: set nocin ai et ts=4 sw=4: */

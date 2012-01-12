@@ -1,0 +1,24 @@
+<%inherit file="base.html" />
+
+<%def name="head()">
+    ${form.media}
+</%def>
+
+<%def name="content()">
+    <h2>Myotonic Dystrophy Questionnaire</h2>
+
+    <div id="blurb">
+        TODO: Any preamble that needs to be attached to the questionnaire.
+    </div>
+
+    <form method="POST">
+        ${self.output_form(form)}
+
+        <div class="row submit">
+            <div class="cell"></div>
+            <div class="cell">
+                <input type="submit" value="Continue">
+            </div>
+        </div>
+    </form>
+</%def>
