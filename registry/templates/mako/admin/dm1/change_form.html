@@ -6,7 +6,7 @@
 ${ media }
 </%def>${self.block_extrahead()}
 
-${self.block_stylesheet()}<%def name="block_stylesheet()">${admin.admin_media_prefix()}css/forms.css</%def>
+${self.block_stylesheet()}<%def name="block_stylesheet()">${admin_media_prefix()}css/forms.css</%def>
 
 ${self.block_coltype()}<%def name="block_coltype()">
 % if ordered_objects:
@@ -151,6 +151,10 @@ ${ sl.submit_line( submit_row(context) ) }
    <script type="text/javascript">document.getElementById("${adminform.first_field().auto_id}").focus();</script>
 
 % endif
+
+<%doc>
+## FJ JUST FOR DEBUG EXCEPTION DURING MAGO 1.2 to 1.3 migration
+</%doc>
 
 <%namespace file="admin/prepopulated_fields_js.html" name="ppf"/>
 <%

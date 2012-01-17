@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Django settings defaults 
+Django settings defaults
 """
 import os
-from ccg.utils import webhelpers 
+from ccg.utils import webhelpers
 from ccg.utils.webhelpers import url
 
 # SCRIPT_NAME isnt set when not under wsgi
@@ -18,7 +18,7 @@ DEBUG = True
 DEV_SERVER = True
 SITE_ID = 1
 APPEND_SLASH = True
-SSL_ENABLED = False 
+SSL_ENABLED = False
 
 # Locale
 TIME_ZONE = 'Australia/Perth'
@@ -95,7 +95,7 @@ LOGIN_REDIRECT_URL = url('/admin')
 
 
 #session and cookies
-MADAS_SESSION_TIMEOUT = 1800 #30 minute session timeout 
+MADAS_SESSION_TIMEOUT = 1800 #30 minute session timeout
 SESSION_COOKIE_PATH = url('/')
 SESSION_SAVE_EVERY_REQUEST = True
 CSRF_COOKIE_NAME = "csrftoken_registry"
@@ -110,8 +110,8 @@ SITE_NAME = 'dm1'
 SECRET_KEY = 'qj#tl@9@7((%^)$i#iyw0gcfzf&#a*pobgb8yr#1%65+*6!@g$'
 EMAIL_APP_NAME = "Registry "
 
-INSTALL_NAME = 'dmd'
-#INSTALL_NAME = 'dm1'
+#INSTALL_NAME = 'dmd'
+INSTALL_NAME = 'dm1'
 #INSTALL_NAME = 'sma'
 INSTALL_FULL_NAMES = {'dmd': 'Australian National Duchenne Muscular Dystrophy',
                       'sma': 'Australian Spinal Muscular Atrophy',
@@ -137,14 +137,15 @@ INSTALLED_APPS.extend( [
 INSTALLED_APPS.extend(MODULE_INSTALLED_APPS[INSTALL_NAME].keys())
 
 
+# use this for DM1 as well
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': '<your database name here>',
-        'USER': '<your database user here>',
-        'PASSWORD': '<your database user password here>',
-        'HOST': '<your database host here>',                      
-        'PORT': '',                      
+        'NAME': 'dev_dmd_registry',
+        'HOST': '127.0.0.1',
+        'PORT': '',
+        'USER': 'admin',
+        'PASSWORD': 'admin',
     }
 }
 
@@ -241,8 +242,8 @@ except ImportError, e:
     pass
 
 APP_TITLES = MODULE_INSTALLED_APPS[INSTALL_NAME]
-DATABASES['default'] = DATABASES[INSTALL_NAME]
+#DATABASES['default'] = DATABASES[INSTALL_NAME] # FJ
 SECRET_KEY = "%s_%s" % (SECRET_KEY, INSTALL_NAME)
-MEMCACHE_KEYSPACE = "%s_%s" % (INSTALL_NAME, MEMCACHE_KEYSPACE)
-EMAIL_APP_NAME = "%s %s" % (INSTALL_NAME.upper(), EMAIL_APP_NAME)
+#MEMCACHE_KEYSPACE = "%s_%s" % (INSTALL_NAME, MEMCACHE_KEYSPACE)
+EMAIL_APP_NAME = "%s %s" % (INSTALL_NAME.upper(), EMAIL_APP_NAME) # FJ
 CSRF_COOKIE_NAME = "%s_%s" % (CSRF_COOKIE_NAME, INSTALL_NAME)
