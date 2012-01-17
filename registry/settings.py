@@ -137,16 +137,56 @@ INSTALLED_APPS.extend( [
 INSTALLED_APPS.extend(MODULE_INSTALLED_APPS[INSTALL_NAME].keys())
 
 
-# use this for DM1 as well
+# there is no default setup here as one of these configs should be made 'default' by the settings
 DATABASES = {
-    'default': {
+    'dmd': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dev_dmd_registry',
-        'HOST': '127.0.0.1',
+        'USER': '<your db user>',
+        'NAME': '<your db name>',
+        'PASSWORD': '<your db password>', 
+        'HOST': '<your db host>',                    
         'PORT': '',
-        'USER': 'admin',
-        'PASSWORD': 'admin',
-    }
+    },
+    'dmd_archive': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': '<your db user>',
+        'NAME': '<your db name>',
+        'PASSWORD': '<your db password>', 
+        'HOST': '<your db host>',                    
+        'PORT': '',
+    },    
+    'sma': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': '<your db user>',
+        'NAME': '<your db name>',
+        'PASSWORD': '<your db password>', 
+        'HOST': '<your db host>',                    
+        'PORT': '',
+    },
+    'sma_archive': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': '<your db user>',
+        'NAME': '<your db name>',
+        'PASSWORD': '<your db password>', 
+        'HOST': '<your db host>',                    
+        'PORT': '',
+    },
+    'dm1': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': '<your db user>',
+        'NAME': '<your db name>',
+        'PASSWORD': '<your db password>', 
+        'HOST': '<your db host>',                    
+        'PORT': '',
+    },
+    'dm1_archive': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': '<your db user>',
+        'NAME': '<your db name>',
+        'PASSWORD': '<your db password>', 
+        'HOST': '<your db host>',                    
+        'PORT': '',
+    }    
 }
 
 ##
@@ -242,8 +282,8 @@ except ImportError, e:
     pass
 
 APP_TITLES = MODULE_INSTALLED_APPS[INSTALL_NAME]
-#DATABASES['default'] = DATABASES[INSTALL_NAME] # FJ
+DATABASES['default'] = DATABASES[INSTALL_NAME]
 SECRET_KEY = "%s_%s" % (SECRET_KEY, INSTALL_NAME)
-#MEMCACHE_KEYSPACE = "%s_%s" % (INSTALL_NAME, MEMCACHE_KEYSPACE)
-EMAIL_APP_NAME = "%s %s" % (INSTALL_NAME.upper(), EMAIL_APP_NAME) # FJ
+MEMCACHE_KEYSPACE = "%s_%s" % (INSTALL_NAME, MEMCACHE_KEYSPACE)
+EMAIL_APP_NAME = "%s %s" % (INSTALL_NAME.upper(), EMAIL_APP_NAME)
 CSRF_COOKIE_NAME = "%s_%s" % (CSRF_COOKIE_NAME, INSTALL_NAME)
