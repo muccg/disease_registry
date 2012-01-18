@@ -128,10 +128,12 @@ MODULE_INSTALLED_APPS = {
     },
 }
 
+#The ordering of these apps is important - they have been done in such a way that
+#python manage.py migrate --all will work.
 INSTALLED_APPS.extend( [
     'groups',
     'patients',
-    'genetic'
+    'genetic',
 ])
 
 INSTALLED_APPS.extend(MODULE_INSTALLED_APPS[INSTALL_NAME].keys())
