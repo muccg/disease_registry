@@ -1,16 +1,12 @@
 Create database.
-LOCALDEV=1 python manage.py syncdb
-LOCALDEV=1 python manage.py loaddata fixtures/permissions.json
-LOCALDEV=1 python manage.py loaddata fixtures/initial_data.json
+python manage.py syncdb
+python manage.py migrate --all
 
-
-Now load the gene mutation list from the Internet:
-LOCALDEV=1 python manage.py importgenes 
-
-Or if you have a file already:
-LOCALDEV=1 python manage.py importgenes [filename]
-
-
+This also loads the genetic information from the Internet, 
+negating the need to run the following command:
+    LOCALDEV=1 python manage.py importgenes 
+    Or if you have a file already:
+    LOCALDEV=1 python manage.py importgenes [filename]
 
 Check permissions:
 Clinical:

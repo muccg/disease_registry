@@ -158,7 +158,7 @@ ${ sl.submit_line( submit_row(context) ) }
 
 <%namespace file="admin/prepopulated_fields_js.html" name="ppf"/>
 <%
-    from django.contrib.admin.templatetags.admin_modify import prepopulated_fields_js
+    from django.contrib.admin.templatetags.mako.admin_modify import prepopulated_fields_js
 %>
 
 ${ ppf.prepopulated_fields(*prepopulated_fields_js(context)) }

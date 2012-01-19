@@ -34,46 +34,6 @@ class User(models.Model):
         user.delete()
 
 
-class IPRange(models.Model):
-    working_group = models.ForeignKey(WorkingGroup)
-    address = models.IPAddressField()
-    netmask = models.IPAddressField()
-
-    class Meta:
-        ordering = ["working_group__name", "address", "netmask"]
-        verbose_name = "IP access range"
-        verbose_name_plural = "IP access ranges"
-
-    def __unicode__(self):
-        return "%s/%s" % (self.address, self.netmask)
-
-    def match(self, match):
-        """Quick and dirty function to check if an IP address matches this
-        record.
-
-        This doesn't deal particularly gracefully with non-CIDR netmasks, by
-        which I mean it breaks horribly.
-        """
-
-        # Actually convert the relevant IP addresses into numbers.
-        match = ip.to_int(match)
-        address = ip.to_int(self.address)
-
-        # Being a mask, we actually need the inverse of the netmask.
-        netmask = ip.to_int(self.netmask) ^ 0xffffffff
-
-        # Get the start of the subnet.
-        address -= (address % (netmask + 1))
-
-        return (match >= address and match <= (address + netmask))
-
-    def save(self, *args, **kwargs):
-        if ip.is_cidr_netmask(self.netmask):
-            super(IPRange, self).save(*args, **kwargs)
-        else:
-            raise ValueError("Invalid netmask")
-
-
 # Signal handlers.
 
 from django.db.models.signals import post_save
