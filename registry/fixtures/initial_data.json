@@ -1,0 +1,45 @@
+[
+    {
+        "pk": 1, 
+        "model": "groups.workinggroup", 
+        "fields": {
+            "name": "Western Australia"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "groups.user", 
+        "fields": {
+            "working_group": 1, 
+            "title": "Co-ordinator"
+        }
+    }, 
+    {
+        "pk": "Australia", 
+        "model": "patients.country", 
+        "fields": {}
+    }, 
+    {
+        "pk": "WA", 
+        "model": "patients.state", 
+        "fields": {
+            "country": "Australia", 
+            "name": "Western Australia"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "patients.doctor", 
+        "fields": {
+            "family_name": "Jones", 
+            "speciality": "General Practitioner", 
+            "surgery_name": "", 
+            "phone": "", 
+            "suburb": "Perth", 
+            "state": "WA", 
+            "address": "1 Smith St", 
+            "email": "", 
+            "given_names": "John"
+        }
+    }
+]
