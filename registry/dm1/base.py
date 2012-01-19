@@ -226,8 +226,14 @@ class Muscle(models.Model):
         ("mild", "Yes, mildly"),
         ("no", "No"),
     )
+    EFFECT_CHOICES = (
+        ("yes", "Yes"),
+        ("no", "No"),
+    )
 
     myotonia = models.CharField(max_length=6, choices=MUSCLE_CHOICES, help_text="Does myotonia currently have a negative effect on the patient’s daily activities?")
+    # TODO: uncomment, create migration script, syncdb & migrate
+    #myotonia_effect = models.CharField(max_length=6, choices=EFFECT_CHOICES, help_text="Does myotonia currently have a negative effect on the patient’s daily activities?")
 
     class Meta:
         abstract = True
@@ -374,9 +380,10 @@ class GeneralMedicalFactors(models.Model):
     diabetesage = models.IntegerField(null=True, blank=True, help_text="Leave blank if you do not suffer from diabetes", verbose_name='Age at diagnosis')
 
     pneumonia = models.CharField(max_length=3, choices=YESNO_CHOICES, verbose_name="pneumonia")
-    pneumoniaage = models.IntegerField(null=True, blank=True, help_text="Age of first episode (leave blank if you have never suffered from pneumonia)")
+    pneumoniaage = models.IntegerField(null=True, blank=True, verbose_name="pneumonia age", help_text="Age of first episode (leave blank if you have never suffered from pneumonia)")
     pneumoniainfections = models.CharField(max_length=60, null=True, blank=True, verbose_name="Chest infections recent frequency")
 
+    # TODO: make sure all this fields about cancer are not required, since they are not in Questionnaire
     cancer = models.CharField(max_length=3, choices=YESNO_CHOICES, verbose_name="Has the patient been diagnosed with cancer or a tumour", help_text='Please tick the check box if the patient has been diagnosed with or identifies as having any of the following')
     cancertype = models.CharField(max_length=30, null=True, blank=True, choices=CANCER_TYPE_CHOICES, verbose_name="if yes, please choose from the following options in it")
     cancerothers = models.CharField(max_length=30, null=True, blank=True, verbose_name="Others")
@@ -391,6 +398,7 @@ class GeneralMedicalFactors(models.Model):
     cholesterol = models.BooleanField()
     cognitive_impairment = models.CharField(max_length=6, choices=COGNITIVE_CHOICES)
     psychological = models.BooleanField(verbose_name="psychological problems")
+
     anxiety = models.BooleanField()
     depression = models.BooleanField()
     apathy = models.BooleanField()
