@@ -141,10 +141,10 @@ INSTALLED_APPS.extend(MODULE_INSTALLED_APPS[INSTALL_NAME].keys())
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dev_dmd_registry',# use this for DM1 as well when using a local db
-        'HOST': '127.0.0.1',
-        'PASSWORD': 'admin',
-        'HOST': 'admin',
+        'USER': '<your db user>',
+        'NAME': '<your db name>',
+        'PASSWORD': '<your db password>',
+        'HOST': '<your db host>',
         'PORT': '',
     },
     'dmd_archive': {
