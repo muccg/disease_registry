@@ -62,10 +62,15 @@ class Diagnosis(models.Model):
     affectedstatus = models.CharField(max_length=30, choices=AFFECTED_STATUS_CHOICES, verbose_name='Affected Status')
     first_symptom = models.CharField('What was the first symptom that prompted the diagnosis of Myotonic dystrophy', max_length=50, choices=FIRST_SYMPTOM_CHOICES)
     first_suspected_by = models.CharField(max_length=50, choices=FIRST_SUSPECTED_CHOICES)
+    # 2012-01-18: CAUTION TODO: IMPORTANT: the question is reverse from the questionnaire in forms.py: undiagnosed = forms.BooleanField(label="Have you been clinically diagnosed with myotonic dystrophy")
     # trac 16 #62
     undiagnosed = models.BooleanField(verbose_name="Yet undiagnosed")
     age_at_clinical_diagnosis = models.IntegerField('age in years at clinical diagnosis', null=True, blank=True)
     age_at_molecular_diagnosis = models.IntegerField('age in years at molecular diagnosis', null=True, blank=True)
+
+    @property
+    def diagnosed(self):
+        return not self.diagnosed
 
     class Meta:
         abstract = True
@@ -135,7 +140,7 @@ class Surgery(models.Model):
     #cataract = models.NullBooleanField(verbose_name="cataract surgery")
     cataract = models.CharField(max_length=1, choices=UYN_CHOICES, verbose_name="cataract surgery", null=True, blank=True)
 
-    cataract_age = models.IntegerField(verbose_name="age at cataract surgery", null=True, blank=True, help_text="Age at which cataract surgery performed")
+    cataract_age = models.IntegerField(verbose_name="age at cataract surgery", null=True, blank=True, help_text="Age at which cataract surgery was performed")
 
     class Meta:
         abstract = True

@@ -9,7 +9,6 @@ from patients.models import Country, State
 import dm1.models
 import patients.models
 
-
 class ApproveMixin(object):
     """
     A mixin that can be dropped in to add an approve() method to a Django model
@@ -73,7 +72,7 @@ class Patient(ApproveMixin, models.Model):
     mobile_phone = models.CharField(max_length=30, blank=True, null=True)
     work_phone = models.CharField(max_length=30, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
-    
+
     class Meta:
         ordering = ["family_name", "given_names", "date_of_birth"]
         verbose_name = "Online Questionnaire"   # Appears in Admin UI: Site Administration
@@ -99,7 +98,7 @@ class Patient(ApproveMixin, models.Model):
         )
         for old, new in fields:
             setattr(o, new, getattr(self, old))
-        
+
         o.save(force_insert=True)
 
         # Approve the diagnosis as well.
@@ -115,6 +114,8 @@ class Patient(ApproveMixin, models.Model):
 
 class Diagnosis(ApproveMixin, base.Diagnosis):
     patient = models.OneToOneField(Patient, primary_key=True)
+    # cannot override a field in Django
+    #first_symptom = models.CharField('What was the first symptom that prompted your diagnosis', db_column='first_symptom_derived', max_length=50, choices=base.Diagnosis.FIRST_SYMPTOM_CHOICES)
 
     class Meta:
         #verbose_name_plural = "diagnoses"

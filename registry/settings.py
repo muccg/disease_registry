@@ -136,19 +136,6 @@ INSTALLED_APPS.extend( [
 
 INSTALLED_APPS.extend(MODULE_INSTALLED_APPS[INSTALL_NAME].keys())
 
-
-# use this for DM1 as well
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dev_dmd_registry',
-        'HOST': '127.0.0.1',
-        'PORT': '',
-        'USER': 'admin',
-        'PASSWORD': 'admin',
-    }
-}
-
 ##
 ## LOGGING
 ##
@@ -242,7 +229,7 @@ except ImportError, e:
     pass
 
 APP_TITLES = MODULE_INSTALLED_APPS[INSTALL_NAME]
-#DATABASES['default'] = DATABASES[INSTALL_NAME] # FJ
+DATABASES['default'] = DATABASES[INSTALL_NAME] # FJ
 SECRET_KEY = "%s_%s" % (SECRET_KEY, INSTALL_NAME)
 #MEMCACHE_KEYSPACE = "%s_%s" % (INSTALL_NAME, MEMCACHE_KEYSPACE)
 EMAIL_APP_NAME = "%s %s" % (INSTALL_NAME.upper(), EMAIL_APP_NAME) # FJ

@@ -37,7 +37,7 @@ form label:after {
 
 form .help-text {
     font-size: 80%;
-    color: #888;
+    color: #444; /* FJ was #888 */
 }
 
 form .row.odd {

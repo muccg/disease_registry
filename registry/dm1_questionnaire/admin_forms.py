@@ -11,6 +11,7 @@ from utils.stripspaces import stripspaces
 
 
 class DiagnosisForm(forms.ModelForm):
+
     def __init__(self, *args, **kwargs):
         super(DiagnosisForm, self).__init__(*args, **kwargs)
         # make the patient field static if not a new diagnosis
@@ -97,4 +98,3 @@ class PatientForm(forms.ModelForm):
         if exists:
             raise forms.ValidationError('There is already a patient with the same family and given names in this working group: "%s %s %s".' % (familyname, givennames, workinggroup))
         return cleaneddata
-
