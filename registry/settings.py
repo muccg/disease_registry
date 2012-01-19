@@ -128,14 +128,65 @@ MODULE_INSTALLED_APPS = {
     },
 }
 
+#The ordering of these apps is important - they have been done in such a way that
+#python manage.py migrate --all will work.
 INSTALLED_APPS.extend( [
     'groups',
     'patients',
-    'genetic'
+    'genetic',
 ])
 
 INSTALLED_APPS.extend(MODULE_INSTALLED_APPS[INSTALL_NAME].keys())
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'dev_dmd_registry',# use this for DM1 as well when using a local db
+        'HOST': '127.0.0.1',
+        'PASSWORD': 'admin',
+        'HOST': 'admin',
+        'PORT': '',
+    },
+    'dmd_archive': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': '<your db user>',
+        'NAME': '<your db name>',
+        'PASSWORD': '<your db password>',
+        'HOST': '<your db host>',
+        'PORT': '',
+    },
+    'sma': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': '<your db user>',
+        'NAME': '<your db name>',
+        'PASSWORD': '<your db password>',
+        'HOST': '<your db host>',
+        'PORT': '',
+    },
+    'sma_archive': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': '<your db user>',
+        'NAME': '<your db name>',
+        'PASSWORD': '<your db password>',
+        'HOST': '<your db host>',
+        'PORT': '',
+    },
+    'dm1': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': '<your db user>',
+        'NAME': '<your db name>',
+        'PASSWORD': '<your db password>',
+        'HOST': '<your db host>',
+        'PORT': '',
+    },
+    'dm1_archive': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': '<your db user>',
+        'NAME': '<your db name>',
+        'PASSWORD': '<your db password>',
+        'HOST': '<your db host>',
+    }
+}
 ##
 ## LOGGING
 ##
@@ -229,8 +280,8 @@ except ImportError, e:
     pass
 
 APP_TITLES = MODULE_INSTALLED_APPS[INSTALL_NAME]
-DATABASES['default'] = DATABASES[INSTALL_NAME] # FJ
+DATABASES['default'] = DATABASES[INSTALL_NAME]
 SECRET_KEY = "%s_%s" % (SECRET_KEY, INSTALL_NAME)
-#MEMCACHE_KEYSPACE = "%s_%s" % (INSTALL_NAME, MEMCACHE_KEYSPACE)
-EMAIL_APP_NAME = "%s %s" % (INSTALL_NAME.upper(), EMAIL_APP_NAME) # FJ
+MEMCACHE_KEYSPACE = "%s_%s" % (INSTALL_NAME, MEMCACHE_KEYSPACE)
+EMAIL_APP_NAME = "%s %s" % (INSTALL_NAME.upper(), EMAIL_APP_NAME)
 CSRF_COOKIE_NAME = "%s_%s" % (CSRF_COOKIE_NAME, INSTALL_NAME)

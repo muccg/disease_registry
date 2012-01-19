@@ -10,10 +10,6 @@ from admin_forms import *
 from models import *
 
 
-class IPRangeAdmin(admin.ModelAdmin):
-    search_fields = ["address"]
-
-
 def list_username(user):
     return user.user.username
 list_username.short_description = "Username"
@@ -204,6 +200,5 @@ class WorkingGroupAdmin(admin.ModelAdmin):
     search_fields = ["name"]
 
 
-admin.site.register(IPRange, IPRangeAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(WorkingGroup, WorkingGroupAdmin)
