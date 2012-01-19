@@ -128,12 +128,27 @@ class HeartMedicationForm(forms.ModelForm):
 
 
 class RespiratoryForm(forms.ModelForm):
+    VENTILATION_CHOICES = (('', "-------"),) + base.Respiratory.VENTILATION_CHOICES
+    VENTILATION_TYPE_CHOICES = (('', "-------"),) + base.Respiratory.VENTILATION_TYPE_CHOICES
+
+    non_invasive_ventilation = forms.CharField(widget=Select(choices=VENTILATION_CHOICES), label="Do you use a mechanical ventilation device (eg nasal or buccal mask)")
+    age_non_invasive_ventilation = forms.IntegerField(label='If you use a ventilation device, at what age did you start using it', required=False, max_value=120, min_value=0)
+
+    non_invasive_ventilation_type = forms.CharField(required=False, label='If you use a ventilation device, what type', widget=Select(choices=VENTILATION_TYPE_CHOICES))
+    invasive_ventilation = forms.CharField(widget=Select(choices=VENTILATION_CHOICES), label="Do you use a tracheostomy for ventilation")
+
     class Meta:
-        exclude = ("diagnosis",)
+        exclude = ("diagnosis", "fvc", "fvc_date")
         model = models.Respiratory
 
 
 class MuscleForm(forms.ModelForm):
+    # keep in sync with base.Surgery.UYN_CHOICES
+    MYOTONIA_CHOICES = (('', "---"), ('N', 'No'), ('Y', 'Yes'))
+    myotonia = forms.CharField(widget=Select(choices=MYOTONIA_CHOICES), label="Do you have problems with slow relaxation of muscles")
+    # TODO: create the 'myotonia_effect' field in base and syncdb-migrate
+    myotonia_effect = forms.CharField(widget=Select(choices=MYOTONIA_CHOICES), label="Do problems with slow relaxation of muscles currently have a negative effect on your normal daily activities")
+
     class Meta:
         exclude = ("diagnosis",)
         model = models.Muscle
@@ -146,12 +161,21 @@ class MuscleMedicationForm(forms.ModelForm):
 
 
 class FeedingFunctionForm(forms.ModelForm):
+    # keep in sync with base.FeedingFunction.UYN_CHOICES
+    DYSPHAGIA_CHOICES = (('', "---"), ('N', 'No'), ('Y', 'Yes'))
+    dysphagia = forms.CharField(widget=Select(choices=DYSPHAGIA_CHOICES), label="Do you have difficulty swallowing")
+
+    gastric_nasal_tube = forms.CharField(widget=Select(choices=DYSPHAGIA_CHOICES), label="Do you use a nasogastric or nasojejunal tube, or a gastrostomy for additional meal supplementation")
+
     class Meta:
         exclude = ("diagnosis",)
         model = models.FeedingFunction
 
 
 class FatigueForm(forms.ModelForm):
+    FATIGUE_CHOICES = (('', "---"), ('N', 'No'), ('Y', 'Yes'))
+    fatigue = forms.CharField(widget=Select(choices=FATIGUE_CHOICES), label="Does fatigue or daytime sleepiness currently have a negative effect on your normal daily activities")
+
     class Meta:
         exclude = ("diagnosis",)
         model = models.Fatigue
@@ -164,20 +188,55 @@ class FatigueMedicationForm(forms.ModelForm):
 
 
 class SocioeconomicFactorsForm(forms.ModelForm):
+    EDUCATION_CHOICES = (('', "-------"),) + base.SocioeconomicFactors.EDUCATION_CHOICES
+    education = forms.CharField(label="What is the highest level of education you have achieved", widget=Select(choices=EDUCATION_CHOICES))
+
+    OCCUPATION_CHOICES = (('', "-------"),) + base.SocioeconomicFactors.OCCUPATION_CHOICES
+    occupation = forms.CharField(label="What is your occupation", widget=Select(choices=OCCUPATION_CHOICES))
+
+    EFFECT_CHOICES = (('', "-------"),) + base.SocioeconomicFactors.EFFECT_CHOICES
+    employment_effect = forms.CharField(label="Has myotonic dystrophy affected your employment", widget=Select(choices=EFFECT_CHOICES))
+
+    comments = forms.CharField(required=False, widget=Textarea(attrs={"cols": 60, "rows": 3}))
+
     class Meta:
         exclude = ("diagnosis",)
         model = models.SocioeconomicFactors
 
 
 class GeneralMedicalFactorsForm(forms.ModelForm):
+    DIABETES_CHOICES = ( # keep in sync with base.GeneralMedicalFactors.DIABETES_CHOICES
+        ('', "-------"),
+        ('No', 'Not diagnosed'),
+        ('SugarIntolerance', 'Have sugar intolerance but not diabetes'),
+        ('Type1', 'Yes, Type 1 Diabetes'),
+        ('Type2', 'Yes, Type 2 Diabetes'),
+    )
+    YESNO_CHOICES = (('', "---"),) + base.GeneralMedicalFactors.YESNO_CHOICES
+
+    diabetes = forms.CharField(label="Have you been diagnosed with diabetes", widget=Select(choices=DIABETES_CHOICES))
+    diabetesage = forms.IntegerField(required=False, label='Age at diagnosis')
+
+    pneumonia = forms.CharField(label="Have you ever suffered from pneumonia, if yes please give the age when you first had it", widget=Select(choices=YESNO_CHOICES))
+    pneumoniaage = forms.IntegerField(label='Age of first episode', required=False, max_value=120, min_value=0)
+
+    # TODO: add this field to base!
+    medicalert = forms.CharField(label="Do you wear a Medicalert bracelet", widget=Select(choices=YESNO_CHOICES))
+
     class Meta:
-        exclude = ("diagnosis",)
+        exclude = ("diagnosis","cancer", "cancertype","cancerothers","cancerorgan","liver","miscarriage","gor","gall_bladder",
+                   "infection","sexual_dysfunction","constipation","cholesterol","cognitive_impairment","psychological","endocrine","obgyn",
+                   "anxiety","depression","apathy")
         model = models.GeneralMedicalFactors
 
 
 class GeneticTestDetailsForm(forms.ModelForm):
+    YESNO_CHOICES = (('', "---"), ('Y', 'Yes'), ('N', 'No'))
+
+    details = forms.CharField(label="Have you had a genetic test for myotonic dystrophy", widget=Select(choices=YESNO_CHOICES))
+
     class Meta:
-        exclude = ("diagnosis",)
+        exclude = ("diagnosis", "laboratory")
         model = models.GeneticTestDetails
         widgets = {
             "test_date": LubricatedDateWidget(years=-10),
@@ -185,6 +244,23 @@ class GeneticTestDetailsForm(forms.ModelForm):
 
 
 class EthnicOriginForm(forms.ModelForm):
+    ORIGIN_CHOICES = (
+        ('', "---"),
+        ("atsi", "Aboriginal or Torres Strait Islander"),
+        ("black", "Black African/African American"),
+        ("caucasian", "Caucasian/European"),
+        ("chinese", "Chinese"),
+        ("indian", "Indian"),
+        ("maori", "Maori"),
+        ("meastern", "Middle eastern"),
+        ("pacific", "Pacific island person"),
+        ("asian", "Other Asian"),
+        ("other", "Other"),
+        ("unknown", "Decline to answer"),
+    )
+
+    ethnic_origin = forms.CharField(label="How would you describe your ethnic origin", widget=Select(choices=ORIGIN_CHOICES))
+
     class Meta:
         exclude = ("diagnosis",)
         model = models.EthnicOrigin

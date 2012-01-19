@@ -39,7 +39,7 @@ def clinical(request):
         ("Respiratory Function", RespiratoryForm, save_default),
         ("Muscle Function", MuscleForm, save_default),
         #("Muscle Medication", MuscleMedicationForm, save_default),
-        ("Feeding Function", FeedingFunctionForm, save_default),
+        ("Difficulties Eating", FeedingFunctionForm, save_default), # 2012-01-19 Trac 16 DM1 Questionnaire #44
         ("Fatigue", FatigueForm, save_default),
         #("Fatigue Medication", FatigueMedicationForm, save_default),
         ("Socio-Economic Factors", SocioeconomicFactorsForm, save_default),
