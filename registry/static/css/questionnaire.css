@@ -8,6 +8,40 @@
     margin-bottom: 1em;
 }
 
+#consent-title {
+    text-align: center;
+}
+
+#patient-information {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    padding-left: 0.5em;
+    margin-bottom: 1em;
+    -webkit-margin-after: 1em;
+    background-color: #99FFFF;
+}
+
+#consent h4 {
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 0.1em;
+}
+
+#consent p, #consent div {
+    -webkit-margin-before: 0.1em;
+    -webkit-margin-after: 0.7em;
+    text-align: justify;
+}
+
+p#patient-information-p {
+    -webkit-margin-before: 1em;
+    margin-top: 1em;
+}
+
+#consent #footnotes p, #footnotes h4, #consent ul {
+    -webkit-margin-before: 0.5em;
+    -webkit-margin-after: 0.5em;
+}
+
 form {
     display: table; /* IE6,7 doesn't understand this */
     margin-bottom: 1em;
@@ -21,20 +55,22 @@ form .row.required label {
     font-weight: bold;
 }
 
-form .cell, form label {
+/*form .cell, form label {*/
+form .cell {
     display: table-cell;
     vertical-align: top;
     padding: 0.6ex 0.6ex;
 }
 
 form label {
-    padding-right: 1em;
+    padding-left: .5em;
+    padding-right: .5em;
 }
-
+/*
 form label:after {
     content: ":";
 }
-
+*/
 form .help-text {
     font-size: 80%;
     color: #444; /* FJ was #888 */
@@ -102,8 +138,100 @@ div.requirednote span {
     font-weight: bold;
 }
 
+
 ul.errorlist li {
     color: #400;
     font-style: italic;
 }
+
+/*
+form#consent-form {
+    width: 100%;
+}
+*/
+
+table#informed-consent, table#signature {
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+table#signature {
+    border-spacing: 0px;
+}
+
+table#informed-consent caption {
+    background-color: #99FFFF;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding-top: 6px;
+    padding-bottom: 4px;
+    font-weight: bold;
+}
+
+table#informed-consent td {
+    border: solid grey 1px;
+    padding: 5px;
+}
+
+/*
+table#signature td {
+    padding: 0px;
+}
+*/
+table#signature input, table#doctors input {
+    padding-top: 3px;
+    padding-bottom: 2px;
+}
+
+table#informed-consent td.numbered {
+    vertical-align: top;
+}
+
+table#informed-consent label {
+    white-space: nowrap;
+    padding-left: 3px;
+}
+
+table#informed-consent ul, table#signature ul {
+    color: black;
+    background-color: #FF6347;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    padding-left: 7px;
+    padding-right:0;
+    list-style-type: none;
+    padding-bottom: 4px;
+    padding-top: 4px;
+    font-style: italic;
+}
+
+table#informed-consent li, table#signature li {
+    color: black;
+}
+
+table#signature td.fieldlabel {
+    text-align: right;
+}
+
+table#doctors td.fieldlabel {
+    text-align: right;
+    vertical-align: top;
+}
+
+form#consent-form input, form#consent-form textarea {
+    border: solid 1px #BBBBBB;
+}
+
+/* to display the form validation error at the top of the index.html form */
+div#validation-errors {
+    background-color: #FF6347;
+    font-weight: bold;
+    font-size: 1.4em;
+    padding-left: 10px;
+    padding-bottom: 4px;
+    padding-top: 4px;
+}
+
 /* vim: set nocin ai et ts=4 sw=4: */
