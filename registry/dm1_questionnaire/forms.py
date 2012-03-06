@@ -12,8 +12,77 @@ from patients.models import Patient as RegistryPatient
 from utils.stripspaces import stripspaces
 
 class ConsentForm(forms.Form):
-    consent = forms.BooleanField(required=True)
+    CHOICES = (('N', 'NO'), ('Y', 'YES'))
+    DATE_FORMATS = ('%d-%m-%Y', '%d/%m/%Y', '%d/%m/%y')
 
+    # the default should be None, so none of the 2 radio buttons are selected, forcing the user to select one
+    q1 = forms.ChoiceField(widget=RadioSelect, choices=CHOICES, required=True)
+    q2 = forms.ChoiceField(widget=RadioSelect, choices=CHOICES, required=True)
+    q3 = forms.ChoiceField(widget=RadioSelect, choices=CHOICES, required=True)
+    q4 = forms.ChoiceField(widget=RadioSelect, choices=CHOICES, required=True)
+    q5 = forms.ChoiceField(widget=RadioSelect, choices=CHOICES, required=True)
+    q6 = forms.ChoiceField(widget=RadioSelect, choices=CHOICES, required=True)
+    q7 = forms.ChoiceField(widget=RadioSelect, choices=CHOICES, required=True)
+
+    firstname = forms.CharField(max_length=60, required = True, initial='')
+    lastname = forms.CharField(max_length=60, required = True, initial='')
+    consentdate = forms.DateField(required = True, input_formats=DATE_FORMATS, initial='')
+
+    firstnameparentguardian = forms.CharField(max_length=60, required = False, initial='')
+    lastnameparentguardian = forms.CharField(max_length=60, required = False, initial='')
+    consentdateparentguardian =  forms.DateField(required = False, input_formats=DATE_FORMATS, initial='')
+
+    # use that instead of a relation and a formset, just to get it up and running
+    # this data is probably not gooing to be re-used
+    doctor_0 = forms.CharField(max_length=60, required = False, initial='')
+    doctoraddress_0 = forms.CharField(max_length=60, required = False, initial='')
+    doctortelephone_0 = forms.CharField(max_length=20, required = False, initial='')
+    specialist_0 = forms.CharField(max_length=60, required = False, initial='')
+
+    doctor_1 = forms.CharField(max_length=60, required = False, initial='')
+    doctoraddress_1 = forms.CharField(max_length=60, required = False, initial='')
+    doctortelephone_1 = forms.CharField(max_length=20, required = False, initial='')
+    specialist_1 = forms.CharField(max_length=60, required = False, initial='')
+
+    doctor_2 = forms.CharField(max_length=60, required = False, initial='')
+    doctoraddress_2 = forms.CharField(max_length=60, required = False, initial='')
+    doctortelephone_2 = forms.CharField(max_length=20, required = False, initial='')
+    specialist_2 = forms.CharField(max_length=60, required = False, initial='')
+
+    doctor_3 = forms.CharField(max_length=60, required = False, initial='')
+    doctoraddress_3 = forms.CharField(max_length=60, required = False, initial='')
+    doctortelephone_3 = forms.CharField(max_length=20, required = False, initial='')
+    specialist_3 = forms.CharField(max_length=60, required = False, initial='')
+
+    doctor_4 = forms.CharField(max_length=60, required = False, initial='')
+    doctoraddress_4 = forms.CharField(max_length=60, required = False, initial='')
+    doctortelephone_4 = forms.CharField(max_length=20, required = False, initial='')
+    specialist_4 = forms.CharField(max_length=60, required = False, initial='')
+
+    doctor_5 = forms.CharField(max_length=60, required = False, initial='')
+    doctoraddress_5 = forms.CharField(max_length=60, required = False, initial='')
+    doctortelephone_5 = forms.CharField(max_length=20, required = False, initial='')
+    specialist_5 = forms.CharField(max_length=60, required = False, initial='')
+
+    doctor_6 = forms.CharField(max_length=60, required = False, initial='')
+    doctoraddress_6 = forms.CharField(max_length=60, required = False, initial='')
+    doctortelephone_6 = forms.CharField(max_length=20, required = False, initial='')
+    specialist_6 = forms.CharField(max_length=60, required = False, initial='')
+
+    doctor_7 = forms.CharField(max_length=60, required = False, initial='')
+    doctoraddress_7 = forms.CharField(max_length=60, required = False, initial='')
+    doctortelephone_7 = forms.CharField(max_length=20, required = False, initial='')
+    specialist_7 = forms.CharField(max_length=60, required = False, initial='')
+
+    doctor_8 = forms.CharField(max_length=60, required = False, initial='')
+    doctoraddress_8 = forms.CharField(max_length=60, required = False, initial='')
+    doctortelephone_8 = forms.CharField(max_length=20, required = False, initial='')
+    specialist_8 = forms.CharField(max_length=60, required = False, initial='')
+
+    doctor_9 = forms.CharField(max_length=60, required = False, initial='')
+    doctoraddress_9 = forms.CharField(max_length=60, required = False, initial='')
+    doctortelephone_9 = forms.CharField(max_length=20, required = False, initial='')
+    specialist_9 = forms.CharField(max_length=60, required = False, initial='')
 
 class DiagnosisForm(forms.ModelForm):
     # keep that in sync with base.py and add the null option
@@ -111,10 +180,16 @@ class SurgeryForm(forms.ModelForm):
 
 class HeartForm(forms.ModelForm):
     HEART_CHOICES = (('', "-------"),) + base.Heart.HEART_CHOICES
+    YN_CHOICES = (('', "---"), ('N', 'No'), ('Y', 'Yes'))
 
     condition = forms.CharField(label="Do you have a heart condition", widget=Select(choices=HEART_CHOICES))
     age_at_diagnosis = forms.IntegerField(label='At what age were you diagnosed with a heart condition', required=False, max_value=120, min_value=0)
 
+    # Trac 16 DM1 Questionnaire Item 35, new fields
+    # TODO: implement in Base.model to map them to Registry
+    racing = forms.CharField(label="Do you experience your heart racing or beating irregularly", widget=Select(choices=YN_CHOICES))
+    palpitations = forms.CharField(label="or heart palpitations", widget=Select(choices=YN_CHOICES))
+    fainting = forms.CharField(label="or black-outs or fainting", widget=Select(choices=YN_CHOICES))
 
     class Meta:
         exclude = ('diagnosis', 'ecg', 'ecg_sinus_rhythm', 'ecg_pr_interval', 'ecg_qrs_duration', 'ecg_examination_date',
@@ -147,7 +222,7 @@ class MuscleForm(forms.ModelForm):
     MYOTONIA_CHOICES = (('', "---"), ('N', 'No'), ('Y', 'Yes'))
     myotonia = forms.CharField(widget=Select(choices=MYOTONIA_CHOICES), label="Do you have problems with slow relaxation of muscles")
     # TODO: create the 'myotonia_effect' field in base and syncdb-migrate
-    myotonia_effect = forms.CharField(widget=Select(choices=MYOTONIA_CHOICES), label="Do problems with slow relaxation of muscles currently have a negative effect on your normal daily activities")
+    myotonia_effect = forms.CharField(required=False, widget=Select(choices=MYOTONIA_CHOICES), label="Do problems with slow relaxation of muscles currently have a negative effect on your normal daily activities")
 
     class Meta:
         exclude = ("diagnosis",)
@@ -174,7 +249,13 @@ class FeedingFunctionForm(forms.ModelForm):
 
 class FatigueForm(forms.ModelForm):
     FATIGUE_CHOICES = (('', "---"), ('N', 'No'), ('Y', 'Yes'))
+    DOZING_CHOICES = (('', "-------"),) + models.Fatigue.DOZING_CHOICES
     fatigue = forms.CharField(widget=Select(choices=FATIGUE_CHOICES), label="Does fatigue or daytime sleepiness currently have a negative effect on your normal daily activities")
+    sitting_reading = forms.IntegerField(label="Do you start to fall asleep in the following situations: Sitting and reading", widget=Select(choices=DOZING_CHOICES), required=False)
+
+    #hereonlyforcaption = forms.CharField(label="hereonlyforcaption")
+    # 'fields' ignored in the questionnaire form, must be an admin UI only thing
+    #fields = ['fatigue', 'hereonlyforcaption','watching_tv','sitting_reading','sitting_inactive_public','passenger_car','lying_down_afternoon','sitting_talking','sitting_quietly_lunch','in_car'];
 
     class Meta:
         exclude = ("diagnosis",)
@@ -234,6 +315,8 @@ class GeneticTestDetailsForm(forms.ModelForm):
     YESNO_CHOICES = (('', "---"), ('Y', 'Yes'), ('N', 'No'))
 
     details = forms.CharField(label="Have you had a genetic test for myotonic dystrophy", widget=Select(choices=YESNO_CHOICES))
+    counselling = forms.CharField(label="Have you received genetic counselling", widget=Select(choices=YESNO_CHOICES))
+    familycounselling = forms.CharField(label="Has any of your family members received genetic counselling", widget=Select(choices=YESNO_CHOICES))
 
     class Meta:
         exclude = ("diagnosis", "laboratory")
@@ -244,20 +327,7 @@ class GeneticTestDetailsForm(forms.ModelForm):
 
 
 class EthnicOriginForm(forms.ModelForm):
-    ORIGIN_CHOICES = (
-        ('', "---"),
-        ("atsi", "Aboriginal or Torres Strait Islander"),
-        ("black", "Black African/African American"),
-        ("caucasian", "Caucasian/European"),
-        ("chinese", "Chinese"),
-        ("indian", "Indian"),
-        ("maori", "Maori"),
-        ("meastern", "Middle eastern"),
-        ("pacific", "Pacific island person"),
-        ("asian", "Other Asian"),
-        ("other", "Other"),
-        ("unknown", "Decline to answer"),
-    )
+    ORIGIN_CHOICES = (('', "-------"),) + base.EthnicOrigin.ORIGIN_CHOICES
 
     ethnic_origin = forms.CharField(label="How would you describe your ethnic origin", widget=Select(choices=ORIGIN_CHOICES))
 
