@@ -3,20 +3,20 @@
     from django.utils import webhelpers
 %>
 
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <title>Australian Myotonic Dystrophy Registry &mdash; Questionnaire</title>
 
-        <link rel="stylesheet" type="text/css" href="${webhelpers.url('/static/css/%s.css' % settings.INSTALL_NAME)}">
-        <link rel="stylesheet" type="text/css" href="${webhelpers.url('/static/css/questionnaire.css')}">
+        <link rel="stylesheet" type="text/css" href="${webhelpers.url('/static/css/%s.css' % settings.INSTALL_NAME)}"/>
+        <link rel="stylesheet" type="text/css" href="${webhelpers.url('/static/css/questionnaire.css')}"/>
 
         <!--[if IE 6]>
-        <link rel="stylesheet" type="text/css" href="${webhelpers.url('/static/css/ie6.css')}">
+        <link rel="stylesheet" type="text/css" href="${webhelpers.url('/static/css/ie6.css')}"/>
         <![endif]-->
 
         <!--[if IE 7]>
-        <link rel="stylesheet" type="text/css" href="${webhelpers.url('/static/css/ie7.css')}">
+        <link rel="stylesheet" type="text/css" href="${webhelpers.url('/static/css/ie7.css')}"/>
         <![endif]-->
 
         ${self.head()}
@@ -28,19 +28,19 @@
 
         <div id="container">
             ${self.content()}
-        </div>
+        </div> <!-- id="container" -->
 
         <div id="footer-container">
             <div id="footer">
                 Authorised by Hugh Dawkins for the
                 <a href="http://www.genomics.health.wa.gov.au/">Office of Population Health Genomics</a>.
-                <br>
+                <br/>
                 All content &copy; 2011 <a href="http://www.genomics.health.wa.gov.au/">Office of Population Health Genomics</a> on behalf of the Australian Myotonic Dystrophy Registry.
-                <br>
+                <br/>
                 Supported by <a href="http://www.ivec.org/">iVEC</a> and the <a href="http://www.genomics.health.wa.gov.au/">Office of Population Health Genomics</a>.
-                <br>
+                <br/>
                 Developed and hosted by the <a href="http://ccg.murdoch.edu.au/">Centre for Comparative Genomics</a>, <a href="http://www.murdoch.edu.au/">Murdoch University</a>.
-                <br>
+                <br/>
                 <a href="${webhelpers.url('/admin/')}">Administration</a>
             </div>
         </div>
