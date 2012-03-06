@@ -2,7 +2,6 @@
 from __future__ import division
 from django.db import models
 
-
 # Base abstract models for fields common to the registry proper and
 # questionnaire.
 
@@ -284,6 +283,16 @@ class Fatigue(models.Model):
     )
 
     fatigue = models.CharField(null=True, blank=True, max_length=6, choices=FATIGUE_CHOICES, help_text="Does fatigue or daytime sleepiness currently have a negative effect on the patient’s normal daily activities?")
+
+    # Trac 16 DM1 Questionnaire #46
+    # We just want the label text, not the field as a general caption for the fields that follow
+    #hereonlyforcaption = forms.CharField(label="Do you start to fall asleep in the following situations")
+    #hereonlyforcaption = models.CharField(max_length=1, null=True, blank=True, help_text="Does the patient start to fall asleep in the following situations")
+
+    #def _get_hereonlyforcaption(self):
+    #    return "Y"
+    #hereonlyforcaption = property(_get_hereonlyforcaption)
+
     sitting_reading = models.IntegerField(verbose_name="sitting and reading", choices=DOZING_CHOICES, null=True, blank=True)
     watching_tv = models.IntegerField(verbose_name="watching TV", choices=DOZING_CHOICES, null=True, blank=True)
     sitting_inactive_public = models.IntegerField(verbose_name="sitting, inactive, in a public place", choices=DOZING_CHOICES, help_text="For example, at a theatre or in a meeting", null=True, blank=True)
@@ -428,6 +437,11 @@ class GeneticTestDetails(models.Model):
         ('N', 'No'),
     )
 
+    YES_NO_CHOICES = (
+        ('Y', 'Yes'),
+        ('N', 'No'),
+    )
+
     #details = models.NullBooleanField(verbose_name="details", help_text="Are details of genetic testing available?")
     details = models.CharField(max_length=1, choices=UYN_CHOICES, null=True, blank=True, help_text="Are details of genetic testing available?")
 
@@ -440,7 +454,12 @@ class GeneticTestDetails(models.Model):
 
     #test_date = models.DateField(null=True, blank=True, verbose_name="Genetic Test Date")
     test_date = models.DateField(verbose_name="Genetic Test Date", null=True, blank=True)
+    # not used in questionnaire, should we keep it in the registry?
     laboratory = models.CharField(max_length=256, null=True, blank=True)
+
+    # added for the questionnaire 2012-02-20
+    counselling = models.CharField(max_length=1, choices=YES_NO_CHOICES, null=True, blank=True, help_text="Has the patient received genetic counselling?")
+    familycounselling = models.CharField(max_length=1, choices=YES_NO_CHOICES, null=True, blank=True, help_text="Has any member of the patient's family received genetic counselling?")
 
     class Meta:
         abstract = True
@@ -448,17 +467,19 @@ class GeneticTestDetails(models.Model):
 
 class EthnicOrigin(models.Model):
     ORIGIN_CHOICES = (
-        ("atsi", "Aboriginal or Torres Strait Islander"),
-        ("black", "Black African/African American"),
-        ("caucasian", "Caucasian/European"),
-        ("chinese", "Chinese"),
-        ("indian", "Indian"),
-        ("maori", "Maori"),
-        ("meastern", "Middle eastern"),
-        ("pacific", "Pacific island person"),
-        ("asian", "Other Asian"),
-        ("other", "Other"),
-        ("unknown", "Decline to answer"),
+        # changed according to Trac 16 DM1 Questionnaire #64. Questionnaire and Registry options are made the same now
+        ("tsi", "Person from the Torres Strait Islands"),
+        ("abo", "Aboriginal"),
+        ("bla", "Black African/African American"),
+        ("cau", "Caucasian/European"),
+        ("chi", "Chinese"),
+        ("ind", "Indian"),
+        ("mao", "Maori"),
+        ("mea", "Middle Eastern"),
+        ("pac", "Person from the Pacific Islands"),
+        ("asi", "Other Asian"),
+        ("oth", "Other"),
+        ("dcl", "Decline to answer"),
     )
 
     ethnic_origin = models.CharField(null=True, blank=True, max_length=9, choices=ORIGIN_CHOICES, help_text="How does the patient describe their ethnic origin?")
