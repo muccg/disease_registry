@@ -150,7 +150,13 @@ def personal(request):
             request.session["patientform"] = postdata
             return HttpResponseRedirect("clinical")
     else:
-        initialvalues = {}
+        # get the first and last names form the consent form
+        consentformdata = request.session["consentform"]
+        familyname = consentformdata.get('lastname')
+        givennames = consentformdata.get('firstname')
+        print "familyname %s givennames %s" % (familyname, givennames)
+
+        initialvalues = {'family_name': familyname, 'given_names': givennames}
 
         # make the first working group in the database the default one if there is only one
         # TODO: add a 'default' attribute to WorkingGroup
@@ -181,14 +187,47 @@ def personal(request):
 
 def index(request):
     if request.method == "POST":
-        form = ConsentForm(request.POST)
+        #print "request: %s" % dir(request)
+        #print "request.REQUEST: %s" % dir(request.REQUEST)
+        print "request.REQUEST: %s" % request.REQUEST # prints the params
+        #print "request.POST: %s" % request.POST
 
+        form = ConsentForm(request.POST)
         if form.is_valid():
             # No need to save anything; merely consenting (which is enough for
             # this to be valid) is sufficient.
+            print "form consentdate: %s" % form.cleaned_data['consentdate']
+            print "form consentdateparentguardian: %s" % form.cleaned_data['consentdateparentguardian']
+            request.session["consentform"] = request.POST.copy() # keep the data for the "personal" & "clinical" views
+            
             return HttpResponseRedirect("personal")
+        else:
+            #print "dir form.errors: %s" % (dir(form.errors),)
+            print "form.errors %s" % (form.errors, )
+            #print "form.errors['q1'] %s" % (form.errors['q1'], )
+            #print "dir(form.errors['q1']) %s" % (dir(form.errors['q1']), )
+            #print "form.errors['q1'].as_text() %s" % (form.errors['q1'].as_text(), )
+            #print "views.index NOT VALID errors: %s\n" % form.errors
+            #print "views.index.form %s" % form
+            return render_to_response("dm1/questionnaire/index.html", {"form": form })
     else:
+        #print "views.index no POST"
         form = ConsentForm()
+
+    '''
+    print "form dir: %s" % (dir(form),)
+    print "form %s" % (form, )
+    print "form.fields: %s" % (form.fields, )
+    print "form['q1']: %s" % (form['q1'], )
+    print "form['q1'].value(): %s" % (form['q1'].value(), )
+    print "form['q1'].label: %s" % (form['q1'].label, )
+    print "form['q1'].label: %s" % (form['q1'].label, )
+    print "form['q1'].errors: %s" % (form['q1'].errors, )
+    print "form.fields.q1: %s" % (form.fields['q1'], )
+    print "form.fields['q1'].__class__.__name__: %s" % (form.fields['q1'].__class__.__name__, )
+    print "dir(form.fields['q1']): %s" % (dir(form.fields['q1']), )
+    print "form.fields['q1'].value(): %s" % (form.fields['q1'].value(), )
+    '''
 
     return render_to_response("dm1/questionnaire/index.html", {
         "form": form
