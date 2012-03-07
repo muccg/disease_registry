@@ -180,7 +180,7 @@ class SurgeryForm(forms.ModelForm):
 
 class HeartForm(forms.ModelForm):
     HEART_CHOICES = (('', "-------"),) + base.Heart.HEART_CHOICES
-    YN_CHOICES = (('', "---"), ('N', 'No'), ('Y', 'Yes'))
+    YN_CHOICES = (('', "---"),) + base.Heart.YN_CHOICES
 
     condition = forms.CharField(label="Do you have a heart condition", widget=Select(choices=HEART_CHOICES))
     age_at_diagnosis = forms.IntegerField(label='At what age were you diagnosed with a heart condition', required=False, max_value=120, min_value=0)
@@ -219,10 +219,10 @@ class RespiratoryForm(forms.ModelForm):
 
 class MuscleForm(forms.ModelForm):
     # keep in sync with base.Surgery.UYN_CHOICES
-    MYOTONIA_CHOICES = (('', "---"), ('N', 'No'), ('Y', 'Yes'))
-    myotonia = forms.CharField(widget=Select(choices=MYOTONIA_CHOICES), label="Do you have problems with slow relaxation of muscles")
+    YN_CHOICES = (('', "---"),) + base.Muscle.YN_CHOICES
+    myotonia = forms.CharField(widget=Select(choices=YN_CHOICES), label="Do you have problems with slow relaxation of muscles")
     # TODO: create the 'myotonia_effect' field in base and syncdb-migrate
-    myotonia_effect = forms.CharField(required=False, widget=Select(choices=MYOTONIA_CHOICES), label="Do problems with slow relaxation of muscles currently have a negative effect on your normal daily activities")
+    myotonia_effect = forms.CharField(required=False, widget=Select(choices=YN_CHOICES), label="Do problems with slow relaxation of muscles currently have a negative effect on your normal daily activities")
 
     class Meta:
         exclude = ("diagnosis",)
@@ -248,7 +248,7 @@ class FeedingFunctionForm(forms.ModelForm):
 
 
 class FatigueForm(forms.ModelForm):
-    FATIGUE_CHOICES = (('', "---"), ('N', 'No'), ('Y', 'Yes'))
+    FATIGUE_CHOICES = (('', "---"),) + models.Fatigue.YN_CHOICES
     DOZING_CHOICES = (('', "-------"),) + models.Fatigue.DOZING_CHOICES
     fatigue = forms.CharField(widget=Select(choices=FATIGUE_CHOICES), label="Does fatigue or daytime sleepiness currently have a negative effect on your normal daily activities")
     sitting_reading = forms.IntegerField(label="Do you start to fall asleep in the following situations: Sitting and reading", widget=Select(choices=DOZING_CHOICES), required=False)
@@ -294,6 +294,7 @@ class GeneralMedicalFactorsForm(forms.ModelForm):
         ('Type2', 'Yes, Type 2 Diabetes'),
     )
     YESNO_CHOICES = (('', "---"),) + base.GeneralMedicalFactors.YESNO_CHOICES
+    YESNOUNSURE_CHOICES = (('', "---"),) + base.GeneralMedicalFactors.YESNOUNSURE_CHOICES
 
     diabetes = forms.CharField(label="Have you been diagnosed with diabetes", widget=Select(choices=DIABETES_CHOICES))
     diabetesage = forms.IntegerField(required=False, label='Age at diagnosis')
@@ -302,7 +303,16 @@ class GeneralMedicalFactorsForm(forms.ModelForm):
     pneumoniaage = forms.IntegerField(label='Age of first episode', required=False, max_value=120, min_value=0)
 
     # TODO: add this field to base!
+    # done: added to base.py
     medicalert = forms.CharField(label="Do you wear a Medicalert bracelet", widget=Select(choices=YESNO_CHOICES))
+
+    #TODO: add this to base.py
+    physiotherapy = forms.CharField(label="Have you received any of the following? Physiotherapy", widget=Select(choices=YESNOUNSURE_CHOICES))
+    geneticcounseling = forms.CharField(label="Genetic counseling", widget=Select(choices=YESNOUNSURE_CHOICES))
+    psychologicalcounseling = forms.CharField(label="Emotional & psychological counseling", widget=Select(choices=YESNOUNSURE_CHOICES))
+    speechtherapy = forms.CharField(label="Speech therapy", widget=Select(choices=YESNOUNSURE_CHOICES))
+    occupationaltherapy = forms.CharField(label="Occupational therapy", widget=Select(choices=YESNOUNSURE_CHOICES))
+    vocationaltraining = forms.CharField(label="Vocational rehabilitation", widget=Select(choices=YESNOUNSURE_CHOICES))
 
     class Meta:
         exclude = ("diagnosis","cancer", "cancertype","cancerothers","cancerorgan","liver","miscarriage","gor","gall_bladder",
