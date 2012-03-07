@@ -160,8 +160,15 @@ class Heart(models.Model):
         ('N', 'No'),
     )
 
+    YN_CHOICES = (('N', 'No'), ('Y', 'Yes'))
+
     condition = models.CharField(verbose_name="heart condition", max_length=14, choices=HEART_CHOICES)
     age_at_diagnosis = models.IntegerField(verbose_name="At what age was the patient diagnosed with a heart condition", null=True, blank=True)
+
+    # added according to the questionnaire
+    racing = models.CharField(verbose_name="Do you experience your heart racing or beating irregularly", choices=YN_CHOICES, max_length=1)
+    palpitations = models.CharField(verbose_name="or heart palpitations", choices=YN_CHOICES, max_length=1)
+    fainting = models.CharField(verbose_name="or black-outs or fainting", choices=YN_CHOICES, max_length=1)
 
     # ecg
     #ecg = models.NullBooleanField(verbose_name="ECG")
@@ -220,19 +227,11 @@ class Respiratory(models.Model):
 
 
 class Muscle(models.Model):
-    MUSCLE_CHOICES = (
-        ("severe", "Yes, severely"),
-        ("mild", "Yes, mildly"),
-        ("no", "No"),
-    )
-    EFFECT_CHOICES = (
-        ("yes", "Yes"),
-        ("no", "No"),
-    )
+    YN_CHOICES = (('N', 'No'), ('Y', 'Yes'))
 
-    myotonia = models.CharField(max_length=6, choices=MUSCLE_CHOICES, help_text="Does myotonia currently have a negative effect on the patient’s daily activities?")
+    myotonia = models.CharField(max_length=6, choices=YN_CHOICES, help_text="Does myotonia currently have a negative effect on the patient’s daily activities?")
     # TODO: uncomment, create migration script, syncdb & migrate
-    #myotonia_effect = models.CharField(max_length=6, choices=EFFECT_CHOICES, help_text="Does myotonia currently have a negative effect on the patient’s daily activities?")
+    myotonia_effect = models.CharField(max_length=6, choices=YN_CHOICES, help_text="Does myotonia currently have a negative effect on the patient’s daily activities?")
 
     class Meta:
         abstract = True
@@ -276,13 +275,10 @@ class Fatigue(models.Model):
         (3, "High chance of dozing"),
     )
 
-    FATIGUE_CHOICES = (
-        ("severe", "Yes, severely"),
-        ("mild", "Yes, mildly"),
-        ("no", "No"),
-    )
+    YN_CHOICES = (('N', 'No'), ('Y', 'Yes'))
 
-    fatigue = models.CharField(null=True, blank=True, max_length=6, choices=FATIGUE_CHOICES, help_text="Does fatigue or daytime sleepiness currently have a negative effect on the patient’s normal daily activities?")
+
+    fatigue = models.CharField(null=True, blank=True, max_length=6, choices=YN_CHOICES, help_text="Does fatigue or daytime sleepiness currently have a negative effect on the patient’s normal daily activities?")
 
     # Trac 16 DM1 Questionnaire #46
     # We just want the label text, not the field as a general caption for the fields that follow
@@ -360,6 +356,7 @@ class SocioeconomicFactors(models.Model):
 
 class GeneralMedicalFactors(models.Model):
     YESNO_CHOICES = ( ('0', 'No'), ('1','Yes') )
+    YESNOUNSURE_CHOICES = ( ('0','No'), ('1','Yes'), ('2', 'Unsure') )
 
     COGNITIVE_CHOICES = (
         ("No", "No"),
@@ -415,6 +412,16 @@ class GeneralMedicalFactors(models.Model):
     height = models.IntegerField(verbose_name="height", help_text="Height in centimetres")
     endocrine = models.BooleanField(verbose_name="endocrine disorders")
     obgyn = models.BooleanField(verbose_name="OB/GYN issues")
+
+    # added according to questionnaire
+    medicalert = models.CharField(verbose_name="Does the patient wear a Medicalert bracelet", choices=YESNO_CHOICES, max_length=1)
+
+    physiotherapy = models.CharField(verbose_name="Has the patient received any of the following? Physiotherapy", choices=YESNOUNSURE_CHOICES, max_length=1)
+    geneticcounseling = models.CharField(verbose_name="Genetic counseling", choices=YESNOUNSURE_CHOICES, max_length=1)
+    psychologicalcounseling = models.CharField(verbose_name="Emotional & psychological counseling", choices=YESNOUNSURE_CHOICES, max_length=1)
+    speechtherapy = models.CharField(verbose_name="Speech therapy", choices=YESNOUNSURE_CHOICES, max_length=1)
+    occupationaltherapy = models.CharField(verbose_name="Occupational therapy", choices=YESNOUNSURE_CHOICES, max_length=1)
+    vocationaltraining = models.CharField(verbose_name="Vocational rehabilitation", choices=YESNOUNSURE_CHOICES, max_length=1)
 
     class Meta:
         abstract = True
