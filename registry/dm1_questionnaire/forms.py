@@ -96,9 +96,8 @@ class DiagnosisForm(forms.ModelForm):
     # TODO: IMPORTANT: the question is reverse from the "Yest undiagnosed" in registry base.py
     #undiagnosed = forms.BooleanField(label="Have you been clinically diagnosed with myotonic dystrophy", widget=Select(choices=DIAGNOSED_CHOICES))
     #undiagnosed = forms.NullBooleanSelect(label="Have you been clinically diagnosed with myotonic dystrophy")
-    undiagnosed = forms.CharField(label='Have you been clinically diagnosed with myotonic dystrophy', widget=Select(choices=DIAGNOSED_CHOICES))
-    #TODO: shadow !undiagnosed in save
-    #diagnosed = forms.BooleanField(label="diagnosed")
+    #undiagnosed = forms.CharField(label='Have you been clinically diagnosed with myotonic dystrophy', widget=Select(choices=DIAGNOSED_CHOICES))
+    diagnosed = forms.CharField(label='Have you been clinically diagnosed with myotonic dystrophy', widget=Select(choices=DIAGNOSED_CHOICES))
 
     age_at_clinical_diagnosis = forms.IntegerField(label='What was your age when you were clinically diagnosed', required=False, max_value=120, min_value=0, help_text="Age in years")
 
