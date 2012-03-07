@@ -63,13 +63,10 @@ class Diagnosis(models.Model):
     first_suspected_by = models.CharField(max_length=50, choices=FIRST_SUSPECTED_CHOICES)
     # 2012-01-18: CAUTION TODO: IMPORTANT: the question is reverse from the questionnaire in forms.py: undiagnosed = forms.BooleanField(label="Have you been clinically diagnosed with myotonic dystrophy")
     # trac 16 #62
-    undiagnosed = models.BooleanField(verbose_name="Yet undiagnosed")
+    #undiagnosed = models.BooleanField(verbose_name="Yet undiagnosed")
+    diagnosed = models.BooleanField(verbose_name="diagnosed")
     age_at_clinical_diagnosis = models.IntegerField('age in years at clinical diagnosis', null=True, blank=True)
     age_at_molecular_diagnosis = models.IntegerField('age in years at molecular diagnosis', null=True, blank=True)
-
-    @property
-    def diagnosed(self):
-        return not self.diagnosed
 
     class Meta:
         abstract = True
