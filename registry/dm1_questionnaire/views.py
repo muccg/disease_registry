@@ -199,14 +199,14 @@ def index(request):
             print "form consentdate: %s" % form.cleaned_data['consentdate']
             print "form consentdateparentguardian: %s" % form.cleaned_data['consentdateparentguardian']
             request.session["consentform"] = request.POST.copy() # keep the data for the "personal" & "clinical" views
-            
+
             return HttpResponseRedirect("personal")
         else:
             #print "dir form.errors: %s" % (dir(form.errors),)
-            print "form.errors %s" % (form.errors, )
+            #print "form.errors %s" % (form.errors, )
             #print "form.errors['q1'] %s" % (form.errors['q1'], )
             #print "dir(form.errors['q1']) %s" % (dir(form.errors['q1']), )
-            #print "form.errors['q1'].as_text() %s" % (form.errors['q1'].as_text(), )
+            #print "form.errors['q1'].as_text() %s" % (form.errors['q1'].as_text(), ) # prints: "* This field is required."
             #print "views.index NOT VALID errors: %s\n" % form.errors
             #print "views.index.form %s" % form
             return render_to_response("dm1/questionnaire/index.html", {"form": form })
