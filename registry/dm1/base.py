@@ -163,9 +163,9 @@ class Heart(models.Model):
     age_at_diagnosis = models.IntegerField(verbose_name="At what age was the patient diagnosed with a heart condition", null=True, blank=True)
 
     # added according to the questionnaire
-    racing = models.CharField(verbose_name="Do you experience your heart racing or beating irregularly", choices=YN_CHOICES, max_length=1)
-    palpitations = models.CharField(verbose_name="or heart palpitations", choices=YN_CHOICES, max_length=1)
-    fainting = models.CharField(verbose_name="or black-outs or fainting", choices=YN_CHOICES, max_length=1)
+    racing = models.CharField(verbose_name="Does the patient experience his heart racing or beating irregularly", choices=YN_CHOICES, max_length=1, null=True, blank=True)
+    palpitations = models.CharField(verbose_name="or heart palpitations", choices=YN_CHOICES, max_length=1, null=True, blank=True)
+    fainting = models.CharField(verbose_name="or black-outs or fainting", choices=YN_CHOICES, max_length=1, null=True, blank=True)
 
     # ecg
     #ecg = models.NullBooleanField(verbose_name="ECG")
@@ -216,8 +216,8 @@ class Respiratory(models.Model):
     age_non_invasive_ventilation = models.IntegerField(null=True, blank=True, verbose_name="age ventilation device use commenced", help_text="Age at which non invasive ventilation device use started (leave blank if no ventilation device is in use)")
     non_invasive_ventilation_type = models.CharField(max_length=5, null=True, blank=True, choices=VENTILATION_TYPE_CHOICES)
     invasive_ventilation = models.CharField(max_length=2, choices=VENTILATION_CHOICES, help_text="Mechanical ventilation with tracheostomy")
-    fvc = models.IntegerField(null=True, blank=True, verbose_name="FVC score", help_text="Pulmonary function test with spirometry; Forced Vital Capacity (FVC) expressed as % predicted for height (not in mL) and date of last examination")
-    fvc_date = models.DateField(null=True, blank=True, verbose_name="FVC date")
+    fvc = models.IntegerField(null=True, blank=True, verbose_name="Measured FVC", help_text="Using spirometer measures of total volume of air exhaled from a full lung (total lung capacity) to an empty lung (residual volume).")
+    fvc_date = models.DateField(null=True, blank=True, verbose_name="Date of last spirometer reading of FVC")
 
     class Meta:
         abstract = True
@@ -411,14 +411,14 @@ class GeneralMedicalFactors(models.Model):
     obgyn = models.BooleanField(verbose_name="OB/GYN issues")
 
     # added according to questionnaire
-    medicalert = models.CharField(verbose_name="Does the patient wear a Medicalert bracelet", choices=YESNO_CHOICES, max_length=1)
+    medicalert = models.CharField(verbose_name="Does the patient wear a Medicalert bracelet", choices=YESNO_CHOICES, max_length=1, null=True, blank=True)
 
-    physiotherapy = models.CharField(verbose_name="Has the patient received any of the following? Physiotherapy", choices=YESNOUNSURE_CHOICES, max_length=1)
-    geneticcounseling = models.CharField(verbose_name="Genetic counseling", choices=YESNOUNSURE_CHOICES, max_length=1)
-    psychologicalcounseling = models.CharField(verbose_name="Emotional & psychological counseling", choices=YESNOUNSURE_CHOICES, max_length=1)
-    speechtherapy = models.CharField(verbose_name="Speech therapy", choices=YESNOUNSURE_CHOICES, max_length=1)
-    occupationaltherapy = models.CharField(verbose_name="Occupational therapy", choices=YESNOUNSURE_CHOICES, max_length=1)
-    vocationaltraining = models.CharField(verbose_name="Vocational rehabilitation", choices=YESNOUNSURE_CHOICES, max_length=1)
+    physiotherapy = models.CharField(verbose_name="Has the patient received any of the following? Physiotherapy", choices=YESNOUNSURE_CHOICES, max_length=1, null=True, blank=True)
+    geneticcounseling = models.CharField(verbose_name="Genetic counseling", choices=YESNOUNSURE_CHOICES, max_length=1, null=True, blank=True)
+    psychologicalcounseling = models.CharField(verbose_name="Emotional & psychological counseling", choices=YESNOUNSURE_CHOICES, max_length=1, null=True, blank=True)
+    speechtherapy = models.CharField(verbose_name="Speech therapy", choices=YESNOUNSURE_CHOICES, max_length=1, null=True, blank=True)
+    occupationaltherapy = models.CharField(verbose_name="Occupational therapy", choices=YESNOUNSURE_CHOICES, max_length=1, null=True, blank=True)
+    vocationaltraining = models.CharField(verbose_name="Vocational rehabilitation", choices=YESNOUNSURE_CHOICES, max_length=1, null=True, blank=True)
 
     class Meta:
         abstract = True
