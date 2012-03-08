@@ -186,9 +186,9 @@ class HeartForm(forms.ModelForm):
 
     # Trac 16 DM1 Questionnaire Item 35, new fields
     # TODO: implement in Base.model to map them to Registry
-    racing = forms.CharField(label="Do you experience your heart racing or beating irregularly", widget=Select(choices=YN_CHOICES))
-    palpitations = forms.CharField(label="or heart palpitations", widget=Select(choices=YN_CHOICES))
-    fainting = forms.CharField(label="or black-outs or fainting", widget=Select(choices=YN_CHOICES))
+    racing = forms.CharField(label="Do you experience your heart racing or beating irregularly", widget=Select(choices=YN_CHOICES), required=False)
+    palpitations = forms.CharField(label="or heart palpitations", widget=Select(choices=YN_CHOICES), required=False)
+    fainting = forms.CharField(label="or black-outs or fainting", widget=Select(choices=YN_CHOICES), required=False)
 
     class Meta:
         exclude = ('diagnosis', 'ecg', 'ecg_sinus_rhythm', 'ecg_pr_interval', 'ecg_qrs_duration', 'ecg_examination_date',
@@ -303,15 +303,15 @@ class GeneralMedicalFactorsForm(forms.ModelForm):
 
     # TODO: add this field to base!
     # done: added to base.py
-    medicalert = forms.CharField(label="Do you wear a Medicalert bracelet", widget=Select(choices=YESNO_CHOICES))
+    medicalert = forms.CharField(label="Do you wear a Medicalert bracelet", widget=Select(choices=YESNO_CHOICES), required=False)
 
     #TODO: add this to base.py
-    physiotherapy = forms.CharField(label="Have you received any of the following? Physiotherapy", widget=Select(choices=YESNOUNSURE_CHOICES))
-    geneticcounseling = forms.CharField(label="Genetic counseling", widget=Select(choices=YESNOUNSURE_CHOICES))
-    psychologicalcounseling = forms.CharField(label="Emotional & psychological counseling", widget=Select(choices=YESNOUNSURE_CHOICES))
-    speechtherapy = forms.CharField(label="Speech therapy", widget=Select(choices=YESNOUNSURE_CHOICES))
-    occupationaltherapy = forms.CharField(label="Occupational therapy", widget=Select(choices=YESNOUNSURE_CHOICES))
-    vocationaltraining = forms.CharField(label="Vocational rehabilitation", widget=Select(choices=YESNOUNSURE_CHOICES))
+    physiotherapy = forms.CharField(label="Have you received any of the following? Physiotherapy", widget=Select(choices=YESNOUNSURE_CHOICES), required=False)
+    geneticcounseling = forms.CharField(label="Genetic counseling", widget=Select(choices=YESNOUNSURE_CHOICES), required=False)
+    psychologicalcounseling = forms.CharField(label="Emotional & psychological counseling", widget=Select(choices=YESNOUNSURE_CHOICES), required=False)
+    speechtherapy = forms.CharField(label="Speech therapy", widget=Select(choices=YESNOUNSURE_CHOICES), required=False)
+    occupationaltherapy = forms.CharField(label="Occupational therapy", widget=Select(choices=YESNOUNSURE_CHOICES), required=False)
+    vocationaltraining = forms.CharField(label="Vocational rehabilitation", widget=Select(choices=YESNOUNSURE_CHOICES), required=False)
 
     class Meta:
         exclude = ("diagnosis","cancer", "cancertype","cancerothers","cancerorgan","liver","miscarriage","gor","gall_bladder",
