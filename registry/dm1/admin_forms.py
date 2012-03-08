@@ -1,7 +1,7 @@
 from django import forms
 from ccg.utils.webhelpers import url
 from models import *
-from registry.forms.widgets import ComboWidget, LiveComboWidget, LubricatedDateWidget, StaticWidget, PercentageWidget
+from registry.forms.widgets import ComboWidget, LiveComboWidget, LubricatedDateWidget, StaticWidget, FVCPercentageWidget, PercentageWidget
 
 from django.forms import Select
 from django.forms.widgets import RadioSelect
@@ -43,7 +43,7 @@ class FamilyMemberForm(forms.ModelForm):
     class Meta:
         model = FamilyMember
 
- 
+
 class RespiratoryForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(RespiratoryForm, self).__init__(*args, **kwargs)
@@ -52,7 +52,7 @@ class RespiratoryForm(forms.ModelForm):
         # custom verbose name, which is what happens if you just override the
         # field by setting a property on the class the way the Django
         # documentation suggests.
-        self.fields["fvc"].widget = PercentageWidget()
+        self.fields["fvc"].widget = FVCPercentageWidget()
         self.fields["fvc_date"].widget=LubricatedDateWidget(popup=True, today=True, years=-5)
 
     class Meta:
