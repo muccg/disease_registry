@@ -101,7 +101,7 @@ class DiagnosisAdmin(admin.ModelAdmin):
     ]
     search_fields = ["patient__family_name", "patient__given_names"]
     # Trac #16 Item 10
-    fields = ('patient', 'diagnosis', 'affectedstatus', 'first_symptom', 'first_suspected_by', 'undiagnosed', 'age_at_clinical_diagnosis', 'age_at_molecular_diagnosis')
+    fields = ('patient', 'diagnosis', 'affectedstatus', 'first_symptom', 'first_suspected_by', 'diagnosed', 'age_at_clinical_diagnosis', 'age_at_molecular_diagnosis')
     # Trac #16 Item 10 end
 
     class Media:
