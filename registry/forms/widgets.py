@@ -108,3 +108,16 @@ class PercentageWidget(forms.TextInput):
 
     def render(self, name, value, attrs=None):
         return super(PercentageWidget, self).render(name, value, attrs) + " %"
+
+# to add the text after the input field
+class FVCPercentageWidget(forms.TextInput):
+    def __init__(self, attrs={}, *args, **kwargs):
+        if attrs:
+            attrs["size"] = 3
+        else:
+            attrs = {"size": 3}
+
+        super(FVCPercentageWidget, self).__init__(attrs, *args, **kwargs)
+
+    def render(self, name, value, attrs=None):
+        return super(FVCPercentageWidget, self).render(name, value, attrs) + "% (to 2 decimal places based on last spirometer reading)"
