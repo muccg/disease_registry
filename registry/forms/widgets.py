@@ -99,10 +99,14 @@ class StaticWidget(forms.HiddenInput):
 
 class PercentageWidget(forms.TextInput):
     def __init__(self, attrs={}, *args, **kwargs):
+        '''
         if attrs:
             attrs["size"] = 3
         else:
             attrs = {"size": 3}
+        '''
+        if not attrs:
+            attrs = {"size": "3"}
 
         super(PercentageWidget, self).__init__(attrs, *args, **kwargs)
 
