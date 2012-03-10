@@ -147,4 +147,8 @@ div.requirednote span {
     font-weight: bold;
 }
 
+input#id_respiratory-0-predictedfvc, input#id_respiratory-0-ci {
+    text-align: right; /* for percentage */
+}
+
 /* vim: set nocin ai et ts=4 sw=4: */
