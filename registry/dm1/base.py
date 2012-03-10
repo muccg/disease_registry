@@ -216,8 +216,21 @@ class Respiratory(models.Model):
     age_non_invasive_ventilation = models.IntegerField(null=True, blank=True, verbose_name="age ventilation device use commenced", help_text="Age at which non invasive ventilation device use started (leave blank if no ventilation device is in use)")
     non_invasive_ventilation_type = models.CharField(max_length=5, null=True, blank=True, choices=VENTILATION_TYPE_CHOICES)
     invasive_ventilation = models.CharField(max_length=2, choices=VENTILATION_CHOICES, help_text="Mechanical ventilation with tracheostomy")
-    fvc = models.IntegerField(null=True, blank=True, verbose_name="Measured FVC", help_text="Using spirometer measures of total volume of air exhaled from a full lung (total lung capacity) to an empty lung (residual volume).")
+    fvc = models.DecimalField(null=True,max_digits=5, decimal_places=2, blank=True, verbose_name="Measured FVC", help_text="Using spirometer measures of total volume of air exhaled from a full lung (total lung capacity) to an empty lung (residual volume).")
     fvc_date = models.DateField(null=True, blank=True, verbose_name="Date of last spirometer reading of FVC")
+
+    # adding this field, cannot figure out how to have a calculated field on the form without storing it in the DB
+    # if editable=flase, the field is not made readonly, it is NOT displayed in the admin UI AT ALL
+    #predictedfvc = models.DecimalField(verbose_name='Predicted FVC', help_text='forced vital capacity (FVC, expressed as % of normal, predicted by height, age and sex according to NHANES III formulae for Caucasians).', max_digits=5, decimal_places=2, null=True, blank=True) #, editable=False)
+
+    '''
+    # could not get that to display in the forms
+    @property
+    def predictedfvc(self):
+        print "predictedfvc property"
+        fvc = 92.3 # test
+        return fvc
+    '''
 
     class Meta:
         abstract = True
