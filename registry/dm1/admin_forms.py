@@ -43,8 +43,79 @@ class FamilyMemberForm(forms.ModelForm):
     class Meta:
         model = FamilyMember
 
+from datetime import date
+def calculateage(birthday):
+        today = date.today()
+        y = today.year - birthday.year
+        if today.month < birthday.month or today.month == birthday.month and today.day < birthday.day:
+            y -= 1
+        return y
+
+def calculatefvcci(dateofbirth, height, weight, sex):
+
+    if not dateofbirth or not height or not weight or not sex: return ('','')
+
+    male = female = False
+    if sex == 'M': male = True
+    elif sex == 'F': female = True
+    age = calculateage(dateofbirth)
+
+
+    #if male and less than or equal to 7 years of age then do not predict
+    if male and age <= 7: return ("","")
+
+    #If male and between 8 and  19 years of age
+    #      then FVC Eqn: -0.2584-0.20415*AGE+0.010133*AGE^2+0.00018642*HEIGHT_CM^2
+    #and        CI Eqn: (0.00018642 - 0.00015695)*HEIGHT_CM^2
+
+    if male and 8 <= age <=19:
+        fvc = -0.2584 - (0.20415 * age) + (0.010133 * (age**2)) + (0.00018642 * (height**2))
+        ci = (0.00018642 - 0.00015695) * height**2
+        return (fvc, ci)
+
+    #If male and 20 years or over
+    #then Eqn: -0.1933+0.00064*AGE-0.000269*AGE^2+0.00018642*HEIGHT_CM^2
+    #and CI Eqn: (0.00018642 - 0.00015695)*HEIGHT_CM^2
+
+    if male and 20 <= age:
+        fvc = -0.1933 + (0.00064 * age) - (0.000269 * (age**2)) + (0.00018642 * (height**2))
+        ci = (0.00018642 - 0.00015695)* (height**2)
+        return (fvc, ci)
+
+
+    #If female and less than or equal to 7 years of age then do not predict
+    if female and age <= 7: return ("","")
+
+
+    #If female and between and between 8 and 17 years of age then
+    #FVC Eqn: -1.2082+0.05916*AGE+0.00014815*HEIGHT_CM^2 and
+    #CI (0.00014815 - 0.00012198)*HEIGHT_CM^2
+    if female and 8 <= age <= 17:
+        fvc = -1.2082 + (0.05916 * age) + (0.00014815 * (height**2))
+        ci = (0.00014815 - 0.00012198) * (height**2)
+        return (fvc, ci)
+
+    #If female and 18 years or over then
+    #FVC Eqn: -0.3560+0.01870*AGE-0.000382*AGE^2+0.00014815*HEIGHT_CM^2
+    #And CI Eqn: (0.00014815 - 0.00012198)*HEIGHT_CM^2
+    if female and 18 <= age:
+        fvc = -0.3560 + (0.01870 * age) - (0.000382 * (age**2)) + (0.00014815 * (height**2))
+        ci = (0.00014815 - 0.00012198) * (height**2)
+        return (fvc, ci)
+
+    # for cases not handled
+    return ("","")
 
 class RespiratoryForm(forms.ModelForm):
+    #predictedfvc = forms.DecimalField(label='Predicted FVC', required=False, min_value=0, max_value=100, max_digits=5, decimal_places=2, widget = FVCPercentageWidget(attrs={'readonly': 'readonly'}))
+    #predictedfvc = forms.DecimalField(label='Predicted FVC', required=False, min_value=0, max_value=100, max_digits=5, decimal_places=2, widget = FVCPercentageWidget())
+    #fvc = forms.DecimalField(label='Measured FVC', required=False, min_value=0, max_value=100, max_digits=5, decimal_places=2, widget = FVCPercentageWidget(attrs={'size':'6', 'maxlength': '6'}))
+    #fvc = forms.DecimalField(label='Measured FVC', required=False, min_value=0, max_value=100, max_digits=5, decimal_places=2)
+    predictedfvc = forms.DecimalField(label='Predicted FVC', required=False, min_value=0, max_value=100, max_digits=5, decimal_places=2,
+                        widget = PercentageWidget(attrs={'readonly': 'readonly', 'size': '6'}), help_text="forced vital capacity (FVC, expressed as % of normal, predicted by height, age and sex according to NHANES III formulae for Caucasians).")
+    ci = forms.DecimalField(label='Confidence interval', required=False, min_value=0, max_value=100, max_digits=5, decimal_places=2,
+                        widget = forms.TextInput(attrs={'readonly': 'readonly', 'size': '6'}))
+
     def __init__(self, *args, **kwargs):
         super(RespiratoryForm, self).__init__(*args, **kwargs)
 
@@ -52,14 +123,34 @@ class RespiratoryForm(forms.ModelForm):
         # custom verbose name, which is what happens if you just override the
         # field by setting a property on the class the way the Django
         # documentation suggests.
-        self.fields["fvc"].widget = FVCPercentageWidget()
+        #self.fields["fvc"].widget = FVCPercentageWidget()
         self.fields["fvc_date"].widget=LubricatedDateWidget(popup=True, today=True, years=-5)
+
+        # Set the form fields based on the model object
+        if kwargs.has_key('instance'):
+            instance = kwargs['instance'] # dm1.models.Respiratory
+            if not instance: return
+            diagnosis = instance.diagnosis
+            if not diagnosis: return
+            patient = diagnosis.patient
+            if not patient: return
+            generalmedicalfactors = diagnosis.generalmedicalfactors
+            if not generalmedicalfactors: return
+            height = generalmedicalfactors.height
+            if not height: return
+            weight = generalmedicalfactors.weight
+            if not weight: return
+            dateofbirth = patient.date_of_birth
+            if not dateofbirth: return
+            sex = patient.sex
+            if not sex: return
+
+            fvc, ci = calculatefvcci(dateofbirth, height, weight, sex)
+            self.initial['predictedfvc'] = "%.2f" % fvc
+            self.initial['ci'] = "%.2f" % ci
 
     class Meta:
         model = Respiratory
-
-
-
 
 class HeartForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
