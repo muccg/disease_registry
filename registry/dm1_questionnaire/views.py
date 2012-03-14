@@ -47,6 +47,7 @@ def clinical(request):
         ("Genetic Test Details", GeneticTestDetailsForm, save_default),
         ("Ethnic Origin", EthnicOriginForm, save_default),
         #("Clinical Trials", ClinicalTrialsForm, save_default),
+        #("Consent Form", ConsentForm, save_default), # validated separately
     )
 
     def instantiate_form(definition, *args, **kwargs):
@@ -84,6 +85,9 @@ def clinical(request):
 
     if request.method == "POST":
         # The form has been submitted, so let's do something useful with it.
+        print "views.clinical: request.session: %s" % dir(request.session)
+        print "\nviews.clinical: request.session.iteritems: %s" % request.session.iteritems
+        print "\nviews.clinical: request.session.iteritems: %s" % dir(request.session.iteritems)
 
         # First, we have to loop through the forms and make sure we have no
         # validation errors.
@@ -93,8 +97,17 @@ def clinical(request):
             form = instantiate_form(definition, request.POST)
             if not form.is_valid():
                 valid = False
+            print "form: %s valid: %s" % (definition[0], valid)
             forms.append((definition[0], form, definition[2]))
 
+        # check the consent form
+        print "session['consentform']: %s" % request.session.get('consentform')
+        consent_form = ConsentForm(request.session["consentform"])
+        if not consent_form or not consent_form.is_valid():
+            valid = False
+            print "consent_form valid: %s" % valid
+        else:
+            print "consent form valid"
         # If there are validation errors, we'll just fall through: Django's
         # bound form functionality means this will just work if we go through
         # the normal display code.
@@ -114,8 +127,15 @@ def clinical(request):
             for name, form, save in forms:
                 save(form, diagnosis)
 
+            # 2 steps required to get the consent object, add the diagnosis link to it and save it
+            consent = consent_form.save(commit=False)
+            consent.diagnosis = diagnosis
+            print "consent before save: %s dir: %s" % (consent, dir(consent))
+            consent.save()
+
             # Clean up the session and prevent accidental multiple submissions.
             del request.session["patientform"]
+            del request.session["consentform"]
 
             # Thanks, mysterious stranger!
             return HttpResponseRedirect("thanks")

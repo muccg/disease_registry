@@ -80,3 +80,9 @@ div.asymptomaticnote span {
 input#id_respiratory-0-predictedfvc, input#id_respiratory-0-ci {
     text-align: right; /* for percentage */
 }
+
+/* for the Consent form in the Registry Admin form */
+div#consent-group div.q1 label, div#consent-group div.q2 label, div#consent-group div.q3 label, div#consent-group div.q3 label, div#consent-group div.q4 label,
+div#consent-group div.q5 label, div#consent-group div.q6 label, div#consent-group div.q7 label {
+    width: 40%;
+}

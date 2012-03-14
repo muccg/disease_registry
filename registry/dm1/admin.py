@@ -73,6 +73,8 @@ class FamilyMemberInline(admin.TabularInline):
 class NotesInline(admin.TabularInline):
     model = Notes
 
+class ConsentInline(admin.StackedInline):
+    model = Consent
 
 class DiagnosisAdmin(admin.ModelAdmin):
     actions = None
@@ -98,6 +100,7 @@ class DiagnosisAdmin(admin.ModelAdmin):
         ClinicalTrialsInline,
         OtherRegistriesInline,
         NotesInline,
+        ConsentInline, # do not display the consent form in the Registry, but needs to be validated and saved
     ]
     search_fields = ["patient__family_name", "patient__given_names"]
     # Trac #16 Item 10

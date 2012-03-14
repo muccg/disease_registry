@@ -145,6 +145,8 @@ class Diagnosis(ApproveMixin, base.Diagnosis):
             GeneticTestDetails,
             EthnicOrigin,
             ClinicalTrials,
+            #TODO: add the Consent model
+            Consent,
         )
         for model in models:
             objects = model.objects.filter(diagnosis=self)
@@ -304,3 +306,12 @@ class ClinicalTrials(ApproveMixin, base.ClinicalTrials):
 
     def approve(self, diagnosis):
         return super(ClinicalTrials, self).approve(dm1.models.ClinicalTrials, diagnosis=diagnosis, commit=True, delete=True)
+
+class Consent(ApproveMixin, base.Consent):
+    diagnosis = models.ForeignKey(Diagnosis, primary_key=True)
+
+    def __unicode__(self):
+        return unicode(self.diagnosis)
+
+    def approve(self, diagnosis):
+        return super(Consent, self).approve(dm1.models.Consent, diagnosis=diagnosis, commit=True, delete=True)

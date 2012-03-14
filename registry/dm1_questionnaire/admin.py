@@ -13,7 +13,6 @@ class MotorFunctionInline(admin.StackedInline):
 class SurgeryInline(admin.StackedInline):
     model = Surgery
 
-
 class RespiratoryInline(admin.StackedInline):
     form = RespiratoryForm
     model = Respiratory
@@ -60,6 +59,9 @@ class GeneticTestDetailsInline(admin.StackedInline):
 class EthnicOriginInline(admin.StackedInline):
     model = EthnicOrigin
 
+class ConsentInline(admin.StackedInline):
+    model = Consent
+
 class DiagnosisAdmin(admin.ModelAdmin):
     actions = None
     form = DiagnosisForm
@@ -72,13 +74,14 @@ class DiagnosisAdmin(admin.ModelAdmin):
         HeartMedicationInline,
         RespiratoryInline,
         FeedingFunctionInline,
-        FatigueInline,        
+        FatigueInline,
         FatigueMedicationInline,
         SocioeconomicFactorsInline,
         GeneralMedicalFactorsInline,
         GeneticTestDetailsInline,
         EthnicOriginInline,
         ClinicalTrialsInline,
+        ConsentInline,
     ]
     search_fields = ["patient__family_name", "patient__given_names"]
     # FJ start Trac 16 Item 10, reordering fields, patient first
