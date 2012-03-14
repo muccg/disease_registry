@@ -107,6 +107,8 @@ class DiagnosisAdmin(admin.ModelAdmin):
     fields = ('patient', 'diagnosis', 'affectedstatus', 'first_symptom', 'first_suspected_by', 'diagnosed', 'age_at_clinical_diagnosis', 'age_at_molecular_diagnosis')
     # Trac #16 Item 10 end
 
+    save_on_top = True
+
     class Media:
         css = {
             "screen": [url("/static/css/diagnosis_admin.css")]
