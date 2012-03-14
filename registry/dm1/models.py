@@ -348,6 +348,11 @@ class Notes(models.Model):
     def __unicode__(self):
         return str(self.diagnosis)
 
+class Consent(base.Consent):
+    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
+
+    def __unicode__(self):
+        return str(self.diagnosis)
 
 # This model is actually based off the molecular data and not the diagnosis,
 # but is DM1 specific, and hence placed here.

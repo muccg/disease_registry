@@ -11,7 +11,7 @@ from patients.models import Patient as RegistryPatient
 
 from utils.stripspaces import stripspaces
 
-class ConsentForm(forms.Form):
+class ConsentForm(forms.ModelForm):
     CHOICES = (('N', 'NO'), ('Y', 'YES'))
     DATE_FORMATS = ('%d-%m-%Y', '%d/%m/%Y', '%d/%m/%y')
 
@@ -35,54 +35,58 @@ class ConsentForm(forms.Form):
     # use that instead of a relation and a formset, just to get it up and running
     # this data is probably not gooing to be re-used
     doctor_0 = forms.CharField(max_length=60, required = False, initial='')
-    doctoraddress_0 = forms.CharField(max_length=60, required = False, initial='')
-    doctortelephone_0 = forms.CharField(max_length=20, required = False, initial='')
+    doctoraddress_0 = forms.CharField(max_length=120, required = False, initial='')
+    doctortelephone_0 = forms.CharField(max_length=40, required = False, initial='')
     specialist_0 = forms.CharField(max_length=60, required = False, initial='')
 
     doctor_1 = forms.CharField(max_length=60, required = False, initial='')
-    doctoraddress_1 = forms.CharField(max_length=60, required = False, initial='')
-    doctortelephone_1 = forms.CharField(max_length=20, required = False, initial='')
+    doctoraddress_1 = forms.CharField(max_length=120, required = False, initial='')
+    doctortelephone_1 = forms.CharField(max_length=40, required = False, initial='')
     specialist_1 = forms.CharField(max_length=60, required = False, initial='')
 
     doctor_2 = forms.CharField(max_length=60, required = False, initial='')
-    doctoraddress_2 = forms.CharField(max_length=60, required = False, initial='')
-    doctortelephone_2 = forms.CharField(max_length=20, required = False, initial='')
+    doctoraddress_2 = forms.CharField(max_length=120, required = False, initial='')
+    doctortelephone_2 = forms.CharField(max_length=40, required = False, initial='')
     specialist_2 = forms.CharField(max_length=60, required = False, initial='')
 
     doctor_3 = forms.CharField(max_length=60, required = False, initial='')
-    doctoraddress_3 = forms.CharField(max_length=60, required = False, initial='')
-    doctortelephone_3 = forms.CharField(max_length=20, required = False, initial='')
+    doctoraddress_3 = forms.CharField(max_length=120, required = False, initial='')
+    doctortelephone_3 = forms.CharField(max_length=40, required = False, initial='')
     specialist_3 = forms.CharField(max_length=60, required = False, initial='')
 
     doctor_4 = forms.CharField(max_length=60, required = False, initial='')
-    doctoraddress_4 = forms.CharField(max_length=60, required = False, initial='')
-    doctortelephone_4 = forms.CharField(max_length=20, required = False, initial='')
+    doctoraddress_4 = forms.CharField(max_length=120, required = False, initial='')
+    doctortelephone_4 = forms.CharField(max_length=40, required = False, initial='')
     specialist_4 = forms.CharField(max_length=60, required = False, initial='')
 
     doctor_5 = forms.CharField(max_length=60, required = False, initial='')
-    doctoraddress_5 = forms.CharField(max_length=60, required = False, initial='')
-    doctortelephone_5 = forms.CharField(max_length=20, required = False, initial='')
+    doctoraddress_5 = forms.CharField(max_length=120, required = False, initial='')
+    doctortelephone_5 = forms.CharField(max_length=40, required = False, initial='')
     specialist_5 = forms.CharField(max_length=60, required = False, initial='')
 
     doctor_6 = forms.CharField(max_length=60, required = False, initial='')
-    doctoraddress_6 = forms.CharField(max_length=60, required = False, initial='')
-    doctortelephone_6 = forms.CharField(max_length=20, required = False, initial='')
+    doctoraddress_6 = forms.CharField(max_length=120, required = False, initial='')
+    doctortelephone_6 = forms.CharField(max_length=40, required = False, initial='')
     specialist_6 = forms.CharField(max_length=60, required = False, initial='')
 
     doctor_7 = forms.CharField(max_length=60, required = False, initial='')
-    doctoraddress_7 = forms.CharField(max_length=60, required = False, initial='')
-    doctortelephone_7 = forms.CharField(max_length=20, required = False, initial='')
+    doctoraddress_7 = forms.CharField(max_length=120, required = False, initial='')
+    doctortelephone_7 = forms.CharField(max_length=40, required = False, initial='')
     specialist_7 = forms.CharField(max_length=60, required = False, initial='')
 
     doctor_8 = forms.CharField(max_length=60, required = False, initial='')
-    doctoraddress_8 = forms.CharField(max_length=60, required = False, initial='')
-    doctortelephone_8 = forms.CharField(max_length=20, required = False, initial='')
+    doctoraddress_8 = forms.CharField(max_length=120, required = False, initial='')
+    doctortelephone_8 = forms.CharField(max_length=40, required = False, initial='')
     specialist_8 = forms.CharField(max_length=60, required = False, initial='')
 
     doctor_9 = forms.CharField(max_length=60, required = False, initial='')
-    doctoraddress_9 = forms.CharField(max_length=60, required = False, initial='')
-    doctortelephone_9 = forms.CharField(max_length=20, required = False, initial='')
+    doctoraddress_9 = forms.CharField(max_length=120, required = False, initial='')
+    doctortelephone_9 = forms.CharField(max_length=40, required = False, initial='')
     specialist_9 = forms.CharField(max_length=60, required = False, initial='')
+
+    class Meta:
+        exclude = ("firstname", "lastname", "diagnosis")
+        model = models.Consent
 
 class DiagnosisForm(forms.ModelForm):
     # keep that in sync with base.py and add the null option
@@ -167,10 +171,10 @@ class SurgeryForm(forms.ModelForm):
     cardiac_implant = forms.CharField(label="Have you had an operation to insert a device to control/normalize your heart rhythm", widget=Select(choices=CARDIAC_IMPLANT_CHOICES))
     cardiac_implant_age = forms.IntegerField(label='At what age was this device for heart rhythm inserted', required=False, max_value=120, min_value=0)
 
-    cataract_diagnosis = forms.CharField(label='Have you been diagnosed with cataracts in your eyes', widget=Select(choices=CATARACT_CHOICES))
+    cataract_diagnosis = forms.CharField(label='Have you been diagnosed with a cataract', widget=Select(choices=CATARACT_CHOICES))
     # This really should be cataract_surgery in the model and here.
-    cataract = forms.CharField(label='Have you had eye surgery for cataract removal', widget=Select(choices=CATARACT_SURGERY_CHOICES))
-    cataract_age = forms.IntegerField(label='At what age was the cataract surgery performed', required=False, max_value=120, min_value=0)
+    cataract = forms.CharField(label='Have you had eye surgery to remove a cataract', widget=Select(choices=CATARACT_SURGERY_CHOICES))
+    cataract_age = forms.IntegerField(label='At what age was cataract surgery performed', required=False, max_value=120, min_value=0)
 
     class Meta:
         exclude = ("diagnosis",)
@@ -186,9 +190,9 @@ class HeartForm(forms.ModelForm):
 
     # Trac 16 DM1 Questionnaire Item 35, new fields
     # TODO: implement in Base.model to map them to Registry
-    racing = forms.CharField(label="Do you experience your heart racing or beating irregularly", widget=Select(choices=YN_CHOICES), required=False)
-    palpitations = forms.CharField(label="or heart palpitations", widget=Select(choices=YN_CHOICES), required=False)
-    fainting = forms.CharField(label="or black-outs or fainting", widget=Select(choices=YN_CHOICES), required=False)
+    racing = forms.CharField(label="Do you experience: your heart racing or beating irregularly", widget=Select(choices=YN_CHOICES), required=False)
+    palpitations = forms.CharField(label="heart palpitations", widget=Select(choices=YN_CHOICES), required=False)
+    fainting = forms.CharField(label="black-outs or fainting", widget=Select(choices=YN_CHOICES), required=False)
 
     class Meta:
         exclude = ('diagnosis', 'ecg', 'ecg_sinus_rhythm', 'ecg_pr_interval', 'ecg_qrs_duration', 'ecg_examination_date',

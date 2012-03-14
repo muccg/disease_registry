@@ -53,9 +53,9 @@ class Diagnosis(models.Model):
     AFFECTED_STATUS_CHOICES = (
         ('FamilyHistory','Family History only'),
         ('AsymptomaticCarrier','Asymptomatic Carrier'),
-        ('Congenital','Congenital Myotonic Distrophy'),
-        ('Juvenile','Juvenile Myotonic Distrophy'),
-        ('Adult','Adult Myotonic Distrophy'),
+        ('Congenital','Congenital Myotonic Dystrophy'),
+        ('Juvenile','Juvenile Myotonic Dystrophy'),
+        ('Adult','Adult Myotonic Dystrophy'),
     )
 
     affectedstatus = models.CharField(max_length=30, choices=AFFECTED_STATUS_CHOICES, verbose_name='Affected Status')
@@ -424,14 +424,14 @@ class GeneralMedicalFactors(models.Model):
     obgyn = models.BooleanField(verbose_name="OB/GYN issues")
 
     # added according to questionnaire
-    medicalert = models.CharField(verbose_name="Does the patient wear a Medicalert bracelet", choices=YESNO_CHOICES, max_length=1, null=True, blank=True)
+    medicalert = models.CharField(verbose_name="Does the patient wear a Medicalert bracelet", choices=YESNO_CHOICES, max_length=1, null=True, blank=True, default='')
 
-    physiotherapy = models.CharField(verbose_name="Has the patient received any of the following? Physiotherapy", choices=YESNOUNSURE_CHOICES, max_length=1, null=True, blank=True)
-    geneticcounseling = models.CharField(verbose_name="Genetic counseling", choices=YESNOUNSURE_CHOICES, max_length=1, null=True, blank=True)
-    psychologicalcounseling = models.CharField(verbose_name="Emotional & psychological counseling", choices=YESNOUNSURE_CHOICES, max_length=1, null=True, blank=True)
-    speechtherapy = models.CharField(verbose_name="Speech therapy", choices=YESNOUNSURE_CHOICES, max_length=1, null=True, blank=True)
-    occupationaltherapy = models.CharField(verbose_name="Occupational therapy", choices=YESNOUNSURE_CHOICES, max_length=1, null=True, blank=True)
-    vocationaltraining = models.CharField(verbose_name="Vocational rehabilitation", choices=YESNOUNSURE_CHOICES, max_length=1, null=True, blank=True)
+    physiotherapy = models.CharField(verbose_name="Has the patient received any of the following? Physiotherapy", choices=YESNOUNSURE_CHOICES, max_length=1, null=True, blank=True, default='')
+    geneticcounseling = models.CharField(verbose_name="Genetic counseling", choices=YESNOUNSURE_CHOICES, max_length=1, null=True, blank=True, default='')
+    psychologicalcounseling = models.CharField(verbose_name="Emotional & psychological counseling", choices=YESNOUNSURE_CHOICES, max_length=1, null=True, blank=True, default='')
+    speechtherapy = models.CharField(verbose_name="Speech therapy", choices=YESNOUNSURE_CHOICES, max_length=1, null=True, blank=True, default='')
+    occupationaltherapy = models.CharField(verbose_name="Occupational therapy", choices=YESNOUNSURE_CHOICES, max_length=1, null=True, blank=True, default='')
+    vocationaltraining = models.CharField(verbose_name="Vocational rehabilitation", choices=YESNOUNSURE_CHOICES, max_length=1, null=True, blank=True, default='')
 
     class Meta:
         abstract = True
@@ -510,6 +510,78 @@ class ClinicalTrials(models.Model):
     trial_name = models.CharField(max_length=50)
     trial_sponsor = models.CharField(max_length=50)
     trial_phase = models.CharField(max_length=50)
+
+    class Meta:
+        abstract = True
+
+class Consent(models.Model):
+    YES_NO_CHOICES = (('N', 'No'), ('Y', 'Yes'))
+
+    #TODO: add q2-q7
+    q1 = models.CharField(max_length=1, choices=YES_NO_CHOICES, null=True, blank=True, default='', verbose_name='Do we have your permission to store your personal & clinical data in the Australasian National Myotonic Dystrophy Registry and to transfer it (in a form identifiable only by a code) to the global TREAT-NMD registry in which it may be used for research and for the planning of clinical trials?')
+    q2 = models.CharField(max_length=1, choices=YES_NO_CHOICES, null=True, blank=True, default='', verbose_name='Do we have your permission to obtain your Myotonic Dystrophy genetic test result from the relevant testing laboratory to store this information with your clinical and personal information in the Australasian National Myotonic  Dystrophy Registry and to transfer it (in a form identifiable only by a code) to the global TREAT-NMD registry where it may be used for research and for the planning of clinical trials?')
+    q3 = models.CharField(max_length=1, choices=YES_NO_CHOICES, null=True, blank=True, default='', verbose_name='If we receive information on TREAT-NMD projects or other information related to your disease which might be relevant to you, would you like to be informed about this?')
+    q4 = models.CharField(max_length=1, choices=YES_NO_CHOICES, null=True, blank=True, default='', verbose_name='If your doctor receives information about a clinical trial which you might be eligible for, would you like to be informed about this?')
+    q5 = models.CharField(max_length=1, choices=YES_NO_CHOICES, null=True, blank=True, default='', verbose_name='So that we can keep the registry up to date, we will need to update your records once a year. Do you agree to receive follow-up forms once a year which you will be asked to complete in order to register any changes in your medical condition or contact details?')
+    q6 = models.CharField(max_length=1, choices=YES_NO_CHOICES, null=True, blank=True, default='', verbose_name='To improve the quality of the family history data on the Registry, we propose to link your record to any other affected family member or relative on the Registry. The link will only show your Unique identification number and your relationship to the affected relative. Do you agree to have your record linked to any other affected relatives on the Registry?')
+    q7 = models.CharField(max_length=1, choices=YES_NO_CHOICES, null=True, blank=True, default='', verbose_name='If there are any major changes in your data (for example change of address or changes in your medical condition, such as loss of ability to walk unassisted) that occur in the period between updates, are you willing to inform us?')
+
+    consentdate = models.DateField(verbose_name="Consent Date", null=True, blank=True, default='')
+
+    firstnameparentguardian = models.CharField(null=True, blank=True, default='', max_length=60, verbose_name="Parent/guardian's first name")
+    lastnameparentguardian = models.CharField(null=True, blank=True, default='', max_length=60, verbose_name="Parent/guardian's last name")
+    consentdateparentguardian = models.DateField(verbose_name="Parent/guardian's Consent Date", null=True, blank=True, default='') # consent date reuired in the questionnaire but not in the registry
+
+    # TODO: add doctors 1-10
+    doctor_0 = models.CharField(null=True, blank=True, max_length=60, verbose_name="Doctor's name", default=None)
+    doctoraddress_0 = models.CharField(null=True, blank=True, max_length=120, verbose_name="Doctor's address", default=None)
+    doctortelephone_0 = models.CharField(null=True, blank=True, max_length=40, verbose_name="Doctor's phone", default=None)
+    specialist_0 = models.CharField(null=True, blank=True, max_length=60, verbose_name="Specialist's name", default=None)
+
+    doctor_1 = models.CharField(null=True, blank=True, max_length=60, verbose_name="Doctor's name", default=None)
+    doctoraddress_1 = models.CharField(null=True, blank=True, max_length=120, verbose_name="Doctor's address", default=None)
+    doctortelephone_1 = models.CharField(null=True, blank=True, max_length=40, verbose_name="Doctor's phone", default=None)
+    specialist_1 = models.CharField(null=True, blank=True, max_length=60, verbose_name="Specialist's name", default=None)
+
+    doctor_2 = models.CharField(null=True, blank=True, max_length=60, verbose_name="Doctor's name", default=None)
+    doctoraddress_2 = models.CharField(null=True, blank=True, max_length=120, verbose_name="Doctor's address", default=None)
+    doctortelephone_2 = models.CharField(null=True, blank=True, max_length=40, verbose_name="Doctor's phone", default=None)
+    specialist_2 = models.CharField(null=True, blank=True, max_length=60, verbose_name="Specialist's name", default=None)
+
+    doctor_3 = models.CharField(null=True, blank=True, max_length=60, verbose_name="Doctor's name", default=None)
+    doctoraddress_3 = models.CharField(null=True, blank=True, max_length=120, verbose_name="Doctor's address", default=None)
+    doctortelephone_3 = models.CharField(null=True, blank=True, max_length=40, verbose_name="Doctor's phone", default=None)
+    specialist_3 = models.CharField(null=True, blank=True, max_length=60, verbose_name="Specialist's name", default=None)
+
+    doctor_4 = models.CharField(null=True, blank=True, max_length=60, verbose_name="Doctor's name", default=None)
+    doctoraddress_4 = models.CharField(null=True, blank=True, max_length=120, verbose_name="Doctor's address", default=None)
+    doctortelephone_4 = models.CharField(null=True, blank=True, max_length=40, verbose_name="Doctor's phone", default=None)
+    specialist_4 = models.CharField(null=True, blank=True, max_length=60, verbose_name="Specialist's name", default=None)
+
+    doctor_5 = models.CharField(null=True, blank=True, max_length=60, verbose_name="Doctor's name", default=None)
+    doctoraddress_5 = models.CharField(null=True, blank=True, max_length=120, verbose_name="Doctor's address", default=None)
+    doctortelephone_5 = models.CharField(null=True, blank=True, max_length=40, verbose_name="Doctor's phone", default=None)
+    specialist_5 = models.CharField(null=True, blank=True, max_length=60, verbose_name="Specialist's name", default=None)
+
+    doctor_6 = models.CharField(null=True, blank=True, max_length=60, verbose_name="Doctor's name", default=None)
+    doctoraddress_6 = models.CharField(null=True, blank=True, max_length=120, verbose_name="Doctor's address", default=None)
+    doctortelephone_6 = models.CharField(null=True, blank=True, max_length=40, verbose_name="Doctor's phone", default=None)
+    specialist_6 = models.CharField(null=True, blank=True, max_length=60, verbose_name="Specialist's name", default=None)
+
+    doctor_7 = models.CharField(null=True, blank=True, max_length=60, verbose_name="Doctor's name", default=None)
+    doctoraddress_7 = models.CharField(null=True, blank=True, max_length=120, verbose_name="Doctor's address", default=None)
+    doctortelephone_7 = models.CharField(null=True, blank=True, max_length=40, verbose_name="Doctor's phone", default=None)
+    specialist_7 = models.CharField(null=True, blank=True, max_length=60, verbose_name="Specialist's name", default=None)
+
+    doctor_8 = models.CharField(null=True, blank=True, max_length=60, verbose_name="Doctor's name", default=None)
+    doctoraddress_8 = models.CharField(null=True, blank=True, max_length=120, verbose_name="Doctor's address", default=None)
+    doctortelephone_8 = models.CharField(null=True, blank=True, max_length=40, verbose_name="Doctor's phone", default=None)
+    specialist_8 = models.CharField(null=True, blank=True, max_length=60, verbose_name="Specialist's name", default=None)
+
+    doctor_9 = models.CharField(null=True, blank=True, max_length=60, verbose_name="Doctor's name", default=None)
+    doctoraddress_9 = models.CharField(null=True, blank=True, max_length=120, verbose_name="Doctor's address", default=None)
+    doctortelephone_9 = models.CharField(null=True, blank=True, max_length=40, verbose_name="Doctor's phone", default=None)
+    specialist_9 = models.CharField(null=True, blank=True, max_length=60, verbose_name="Specialist's name", default=None)
 
     class Meta:
         abstract = True
