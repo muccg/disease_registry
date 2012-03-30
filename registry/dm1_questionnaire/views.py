@@ -46,6 +46,7 @@ def clinical(request):
         ("General Medical Factors", GeneralMedicalFactorsForm, save_default),
         ("Genetic Test Details", GeneticTestDetailsForm, save_default),
         ("Ethnic Origin", EthnicOriginForm, save_default),
+        ("Family Member", FamilyMemberForm, save_default),
         #("Clinical Trials", ClinicalTrialsForm, save_default),
         #("Consent Form", ConsentForm, save_default), # validated separately
     )

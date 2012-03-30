@@ -32,6 +32,7 @@ class RespiratoryForm(forms.ModelForm):
         # documentation suggests.
         self.fields["fvc"].widget = PercentageWidget()
         self.fields["fvc_date"].widget=LubricatedDateWidget(popup=True, today=True, years=-5)
+        self.fields["calculatedfvc"].widget = PercentageWidget()
 
     class Meta:
         model = Respiratory

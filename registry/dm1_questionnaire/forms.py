@@ -90,37 +90,57 @@ class ConsentForm(forms.ModelForm):
 
 class DiagnosisForm(forms.ModelForm):
     # keep that in sync with base.py and add the null option
-    FIRST_SYMPTOM_CHOICES_FORM = (('', "--------"),) + base.Diagnosis.FIRST_SYMPTOM_CHOICES
+    DIAGNOSIS_CHOICES = (
+        ('', "--------"),
+        ("DM1", "DM1"),
+        ("DM2", "DM2"),
+        ("O", "Not yet diagnosed"), # the text is different from registry, but the value is the same as 'Other' in the registry in base.py
+    )
+
+    # keep the values in sync with base.py base.Diagnosis.FIRST_SYMPTOM_CHOICES
+    FIRST_SYMPTOM_CHOICES_FORM = (('', "--------"),
+        ("1", "Concerns prior to/or around the time of birth eg decreased movements in the womb"),  #"Prenatal - polyhydramnios and reduced fetal movements"),
+        ("2", "Feeding difficulties requiring a feeding tube shortly after birth"),  #"Feeding difficulties requiring tube at or near term"),
+        #("3", ""),  #"Hypotonia"),
+        ("4", "Learning difficulties"),  #"Learning difficulties"),
+        ("5", "Delayed development"),  #"Delayed development"),
+        ("6", "Muscles difficult to relax or stiff (myotonia)"),  #"Myotonia"),
+        ("7", "Muscle weakness"),  #"Muscle weakness"),
+        ("8", "Cataracts"),  #"Bilateral cataracts"),
+        ("9", "Heart problems"),  #"Cardiac symptoms"),
+        ("10", "Problems with anaesthetics"), #"Anaesthetic problems"),
+        #("11", ""), #"Patient is the mother of a child with congenital myotonic dystrophy"),
+        ("12", "Asymptomatic"), #"Patient asymptomatic"),
+        ("13", "Diagnosis of a family member with Myotonic dystrophy"), #"Diagnosis of a family member with Myotonic dystrophy"),
+        #("14", "")) #"Other")
+        )
+
     FIRST_SUSPECTED_CHOICES_FORM = (('', "--------"),) + base.Diagnosis.FIRST_SUSPECTED_CHOICES
     DIAGNOSED_CHOICES = (('', "---"), ('False', 'No'), ('True', 'Yes'))
 
-    #first_symptom = forms.CharField('What was the first symptom that prompted your diagnosis', widget=Select(choices=base.Diagnosis.FIRST_SYMPTOM_CHOICES))
-    first_symptom = forms.CharField(label='What was the first symptom that prompted your diagnosis', widget=Select(choices=FIRST_SYMPTOM_CHOICES_FORM))
-    first_suspected_by = forms.CharField(label='Who first suspected you to have Myotonic Dystrophy', widget=Select(choices=FIRST_SUSPECTED_CHOICES_FORM))
-    # TODO: IMPORTANT: the question is reverse from the "Yest undiagnosed" in registry base.py
-    #undiagnosed = forms.BooleanField(label="Have you been clinically diagnosed with myotonic dystrophy", widget=Select(choices=DIAGNOSED_CHOICES))
-    #undiagnosed = forms.NullBooleanSelect(label="Have you been clinically diagnosed with myotonic dystrophy")
-    #undiagnosed = forms.CharField(label='Have you been clinically diagnosed with myotonic dystrophy', widget=Select(choices=DIAGNOSED_CHOICES))
-    diagnosed = forms.CharField(label='Have you been clinically diagnosed with myotonic dystrophy', widget=Select(choices=DIAGNOSED_CHOICES))
+    diagnosis = forms.CharField(label='What type of Myotonic dystrophy have you been diagnosed with?', widget=Select(choices=DIAGNOSIS_CHOICES), required=False)
 
-    age_at_clinical_diagnosis = forms.IntegerField(label='What was your age when you were clinically diagnosed', required=False, max_value=120, min_value=0, help_text="Age in years")
+    #first_symptom = forms.CharField('What was the first symptom that prompted your diagnosis', widget=Select(choices=base.Diagnosis.FIRST_SYMPTOM_CHOICES))
+    first_symptom = forms.CharField(label='What was the first symptom that prompted your diagnosis?', widget=Select(choices=FIRST_SYMPTOM_CHOICES_FORM), required=False)
+    first_suspected_by = forms.CharField(label='Who first suspected you to have Myotonic Dystrophy?', widget=Select(choices=FIRST_SUSPECTED_CHOICES_FORM), required=False)
+
+    age_at_clinical_diagnosis = forms.IntegerField(label='What was your age when you were clinically diagnosed?', required=False, max_value=120, min_value=0, help_text="Age in years")
 
     class Meta:
-        exclude = ("patient", "age_at_molecular_diagnosis")
+        exclude = ("patient", "affectedstatus", "age_at_molecular_diagnosis")
         model = models.Diagnosis
 
 
 class MotorFunctionForm(forms.ModelForm):
-    WALK_CHOICES = (('', "---"), ('False', 'No'), ('True', 'Yes'))
-    # Keep in sync with base.py!!!!
-    WALK_ASSISTED_CHOICES = (
+    WALK_CHOICES = (('', "---"),) + base.MotorFunction.YN_CHOICES
+    WALK_ASSISTED_CHOICES = (('', "-------"),) + base.MotorFunction.WALK_ASSISTED_CHOICES
+    # caution: keep in sync with base.MotorFunction.MOTOR_FUNCTION_CHOICES
+    MOTOR_FUNCTION_CHOICES = (
         ('', "-------"),
-        ("No device", "No device required"), # Trac 16 #49
-        # ("Ankle support", "Ankle support"), # Trac 16 Questionnaire #20, last item
-        ("Stick", "Stick"),
-        ("Walker", "Walker"))
-
-    MOTOR_FUNCTION_CHOICES = (('', "-------"),) + base.MotorFunction.MOTOR_FUNCTION_CHOICES
+        ("walking", "Walking independently"),
+        ("assisted", "Walking assisted"),
+        ("nonamb", "I cannot walk"), # added v3
+    )
 
     # Keep in sync with base.py!!!!
     WHEELCHAIR_USE_CHOICES = (
@@ -138,19 +158,22 @@ class MotorFunctionForm(forms.ModelForm):
         (3, "Significant speech problems"),
     )
 
-    walk = forms.CharField(label='Are you currently able to walk', widget=Select(choices=WALK_CHOICES), help_text="Walking without help or assisted walking (orthoses or assistive device or human assistance), indoors or outdoors")
-    walk_assisted = forms.CharField(label='Do you currently use devices to assist with walking', widget=Select(choices=WALK_ASSISTED_CHOICES), help_text="Walking without help or assisted walking (orthoses or assistive device or human assistance), indoors or outdoors")
+    walk = forms.CharField(label='Are you currently able to walk', required=False, widget=Select(choices=WALK_CHOICES), help_text="Walking without help or assisted walking (orthoses or assistive device or human assistance), indoors or outdoors")
+    walk_assisted = forms.CharField(label='Do you currently use devices to assist with walking', required=False, widget=Select(choices=WALK_ASSISTED_CHOICES), help_text="Walking without help or assisted walking (orthoses or assistive device or human assistance), indoors or outdoors")
     walk_assisted_age = forms.IntegerField(label='At what age did you commence using devices to assist with walking', required=False, max_value=120, min_value=0, help_text="Age in years")
-    sit = forms.BooleanField(label="Are you currently able to sit without support", widget=Select(choices=WALK_CHOICES), help_text="Able to maintain a sitting position on a chair or a wheelchair without support of upper limbs or leaning against the back of the chair")
-    best_function = forms.CharField(label="What is the best motor function level you have achieved", widget=Select(choices=MOTOR_FUNCTION_CHOICES), help_text="Walking: walking with or without help (orthoses or assistive device or human assistance), inside or outdoors<br/>Sitting independently: able to maintain a sitting position on a chair or a wheelchair without support of upper limbs or leaning against the back of the chair")
-    acquisition_age = forms.IntegerField(label='At what age did you start walking', required=False, max_value=120, min_value=0, help_text="Indicate the age in years when you started walking")
-    wheelchair_use = forms.CharField(label='Do you use a wheelchair', widget=Select(choices=WHEELCHAIR_USE_CHOICES))
+    # removed v3
+    #sit = forms.BooleanField(label="Are you currently able to sit without support", widget=Select(choices=WALK_CHOICES), help_text="Able to maintain a sitting position on a chair or a wheelchair without support of upper limbs or leaning against the back of the chair")
+    # removed v3
+    #acquisition_age = forms.IntegerField(label='At what age did you start walking', required=False, max_value=120, min_value=0, help_text="Indicate the age in years when you started walking")
+    best_function = forms.CharField(label="Which of the following options describes the best motor function you are currently able to achieve", required=False, widget=Select(choices=MOTOR_FUNCTION_CHOICES))
+
+    wheelchair_use = forms.CharField(label='Do you use a wheelchair', required=False, widget=Select(choices=WHEELCHAIR_USE_CHOICES))
     wheelchair_usage_age = forms.IntegerField(label='At what age did you start using a wheelchair', required=False, max_value=120, min_value=0, help_text="If using a wheelchair, specify age when wheelchair use started")
 
-    dysarthria = forms.IntegerField(label='Do you have problems with your speech', widget=Select(choices=DYSARTHRIA_CHOICES))
+    dysarthria = forms.IntegerField(label='Do you have problems with your speech', required=False, widget=Select(choices=DYSARTHRIA_CHOICES))
 
     class Meta:
-        exclude = ("diagnosis",)
+        exclude = ("diagnosis", "best_function")
         model = models.MotorFunction
         #FJ Trac 16 item 15, change checkbox to drop down with Yes, No
         #widgets = { 'walk': Select( choices = ((None, '---'), ('0', 'No'), ('1','Yes')) ) }
@@ -168,12 +191,12 @@ class SurgeryForm(forms.ModelForm):
     CATARACT_SURGERY_CHOICES = (('', "---"), ('N', 'No'), ('Y', 'Yes'))
 
     #cardiac_implant = models.NullBooleanField(verbose_name="cardiac implant", help_text="Have you had an operation to implant a device to control/normalise your heart rhythm?")
-    cardiac_implant = forms.CharField(label="Have you had an operation to insert a device to control/normalize your heart rhythm", widget=Select(choices=CARDIAC_IMPLANT_CHOICES))
+    cardiac_implant = forms.CharField(label="Have you had an operation to insert a device to control/normalize your heart rhythm", required=False, widget=Select(choices=CARDIAC_IMPLANT_CHOICES))
     cardiac_implant_age = forms.IntegerField(label='At what age was this device for heart rhythm inserted', required=False, max_value=120, min_value=0)
 
-    cataract_diagnosis = forms.CharField(label='Have you been diagnosed with a cataract', widget=Select(choices=CATARACT_CHOICES))
+    cataract_diagnosis = forms.CharField(label='Have you been diagnosed with a cataract', required=False, widget=Select(choices=CATARACT_CHOICES))
     # This really should be cataract_surgery in the model and here.
-    cataract = forms.CharField(label='Have you had eye surgery to remove a cataract', widget=Select(choices=CATARACT_SURGERY_CHOICES))
+    cataract = forms.CharField(label='Have you had eye surgery to remove a cataract', required=False, widget=Select(choices=CATARACT_SURGERY_CHOICES))
     cataract_age = forms.IntegerField(label='At what age was cataract surgery performed', required=False, max_value=120, min_value=0)
 
     class Meta:
@@ -185,7 +208,7 @@ class HeartForm(forms.ModelForm):
     HEART_CHOICES = (('', "-------"),) + base.Heart.HEART_CHOICES
     YN_CHOICES = (('', "---"),) + base.Heart.YN_CHOICES
 
-    condition = forms.CharField(label="Do you have a heart condition", widget=Select(choices=HEART_CHOICES))
+    condition = forms.CharField(label="Do you have a heart condition", required=False, widget=Select(choices=HEART_CHOICES))
     age_at_diagnosis = forms.IntegerField(label='At what age were you diagnosed with a heart condition', required=False, max_value=120, min_value=0)
 
     # Trac 16 DM1 Questionnaire Item 35, new fields
@@ -209,23 +232,21 @@ class RespiratoryForm(forms.ModelForm):
     VENTILATION_CHOICES = (('', "-------"),) + base.Respiratory.VENTILATION_CHOICES
     VENTILATION_TYPE_CHOICES = (('', "-------"),) + base.Respiratory.VENTILATION_TYPE_CHOICES
 
-    non_invasive_ventilation = forms.CharField(widget=Select(choices=VENTILATION_CHOICES), label="Do you use a mechanical ventilation device (eg nasal or buccal mask)")
+    non_invasive_ventilation = forms.CharField(widget=Select(choices=VENTILATION_CHOICES), required=False, label="Do you use a mechanical ventilation device (eg nasal or buccal mask)")
     age_non_invasive_ventilation = forms.IntegerField(label='If you use a ventilation device, at what age did you start using it', required=False, max_value=120, min_value=0)
 
     non_invasive_ventilation_type = forms.CharField(required=False, label='If you use a ventilation device, what type', widget=Select(choices=VENTILATION_TYPE_CHOICES))
-    invasive_ventilation = forms.CharField(widget=Select(choices=VENTILATION_CHOICES), label="Do you use a tracheostomy for ventilation")
+    invasive_ventilation = forms.CharField(widget=Select(choices=VENTILATION_CHOICES), required=False, label="Do you use a tracheostomy for ventilation")
 
     class Meta:
-        exclude = ("diagnosis", "fvc", "fvc_date")
+        exclude = ("diagnosis", "fvc", "fvc_date", "calculatedfvc")
         model = models.Respiratory
 
 
 class MuscleForm(forms.ModelForm):
     # keep in sync with base.Surgery.UYN_CHOICES
-    YN_CHOICES = (('', "---"),) + base.Muscle.YN_CHOICES
-    myotonia = forms.CharField(widget=Select(choices=YN_CHOICES), label="Do you have problems with slow relaxation of muscles")
-    # TODO: create the 'myotonia_effect' field in base and syncdb-migrate
-    myotonia_effect = forms.CharField(required=False, widget=Select(choices=YN_CHOICES), label="Do problems with slow relaxation of muscles currently have a negative effect on your normal daily activities")
+    YN_CHOICES = (('', "---"),) + base.Muscle.MYOTONIA_CHOICES
+    myotonia = forms.CharField(widget=Select(choices=YN_CHOICES), required=False, label="Do problems with slow relaxation of muscles currently have a negative effect on your normal daily activities?")
 
     class Meta:
         exclude = ("diagnosis",)
@@ -241,9 +262,9 @@ class MuscleMedicationForm(forms.ModelForm):
 class FeedingFunctionForm(forms.ModelForm):
     # keep in sync with base.FeedingFunction.UYN_CHOICES
     DYSPHAGIA_CHOICES = (('', "---"), ('N', 'No'), ('Y', 'Yes'))
-    dysphagia = forms.CharField(widget=Select(choices=DYSPHAGIA_CHOICES), label="Do you have difficulty swallowing")
+    dysphagia = forms.CharField(widget=Select(choices=DYSPHAGIA_CHOICES), required=False, label="Do you have difficulty swallowing")
 
-    gastric_nasal_tube = forms.CharField(widget=Select(choices=DYSPHAGIA_CHOICES), label="Do you use a nasogastric or nasojejunal tube, or a gastrostomy for additional meal supplementation")
+    gastric_nasal_tube = forms.CharField(widget=Select(choices=DYSPHAGIA_CHOICES), required=False, label="Do you use a nasogastric or nasojejunal tube, or a gastrostomy for additional meal supplementation")
 
     class Meta:
         exclude = ("diagnosis",)
@@ -253,7 +274,7 @@ class FeedingFunctionForm(forms.ModelForm):
 class FatigueForm(forms.ModelForm):
     FATIGUE_CHOICES = (('', "---"),) + models.Fatigue.YN_CHOICES
     DOZING_CHOICES = (('', "-------"),) + models.Fatigue.DOZING_CHOICES
-    fatigue = forms.CharField(widget=Select(choices=FATIGUE_CHOICES), label="Does fatigue or daytime sleepiness currently have a negative effect on your normal daily activities")
+    fatigue = forms.CharField(widget=Select(choices=FATIGUE_CHOICES), required=False, label="Does fatigue or daytime sleepiness currently have a negative effect on your normal daily activities")
     sitting_reading = forms.IntegerField(label="Do you start to fall asleep in the following situations: Sitting and reading", widget=Select(choices=DOZING_CHOICES), required=False)
 
     #hereonlyforcaption = forms.CharField(label="hereonlyforcaption")
@@ -273,18 +294,16 @@ class FatigueMedicationForm(forms.ModelForm):
 
 class SocioeconomicFactorsForm(forms.ModelForm):
     EDUCATION_CHOICES = (('', "-------"),) + base.SocioeconomicFactors.EDUCATION_CHOICES
-    education = forms.CharField(label="What is the highest level of education you have achieved", widget=Select(choices=EDUCATION_CHOICES))
+    education = forms.CharField(label="What is the highest level of education you have achieved", required=False, widget=Select(choices=EDUCATION_CHOICES))
 
     OCCUPATION_CHOICES = (('', "-------"),) + base.SocioeconomicFactors.OCCUPATION_CHOICES
-    occupation = forms.CharField(label="What is your occupation", widget=Select(choices=OCCUPATION_CHOICES))
+    occupation = forms.CharField(label="What is your occupation", required=False, widget=Select(choices=OCCUPATION_CHOICES))
 
     EFFECT_CHOICES = (('', "-------"),) + base.SocioeconomicFactors.EFFECT_CHOICES
-    employment_effect = forms.CharField(label="Has myotonic dystrophy affected your employment", widget=Select(choices=EFFECT_CHOICES))
-
-    comments = forms.CharField(required=False, widget=Textarea(attrs={"cols": 60, "rows": 3}))
+    employment_effect = forms.CharField(label="Has myotonic dystrophy affected your employment", required=False, widget=Select(choices=EFFECT_CHOICES))
 
     class Meta:
-        exclude = ("diagnosis",)
+        exclude = ("diagnosis",'comments')
         model = models.SocioeconomicFactors
 
 
@@ -299,37 +318,33 @@ class GeneralMedicalFactorsForm(forms.ModelForm):
     YESNO_CHOICES = (('', "---"),) + base.GeneralMedicalFactors.YESNO_CHOICES
     YESNOUNSURE_CHOICES = (('', "---"),) + base.GeneralMedicalFactors.YESNOUNSURE_CHOICES
 
-    diabetes = forms.CharField(label="Have you been diagnosed with diabetes", widget=Select(choices=DIABETES_CHOICES))
+    diabetes = forms.CharField(label="Have you been diagnosed with diabetes", required=False, widget=Select(choices=DIABETES_CHOICES))
     diabetesage = forms.IntegerField(required=False, label='Age at diagnosis')
 
-    pneumonia = forms.CharField(label="Have you ever suffered from pneumonia, if yes please give the age when you first had it", widget=Select(choices=YESNO_CHOICES))
+    pneumonia = forms.CharField(label="Have you ever suffered from pneumonia, if yes please give the age when you first had it", required=False, widget=Select(choices=YESNO_CHOICES))
     pneumoniaage = forms.IntegerField(label='Age of first episode', required=False, max_value=120, min_value=0)
 
-    # TODO: add this field to base!
-    # done: added to base.py
     medicalert = forms.CharField(label="Do you wear a Medicalert bracelet", widget=Select(choices=YESNO_CHOICES), required=False)
 
-    #TODO: add this to base.py
-    physiotherapy = forms.CharField(label="Have you received any of the following? Physiotherapy", widget=Select(choices=YESNOUNSURE_CHOICES), required=False)
-    geneticcounseling = forms.CharField(label="Genetic counseling", widget=Select(choices=YESNOUNSURE_CHOICES), required=False)
-    psychologicalcounseling = forms.CharField(label="Emotional & psychological counseling", widget=Select(choices=YESNOUNSURE_CHOICES), required=False)
-    speechtherapy = forms.CharField(label="Speech therapy", widget=Select(choices=YESNOUNSURE_CHOICES), required=False)
-    occupationaltherapy = forms.CharField(label="Occupational therapy", widget=Select(choices=YESNOUNSURE_CHOICES), required=False)
-    vocationaltraining = forms.CharField(label="Vocational rehabilitation", widget=Select(choices=YESNOUNSURE_CHOICES), required=False)
+    physiotherapy = forms.CharField(label="Have you received any of the following: Physiotherapy", widget=Select(choices=YESNO_CHOICES), required=False)
+    psychologicalcounseling = forms.CharField(label="Emotional & psychological counseling", widget=Select(choices=YESNO_CHOICES), required=False)
+    speechtherapy = forms.CharField(label="Speech therapy", widget=Select(choices=YESNO_CHOICES), required=False)
+    occupationaltherapy = forms.CharField(label="Occupational therapy", widget=Select(choices=YESNO_CHOICES), required=False)
+    vocationaltraining = forms.CharField(label="Vocational rehabilitation", widget=Select(choices=YESNO_CHOICES), required=False)
+
+    liver = forms.BooleanField(label="Have you been diagnosed with: Liver disease", required=False)
 
     class Meta:
-        exclude = ("diagnosis","cancer", "cancertype","cancerothers","cancerorgan","liver","miscarriage","gor","gall_bladder",
-                   "infection","sexual_dysfunction","constipation","cholesterol","cognitive_impairment","psychological","endocrine","obgyn",
-                   "anxiety","depression","apathy")
+        exclude = ("diagnosis","cancer", "cancertype","cancerothers","cancerorgan","cognitive_impairment","psychological","endocrine","obgyn",)
         model = models.GeneralMedicalFactors
 
 
 class GeneticTestDetailsForm(forms.ModelForm):
     YESNO_CHOICES = (('', "---"), ('Y', 'Yes'), ('N', 'No'))
 
-    details = forms.CharField(label="Have you had a genetic test for myotonic dystrophy", widget=Select(choices=YESNO_CHOICES))
-    counselling = forms.CharField(label="Have you received genetic counselling", widget=Select(choices=YESNO_CHOICES))
-    familycounselling = forms.CharField(label="Has any of your family members received genetic counselling", widget=Select(choices=YESNO_CHOICES))
+    details = forms.CharField(label="Have you had a genetic test for myotonic dystrophy", required=False, widget=Select(choices=YESNO_CHOICES))
+    counselling = forms.CharField(label="Have you received genetic counselling", required=False, widget=Select(choices=YESNO_CHOICES))
+    familycounselling = forms.CharField(label="Has any of your family members received genetic counselling", required=False, widget=Select(choices=YESNO_CHOICES))
 
     class Meta:
         exclude = ("diagnosis", "laboratory")
@@ -342,7 +357,7 @@ class GeneticTestDetailsForm(forms.ModelForm):
 class EthnicOriginForm(forms.ModelForm):
     ORIGIN_CHOICES = (('', "-------"),) + base.EthnicOrigin.ORIGIN_CHOICES
 
-    ethnic_origin = forms.CharField(label="How would you describe your ethnic origin", widget=Select(choices=ORIGIN_CHOICES))
+    ethnic_origin = forms.CharField(label="How would you describe your ethnic origin", required=False, widget=Select(choices=ORIGIN_CHOICES))
 
     class Meta:
         exclude = ("diagnosis",)
@@ -356,7 +371,9 @@ class ClinicalTrialsForm(forms.ModelForm):
 
 
 class PatientForm(forms.ModelForm):
-    email = forms.EmailField(required=True)
+    email = forms.EmailField(required=False)
+    SEX_CHOICES = (('', "-------"),) + models.Patient.SEX_CHOICES
+    sex = forms.CharField(required=False, widget=Select(choices=SEX_CHOICES))
 
     class Meta:
         model = models.Patient
@@ -405,3 +422,8 @@ class PatientForm(forms.ModelForm):
             raise forms.ValidationError('There is already a patient with the same family and given names in this working group: "%s %s %s".' % (familyname, givennames, workinggroup))
         return cleaneddata
     #FJ end
+
+class FamilyMemberForm(forms.ModelForm):
+    class Meta:
+        exclude = ("diagnosis",)
+        model = models.FamilyMember
