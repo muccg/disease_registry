@@ -125,7 +125,14 @@ class Diagnosis(ApproveMixin, base.Diagnosis):
         return unicode(self.patient)
 
     def approve(self, patient):
-        diagnosis = super(Diagnosis, self).approve(dm1.models.Diagnosis, patient=patient, commit=True)
+        print "self.diagnosis %s" % (self.diagnosis,) # diagnosis field of this diagnosis instance
+        extra = {}
+        if (self.diagnosis == "O"): # "Not yet diagnosed" in Questionnaire, "Other" in Registry
+            # force "Affected Status in Registry to "Not yet diagnosed/Family history only" if "Condition" is "Not yet diagnosed" in questionnaire
+            print "Diagnosis approve Not Yet Diagnosed"
+            extra = {'affectedstatus': 'FamilyHistory'}
+
+        diagnosis = super(Diagnosis, self).approve(dm1.models.Diagnosis, patient=patient, commit=True, **extra)
 
         # Loop through the models that have a one-to-one relationship with
         # this one and approve them. This is ugly, but effective.
