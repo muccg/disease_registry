@@ -43,6 +43,9 @@ class FamilyMemberForm(forms.ModelForm):
     class Meta:
         model = FamilyMember
 
+"""
+#v3 not needed anymore
+
 from datetime import date
 def calculateage(birthday):
         today = date.today()
@@ -105,16 +108,24 @@ def calculatefvcci(dateofbirth, height, weight, sex):
 
     # for cases not handled
     return ("","")
+"""
 
 class RespiratoryForm(forms.ModelForm):
     #predictedfvc = forms.DecimalField(label='Predicted FVC', required=False, min_value=0, max_value=100, max_digits=5, decimal_places=2, widget = FVCPercentageWidget(attrs={'readonly': 'readonly'}))
     #predictedfvc = forms.DecimalField(label='Predicted FVC', required=False, min_value=0, max_value=100, max_digits=5, decimal_places=2, widget = FVCPercentageWidget())
     #fvc = forms.DecimalField(label='Measured FVC', required=False, min_value=0, max_value=100, max_digits=5, decimal_places=2, widget = FVCPercentageWidget(attrs={'size':'6', 'maxlength': '6'}))
     #fvc = forms.DecimalField(label='Measured FVC', required=False, min_value=0, max_value=100, max_digits=5, decimal_places=2)
-    predictedfvc = forms.DecimalField(label='Predicted FVC', required=False, min_value=0, max_value=100, max_digits=5, decimal_places=2,
-                        widget = PercentageWidget(attrs={'readonly': 'readonly', 'size': '6'}), help_text="forced vital capacity (FVC, expressed as % of normal, predicted by height, age and sex according to NHANES III formulae for Caucasians).")
-    ci = forms.DecimalField(label='Confidence interval', required=False, min_value=0, max_value=100, max_digits=5, decimal_places=2,
-                        widget = forms.TextInput(attrs={'readonly': 'readonly', 'size': '6'}))
+    # removed v3
+    #predictedfvc = forms.DecimalField(label='Predicted FVC', required=False, min_value=0, max_value=100, max_digits=5, decimal_places=2,
+    #                    widget = PercentageWidget(attrs={'readonly': 'readonly', 'size': '6'}), help_text="forced vital capacity (FVC, expressed as % of normal, predicted by height, age and sex according to NHANES III formulae for Caucasians).")
+    # removed v3
+    #ci = forms.DecimalField(label='Confidence interval', required=False, min_value=0, max_value=100, max_digits=5, decimal_places=2,
+    #                    widget = forms.TextInput(attrs={'readonly': 'readonly', 'size': '6'}))
+
+    # added v3
+    # declared here to add the '%' symbol after the input field
+    #calculatedfvc = forms.DecimalField(label='Calculated FVC', required=False, min_value=0, max_value=100, max_digits=5, decimal_places=2,
+    #                    widget = PercentageWidget(attrs={'size': '6'}))
 
     def __init__(self, *args, **kwargs):
         super(RespiratoryForm, self).__init__(*args, **kwargs)
@@ -125,7 +136,10 @@ class RespiratoryForm(forms.ModelForm):
         # documentation suggests.
         #self.fields["fvc"].widget = FVCPercentageWidget()
         self.fields["fvc_date"].widget=LubricatedDateWidget(popup=True, today=True, years=-5)
+        self.fields["calculatedfvc"].widget = PercentageWidget() # just to display the "%" symbol after the input field
 
+        """
+        # removed v3
         # Set the form fields based on the model object
         if kwargs.has_key('instance'):
             instance = kwargs['instance'] # dm1.models.Respiratory
@@ -148,6 +162,7 @@ class RespiratoryForm(forms.ModelForm):
             fvc, ci = calculatefvcci(dateofbirth, height, weight, sex)
             self.initial['predictedfvc'] = "%.2f" % fvc
             self.initial['ci'] = "%.2f" % ci
+        """
 
     class Meta:
         model = Respiratory
@@ -174,19 +189,50 @@ class GeneticTestDetailsForm(forms.ModelForm):
         self.fields["test_date"].widget=LubricatedDateWidget(popup=True, today=True, years=-5, required=self.fields["test_date"].required)
 
     # the following code doesn't display the wodget properly, hence the code above
-    #class Meta:
-    #    model = GeneticTestDetails
+    class Meta:
+        model = GeneticTestDetails
     #    test_date = forms.DateField(label="Test Date", widget=LubricatedDateWidget(popup=True, today=True, years=-20, required=False))
+
+    def clean(self):
+        cleaneddata = self.cleaned_data
+
+        details = cleaneddata.get('details', None)
+        test_date = cleaneddata.get('test_date', None)
+        #print "GeneticTestDetailsForm clean: details '%s' test_date '%s'" % (details, test_date)
+
+        if details == 'Y' and not test_date:
+            # see https://docs.djangoproject.com/en/1.2/ref/forms/validation/#cleaning-and-validating-fields-that-depend-on-each-other
+            self._errors["test_date"] = self.error_class(["Please enter the Genetic Test Date"])
+            #raise forms.ValidationError('Please enter the Genetic Test Date')
+            self.fields["test_date"].required=True
+        return cleaneddata
 
 #FJ added to change the checkbox to a select
 class MotorFunctionForm(forms.ModelForm):
+    # Trac 16 Item 44, use Radio buttons for Yes, No
+    walk = forms.CharField(label="Currently able to walk", widget=RadioSelect(choices=base.MotorFunction.YN_CHOICES))
+
     class Meta:
         model = MotorFunction
         #FJ Trac 16 item 15 & 18, change checkbox to drop down with Yes, No
         # Trac 16 Item 44, use Radio buttons for Yes, No
-        widgets = { 'walk': RadioSelect( choices = (('0', 'No'), ('1','Yes')) ),    # , attrs={'class':'radiochoices'} ),
-                    'sit': RadioSelect( choices = (('0', 'No'), ('1','Yes')) )
-                   }
+        #widgets = { 'walk': RadioSelect( choices = (('0', 'No'), ('1','Yes')) ),    # , attrs={'class':'radiochoices'} ),
+        #            'sit': RadioSelect( choices = (('0', 'No'), ('1','Yes')) ) }
+
+    def clean(self):
+        cleaneddata = self.cleaned_data
+
+        wheelchair_use = cleaneddata.get('wheelchair_use', None)
+        wheelchair_usage_age = cleaneddata.get('wheelchair_usage_age', None)
+        print "MotorFunctionForm clean: wheelchair_use '%s' wheelchair_usage_age '%s'" % (wheelchair_use, wheelchair_usage_age)
+
+        if (wheelchair_use == "intermittent" or wheelchair_use == "permanent") and not wheelchair_usage_age:
+            # see https://docs.djangoproject.com/en/1.2/ref/forms/validation/#cleaning-and-validating-fields-that-depend-on-each-other
+            self._errors["wheelchair_usage_age"] = self.error_class(["Please specify the age at start of wheelchair use"])
+            #raise forms.ValidationError('Please enter the Genetic Test Date')
+            self.fields["wheelchair_usage_age"].required=True
+
+        return cleaneddata
 
 #FJ added to change the checkbox to a select
 class SurgeryForm(forms.ModelForm):

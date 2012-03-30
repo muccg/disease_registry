@@ -2,40 +2,28 @@
 from __future__ import division
 from django.db import models
 
+from patients.models import Patient
+
 # Base abstract models for fields common to the registry proper and
 # questionnaire.
 
 class Diagnosis(models.Model):
-    """
-    FIRST_SYMPTOM_CHOICES = (
-        ("Prenatal", "Prenatal — polyhydramnios and reduced fetal movements"),
-        ("Feeding difficulties", "Feeding difficulties requiring tube at or near term"),
-        ("Hypotonia", "Hypotonia"),
-        ("Learning difficulties", "Learning difficulties"),
-        ("Myotonia", "Myotonia"),
-        ("Muscle weakness", "Muscle weakness"),
-        ("Bilateral cataracts", "Bilateral cataracts"),
-        ("Cardiac", "Cardiac symptoms"),
-        ("Anaesthetic", "Anaesthetic problems"),
-        ("Mother", "Mother of a child with congenital myotonic dystrophy"),
-        ("Relative", "Relative of a person with myotonic dystrophy but no symptoms or clinical manifestations"),
-        ("Other", "Other"),
-    )
-    """
     # Trac 16 #12 Now assigning numbers instead of lengthy strings. The database is not really in production yet, so we can change that
     FIRST_SYMPTOM_CHOICES = (
-        ("1", "Concerns prior to birth eg decreased movements in the womb"),
-        ("2", "Feeding difficulties requiring a feeding tube shortly after birth"),
-        ("3", "Learning difficulties"),
-        ("4", "Delayed development"),
-        ("5", "Muscle weakness"),
-        ("6", "Muscles difficult to relax or stiff (myotonia) "),
-        ("7", "Cataracts"),
-        ("8", "Heart problems"),
-        ("9", "Problems with anaesthetics"),
-        ("10", "Diagnosis of a family member with Myotonic dystrophy"),
-        ("11", "Asymptomatic"),
-    )
+        ("1", "Prenatal - polyhydramnios and reduced fetal movements"),
+        ("2", "Feeding difficulties requiring tube at or near term"),
+        ("3", "Hypotonia"),
+        ("4", "Learning difficulties"),
+        ("5", "Delayed development"),
+        ("6", "Myotonia"),
+        ("7", "Muscle weakness"),
+        ("8", "Bilateral cataracts"),
+        ("9", "Cardiac symptoms"),
+        ("10", "Anaesthetic problems"),
+        ("11", "Patient is the mother of a child with congenital myotonic dystrophy"),
+        ("12", "Patient asymptomatic"),
+        ("13", "Diagnosis of a family member with Myotonic dystrophy"),
+        ("14", "Other"))
 
     FIRST_SUSPECTED_CHOICES = (
         ("NA", "Not Applicable"), # Trac 16 #61
@@ -51,20 +39,27 @@ class Diagnosis(models.Model):
     )
 
     AFFECTED_STATUS_CHOICES = (
-        ('FamilyHistory','Family History only'),
+        ('FamilyHistory','Not yet diagnosed/Family history only'),
         ('AsymptomaticCarrier','Asymptomatic Carrier'),
         ('Congenital','Congenital Myotonic Dystrophy'),
         ('Juvenile','Juvenile Myotonic Dystrophy'),
         ('Adult','Adult Myotonic Dystrophy'),
     )
 
-    affectedstatus = models.CharField(max_length=30, choices=AFFECTED_STATUS_CHOICES, verbose_name='Affected Status')
-    first_symptom = models.CharField('What was the first symptom that prompted the diagnosis of Myotonic dystrophy', max_length=50, choices=FIRST_SYMPTOM_CHOICES)
-    first_suspected_by = models.CharField(max_length=50, choices=FIRST_SUSPECTED_CHOICES)
-    # 2012-01-18: CAUTION TODO: IMPORTANT: the question is reverse from the questionnaire in forms.py: undiagnosed = forms.BooleanField(label="Have you been clinically diagnosed with myotonic dystrophy")
-    # trac 16 #62
-    #undiagnosed = models.BooleanField(verbose_name="Yet undiagnosed")
-    diagnosed = models.BooleanField(verbose_name="diagnosed")
+    DIAGNOSIS_CHOICES = (
+        ("DM1", "DM1"),
+        ("DM2", "DM2"),
+        ("O", "Other"),
+    )
+    # moved up to base.py since the question is now in registry & questionnaire
+    # Need the "default='DM1'" to remove the '----' option, see Django admin
+    # /home/username/registry/virt_registry/lib/python2.6/site-packages/Mango_py-1.2.3-py2.6.egg/django/db/models/fields/__init__.py
+    diagnosis = models.CharField(max_length=3, choices=DIAGNOSIS_CHOICES, verbose_name='Condition', default='DM1') # required
+
+    affectedstatus = models.CharField(max_length=30, choices=AFFECTED_STATUS_CHOICES, verbose_name='Affected Status') # required
+    first_symptom = models.CharField('What was the first symptom that prompted the diagnosis of Myotonic Dystrophy', max_length=50, choices=FIRST_SYMPTOM_CHOICES, null=True, blank=True)
+    first_suspected_by = models.CharField(max_length=50, choices=FIRST_SUSPECTED_CHOICES, null=True, blank=True)
+
     age_at_clinical_diagnosis = models.IntegerField('age in years at clinical diagnosis', null=True, blank=True)
     age_at_molecular_diagnosis = models.IntegerField('age in years at molecular diagnosis', null=True, blank=True)
 
@@ -83,9 +78,12 @@ class MotorFunction(models.Model):
     MOTOR_FUNCTION_CHOICES = (
         ("walking", "Walking independently"),
         ("assisted", "Walking assisted"),
-        ("sitting", "Sitting independently"),
-        ("none", "Never able to walk or sit independently")
+        ("nonamb", "Non-ambulatory"), # added v3
+        #("sitting", "Sitting independently"), # removed v3
+        #("none", "Never able to walk or sit independently") # removed v3
     )
+
+    YN_CHOICES = (('N', 'No'), ('Y', 'Yes'))
 
     WALK_ASSISTED_CHOICES = (
         ("No device", "No device required"), # Trac 16 #49
@@ -101,15 +99,19 @@ class MotorFunction(models.Model):
         ("unknown", "Unknown")
     )
 
-    walk = models.BooleanField(verbose_name="currently able to walk") # Trac 16 Item 48, removed help text
-    walk_assisted = models.CharField(null=True, blank=True, max_length=50, choices=WALK_ASSISTED_CHOICES, verbose_name="current use of devices to assist with walking")
+    # could not make the BooleanField required
+    #walk = models.BooleanField(verbose_name="currently able to walk", null=False, blank=False) # Trac 16 Item 48, removed help text #required
+    walk = models.CharField(max_length=1, choices=YN_CHOICES, verbose_name="currently able to walk") #required
+    walk_assisted = models.CharField(max_length=50, choices=WALK_ASSISTED_CHOICES, verbose_name="current use of devices to assist with walking") #required
     walk_assisted_age = models.IntegerField(verbose_name="at what age did the patient commence using devices to assist with walking", null=True, blank=True, help_text="age in years")
-    sit = models.BooleanField(verbose_name="currently able to sit without support", help_text="Able to maintain a sitting position on a chair or a wheelchair without support of upper limbs or leaning against the back of the chair")
-    best_function = models.CharField(max_length=8, verbose_name="What is the best motor function level the patient has achieved", choices=MOTOR_FUNCTION_CHOICES, help_text="[Motor functions are listed in order with higher functions at the top, please choose one]<br/>Walking: walking with or without help (orthoses or assistive device or human assistance), inside or outdoors<br/>Sitting independently: able to maintain a sitting position on a chair or a wheelchair without support of upper limbs or leaning against the back of the chair")
-    acquisition_age = models.IntegerField(verbose_name="At what age did the patient start walking", null=True, blank=True, help_text="Indicate age in years when the patient started walking")
-    wheelchair_use = models.CharField(verbose_name="wheel chair use (over 3 years of age)", max_length=12, choices=WHEELCHAIR_USE_CHOICES, help_text="Yes (permanent): patient is not able to walk and needs a wheelchair to move<br/>Yes (intermittent): patient is still able to walk")
-    wheelchair_usage_age = models.IntegerField(null=True, blank=True, help_text="If using wheelchair specify age at start of wheelchair use")
-    dysarthria = models.IntegerField(choices=DYSARTHRIA_CHOICES)
+    # removed v3
+    #sit = models.BooleanField(verbose_name="currently able to sit without support", help_text="Able to maintain a sitting position on a chair or a wheelchair without support of upper limbs or leaning against the back of the chair")
+    best_function = models.CharField(null=True, blank=True, max_length=8, verbose_name="What is the best motor function level the patient has achieved", choices=MOTOR_FUNCTION_CHOICES, help_text="[Motor functions are listed in order with higher functions at the top, please choose one]<br/>Walking: walking with or without help (orthoses or assistive device or human assistance), inside or outdoors<br/>Sitting independently: able to maintain a sitting position on a chair or a wheelchair without support of upper limbs or leaning against the back of the chair")
+    #removed v3
+    #acquisition_age = models.IntegerField(verbose_name="At what age did the patient start walking", null=True, blank=True, help_text="Indicate age in years when the patient started walking")
+    wheelchair_use = models.CharField(verbose_name="wheel chair use", max_length=12, choices=WHEELCHAIR_USE_CHOICES, help_text="Yes (permanent): patient is not able to walk and needs a wheelchair to move<br/>Yes (intermittent): patient is still able to walk") #required
+    wheelchair_usage_age = models.IntegerField(null=True, blank=True, help_text="If using wheelchair specify age at start of wheelchair use") # required but need to check Yes previous question
+    dysarthria = models.IntegerField(choices=DYSARTHRIA_CHOICES,null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -130,7 +132,7 @@ class Surgery(models.Model):
     )
 
     #cardiac_implant = models.NullBooleanField(verbose_name="cardiac implant", help_text="Have you had an operation to implant a device to control/normalise your heart rhythm?")
-    cardiac_implant = models.CharField(verbose_name="cardiac implant", max_length=30, choices=CARDIAC_IMPLANT_CHOICES, help_text="Have you had an operation to implant a device to control/normalise your heart rhythm?")
+    cardiac_implant = models.CharField(verbose_name="cardiac implant", blank=True, null=True, max_length=30, choices=CARDIAC_IMPLANT_CHOICES, help_text="Have you had an operation to implant a device to control/normalise your heart rhythm?")
     cardiac_implant_age = models.IntegerField(verbose_name="age cardiac implant received", null=True, blank=True, help_text="Age at which cardiac implant received")
     cataract_diagnosis = models.BooleanField()
     #cataract = models.NullBooleanField(verbose_name="cataract surgery")
@@ -159,13 +161,13 @@ class Heart(models.Model):
 
     YN_CHOICES = (('N', 'No'), ('Y', 'Yes'))
 
-    condition = models.CharField(verbose_name="heart condition", max_length=14, choices=HEART_CHOICES)
+    condition = models.CharField(verbose_name="heart condition", max_length=14, choices=HEART_CHOICES, null=True, blank=True)
     age_at_diagnosis = models.IntegerField(verbose_name="At what age was the patient diagnosed with a heart condition", null=True, blank=True)
 
     # added according to the questionnaire
-    racing = models.CharField(verbose_name="Does the patient experience his heart racing or beating irregularly", choices=YN_CHOICES, max_length=1, null=True, blank=True)
-    palpitations = models.CharField(verbose_name="or heart palpitations", choices=YN_CHOICES, max_length=1, null=True, blank=True)
-    fainting = models.CharField(verbose_name="or black-outs or fainting", choices=YN_CHOICES, max_length=1, null=True, blank=True)
+    racing = models.CharField(verbose_name="Does the patient experience: heart racing or beating irregularly", choices=UYN_CHOICES, max_length=1, null=True, blank=True)
+    palpitations = models.CharField(verbose_name="heart palpitations", choices=UYN_CHOICES, max_length=1, null=True, blank=True)
+    fainting = models.CharField(verbose_name="black-outs or fainting", choices=UYN_CHOICES, max_length=1, null=True, blank=True)
 
     # ecg
     #ecg = models.NullBooleanField(verbose_name="ECG")
@@ -212,12 +214,13 @@ class Respiratory(models.Model):
         ("BIPAP", "Bi-level Positive Airway Pressure (BIPAP)"),
     )
 
-    non_invasive_ventilation = models.CharField(max_length=2, choices=VENTILATION_CHOICES, help_text="Mechanical ventilation with nasal or bucal mask")
+    non_invasive_ventilation = models.CharField(max_length=2, null=True, blank=True, choices=VENTILATION_CHOICES, help_text="Mechanical ventilation with nasal or bucal mask")
     age_non_invasive_ventilation = models.IntegerField(null=True, blank=True, verbose_name="age ventilation device use commenced", help_text="Age at which non invasive ventilation device use started (leave blank if no ventilation device is in use)")
     non_invasive_ventilation_type = models.CharField(max_length=5, null=True, blank=True, choices=VENTILATION_TYPE_CHOICES)
-    invasive_ventilation = models.CharField(max_length=2, choices=VENTILATION_CHOICES, help_text="Mechanical ventilation with tracheostomy")
+    invasive_ventilation = models.CharField(max_length=2, null=True, blank=True, choices=VENTILATION_CHOICES, help_text="Mechanical ventilation with tracheostomy")
     fvc = models.DecimalField(null=True,max_digits=5, decimal_places=2, blank=True, verbose_name="Measured FVC", help_text="Using spirometer measures of total volume of air exhaled from a full lung (total lung capacity) to an empty lung (residual volume).")
     fvc_date = models.DateField(null=True, blank=True, verbose_name="Date of last spirometer reading of FVC")
+    calculatedfvc = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name="Calculated FVC")
 
     # adding this field, cannot figure out how to have a calculated field on the form without storing it in the DB
     # if editable=flase, the field is not made readonly, it is NOT displayed in the admin UI AT ALL
@@ -237,11 +240,10 @@ class Respiratory(models.Model):
 
 
 class Muscle(models.Model):
+    MYOTONIA_CHOICES = (('S', 'Yes, severely'), ('M', 'Yes, mildly'), ('N', 'No'))
     YN_CHOICES = (('N', 'No'), ('Y', 'Yes'))
 
-    myotonia = models.CharField(max_length=6, choices=YN_CHOICES, help_text="Does myotonia currently have a negative effect on the patient’s daily activities?")
-    # TODO: uncomment, create migration script, syncdb & migrate
-    myotonia_effect = models.CharField(max_length=6, choices=YN_CHOICES, help_text="Does myotonia currently have a negative effect on the patient’s daily activities?")
+    myotonia = models.CharField(max_length=6, blank=True, null=True, choices=MYOTONIA_CHOICES, verbose_name="Does myotonia currently have a negative effect on the patient’s daily activities")
 
     class Meta:
         abstract = True
@@ -355,9 +357,9 @@ class SocioeconomicFactors(models.Model):
         ("Unemployed", "Unemployed — not due to disablement"),
     )
 
-    education = models.CharField(max_length=30, choices=EDUCATION_CHOICES)
-    occupation = models.CharField(max_length=30, choices=OCCUPATION_CHOICES)
-    employment_effect = models.CharField(max_length=30, choices=EFFECT_CHOICES, verbose_name="has Myotonic dystrophy affected the patient's employment")
+    education = models.CharField(max_length=30, choices=EDUCATION_CHOICES, null=True, blank=True)
+    occupation = models.CharField(max_length=30, choices=OCCUPATION_CHOICES, null=True, blank=True)
+    employment_effect = models.CharField(max_length=30, choices=EFFECT_CHOICES, verbose_name="has Myotonic dystrophy affected the patient's employment", null=True, blank=True)
     comments = models.CharField(max_length=200, null=True, blank=True)
 
     class Meta:
@@ -365,7 +367,8 @@ class SocioeconomicFactors(models.Model):
 
 
 class GeneralMedicalFactors(models.Model):
-    YESNO_CHOICES = ( ('0', 'No'), ('1','Yes') )
+    YESNO_CHOICES = ( ('N', 'No'), ('Y','Yes') ) # need to keep the values in sync with UYN_CHOICES
+    UYN_CHOICES = ( ('U', 'Unknown'), ('N', 'No'), ('Y','Yes') )
     YESNOUNSURE_CHOICES = ( ('0','No'), ('1','Yes'), ('2', 'Unsure') )
 
     COGNITIVE_CHOICES = (
@@ -392,19 +395,19 @@ class GeneralMedicalFactors(models.Model):
     )
 
     #diabetes = models.IntegerField(null=True, blank=True, help_text="Age at onset (leave blank if you do not suffer from diabetes)")
-    diabetes = models.CharField(max_length=30, choices=DIABETES_CHOICES)
+    diabetes = models.CharField(max_length=30, choices=DIABETES_CHOICES, null=True, blank=True)
     diabetesage = models.IntegerField(null=True, blank=True, help_text="Leave blank if you do not suffer from diabetes", verbose_name='Age at diagnosis')
 
-    pneumonia = models.CharField(max_length=3, choices=YESNO_CHOICES, verbose_name="pneumonia")
+    pneumonia = models.CharField(max_length=3, choices=YESNO_CHOICES, verbose_name="pneumonia", null=True, blank=True)
     pneumoniaage = models.IntegerField(null=True, blank=True, verbose_name="pneumonia age", help_text="Age of first episode (leave blank if you have never suffered from pneumonia)")
-    pneumoniainfections = models.CharField(max_length=60, null=True, blank=True, verbose_name="Chest infections recent frequency")
+    pneumoniainfections = models.CharField(max_length=3, null=True, blank=True, verbose_name="Number of Chest infections in the last 12 months")
 
     # TODO: make sure all this fields about cancer are not required, since they are not in Questionnaire
-    cancer = models.CharField(max_length=3, choices=YESNO_CHOICES, verbose_name="Has the patient been diagnosed with cancer or a tumour", help_text='Please tick the check box if the patient has been diagnosed with or identifies as having any of the following')
+    cancer = models.CharField(max_length=3, choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Has the patient been diagnosed with cancer or a tumour", help_text='Please tick the check box if the patient has been diagnosed with or identifies as having any of the following')
     cancertype = models.CharField(max_length=30, null=True, blank=True, choices=CANCER_TYPE_CHOICES, verbose_name="if yes, please choose from the following options in it")
     cancerothers = models.CharField(max_length=30, null=True, blank=True, verbose_name="Others")
     cancerorgan = models.CharField(max_length=30, null=True, blank=True, verbose_name="If the patient was diagnosed with cancer please indicate the body organ it was diagnosed in")
-    liver = models.BooleanField(verbose_name="liver disease")
+    liver = models.BooleanField(verbose_name="Has the patient been diagnosed with: liver disease")
     miscarriage = models.BooleanField()
     gor = models.BooleanField(verbose_name="gastro-oesophageal reflux")
     gall_bladder = models.BooleanField(verbose_name="gall bladder disease")
@@ -412,26 +415,25 @@ class GeneralMedicalFactors(models.Model):
     sexual_dysfunction = models.BooleanField()
     constipation = models.BooleanField()
     cholesterol = models.BooleanField()
-    cognitive_impairment = models.CharField(max_length=6, choices=COGNITIVE_CHOICES)
+    cognitive_impairment = models.CharField(max_length=6, choices=COGNITIVE_CHOICES, null=True, blank=True)
     psychological = models.BooleanField(verbose_name="psychological problems")
 
     anxiety = models.BooleanField()
     depression = models.BooleanField()
     apathy = models.BooleanField()
-    weight = models.IntegerField(verbose_name="body weight", help_text="Body weight in kilograms")
-    height = models.IntegerField(verbose_name="height", help_text="Height in centimetres")
+    weight = models.IntegerField(verbose_name="body weight", help_text="Body weight in kilograms", null=True, blank=True)
+    height = models.IntegerField(verbose_name="height", help_text="Height in centimetres", null=True, blank=True)
     endocrine = models.BooleanField(verbose_name="endocrine disorders")
     obgyn = models.BooleanField(verbose_name="OB/GYN issues")
 
     # added according to questionnaire
-    medicalert = models.CharField(verbose_name="Does the patient wear a Medicalert bracelet", choices=YESNO_CHOICES, max_length=1, null=True, blank=True, default='')
+    medicalert = models.CharField(verbose_name="Does the patient wear a Medicalert bracelet", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
 
-    physiotherapy = models.CharField(verbose_name="Has the patient received any of the following? Physiotherapy", choices=YESNOUNSURE_CHOICES, max_length=1, null=True, blank=True, default='')
-    geneticcounseling = models.CharField(verbose_name="Genetic counseling", choices=YESNOUNSURE_CHOICES, max_length=1, null=True, blank=True, default='')
-    psychologicalcounseling = models.CharField(verbose_name="Emotional & psychological counseling", choices=YESNOUNSURE_CHOICES, max_length=1, null=True, blank=True, default='')
-    speechtherapy = models.CharField(verbose_name="Speech therapy", choices=YESNOUNSURE_CHOICES, max_length=1, null=True, blank=True, default='')
-    occupationaltherapy = models.CharField(verbose_name="Occupational therapy", choices=YESNOUNSURE_CHOICES, max_length=1, null=True, blank=True, default='')
-    vocationaltraining = models.CharField(verbose_name="Vocational rehabilitation", choices=YESNOUNSURE_CHOICES, max_length=1, null=True, blank=True, default='')
+    physiotherapy = models.CharField(verbose_name="Has the patient received any of the following: Physiotherapy", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
+    psychologicalcounseling = models.CharField(verbose_name="Emotional & psychological counseling", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
+    speechtherapy = models.CharField(verbose_name="Speech therapy", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
+    occupationaltherapy = models.CharField(verbose_name="Occupational therapy", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
+    vocationaltraining = models.CharField(verbose_name="Vocational rehabilitation", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
 
     class Meta:
         abstract = True
@@ -460,8 +462,7 @@ class GeneticTestDetails(models.Model):
     )
 
     #details = models.NullBooleanField(verbose_name="details", help_text="Are details of genetic testing available?")
-    details = models.CharField(max_length=1, choices=UYN_CHOICES, null=True, blank=True, help_text="Are details of genetic testing available?")
-
+    details = models.CharField(max_length=1, choices=UYN_CHOICES, verbose_name="Are details of genetic testing available") # required
 
     # TODO: add the "null=True, blank=True" attributes when the DDL change for the table column is ready, otherwise exception when saving with a blank date
     # ALTER TABLE dev_dm1_registry.public.dm1_genetictestdetails ALTER COLUMN test_date DROP NOT NULL;
@@ -470,23 +471,22 @@ class GeneticTestDetails(models.Model):
     # ALTER TABLE dev_dm1_registry.public.dm1_genetictestdetails ALTER COLUMN test_date DROP NOT NULL;
 
     #test_date = models.DateField(null=True, blank=True, verbose_name="Genetic Test Date")
-    test_date = models.DateField(verbose_name="Genetic Test Date", null=True, blank=True)
+    test_date = models.DateField(verbose_name="Genetic Test Date", null=True, blank=True) # required, but need to check Yes to previous question
     # not used in questionnaire, should we keep it in the registry?
     laboratory = models.CharField(max_length=256, null=True, blank=True)
 
     # added for the questionnaire 2012-02-20
-    counselling = models.CharField(max_length=1, choices=YES_NO_CHOICES, null=True, blank=True, help_text="Has the patient received genetic counselling?")
-    familycounselling = models.CharField(max_length=1, choices=YES_NO_CHOICES, null=True, blank=True, help_text="Has any member of the patient's family received genetic counselling?")
+    counselling = models.CharField(max_length=1, choices=UYN_CHOICES, null=True, blank=True, verbose_name="Has the patient received genetic counselling")
+    familycounselling = models.CharField(max_length=1, choices=UYN_CHOICES, null=True, blank=True, verbose_name="Have any of the patient's family members received genetic counselling")
 
     class Meta:
         abstract = True
 
-
 class EthnicOrigin(models.Model):
     ORIGIN_CHOICES = (
         # changed according to Trac 16 DM1 Questionnaire #64. Questionnaire and Registry options are made the same now
-        ("tsi", "Person from the Torres Strait Islands"),
         ("abo", "Aboriginal"),
+        ("tsi", "Person from the Torres Strait Islands"),
         ("bla", "Black African/African American"),
         ("cau", "Caucasian/European"),
         ("chi", "Chinese"),
@@ -517,7 +517,6 @@ class ClinicalTrials(models.Model):
 class Consent(models.Model):
     YES_NO_CHOICES = (('N', 'No'), ('Y', 'Yes'))
 
-    #TODO: add q2-q7
     q1 = models.CharField(max_length=1, choices=YES_NO_CHOICES, null=True, blank=True, default='', verbose_name='Do we have your permission to store your personal & clinical data in the Australasian National Myotonic Dystrophy Registry and to transfer it (in a form identifiable only by a code) to the global TREAT-NMD registry in which it may be used for research and for the planning of clinical trials?')
     q2 = models.CharField(max_length=1, choices=YES_NO_CHOICES, null=True, blank=True, default='', verbose_name='Do we have your permission to obtain your Myotonic Dystrophy genetic test result from the relevant testing laboratory to store this information with your clinical and personal information in the Australasian National Myotonic  Dystrophy Registry and to transfer it (in a form identifiable only by a code) to the global TREAT-NMD registry where it may be used for research and for the planning of clinical trials?')
     q3 = models.CharField(max_length=1, choices=YES_NO_CHOICES, null=True, blank=True, default='', verbose_name='If we receive information on TREAT-NMD projects or other information related to your disease which might be relevant to you, would you like to be informed about this?')
@@ -526,11 +525,13 @@ class Consent(models.Model):
     q6 = models.CharField(max_length=1, choices=YES_NO_CHOICES, null=True, blank=True, default='', verbose_name='To improve the quality of the family history data on the Registry, we propose to link your record to any other affected family member or relative on the Registry. The link will only show your Unique identification number and your relationship to the affected relative. Do you agree to have your record linked to any other affected relatives on the Registry?')
     q7 = models.CharField(max_length=1, choices=YES_NO_CHOICES, null=True, blank=True, default='', verbose_name='If there are any major changes in your data (for example change of address or changes in your medical condition, such as loss of ability to walk unassisted) that occur in the period between updates, are you willing to inform us?')
 
-    consentdate = models.DateField(verbose_name="Consent Date", null=True, blank=True, default='')
+    #consentdate = models.DateField(verbose_name="Consent Date", null=True, blank=True, default=datetime.date.today())
+    consentdate = models.DateField(verbose_name="Consent Date", null=True, blank=True, default=None)
 
     firstnameparentguardian = models.CharField(null=True, blank=True, default='', max_length=60, verbose_name="Parent/guardian's first name")
     lastnameparentguardian = models.CharField(null=True, blank=True, default='', max_length=60, verbose_name="Parent/guardian's last name")
-    consentdateparentguardian = models.DateField(verbose_name="Parent/guardian's Consent Date", null=True, blank=True, default='') # consent date reuired in the questionnaire but not in the registry
+    #consentdateparentguardian = models.DateField(verbose_name="Parent/guardian's Consent Date", null=True, blank=True, default=datetime.date.today())
+    consentdateparentguardian = models.DateField(verbose_name="Parent/guardian's Consent Date", null=True, blank=True, default=None)
 
     # TODO: add doctors 1-10
     doctor_0 = models.CharField(null=True, blank=True, max_length=60, verbose_name="Doctor's name", default=None)
@@ -582,6 +583,21 @@ class Consent(models.Model):
     doctoraddress_9 = models.CharField(null=True, blank=True, max_length=120, verbose_name="Doctor's address", default=None)
     doctortelephone_9 = models.CharField(null=True, blank=True, max_length=40, verbose_name="Doctor's phone", default=None)
     specialist_9 = models.CharField(null=True, blank=True, max_length=60, verbose_name="Specialist's name", default=None)
+
+    class Meta:
+        abstract = True
+
+# moved from dm1/models.py to base to add to the questionnaire
+class FamilyMember(models.Model):
+    DIAGNOSIS_CHOICES = (
+        ("DM1", "Myotonic distrophy Type 1 (DM1)"),
+        ("DM2", "Myotonic distrophy Type 2 (DM2)"),
+        ("Unknown", "Unknown"),
+    )
+
+    sex = models.CharField(max_length=1, choices=Patient.SEX_CHOICES, null=True, blank=True)
+    relationship = models.CharField(max_length=50, null=True, blank=True)
+    family_member_diagnosis = models.CharField(max_length=30, choices=DIAGNOSIS_CHOICES, verbose_name="diagnosis", null=True, blank=True)
 
     class Meta:
         abstract = True

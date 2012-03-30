@@ -124,12 +124,13 @@ ${ sl.submit_line( submit_row(context) ) }
 ##${inline_admin_formset.opts.template}
 ##{% include inline_admin_formset.opts.template %}
 
+## FJ Removed after some of the fields became required
 ## FJ Trac 16 item 60
-% if i == 0:
-<div class='asymptomaticnote'>
-     <span>If the patient is asymptomatic, please leave the remainder of the registry blank</span>
-</div>
-% endif
+##% if i == 0:
+##<div class='asymptomaticnote'>
+##     <span>If the patient is asymptomatic, please leave the remainder of the registry blank</span>
+##</div>
+##% endif
 ## FJ end: Trac 16 item 60
 
 % endfor

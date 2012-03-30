@@ -59,6 +59,10 @@ class GeneticTestDetailsInline(admin.StackedInline):
 class EthnicOriginInline(admin.StackedInline):
     model = EthnicOrigin
 
+class FamilyMemberInline(admin.TabularInline):
+    model = FamilyMember
+    extra = 3
+
 class ConsentInline(admin.StackedInline):
     model = Consent
 
@@ -81,6 +85,7 @@ class DiagnosisAdmin(admin.ModelAdmin):
         GeneticTestDetailsInline,
         EthnicOriginInline,
         ClinicalTrialsInline,
+        FamilyMemberInline,
         ConsentInline,
     ]
     search_fields = ["patient__family_name", "patient__given_names"]

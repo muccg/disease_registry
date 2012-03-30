@@ -23,59 +23,7 @@ class Patient(BasePatient):
 '''
 
 class Diagnosis(base.Diagnosis):
-    DIAGNOSIS_CHOICES = (
-        ("DM1", "DM1"),
-        ("DM2", "DM2"),
-        ("O", "Other"),
-    )
-    OLD_DIAGNOSIS_CHOICES = (
-        ("CMD", "Congenital Myotonic Dystrophy"),
-        ("DM1", "Myotonic Dystrophy Type 1 (DM1)"),
-        ("AS1", "DM1 Asymptomatic Mutation Carrier"),
-        ("Fam", "Family History (probable DM1)"),
-        ("DM2", "Myotonic Dystrophy Type 2 (DM2)"),
-        ("AS2", "DM2 Asymptomatic Mutation Carrier"),
-        ("Unk", "Unknown Condition (probable myotonic dystrophy)"),
-        ("Oth", "Other"),
-    )
-
-    # Already defined in Base.py, removed
-    """
-    FIRST_SYMPTOM_CHOICES = (
-        ("Prenatal", "Prenatal — polyhydramnios and reduced fetal movements"),
-        ("Feeding difficulties", "Feeding difficulties requiring tube at or near term"),
-        ("Hypotonia", "Hypotonia"),
-        ("Learning difficulties", "Learning difficulties"),
-        ("Myotonia", "Myotonia"),
-        ("Muscle weakness", "Muscle weakness"),
-        ("Bilateral cataracts", "Bilateral cataracts"),
-        ("Cardiac", "Cardiac symptoms"),
-        ("Anaesthetic", "Anaesthetic problems"),
-        ("Mother", "Mother of a child with congenital myotonic dystrophy"),
-        ("Relative", "Relative of a person with myotonic dystrophy but no symptoms or clinical manifestations"),
-        ("Other", "Other"),
-    )
-    """
-
-    # Already defined in Base.py, removed
-    """
-    FIRST_SUSPECTED_CHOICES = (
-        ("Self", "Self"),
-        ("Family", "Family"),
-        ("GP", "GP"),
-        ("Paediatrician", "Paediatrician"),
-        ("Neurologist", "Neurologist"),
-        ("Cardiologist", "Cardiologist"),
-        ("Ophthalmologist", "Ophthalmologist"),
-        ("Geneticist", "Geneticist"),
-        ("Other", "Other"),
-    )
-    """
-
     patient = models.OneToOneField(Patient, primary_key=True)
-    # Need the "default='DM1'" to remove the '----' option, see Django admin
-    # /home/username/registry/virt_registry/lib/python2.6/site-packages/Mango_py-1.2.3-py2.6.egg/django/db/models/fields/__init__.py
-    diagnosis = models.CharField(max_length=3, choices=DIAGNOSIS_CHOICES, verbose_name='Condition', default='DM1')
 
     created = models.DateTimeField(editable=False)
     updated = models.DateTimeField(editable=False)
@@ -320,30 +268,19 @@ class OtherRegistries(models.Model):
     def __unicode__(self):
         return str(self.diagnosis)
 
-
-class FamilyMember(models.Model):
-    DIAGNOSIS_CHOICES = (
-        ("DM1", "Myotonic distrophy Type 1 (DM1)"),
-        ("DM2", "Myotonic distrophy Type 2 (DM2)"),
-        ("Unknown", "Unknown"),
-    )
-
-    diagnosis = models.ForeignKey(Diagnosis)
-    registry_patient = models.OneToOneField(Patient, blank=True, null=True, verbose_name="patient record within the registry (optional)", related_name="%(app_label)s_%(class)s_related")
-    sex = models.CharField(max_length=1, choices=Patient.SEX_CHOICES)
-    relationship = models.CharField(max_length=50)
-    family_member_diagnosis = models.CharField(max_length=30, choices=DIAGNOSIS_CHOICES, verbose_name="diagnosis")
-
-    def __unicode__(self):
-        return str(self.diagnosis)
-
-
 class Notes(models.Model):
     diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
     notes = models.TextField(blank=True)
 
     class Meta:
         verbose_name_plural = "notes"
+
+    def __unicode__(self):
+        return str(self.diagnosis)
+
+class FamilyMember(base.FamilyMember):
+    diagnosis = models.ForeignKey(Diagnosis)
+    registry_patient = models.OneToOneField(Patient, blank=True, null=True, verbose_name="Family members with Myotonic dystrophy", related_name="%(app_label)s_%(class)s_related")
 
     def __unicode__(self):
         return str(self.diagnosis)

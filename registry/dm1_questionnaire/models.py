@@ -315,3 +315,12 @@ class Consent(ApproveMixin, base.Consent):
 
     def approve(self, diagnosis):
         return super(Consent, self).approve(dm1.models.Consent, diagnosis=diagnosis, commit=True, delete=True)
+
+class FamilyMember(ApproveMixin, base.FamilyMember):
+    diagnosis = models.ForeignKey(Diagnosis, primary_key=True)
+
+    def __unicode__(self):
+        return unicode(self.diagnosis)
+
+    def approve(self, diagnosis):
+        return super(FamilyMember, self).approve(dm1.models.FamilyMember, diagnosis=diagnosis, commit=True, delete=True)

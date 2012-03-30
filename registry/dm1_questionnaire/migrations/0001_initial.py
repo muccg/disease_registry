@@ -30,10 +30,10 @@ class Migration(SchemaMigration):
 
         # Adding model 'Diagnosis'
         db.create_table('dm1_questionnaire_diagnosis', (
+            ('diagnosis', self.gf('django.db.models.fields.CharField')(default='DM1', max_length=3)),
             ('affectedstatus', self.gf('django.db.models.fields.CharField')(max_length=30)),
-            ('first_symptom', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('first_suspected_by', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('undiagnosed', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('first_symptom', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
+            ('first_suspected_by', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
             ('age_at_clinical_diagnosis', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
             ('age_at_molecular_diagnosis', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
             ('patient', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dm1_questionnaire.Patient'], unique=True, primary_key=True)),
@@ -42,22 +42,20 @@ class Migration(SchemaMigration):
 
         # Adding model 'MotorFunction'
         db.create_table('dm1_questionnaire_motorfunction', (
-            ('walk', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('walk_assisted', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
+            ('walk', self.gf('django.db.models.fields.CharField')(max_length=1)),
+            ('walk_assisted', self.gf('django.db.models.fields.CharField')(max_length=50)),
             ('walk_assisted_age', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('sit', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('best_function', self.gf('django.db.models.fields.CharField')(max_length=8)),
-            ('acquisition_age', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('best_function', self.gf('django.db.models.fields.CharField')(max_length=8, null=True, blank=True)),
             ('wheelchair_use', self.gf('django.db.models.fields.CharField')(max_length=12)),
             ('wheelchair_usage_age', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('dysarthria', self.gf('django.db.models.fields.IntegerField')()),
+            ('dysarthria', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
             ('diagnosis', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dm1_questionnaire.Diagnosis'], unique=True, primary_key=True)),
         ))
         db.send_create_signal('dm1_questionnaire', ['MotorFunction'])
 
         # Adding model 'Surgery'
         db.create_table('dm1_questionnaire_surgery', (
-            ('cardiac_implant', self.gf('django.db.models.fields.CharField')(max_length=30)),
+            ('cardiac_implant', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
             ('cardiac_implant_age', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
             ('cataract_diagnosis', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('cataract', self.gf('django.db.models.fields.CharField')(max_length=1, null=True, blank=True)),
@@ -68,8 +66,11 @@ class Migration(SchemaMigration):
 
         # Adding model 'Heart'
         db.create_table('dm1_questionnaire_heart', (
-            ('condition', self.gf('django.db.models.fields.CharField')(max_length=14)),
+            ('condition', self.gf('django.db.models.fields.CharField')(max_length=14, null=True, blank=True)),
             ('age_at_diagnosis', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('racing', self.gf('django.db.models.fields.CharField')(max_length=1, null=True, blank=True)),
+            ('palpitations', self.gf('django.db.models.fields.CharField')(max_length=1, null=True, blank=True)),
+            ('fainting', self.gf('django.db.models.fields.CharField')(max_length=1, null=True, blank=True)),
             ('ecg', self.gf('django.db.models.fields.CharField')(max_length=1, null=True, blank=True)),
             ('ecg_sinus_rhythm', self.gf('django.db.models.fields.CharField')(max_length=1, null=True, blank=True)),
             ('ecg_pr_interval', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
@@ -92,19 +93,20 @@ class Migration(SchemaMigration):
 
         # Adding model 'Respiratory'
         db.create_table('dm1_questionnaire_respiratory', (
-            ('non_invasive_ventilation', self.gf('django.db.models.fields.CharField')(max_length=2)),
+            ('non_invasive_ventilation', self.gf('django.db.models.fields.CharField')(max_length=2, null=True, blank=True)),
             ('age_non_invasive_ventilation', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
             ('non_invasive_ventilation_type', self.gf('django.db.models.fields.CharField')(max_length=5, null=True, blank=True)),
-            ('invasive_ventilation', self.gf('django.db.models.fields.CharField')(max_length=2)),
-            ('fvc', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('invasive_ventilation', self.gf('django.db.models.fields.CharField')(max_length=2, null=True, blank=True)),
+            ('fvc', self.gf('django.db.models.fields.DecimalField')(null=True, max_digits=5, decimal_places=2, blank=True)),
             ('fvc_date', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
+            ('calculatedfvc', self.gf('django.db.models.fields.DecimalField')(null=True, max_digits=5, decimal_places=2, blank=True)),
             ('diagnosis', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dm1_questionnaire.Diagnosis'], unique=True, primary_key=True)),
         ))
         db.send_create_signal('dm1_questionnaire', ['Respiratory'])
 
         # Adding model 'Muscle'
         db.create_table('dm1_questionnaire_muscle', (
-            ('myotonia', self.gf('django.db.models.fields.CharField')(max_length=6)),
+            ('myotonia', self.gf('django.db.models.fields.CharField')(max_length=6, null=True, blank=True)),
             ('diagnosis', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dm1_questionnaire.Diagnosis'], unique=True, primary_key=True)),
         ))
         db.send_create_signal('dm1_questionnaire', ['Muscle'])
@@ -150,9 +152,9 @@ class Migration(SchemaMigration):
 
         # Adding model 'SocioeconomicFactors'
         db.create_table('dm1_questionnaire_socioeconomicfactors', (
-            ('education', self.gf('django.db.models.fields.CharField')(max_length=30)),
-            ('occupation', self.gf('django.db.models.fields.CharField')(max_length=30)),
-            ('employment_effect', self.gf('django.db.models.fields.CharField')(max_length=30)),
+            ('education', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
+            ('occupation', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
+            ('employment_effect', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
             ('comments', self.gf('django.db.models.fields.CharField')(max_length=200, null=True, blank=True)),
             ('diagnosis', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dm1_questionnaire.Diagnosis'], unique=True, primary_key=True)),
         ))
@@ -160,12 +162,12 @@ class Migration(SchemaMigration):
 
         # Adding model 'GeneralMedicalFactors'
         db.create_table('dm1_questionnaire_generalmedicalfactors', (
-            ('diabetes', self.gf('django.db.models.fields.CharField')(max_length=30)),
+            ('diabetes', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
             ('diabetesage', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('pneumonia', self.gf('django.db.models.fields.CharField')(max_length=3)),
+            ('pneumonia', self.gf('django.db.models.fields.CharField')(max_length=3, null=True, blank=True)),
             ('pneumoniaage', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('pneumoniainfections', self.gf('django.db.models.fields.CharField')(max_length=60, null=True, blank=True)),
-            ('cancer', self.gf('django.db.models.fields.CharField')(max_length=3)),
+            ('pneumoniainfections', self.gf('django.db.models.fields.CharField')(max_length=3, null=True, blank=True)),
+            ('cancer', self.gf('django.db.models.fields.CharField')(max_length=3, null=True, blank=True)),
             ('cancertype', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
             ('cancerothers', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
             ('cancerorgan', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
@@ -177,24 +179,32 @@ class Migration(SchemaMigration):
             ('sexual_dysfunction', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('constipation', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('cholesterol', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('cognitive_impairment', self.gf('django.db.models.fields.CharField')(max_length=6)),
+            ('cognitive_impairment', self.gf('django.db.models.fields.CharField')(max_length=6, null=True, blank=True)),
             ('psychological', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('anxiety', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('depression', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('apathy', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('weight', self.gf('django.db.models.fields.IntegerField')()),
-            ('height', self.gf('django.db.models.fields.IntegerField')()),
+            ('weight', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
+            ('height', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
             ('endocrine', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('obgyn', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('medicalert', self.gf('django.db.models.fields.CharField')(default='', max_length=1, null=True, blank=True)),
+            ('physiotherapy', self.gf('django.db.models.fields.CharField')(default='', max_length=1, null=True, blank=True)),
+            ('psychologicalcounseling', self.gf('django.db.models.fields.CharField')(default='', max_length=1, null=True, blank=True)),
+            ('speechtherapy', self.gf('django.db.models.fields.CharField')(default='', max_length=1, null=True, blank=True)),
+            ('occupationaltherapy', self.gf('django.db.models.fields.CharField')(default='', max_length=1, null=True, blank=True)),
+            ('vocationaltraining', self.gf('django.db.models.fields.CharField')(default='', max_length=1, null=True, blank=True)),
             ('diagnosis', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dm1_questionnaire.Diagnosis'], unique=True, primary_key=True)),
         ))
         db.send_create_signal('dm1_questionnaire', ['GeneralMedicalFactors'])
 
         # Adding model 'GeneticTestDetails'
         db.create_table('dm1_questionnaire_genetictestdetails', (
-            ('details', self.gf('django.db.models.fields.CharField')(max_length=1, null=True, blank=True)),
+            ('details', self.gf('django.db.models.fields.CharField')(max_length=1)),
             ('test_date', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
             ('laboratory', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True)),
+            ('counselling', self.gf('django.db.models.fields.CharField')(max_length=1, null=True, blank=True)),
+            ('familycounselling', self.gf('django.db.models.fields.CharField')(max_length=1, null=True, blank=True)),
             ('diagnosis', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dm1_questionnaire.Diagnosis'], unique=True, primary_key=True)),
         ))
         db.send_create_signal('dm1_questionnaire', ['GeneticTestDetails'])
@@ -215,6 +225,72 @@ class Migration(SchemaMigration):
             ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dm1_questionnaire.Diagnosis'], primary_key=True)),
         ))
         db.send_create_signal('dm1_questionnaire', ['ClinicalTrials'])
+
+        # Adding model 'Consent'
+        db.create_table('dm1_questionnaire_consent', (
+            ('q1', self.gf('django.db.models.fields.CharField')(default='', max_length=1, null=True, blank=True)),
+            ('q2', self.gf('django.db.models.fields.CharField')(default='', max_length=1, null=True, blank=True)),
+            ('q3', self.gf('django.db.models.fields.CharField')(default='', max_length=1, null=True, blank=True)),
+            ('q4', self.gf('django.db.models.fields.CharField')(default='', max_length=1, null=True, blank=True)),
+            ('q5', self.gf('django.db.models.fields.CharField')(default='', max_length=1, null=True, blank=True)),
+            ('q6', self.gf('django.db.models.fields.CharField')(default='', max_length=1, null=True, blank=True)),
+            ('q7', self.gf('django.db.models.fields.CharField')(default='', max_length=1, null=True, blank=True)),
+            ('consentdate', self.gf('django.db.models.fields.DateField')(default=None, null=True, blank=True)),
+            ('firstnameparentguardian', self.gf('django.db.models.fields.CharField')(default='', max_length=60, null=True, blank=True)),
+            ('lastnameparentguardian', self.gf('django.db.models.fields.CharField')(default='', max_length=60, null=True, blank=True)),
+            ('consentdateparentguardian', self.gf('django.db.models.fields.DateField')(default=None, null=True, blank=True)),
+            ('doctor_0', self.gf('django.db.models.fields.CharField')(default=None, max_length=60, null=True, blank=True)),
+            ('doctoraddress_0', self.gf('django.db.models.fields.CharField')(default=None, max_length=120, null=True, blank=True)),
+            ('doctortelephone_0', self.gf('django.db.models.fields.CharField')(default=None, max_length=40, null=True, blank=True)),
+            ('specialist_0', self.gf('django.db.models.fields.CharField')(default=None, max_length=60, null=True, blank=True)),
+            ('doctor_1', self.gf('django.db.models.fields.CharField')(default=None, max_length=60, null=True, blank=True)),
+            ('doctoraddress_1', self.gf('django.db.models.fields.CharField')(default=None, max_length=120, null=True, blank=True)),
+            ('doctortelephone_1', self.gf('django.db.models.fields.CharField')(default=None, max_length=40, null=True, blank=True)),
+            ('specialist_1', self.gf('django.db.models.fields.CharField')(default=None, max_length=60, null=True, blank=True)),
+            ('doctor_2', self.gf('django.db.models.fields.CharField')(default=None, max_length=60, null=True, blank=True)),
+            ('doctoraddress_2', self.gf('django.db.models.fields.CharField')(default=None, max_length=120, null=True, blank=True)),
+            ('doctortelephone_2', self.gf('django.db.models.fields.CharField')(default=None, max_length=40, null=True, blank=True)),
+            ('specialist_2', self.gf('django.db.models.fields.CharField')(default=None, max_length=60, null=True, blank=True)),
+            ('doctor_3', self.gf('django.db.models.fields.CharField')(default=None, max_length=60, null=True, blank=True)),
+            ('doctoraddress_3', self.gf('django.db.models.fields.CharField')(default=None, max_length=120, null=True, blank=True)),
+            ('doctortelephone_3', self.gf('django.db.models.fields.CharField')(default=None, max_length=40, null=True, blank=True)),
+            ('specialist_3', self.gf('django.db.models.fields.CharField')(default=None, max_length=60, null=True, blank=True)),
+            ('doctor_4', self.gf('django.db.models.fields.CharField')(default=None, max_length=60, null=True, blank=True)),
+            ('doctoraddress_4', self.gf('django.db.models.fields.CharField')(default=None, max_length=120, null=True, blank=True)),
+            ('doctortelephone_4', self.gf('django.db.models.fields.CharField')(default=None, max_length=40, null=True, blank=True)),
+            ('specialist_4', self.gf('django.db.models.fields.CharField')(default=None, max_length=60, null=True, blank=True)),
+            ('doctor_5', self.gf('django.db.models.fields.CharField')(default=None, max_length=60, null=True, blank=True)),
+            ('doctoraddress_5', self.gf('django.db.models.fields.CharField')(default=None, max_length=120, null=True, blank=True)),
+            ('doctortelephone_5', self.gf('django.db.models.fields.CharField')(default=None, max_length=40, null=True, blank=True)),
+            ('specialist_5', self.gf('django.db.models.fields.CharField')(default=None, max_length=60, null=True, blank=True)),
+            ('doctor_6', self.gf('django.db.models.fields.CharField')(default=None, max_length=60, null=True, blank=True)),
+            ('doctoraddress_6', self.gf('django.db.models.fields.CharField')(default=None, max_length=120, null=True, blank=True)),
+            ('doctortelephone_6', self.gf('django.db.models.fields.CharField')(default=None, max_length=40, null=True, blank=True)),
+            ('specialist_6', self.gf('django.db.models.fields.CharField')(default=None, max_length=60, null=True, blank=True)),
+            ('doctor_7', self.gf('django.db.models.fields.CharField')(default=None, max_length=60, null=True, blank=True)),
+            ('doctoraddress_7', self.gf('django.db.models.fields.CharField')(default=None, max_length=120, null=True, blank=True)),
+            ('doctortelephone_7', self.gf('django.db.models.fields.CharField')(default=None, max_length=40, null=True, blank=True)),
+            ('specialist_7', self.gf('django.db.models.fields.CharField')(default=None, max_length=60, null=True, blank=True)),
+            ('doctor_8', self.gf('django.db.models.fields.CharField')(default=None, max_length=60, null=True, blank=True)),
+            ('doctoraddress_8', self.gf('django.db.models.fields.CharField')(default=None, max_length=120, null=True, blank=True)),
+            ('doctortelephone_8', self.gf('django.db.models.fields.CharField')(default=None, max_length=40, null=True, blank=True)),
+            ('specialist_8', self.gf('django.db.models.fields.CharField')(default=None, max_length=60, null=True, blank=True)),
+            ('doctor_9', self.gf('django.db.models.fields.CharField')(default=None, max_length=60, null=True, blank=True)),
+            ('doctoraddress_9', self.gf('django.db.models.fields.CharField')(default=None, max_length=120, null=True, blank=True)),
+            ('doctortelephone_9', self.gf('django.db.models.fields.CharField')(default=None, max_length=40, null=True, blank=True)),
+            ('specialist_9', self.gf('django.db.models.fields.CharField')(default=None, max_length=60, null=True, blank=True)),
+            ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dm1_questionnaire.Diagnosis'], primary_key=True)),
+        ))
+        db.send_create_signal('dm1_questionnaire', ['Consent'])
+
+        # Adding model 'FamilyMember'
+        db.create_table('dm1_questionnaire_familymember', (
+            ('sex', self.gf('django.db.models.fields.CharField')(max_length=1, null=True, blank=True)),
+            ('relationship', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
+            ('family_member_diagnosis', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
+            ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dm1_questionnaire.Diagnosis'], primary_key=True)),
+        ))
+        db.send_create_signal('dm1_questionnaire', ['FamilyMember'])
 
 
     def backwards(self, orm):
@@ -270,6 +346,12 @@ class Migration(SchemaMigration):
         # Deleting model 'ClinicalTrials'
         db.delete_table('dm1_questionnaire_clinicaltrials')
 
+        # Deleting model 'Consent'
+        db.delete_table('dm1_questionnaire_consent')
+
+        # Deleting model 'FamilyMember'
+        db.delete_table('dm1_questionnaire_familymember')
+
 
     models = {
         'dm1_questionnaire.clinicaltrials': {
@@ -280,20 +362,82 @@ class Migration(SchemaMigration):
             'trial_phase': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'trial_sponsor': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         },
+        'dm1_questionnaire.consent': {
+            'Meta': {'object_name': 'Consent'},
+            'consentdate': ('django.db.models.fields.DateField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
+            'consentdateparentguardian': ('django.db.models.fields.DateField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
+            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dm1_questionnaire.Diagnosis']", 'primary_key': 'True'}),
+            'doctor_0': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '60', 'null': 'True', 'blank': 'True'}),
+            'doctor_1': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '60', 'null': 'True', 'blank': 'True'}),
+            'doctor_2': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '60', 'null': 'True', 'blank': 'True'}),
+            'doctor_3': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '60', 'null': 'True', 'blank': 'True'}),
+            'doctor_4': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '60', 'null': 'True', 'blank': 'True'}),
+            'doctor_5': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '60', 'null': 'True', 'blank': 'True'}),
+            'doctor_6': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '60', 'null': 'True', 'blank': 'True'}),
+            'doctor_7': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '60', 'null': 'True', 'blank': 'True'}),
+            'doctor_8': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '60', 'null': 'True', 'blank': 'True'}),
+            'doctor_9': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '60', 'null': 'True', 'blank': 'True'}),
+            'doctoraddress_0': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '120', 'null': 'True', 'blank': 'True'}),
+            'doctoraddress_1': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '120', 'null': 'True', 'blank': 'True'}),
+            'doctoraddress_2': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '120', 'null': 'True', 'blank': 'True'}),
+            'doctoraddress_3': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '120', 'null': 'True', 'blank': 'True'}),
+            'doctoraddress_4': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '120', 'null': 'True', 'blank': 'True'}),
+            'doctoraddress_5': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '120', 'null': 'True', 'blank': 'True'}),
+            'doctoraddress_6': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '120', 'null': 'True', 'blank': 'True'}),
+            'doctoraddress_7': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '120', 'null': 'True', 'blank': 'True'}),
+            'doctoraddress_8': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '120', 'null': 'True', 'blank': 'True'}),
+            'doctoraddress_9': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '120', 'null': 'True', 'blank': 'True'}),
+            'doctortelephone_0': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '40', 'null': 'True', 'blank': 'True'}),
+            'doctortelephone_1': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '40', 'null': 'True', 'blank': 'True'}),
+            'doctortelephone_2': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '40', 'null': 'True', 'blank': 'True'}),
+            'doctortelephone_3': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '40', 'null': 'True', 'blank': 'True'}),
+            'doctortelephone_4': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '40', 'null': 'True', 'blank': 'True'}),
+            'doctortelephone_5': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '40', 'null': 'True', 'blank': 'True'}),
+            'doctortelephone_6': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '40', 'null': 'True', 'blank': 'True'}),
+            'doctortelephone_7': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '40', 'null': 'True', 'blank': 'True'}),
+            'doctortelephone_8': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '40', 'null': 'True', 'blank': 'True'}),
+            'doctortelephone_9': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '40', 'null': 'True', 'blank': 'True'}),
+            'firstnameparentguardian': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '60', 'null': 'True', 'blank': 'True'}),
+            'lastnameparentguardian': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '60', 'null': 'True', 'blank': 'True'}),
+            'q1': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '1', 'null': 'True', 'blank': 'True'}),
+            'q2': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '1', 'null': 'True', 'blank': 'True'}),
+            'q3': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '1', 'null': 'True', 'blank': 'True'}),
+            'q4': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '1', 'null': 'True', 'blank': 'True'}),
+            'q5': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '1', 'null': 'True', 'blank': 'True'}),
+            'q6': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '1', 'null': 'True', 'blank': 'True'}),
+            'q7': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '1', 'null': 'True', 'blank': 'True'}),
+            'specialist_0': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '60', 'null': 'True', 'blank': 'True'}),
+            'specialist_1': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '60', 'null': 'True', 'blank': 'True'}),
+            'specialist_2': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '60', 'null': 'True', 'blank': 'True'}),
+            'specialist_3': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '60', 'null': 'True', 'blank': 'True'}),
+            'specialist_4': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '60', 'null': 'True', 'blank': 'True'}),
+            'specialist_5': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '60', 'null': 'True', 'blank': 'True'}),
+            'specialist_6': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '60', 'null': 'True', 'blank': 'True'}),
+            'specialist_7': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '60', 'null': 'True', 'blank': 'True'}),
+            'specialist_8': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '60', 'null': 'True', 'blank': 'True'}),
+            'specialist_9': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '60', 'null': 'True', 'blank': 'True'})
+        },
         'dm1_questionnaire.diagnosis': {
             'Meta': {'object_name': 'Diagnosis'},
             'affectedstatus': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
             'age_at_clinical_diagnosis': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'age_at_molecular_diagnosis': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'first_suspected_by': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'first_symptom': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'patient': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dm1_questionnaire.Patient']", 'unique': 'True', 'primary_key': 'True'}),
-            'undiagnosed': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
+            'diagnosis': ('django.db.models.fields.CharField', [], {'default': "'DM1'", 'max_length': '3'}),
+            'first_suspected_by': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
+            'first_symptom': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
+            'patient': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dm1_questionnaire.Patient']", 'unique': 'True', 'primary_key': 'True'})
         },
         'dm1_questionnaire.ethnicorigin': {
             'Meta': {'object_name': 'EthnicOrigin'},
             'diagnosis': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dm1_questionnaire.Diagnosis']", 'unique': 'True', 'primary_key': 'True'}),
             'ethnic_origin': ('django.db.models.fields.CharField', [], {'max_length': '9', 'null': 'True', 'blank': 'True'})
+        },
+        'dm1_questionnaire.familymember': {
+            'Meta': {'object_name': 'FamilyMember'},
+            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dm1_questionnaire.Diagnosis']", 'primary_key': 'True'}),
+            'family_member_diagnosis': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
+            'relationship': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
+            'sex': ('django.db.models.fields.CharField', [], {'max_length': '1', 'null': 'True', 'blank': 'True'})
         },
         'dm1_questionnaire.fatigue': {
             'Meta': {'object_name': 'Fatigue'},
@@ -324,43 +468,51 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'GeneralMedicalFactors'},
             'anxiety': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'apathy': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'cancer': ('django.db.models.fields.CharField', [], {'max_length': '3'}),
+            'cancer': ('django.db.models.fields.CharField', [], {'max_length': '3', 'null': 'True', 'blank': 'True'}),
             'cancerorgan': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
             'cancerothers': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
             'cancertype': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
             'cholesterol': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'cognitive_impairment': ('django.db.models.fields.CharField', [], {'max_length': '6'}),
+            'cognitive_impairment': ('django.db.models.fields.CharField', [], {'max_length': '6', 'null': 'True', 'blank': 'True'}),
             'constipation': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'depression': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'diabetes': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
+            'diabetes': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
             'diabetesage': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'diagnosis': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dm1_questionnaire.Diagnosis']", 'unique': 'True', 'primary_key': 'True'}),
             'endocrine': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'gall_bladder': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'gor': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'height': ('django.db.models.fields.IntegerField', [], {}),
+            'height': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'infection': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'liver': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'medicalert': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '1', 'null': 'True', 'blank': 'True'}),
             'miscarriage': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'obgyn': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'pneumonia': ('django.db.models.fields.CharField', [], {'max_length': '3'}),
+            'occupationaltherapy': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '1', 'null': 'True', 'blank': 'True'}),
+            'physiotherapy': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '1', 'null': 'True', 'blank': 'True'}),
+            'pneumonia': ('django.db.models.fields.CharField', [], {'max_length': '3', 'null': 'True', 'blank': 'True'}),
             'pneumoniaage': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'pneumoniainfections': ('django.db.models.fields.CharField', [], {'max_length': '60', 'null': 'True', 'blank': 'True'}),
+            'pneumoniainfections': ('django.db.models.fields.CharField', [], {'max_length': '3', 'null': 'True', 'blank': 'True'}),
             'psychological': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'psychologicalcounseling': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '1', 'null': 'True', 'blank': 'True'}),
             'sexual_dysfunction': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'weight': ('django.db.models.fields.IntegerField', [], {})
+            'speechtherapy': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '1', 'null': 'True', 'blank': 'True'}),
+            'vocationaltraining': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '1', 'null': 'True', 'blank': 'True'}),
+            'weight': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'})
         },
         'dm1_questionnaire.genetictestdetails': {
             'Meta': {'object_name': 'GeneticTestDetails'},
-            'details': ('django.db.models.fields.CharField', [], {'max_length': '1', 'null': 'True', 'blank': 'True'}),
+            'counselling': ('django.db.models.fields.CharField', [], {'max_length': '1', 'null': 'True', 'blank': 'True'}),
+            'details': ('django.db.models.fields.CharField', [], {'max_length': '1'}),
             'diagnosis': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dm1_questionnaire.Diagnosis']", 'unique': 'True', 'primary_key': 'True'}),
+            'familycounselling': ('django.db.models.fields.CharField', [], {'max_length': '1', 'null': 'True', 'blank': 'True'}),
             'laboratory': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'test_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'})
         },
         'dm1_questionnaire.heart': {
             'Meta': {'object_name': 'Heart'},
             'age_at_diagnosis': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'condition': ('django.db.models.fields.CharField', [], {'max_length': '14'}),
+            'condition': ('django.db.models.fields.CharField', [], {'max_length': '14', 'null': 'True', 'blank': 'True'}),
             'diagnosis': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dm1_questionnaire.Diagnosis']", 'unique': 'True', 'primary_key': 'True'}),
             'ecg': ('django.db.models.fields.CharField', [], {'max_length': '1', 'null': 'True', 'blank': 'True'}),
             'ecg_examination_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
@@ -369,7 +521,10 @@ class Migration(SchemaMigration):
             'ecg_sinus_rhythm': ('django.db.models.fields.CharField', [], {'max_length': '1', 'null': 'True', 'blank': 'True'}),
             'echocardiogram': ('django.db.models.fields.CharField', [], {'max_length': '1', 'null': 'True', 'blank': 'True'}),
             'echocardiogram_lvef': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'echocardiogram_lvef_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'})
+            'echocardiogram_lvef_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
+            'fainting': ('django.db.models.fields.CharField', [], {'max_length': '1', 'null': 'True', 'blank': 'True'}),
+            'palpitations': ('django.db.models.fields.CharField', [], {'max_length': '1', 'null': 'True', 'blank': 'True'}),
+            'racing': ('django.db.models.fields.CharField', [], {'max_length': '1', 'null': 'True', 'blank': 'True'})
         },
         'dm1_questionnaire.heartmedication': {
             'Meta': {'object_name': 'HeartMedication'},
@@ -379,13 +534,11 @@ class Migration(SchemaMigration):
         },
         'dm1_questionnaire.motorfunction': {
             'Meta': {'object_name': 'MotorFunction'},
-            'acquisition_age': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'best_function': ('django.db.models.fields.CharField', [], {'max_length': '8'}),
+            'best_function': ('django.db.models.fields.CharField', [], {'max_length': '8', 'null': 'True', 'blank': 'True'}),
             'diagnosis': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dm1_questionnaire.Diagnosis']", 'unique': 'True', 'primary_key': 'True'}),
-            'dysarthria': ('django.db.models.fields.IntegerField', [], {}),
-            'sit': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'walk': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'walk_assisted': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
+            'dysarthria': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'walk': ('django.db.models.fields.CharField', [], {'max_length': '1'}),
+            'walk_assisted': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'walk_assisted_age': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'wheelchair_usage_age': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'wheelchair_use': ('django.db.models.fields.CharField', [], {'max_length': '12'})
@@ -393,7 +546,7 @@ class Migration(SchemaMigration):
         'dm1_questionnaire.muscle': {
             'Meta': {'object_name': 'Muscle'},
             'diagnosis': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dm1_questionnaire.Diagnosis']", 'unique': 'True', 'primary_key': 'True'}),
-            'myotonia': ('django.db.models.fields.CharField', [], {'max_length': '6'})
+            'myotonia': ('django.db.models.fields.CharField', [], {'max_length': '6', 'null': 'True', 'blank': 'True'})
         },
         'dm1_questionnaire.musclemedication': {
             'Meta': {'object_name': 'MuscleMedication'},
@@ -422,24 +575,25 @@ class Migration(SchemaMigration):
         'dm1_questionnaire.respiratory': {
             'Meta': {'object_name': 'Respiratory'},
             'age_non_invasive_ventilation': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'calculatedfvc': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '5', 'decimal_places': '2', 'blank': 'True'}),
             'diagnosis': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dm1_questionnaire.Diagnosis']", 'unique': 'True', 'primary_key': 'True'}),
-            'fvc': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'fvc': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '5', 'decimal_places': '2', 'blank': 'True'}),
             'fvc_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
-            'invasive_ventilation': ('django.db.models.fields.CharField', [], {'max_length': '2'}),
-            'non_invasive_ventilation': ('django.db.models.fields.CharField', [], {'max_length': '2'}),
+            'invasive_ventilation': ('django.db.models.fields.CharField', [], {'max_length': '2', 'null': 'True', 'blank': 'True'}),
+            'non_invasive_ventilation': ('django.db.models.fields.CharField', [], {'max_length': '2', 'null': 'True', 'blank': 'True'}),
             'non_invasive_ventilation_type': ('django.db.models.fields.CharField', [], {'max_length': '5', 'null': 'True', 'blank': 'True'})
         },
         'dm1_questionnaire.socioeconomicfactors': {
             'Meta': {'object_name': 'SocioeconomicFactors'},
             'comments': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'diagnosis': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dm1_questionnaire.Diagnosis']", 'unique': 'True', 'primary_key': 'True'}),
-            'education': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
-            'employment_effect': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
-            'occupation': ('django.db.models.fields.CharField', [], {'max_length': '30'})
+            'education': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
+            'employment_effect': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
+            'occupation': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'})
         },
         'dm1_questionnaire.surgery': {
             'Meta': {'object_name': 'Surgery'},
-            'cardiac_implant': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
+            'cardiac_implant': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
             'cardiac_implant_age': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'cataract': ('django.db.models.fields.CharField', [], {'max_length': '1', 'null': 'True', 'blank': 'True'}),
             'cataract_age': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),

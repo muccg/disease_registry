@@ -234,4 +234,9 @@ div#validation-errors {
     padding-top: 4px;
 }
 
+div.row label {
+    display: block; /* otherwise the second line of the label doesn't have a margin pr padding */
+    text-indent: 0;
+    padding-left: 0.4em;
+}
 /* vim: set nocin ai et ts=4 sw=4: */
