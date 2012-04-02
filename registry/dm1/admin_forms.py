@@ -26,7 +26,9 @@ class DiagnosisForm(forms.ModelForm):
         model = Diagnosis
         # Trac 16 Item 45, use Radio buttons for diagnosis
         #widgets = { 'diagnosis': RadioSelect( choices = (('DM1', 'DM1'), ('DM2', 'DM2'), ('O','Other')) ) }
-        widgets = { 'diagnosis': RadioSelect( choices = Diagnosis.DIAGNOSIS_CHOICES ) }
+        widgets = { 'diagnosis': RadioSelect(choices = Diagnosis.DIAGNOSIS_CHOICES),
+                    'affectedstatus': RadioSelect(choices=Diagnosis.AFFECTED_STATUS_CHOICES)
+                }
 
 class FamilyMemberForm(forms.ModelForm):
     OPTIONS = [
@@ -40,6 +42,10 @@ class FamilyMemberForm(forms.ModelForm):
     registry_patient = forms.ModelChoiceField(queryset=Patient.objects.all(), label="Patient record within the registry (optional)", required=False, widget=LiveComboWidget(attrs={"minchars": 1}, backend=url("/admin/patients/patient/search/")))
     relationship = forms.CharField(label="Relationship", widget=ComboWidget(options=OPTIONS))
 
+#
+    sex = forms.CharField(label="Sex", widget=RadioSelect(choices=Patient.SEX_CHOICES), required=False)
+    family_member_diagnosis = forms.CharField(label="Diagnosis", widget=RadioSelect(choices=FamilyMember.DIAGNOSIS_CHOICES), required=False)
+#
     class Meta:
         model = FamilyMember
 
@@ -111,6 +117,10 @@ def calculatefvcci(dateofbirth, height, weight, sex):
 """
 
 class RespiratoryForm(forms.ModelForm):
+    non_invasive_ventilation = forms.CharField(label="Non invasive ventilation", widget=RadioSelect(choices=Respiratory.VENTILATION_CHOICES), required=False, help_text="Mechanical ventilation with nasal or bucal mask")
+    non_invasive_ventilation_type = forms.CharField(label="Non invasive ventilation type", widget=RadioSelect(choices=Respiratory.VENTILATION_TYPE_CHOICES), required=False)
+    invasive_ventilation = forms.CharField(label="Invasive ventilation", widget=RadioSelect(choices=Respiratory.VENTILATION_CHOICES), required=False, help_text="Mechanical ventilation with tracheostomy")
+
     #predictedfvc = forms.DecimalField(label='Predicted FVC', required=False, min_value=0, max_value=100, max_digits=5, decimal_places=2, widget = FVCPercentageWidget(attrs={'readonly': 'readonly'}))
     #predictedfvc = forms.DecimalField(label='Predicted FVC', required=False, min_value=0, max_value=100, max_digits=5, decimal_places=2, widget = FVCPercentageWidget())
     #fvc = forms.DecimalField(label='Measured FVC', required=False, min_value=0, max_value=100, max_digits=5, decimal_places=2, widget = FVCPercentageWidget(attrs={'size':'6', 'maxlength': '6'}))
@@ -168,6 +178,14 @@ class RespiratoryForm(forms.ModelForm):
         model = Respiratory
 
 class HeartForm(forms.ModelForm):
+    condition = forms.CharField(label="Heart condition", widget=RadioSelect(choices=Heart.HEART_CHOICES), required=False)
+    racing = forms.CharField(label="Does the patient experience: heart racing or beating irregularly", widget=RadioSelect(choices=Heart.UYN_CHOICES), required=False)
+    palpitations = forms.CharField(label="heart palpitations", widget=RadioSelect(choices=Heart.UYN_CHOICES), required=False)
+    fainting = forms.CharField(label="black-outs or fainting", widget=RadioSelect(choices=Heart.UYN_CHOICES), required=False)
+    ecg = forms.CharField(label="ECG", widget=RadioSelect(choices=Heart.UYN_CHOICES), required=False)
+    ecg_sinus_rhythm = forms.CharField(label="ECG Sinus Rhythm", widget=RadioSelect(choices=Heart.UYN_CHOICES), required=False)
+    echocardiogram = forms.CharField(label="Echocardiogram", widget=RadioSelect(choices=Heart.UYN_CHOICES), required=False)
+
     def __init__(self, *args, **kwargs):
         super(HeartForm, self).__init__(*args, **kwargs)
 
@@ -182,8 +200,11 @@ class HeartForm(forms.ModelForm):
     class Meta:
         model = Heart
 
-
 class GeneticTestDetailsForm(forms.ModelForm):
+    details = forms.CharField(label="Are details of genetic testing available", widget=RadioSelect(choices=GeneticTestDetails.UYN_CHOICES))
+    counselling = forms.CharField(label="Has the patient received genetic counselling", widget=RadioSelect(choices=GeneticTestDetails.UYN_CHOICES), required=False)
+    familycounselling = forms.CharField(label="Has any of the patient's family members received genetic counselling", widget=RadioSelect(choices=GeneticTestDetails.UYN_CHOICES), required=False)
+
     def __init__(self, *args, **kwargs):
         super(GeneticTestDetailsForm, self).__init__(*args, **kwargs)
         self.fields["test_date"].widget=LubricatedDateWidget(popup=True, today=True, years=-5, required=self.fields["test_date"].required)
@@ -211,6 +232,10 @@ class GeneticTestDetailsForm(forms.ModelForm):
 class MotorFunctionForm(forms.ModelForm):
     # Trac 16 Item 44, use Radio buttons for Yes, No
     walk = forms.CharField(label="Currently able to walk", widget=RadioSelect(choices=base.MotorFunction.YN_CHOICES))
+    #best_function = forms.CharField(widget=RadioSelect(choices=base.MotorFunction.MOTOR_FUNCTION_CHOICES, default='', required=False, label="What is the best motor function level the patient has achieved", help_text="[Motor functions are listed in order with higher functions at the top, please choose one]<br/>Walking: walking with or without help (orthoses or assistive device or human assistance), inside or outdoors<br/>Sitting independently: able to maintain a sitting position on a chair or a wheelchair without support of upper limbs or leaning against the back of the chair"))
+    best_function = forms.CharField(widget=RadioSelect(choices=base.MotorFunction.MOTOR_FUNCTION_CHOICES), required=False, label="What is the best motor function level the patient has achieved",
+                        help_text="<b>Walking:</b> walking with or without help (orthoses or assistive device or human assistance), inside or outdoors<br/><b>Sitting independently</b>: able to maintain a sitting position on a chair or a wheelchair without support of upper limbs or leaning against the back of the chair")
+    dysarthria = forms.IntegerField(widget=RadioSelect(choices=base.MotorFunction.DYSARTHRIA_CHOICES), required=False)
 
     class Meta:
         model = MotorFunction
@@ -218,6 +243,12 @@ class MotorFunctionForm(forms.ModelForm):
         # Trac 16 Item 44, use Radio buttons for Yes, No
         #widgets = { 'walk': RadioSelect( choices = (('0', 'No'), ('1','Yes')) ),    # , attrs={'class':'radiochoices'} ),
         #            'sit': RadioSelect( choices = (('0', 'No'), ('1','Yes')) ) }
+
+        widgets = { 'walk_assisted': RadioSelect(choices = MotorFunction.WALK_ASSISTED_CHOICES),
+                    #'best_function': RadioSelect(choices = base.MotorFunction.MOTOR_FUNCTION_CHOICES), # still shows '---'
+                    'wheelchair_use': RadioSelect(choices = MotorFunction.WHEELCHAIR_USE_CHOICES),
+                    'dysarthria': RadioSelect(choices = MotorFunction.DYSARTHRIA_CHOICES),
+                }
 
     def clean(self):
         cleaneddata = self.cleaned_data
@@ -236,6 +267,9 @@ class MotorFunctionForm(forms.ModelForm):
 
 #FJ added to change the checkbox to a select
 class SurgeryForm(forms.ModelForm):
+    cardiac_implant = forms.CharField(label="cardiac implant", widget=RadioSelect(choices=Surgery.CARDIAC_IMPLANT_CHOICES), required=False)
+    cataract = forms.CharField(label="cataract surgery", widget=RadioSelect(choices=Surgery.UYN_CHOICES), required=False)
+
     class Meta:
         model = Surgery
         #FJ Trac 16 item 25, change checkbox to drop down with Yes, No
@@ -243,6 +277,59 @@ class SurgeryForm(forms.ModelForm):
 
 # cannot get this form to work, it looks like it is not called by Django, cannot override the choices here
 class GeneralMedicalFactorsForm(forms.ModelForm):
+    diabetes = forms.CharField(label="Diabetes", widget=RadioSelect(choices=GeneralMedicalFactors.DIABETES_CHOICES), required=False)
+    pneumonia = forms.CharField(label="Pneumonia", widget=RadioSelect(choices=GeneralMedicalFactors.YESNO_CHOICES), required=False)
+    cancer = forms.CharField(label="Has the patient been diagnosed with cancer or a tumour", widget=RadioSelect(choices=GeneralMedicalFactors.YESNO_CHOICES), required=False, help_text='Please tick the check box if the patient has been diagnosed with or identifies as having any of the following')
+    cancertype = forms.CharField(label="if yes, please choose from the following options", widget=RadioSelect(choices=GeneralMedicalFactors.CANCER_TYPE_CHOICES), required=False)
+    cognitive_impairment = forms.CharField(label="Cognitive impairment", widget=RadioSelect(choices=GeneralMedicalFactors.COGNITIVE_CHOICES), required=False)
+    medicalert = forms.CharField(label="Does the patient wear a Medicalert bracelet", widget=RadioSelect(choices=GeneralMedicalFactors.UYN_CHOICES), required=False)
+    physiotherapy = forms.CharField(label="Has the patient received any of the following: Physiotherapy", widget=RadioSelect(choices=GeneralMedicalFactors.UYN_CHOICES), required=False)
+    psychologicalcounseling = forms.CharField(label="Emotional & psychological counseling", widget=RadioSelect(choices=GeneralMedicalFactors.UYN_CHOICES), required=False)
+    speechtherapy = forms.CharField(label="Speech therapy", widget=RadioSelect(choices=GeneralMedicalFactors.UYN_CHOICES), required=False)
+    occupationaltherapy = forms.CharField(label="Occupational therapy", widget=RadioSelect(choices=GeneralMedicalFactors.UYN_CHOICES), required=False)
+    vocationaltraining = forms.CharField(label="Vocational rehabilitation", widget=RadioSelect(choices=GeneralMedicalFactors.UYN_CHOICES), required=False)
+
+    """
+    diabetes = models.CharField(max_length=30, choices=DIABETES_CHOICES, null=True, blank=True)
+    diabetesage = models.IntegerField(null=True, blank=True, help_text="Leave blank if you do not suffer from diabetes", verbose_name='Age at diagnosis')
+
+    pneumonia = models.CharField(max_length=3, choices=YESNO_CHOICES, verbose_name="pneumonia", null=True, blank=True)
+    pneumoniaage = models.IntegerField(null=True, blank=True, verbose_name="pneumonia age", help_text="Age of first episode (leave blank if you have never suffered from pneumonia)")
+    pneumoniainfections = models.CharField(max_length=3, null=True, blank=True, verbose_name="Number of Chest infections in the last 12 months")
+
+    # TODO: make sure all this fields about cancer are not required, since they are not in Questionnaire
+    cancer = models.CharField(max_length=3, choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Has the patient been diagnosed with cancer or a tumour", help_text='Please tick the check box if the patient has been diagnosed with or identifies as having any of the following')
+    cancertype = models.CharField(max_length=30, null=True, blank=True, choices=CANCER_TYPE_CHOICES, verbose_name="if yes, please choose from the following options in it")
+    cancerothers = models.CharField(max_length=30, null=True, blank=True, verbose_name="Others")
+    cancerorgan = models.CharField(max_length=30, null=True, blank=True, verbose_name="If the patient was diagnosed with cancer please indicate the body organ it was diagnosed in")
+    liver = models.BooleanField(verbose_name="Has the patient been diagnosed with: liver disease")
+    miscarriage = models.BooleanField()
+    gor = models.BooleanField(verbose_name="gastro-oesophageal reflux")
+    gall_bladder = models.BooleanField(verbose_name="gall bladder disease")
+    infection = models.BooleanField(verbose_name="chronic infection")
+    sexual_dysfunction = models.BooleanField()
+    constipation = models.BooleanField()
+    cholesterol = models.BooleanField()
+    cognitive_impairment = models.CharField(max_length=6, choices=COGNITIVE_CHOICES, null=True, blank=True)
+    psychological = models.BooleanField(verbose_name="psychological problems")
+
+    anxiety = models.BooleanField()
+    depression = models.BooleanField()
+    apathy = models.BooleanField()
+    weight = models.IntegerField(verbose_name="body weight", help_text="Body weight in kilograms", null=True, blank=True)
+    height = models.IntegerField(verbose_name="height", help_text="Height in centimetres", null=True, blank=True)
+    endocrine = models.BooleanField(verbose_name="endocrine disorders")
+    obgyn = models.BooleanField(verbose_name="OB/GYN issues")
+
+    # added according to questionnaire
+    medicalert = models.CharField(verbose_name="Does the patient wear a Medicalert bracelet", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
+
+    physiotherapy = models.CharField(verbose_name="Has the patient received any of the following: Physiotherapy", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
+    psychologicalcounseling = models.CharField(verbose_name="Emotional & psychological counseling", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
+    speechtherapy = models.CharField(verbose_name="Speech therapy", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
+    occupationaltherapy = models.CharField(verbose_name="Occupational therapy", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
+    vocationaltraining = models.CharField(verbose_name="Vocational rehabilitation", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
+    """
     class Meta:
         model = GeneralMedicalFactors
         widgets = { 'cancer': Select( choices = (('0', 'No'), ('1','Yes')) ) }
@@ -260,3 +347,59 @@ class PatientForm(forms.ModelForm):
         #widgets = { 'sex': Select( choices = (("M", "Male"), ("F", "Female")) ) }
         sex = models.CharField(max_length=1, choices=SEX_CHOICES)
 '''
+class ConsentForm(forms.ModelForm):
+    q1 = forms.CharField(widget=RadioSelect(choices=Consent.YES_NO_CHOICES), required=False, label='Do we have your permission to store your personal & clinical data in the Australasian National Myotonic Dystrophy Registry and to transfer it (in a form identifiable only by a code) to the global TREAT-NMD registry in which it may be used for research and for the planning of clinical trials?')
+    q2 = forms.CharField(widget=RadioSelect(choices=Consent.YES_NO_CHOICES), required=False, label='Do we have your permission to obtain your Myotonic Dystrophy genetic test result from the relevant testing laboratory to store this information with your clinical and personal information in the Australasian National Myotonic  Dystrophy Registry and to transfer it (in a form identifiable only by a code) to the global TREAT-NMD registry where it may be used for research and for the planning of clinical trials?')
+    q3 = forms.CharField(widget=RadioSelect(choices=Consent.YES_NO_CHOICES), required=False, label='If we receive information on TREAT-NMD projects or other information related to your disease which might be relevant to you, would you like to be informed about this?')
+    q4 = forms.CharField(widget=RadioSelect(choices=Consent.YES_NO_CHOICES), required=False, label='If your doctor receives information about a clinical trial which you might be eligible for, would you like to be informed about this?')
+    q5 = forms.CharField(widget=RadioSelect(choices=Consent.YES_NO_CHOICES), required=False, label='So that we can keep the registry up to date, we will need to update your records once a year. Do you agree to receive follow-up forms once a year which you will be asked to complete in order to register any changes in your medical condition or contact details?')
+    q6 = forms.CharField(widget=RadioSelect(choices=Consent.YES_NO_CHOICES), required=False, label='To improve the quality of the family history data on the Registry, we propose to link your record to any other affected family member or relative on the Registry. The link will only show your Unique identification number and your relationship to the affected relative. Do you agree to have your record linked to any other affected relatives on the Registry?')
+    q7 = forms.CharField(widget=RadioSelect(choices=Consent.YES_NO_CHOICES), required=False, label='If there are any major changes in your data (for example change of address or changes in your medical condition, such as loss of ability to walk unassisted) that occur in the period between updates, are you willing to inform us?')
+
+    class Meta:
+        model = Consent
+
+class FatigueForm(forms.ModelForm):
+    fatigue = forms.CharField(label='Fatigue', widget=RadioSelect(choices=Fatigue.YN_CHOICES), required=False, help_text="Does fatigue or daytime sleepiness currently have a negative effect on the patient's normal daily activities")
+    sitting_reading = forms.CharField(label='sitting and reading', widget=RadioSelect(choices=Fatigue.DOZING_CHOICES), required=False)
+    watching_tv = forms.CharField(label='watching TV', widget=RadioSelect(choices=Fatigue.DOZING_CHOICES), required=False)
+    sitting_inactive_public = forms.CharField(label='sitting, inactive, in a public place', widget=RadioSelect(choices=Fatigue.DOZING_CHOICES), required=False)
+    passenger_car = forms.CharField(label='s a passenger in a car for an hour without a break', widget=RadioSelect(choices=Fatigue.DOZING_CHOICES), required=False)
+    lying_down_afternoon = forms.CharField(label='lying down to rest in the afternoon when circumstances permit', widget=RadioSelect(choices=Fatigue.DOZING_CHOICES), required=False)
+    sitting_talking = forms.CharField(label='sitting and talking to someone', widget=RadioSelect(choices=Fatigue.DOZING_CHOICES), required=False)
+    sitting_quietly_lunch = forms.CharField(label='sitting quietly after lunch without alcohol', widget=RadioSelect(choices=Fatigue.DOZING_CHOICES), required=False)
+    in_car = forms.CharField(label='in a car, while stopped for a few minutes in traffic', widget=RadioSelect(choices=Fatigue.DOZING_CHOICES), required=False)
+
+class FatigueMedicationForm(forms.ModelForm):
+    drug = forms.CharField(label='Drug', required=False, help_text="Specify each drug with its International Nonproprietary Name (INN)")
+    status = forms.CharField(label='Status', widget=RadioSelect(choices=FatigueMedication.STATUS_CHOICES), required=False)
+
+    class Meta:
+        model = FatigueMedication
+
+class MuscleForm(forms.ModelForm):
+    myotonia = forms.CharField(label="Does myotonia currently have a negative effect on the patient's daily activities", widget=RadioSelect(choices=Muscle.MYOTONIA_CHOICES), required=False)
+
+    flexor_digitorum_profundis = forms.CharField(label="Flexor digitorum profundis", widget=RadioSelect(choices=Muscle.MRC_CHOICES), required=False, help_text=Muscle.MRC_HELP_TEXT)
+    tibialis_anterior = forms.CharField(label="Tibialis anterior", widget=RadioSelect(choices=Muscle.MRC_CHOICES), required=False)
+    neck_flexion = forms.CharField(label="Neck flexion", widget=RadioSelect(choices=Muscle.MRC_CHOICES), required=False)
+    iliopsoas = forms.CharField(label="iliopsoas", widget=RadioSelect(choices=Muscle.MRC_CHOICES), required=False)
+    face = forms.CharField(label="Face", widget=RadioSelect(choices=Muscle.UYN_CHOICES), required=False)
+    early_weakness = forms.CharField(label="Was there any evidence of hypotonia or weakness within the first four weeks", widget=RadioSelect(choices=Muscle.UYN_CHOICES), required=False)
+
+    class Meta:
+        model = Muscle
+
+class FeedingFunctionForm(forms.ModelForm):
+    dysphagia = forms.CharField(label='Dysphagia', required=False, help_text="Does the patient have difficulty swallowing", widget=RadioSelect(choices=FeedingFunction.UYN_CHOICES))
+    gastric_nasal_tube = forms.CharField(label='Gastric nasal tube', required=False, help_text="Does the patient need nutritional supplementation via nasogastric or nasojejunal tube, or gastrostomy", widget=RadioSelect(choices=FeedingFunction.UYN_CHOICES))
+
+    class Meta:
+        model = FeedingFunction
+
+class SocioeconomicFactorsForm(forms.ModelForm):
+    occupation = forms.CharField(label='Occupation', required=False, widget=RadioSelect(choices=SocioeconomicFactors.OCCUPATION_CHOICES))
+    employment_effect = forms.CharField(label="Has Myotonic dystrophy affected the patient's employment", required=False, widget=RadioSelect(choices=SocioeconomicFactors.EFFECT_CHOICES))
+
+    class Meta:
+        model = SocioeconomicFactors

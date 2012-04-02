@@ -17,6 +17,7 @@ class RespiratoryInline(admin.StackedInline):
     model = Respiratory
 
 class FeedingFunctionInline(admin.StackedInline):
+    form = FeedingFunctionForm
     model = FeedingFunction
 
 class ClinicalTrialsInline(admin.TabularInline):
@@ -36,16 +37,20 @@ class MuscleMedicationInline(admin.TabularInline):
     extra = 3
 
 class MuscleInline(admin.StackedInline):
+    form = MuscleForm
     model = Muscle
 
 class FatigueInline(admin.StackedInline):
+    form = FatigueForm
     model = Fatigue
 
 class FatigueMedicationInline(admin.TabularInline):
+    form = FatigueMedicationForm
     model = FatigueMedication
     extra = 3
 
 class SocioeconomicFactorsInline(admin.StackedInline):
+    form = SocioeconomicFactorsForm
     model = SocioeconomicFactors
 
 class GeneralMedicalFactorsInline(admin.StackedInline):
@@ -69,11 +74,11 @@ class FamilyMemberInline(admin.TabularInline):
     raw_id_fields = ("registry_patient",)
     extra = 3
 
-
 class NotesInline(admin.TabularInline):
     model = Notes
 
 class ConsentInline(admin.StackedInline):
+    form = ConsentForm
     model = Consent
 
 class DiagnosisAdmin(admin.ModelAdmin):

@@ -56,7 +56,8 @@ class Diagnosis(models.Model):
     # /home/username/registry/virt_registry/lib/python2.6/site-packages/Mango_py-1.2.3-py2.6.egg/django/db/models/fields/__init__.py
     diagnosis = models.CharField(max_length=3, choices=DIAGNOSIS_CHOICES, verbose_name='Condition', default='DM1') # required
 
-    affectedstatus = models.CharField(max_length=30, choices=AFFECTED_STATUS_CHOICES, verbose_name='Affected Status') # required
+    #affectedstatus = models.CharField(max_length=30, choices=AFFECTED_STATUS_CHOICES, verbose_name='Affected Status') # required
+    affectedstatus = models.CharField(max_length=30, choices=AFFECTED_STATUS_CHOICES, verbose_name='Affected Status', default='') # required, default to remove the '---' in the options
     first_symptom = models.CharField('What was the first symptom that prompted the diagnosis of Myotonic Dystrophy', max_length=50, choices=FIRST_SYMPTOM_CHOICES, null=True, blank=True)
     first_suspected_by = models.CharField(max_length=50, choices=FIRST_SUSPECTED_CHOICES, null=True, blank=True)
 
@@ -101,17 +102,17 @@ class MotorFunction(models.Model):
 
     # could not make the BooleanField required
     #walk = models.BooleanField(verbose_name="currently able to walk", null=False, blank=False) # Trac 16 Item 48, removed help text #required
-    walk = models.CharField(max_length=1, choices=YN_CHOICES, verbose_name="currently able to walk") #required
-    walk_assisted = models.CharField(max_length=50, choices=WALK_ASSISTED_CHOICES, verbose_name="current use of devices to assist with walking") #required
+    walk = models.CharField(max_length=1, choices=YN_CHOICES, verbose_name="currently able to walk", default='') #required
+    walk_assisted = models.CharField(max_length=50, choices=WALK_ASSISTED_CHOICES, verbose_name="current use of devices to assist with walking", default='') #required
     walk_assisted_age = models.IntegerField(verbose_name="at what age did the patient commence using devices to assist with walking", null=True, blank=True, help_text="age in years")
     # removed v3
     #sit = models.BooleanField(verbose_name="currently able to sit without support", help_text="Able to maintain a sitting position on a chair or a wheelchair without support of upper limbs or leaning against the back of the chair")
-    best_function = models.CharField(null=True, blank=True, max_length=8, verbose_name="What is the best motor function level the patient has achieved", choices=MOTOR_FUNCTION_CHOICES, help_text="[Motor functions are listed in order with higher functions at the top, please choose one]<br/>Walking: walking with or without help (orthoses or assistive device or human assistance), inside or outdoors<br/>Sitting independently: able to maintain a sitting position on a chair or a wheelchair without support of upper limbs or leaning against the back of the chair")
+    best_function = models.CharField(choices=MOTOR_FUNCTION_CHOICES, default='', null=True, blank=True, max_length=8, verbose_name="What is the best motor function level the patient has achieved", help_text="[Motor functions are listed in order with higher functions at the top, please choose one]<br/>Walking: walking with or without help (orthoses or assistive device or human assistance), inside or outdoors<br/>Sitting independently: able to maintain a sitting position on a chair or a wheelchair without support of upper limbs or leaning against the back of the chair")
     #removed v3
     #acquisition_age = models.IntegerField(verbose_name="At what age did the patient start walking", null=True, blank=True, help_text="Indicate age in years when the patient started walking")
-    wheelchair_use = models.CharField(verbose_name="wheel chair use", max_length=12, choices=WHEELCHAIR_USE_CHOICES, help_text="Yes (permanent): patient is not able to walk and needs a wheelchair to move<br/>Yes (intermittent): patient is still able to walk") #required
+    wheelchair_use = models.CharField(verbose_name="wheel chair use", default='', max_length=12, choices=WHEELCHAIR_USE_CHOICES, help_text="<b>Yes (permanent):</b> patient is not able to walk and needs a wheelchair to move<br/><b>Yes (intermittent):</b> patient is still able to walk") #required
     wheelchair_usage_age = models.IntegerField(null=True, blank=True, help_text="If using wheelchair specify age at start of wheelchair use") # required but need to check Yes previous question
-    dysarthria = models.IntegerField(choices=DYSARTHRIA_CHOICES,null=True, blank=True)
+    dysarthria = models.IntegerField(choices=DYSARTHRIA_CHOICES,null=True, blank=True, default='')
 
     class Meta:
         abstract = True
@@ -477,7 +478,7 @@ class GeneticTestDetails(models.Model):
 
     # added for the questionnaire 2012-02-20
     counselling = models.CharField(max_length=1, choices=UYN_CHOICES, null=True, blank=True, verbose_name="Has the patient received genetic counselling")
-    familycounselling = models.CharField(max_length=1, choices=UYN_CHOICES, null=True, blank=True, verbose_name="Have any of the patient's family members received genetic counselling")
+    familycounselling = models.CharField(max_length=1, choices=UYN_CHOICES, null=True, blank=True, verbose_name="Has any of the patient's family members received genetic counselling")
 
     class Meta:
         abstract = True
