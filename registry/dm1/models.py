@@ -142,6 +142,7 @@ class Muscle(base.Muscle):
     diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
 
 ## ADAM - these fields don't seem to be in the frontend now and were causing db errors so have made them nullable
+    ## they are shown in the Registry but not in the Questionnaire
     flexor_digitorum_profundis = models.DecimalField(max_digits=2, decimal_places=1, choices=MRC_CHOICES, help_text=MRC_HELP_TEXT, null=True, blank=True)
     tibialis_anterior = models.DecimalField(max_digits=2, decimal_places=1, choices=MRC_CHOICES, help_text=MRC_HELP_TEXT, null=True, blank=True)
     neck_flexion = models.DecimalField(max_digits=2, decimal_places=1, choices=MRC_CHOICES, help_text=MRC_HELP_TEXT, null=True, blank=True)
