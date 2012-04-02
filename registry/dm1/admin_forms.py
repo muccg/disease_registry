@@ -41,11 +41,9 @@ class FamilyMemberForm(forms.ModelForm):
     ]
     registry_patient = forms.ModelChoiceField(queryset=Patient.objects.all(), label="Patient record within the registry (optional)", required=False, widget=LiveComboWidget(attrs={"minchars": 1}, backend=url("/admin/patients/patient/search/")))
     relationship = forms.CharField(label="Relationship", widget=ComboWidget(options=OPTIONS))
-
-#
     sex = forms.CharField(label="Sex", widget=RadioSelect(choices=Patient.SEX_CHOICES), required=False)
     family_member_diagnosis = forms.CharField(label="Diagnosis", widget=RadioSelect(choices=FamilyMember.DIAGNOSIS_CHOICES), required=False)
-#
+
     class Meta:
         model = FamilyMember
 
@@ -228,7 +226,6 @@ class GeneticTestDetailsForm(forms.ModelForm):
             self.fields["test_date"].required=True
         return cleaneddata
 
-#FJ added to change the checkbox to a select
 class MotorFunctionForm(forms.ModelForm):
     # Trac 16 Item 44, use Radio buttons for Yes, No
     walk = forms.CharField(label="Currently able to walk", widget=RadioSelect(choices=base.MotorFunction.YN_CHOICES))
@@ -275,7 +272,6 @@ class SurgeryForm(forms.ModelForm):
         #FJ Trac 16 item 25, change checkbox to drop down with Yes, No
         widgets = { 'cataract_diagnosis': RadioSelect( choices = (('0', 'No'), ('1','Yes')) ) }
 
-# cannot get this form to work, it looks like it is not called by Django, cannot override the choices here
 class GeneralMedicalFactorsForm(forms.ModelForm):
     diabetes = forms.CharField(label="Diabetes", widget=RadioSelect(choices=GeneralMedicalFactors.DIABETES_CHOICES), required=False)
     pneumonia = forms.CharField(label="Pneumonia", widget=RadioSelect(choices=GeneralMedicalFactors.YESNO_CHOICES), required=False)
@@ -289,47 +285,6 @@ class GeneralMedicalFactorsForm(forms.ModelForm):
     occupationaltherapy = forms.CharField(label="Occupational therapy", widget=RadioSelect(choices=GeneralMedicalFactors.UYN_CHOICES), required=False)
     vocationaltraining = forms.CharField(label="Vocational rehabilitation", widget=RadioSelect(choices=GeneralMedicalFactors.UYN_CHOICES), required=False)
 
-    """
-    diabetes = models.CharField(max_length=30, choices=DIABETES_CHOICES, null=True, blank=True)
-    diabetesage = models.IntegerField(null=True, blank=True, help_text="Leave blank if you do not suffer from diabetes", verbose_name='Age at diagnosis')
-
-    pneumonia = models.CharField(max_length=3, choices=YESNO_CHOICES, verbose_name="pneumonia", null=True, blank=True)
-    pneumoniaage = models.IntegerField(null=True, blank=True, verbose_name="pneumonia age", help_text="Age of first episode (leave blank if you have never suffered from pneumonia)")
-    pneumoniainfections = models.CharField(max_length=3, null=True, blank=True, verbose_name="Number of Chest infections in the last 12 months")
-
-    # TODO: make sure all this fields about cancer are not required, since they are not in Questionnaire
-    cancer = models.CharField(max_length=3, choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Has the patient been diagnosed with cancer or a tumour", help_text='Please tick the check box if the patient has been diagnosed with or identifies as having any of the following')
-    cancertype = models.CharField(max_length=30, null=True, blank=True, choices=CANCER_TYPE_CHOICES, verbose_name="if yes, please choose from the following options in it")
-    cancerothers = models.CharField(max_length=30, null=True, blank=True, verbose_name="Others")
-    cancerorgan = models.CharField(max_length=30, null=True, blank=True, verbose_name="If the patient was diagnosed with cancer please indicate the body organ it was diagnosed in")
-    liver = models.BooleanField(verbose_name="Has the patient been diagnosed with: liver disease")
-    miscarriage = models.BooleanField()
-    gor = models.BooleanField(verbose_name="gastro-oesophageal reflux")
-    gall_bladder = models.BooleanField(verbose_name="gall bladder disease")
-    infection = models.BooleanField(verbose_name="chronic infection")
-    sexual_dysfunction = models.BooleanField()
-    constipation = models.BooleanField()
-    cholesterol = models.BooleanField()
-    cognitive_impairment = models.CharField(max_length=6, choices=COGNITIVE_CHOICES, null=True, blank=True)
-    psychological = models.BooleanField(verbose_name="psychological problems")
-
-    anxiety = models.BooleanField()
-    depression = models.BooleanField()
-    apathy = models.BooleanField()
-    weight = models.IntegerField(verbose_name="body weight", help_text="Body weight in kilograms", null=True, blank=True)
-    height = models.IntegerField(verbose_name="height", help_text="Height in centimetres", null=True, blank=True)
-    endocrine = models.BooleanField(verbose_name="endocrine disorders")
-    obgyn = models.BooleanField(verbose_name="OB/GYN issues")
-
-    # added according to questionnaire
-    medicalert = models.CharField(verbose_name="Does the patient wear a Medicalert bracelet", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
-
-    physiotherapy = models.CharField(verbose_name="Has the patient received any of the following: Physiotherapy", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
-    psychologicalcounseling = models.CharField(verbose_name="Emotional & psychological counseling", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
-    speechtherapy = models.CharField(verbose_name="Speech therapy", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
-    occupationaltherapy = models.CharField(verbose_name="Occupational therapy", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
-    vocationaltraining = models.CharField(verbose_name="Vocational rehabilitation", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
-    """
     class Meta:
         model = GeneralMedicalFactors
         widgets = { 'cancer': Select( choices = (('0', 'No'), ('1','Yes')) ) }
