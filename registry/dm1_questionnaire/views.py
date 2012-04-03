@@ -47,7 +47,8 @@ def clinical(request):
         ("Genetic Test Details", GeneticTestDetailsForm, save_default),
         ("Ethnic Origin", EthnicOriginForm, save_default),
         ("Family Member", FamilyMemberForm, save_default),
-        #("Clinical Trials", ClinicalTrialsForm, save_default),
+        ("Clinical Trials", ClinicalTrialsForm, save_default),
+        ("Other Registries", OtherRegistriesForm, save_default),
         #("Consent Form", ConsentForm, save_default), # validated separately
     )
 
@@ -129,7 +130,7 @@ def clinical(request):
             # 2 steps required to get the consent object, add the diagnosis link to it and save it
             consent = consent_form.save(commit=False)
             consent.diagnosis = diagnosis
-            print "consent before save: %s dir: %s" % (consent, dir(consent))
+            #print "consent before save: %s dir: %s" % (consent, dir(consent))
             consent.save()
 
             # Clean up the session and prevent accidental multiple submissions.
@@ -170,7 +171,10 @@ def personal(request):
             return HttpResponseRedirect("clinical")
     else:
         # get the first and last names form the consent form
-        consentformdata = request.session["consentform"]
+        consentformdata = request.session.get("consentform")
+        if not consentformdata:
+            return HttpResponseRedirect("index")
+
         familyname = consentformdata.get('lastname')
         givennames = consentformdata.get('firstname')
         #print "familyname %s givennames %s" % (familyname, givennames)
@@ -215,8 +219,8 @@ def index(request):
         if form.is_valid():
             # No need to save anything; merely consenting (which is enough for
             # this to be valid) is sufficient.
-            print "form consentdate: %s" % form.cleaned_data['consentdate']
-            print "form consentdateparentguardian: %s" % form.cleaned_data['consentdateparentguardian']
+            #print "form consentdate: %s" % form.cleaned_data['consentdate']
+            #print "form consentdateparentguardian: %s" % form.cleaned_data['consentdateparentguardian']
             request.session["consentform"] = request.POST.copy() # keep the data for the "personal" & "clinical" views
 
             return HttpResponseRedirect("personal")

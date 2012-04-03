@@ -427,3 +427,8 @@ class FamilyMemberForm(forms.ModelForm):
     class Meta:
         exclude = ("diagnosis",)
         model = models.FamilyMember
+
+class OtherRegistriesForm(forms.ModelForm):
+    class Meta:
+        exclude = ("diagnosis",)
+        model = models.OtherRegistries
