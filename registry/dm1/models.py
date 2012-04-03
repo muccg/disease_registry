@@ -259,9 +259,8 @@ class ClinicalTrials(base.ClinicalTrials):
         return str(self.diagnosis)
 
 
-class OtherRegistries(models.Model):
+class OtherRegistries(base.OtherRegistries):
     diagnosis = models.ForeignKey(Diagnosis)
-    registry = models.CharField(max_length=50)
 
     class Meta:
         verbose_name_plural = "other registries"

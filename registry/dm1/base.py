@@ -507,10 +507,10 @@ class EthnicOrigin(models.Model):
 
 
 class ClinicalTrials(models.Model):
-    drug_name = models.CharField(max_length=50)
-    trial_name = models.CharField(max_length=50)
-    trial_sponsor = models.CharField(max_length=50)
-    trial_phase = models.CharField(max_length=50)
+    drug_name = models.CharField(max_length=50, null=True, blank=True)
+    trial_name = models.CharField(max_length=50, null=True, blank=True)
+    trial_sponsor = models.CharField(max_length=50, null=True, blank=True)
+    trial_phase = models.CharField(max_length=50, null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -599,6 +599,12 @@ class FamilyMember(models.Model):
     sex = models.CharField(max_length=1, choices=Patient.SEX_CHOICES, null=True, blank=True)
     relationship = models.CharField(max_length=50, null=True, blank=True)
     family_member_diagnosis = models.CharField(max_length=30, choices=DIAGNOSIS_CHOICES, verbose_name="diagnosis", null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+class OtherRegistries(models.Model):
+    registry = models.CharField(max_length=50, null=True, blank=True)
 
     class Meta:
         abstract = True
