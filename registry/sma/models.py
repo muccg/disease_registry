@@ -19,8 +19,8 @@ class Diagnosis(models.Model):
         ("SMA2", "SMA2 - onset between 7-18 months, never stands, natural age of death >2 years"),
         ("SMA3", "SMA3 - onset >18 months, stands and walks (this highest function may be lost during evolution)"),
         ("Other", "Other"),
-        ("Unknown", "Unknown"),        
-    )    
+        ("Unknown", "Unknown"),
+    )
 
     patient = models.OneToOneField(Patient, primary_key=True)
     diagnosis = models.CharField(max_length=3, choices=DIAGNOSIS_CHOICES)
@@ -88,10 +88,10 @@ class MotorFunction(models.Model):
     walk = models.BooleanField(verbose_name="currently able to walk", help_text="Functional walking with or without help (orthoses or assistive device or human assistance), inside or outdoors")
     sit = models.BooleanField(verbose_name="currently able to sit without support", help_text="Able to maintain the sitting position on a chair or a wheelchair without support of upper limbs or leaning against the back of the chair")
     best_function = models.CharField(max_length=7, choices=MOTOR_FUNCTION_CHOICES, help_text="Walking: functional walking with or without help (orthoses or assistive device or human assistance), inside or outdoors<br/>Sitting independently: able to maintain the sitting position on a chair or a wheelchair without support of upper limbs or leaning against the back of the chair")
-    acquisition_age = models.IntegerField(null=True, blank=True, help_text="If walking or sitting specify age of acquisition")
+    acquisition_age = models.IntegerField(null=True, blank=True, help_text="If walking or sitting specify age of acquisition in months")
     wheelchair_use = models.CharField(verbose_name="wheel chair use (over 3 years of age)", max_length=12, choices=WHEELCHAIR_USE_CHOICES, help_text="Yes (permanent): patient is not able to walk and needs a wheelchair to move<br/>Yes (intermittent): patient is still able to walk")
     wheelchair_usage_age = models.IntegerField(null=True, blank=True, help_text="If using wheelchair specify age at start of wheelchair use")
-    
+
     class Meta:
         verbose_name_plural = "motor function"
 
@@ -104,7 +104,7 @@ class Surgery(models.Model):
     diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
     surgery = models.NullBooleanField(verbose_name="scoliosis surgery", help_text="Scoliosis: lateral curvature of the spine in the coronal plane with a Cobb angle measuring more than 10°; surgery: any type of surgical procedure")
 
-    class Meta: 
+    class Meta:
         verbose_name_plural = "surgeries"
 
     def __unicode__(self):
@@ -115,7 +115,7 @@ class FeedingFunction(models.Model):
     diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
     gastric_nasal_tube = models.NullBooleanField(verbose_name="gastric/nasal tube", help_text="Nutritional supplementation via nasogastric or nasojejunal tube or gastrostomy")
 
-    class Meta: 
+    class Meta:
         verbose_name_plural = "feeding function"
 
     def __unicode__(self):
