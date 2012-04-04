@@ -15,6 +15,7 @@ class Diagnosis(models.Model):
         ("IMD", "Intermediate Muscular Dystrophy"),
         ("Oth", "Non-Duchenne/Becker Muscular Dystrophy"),
         ("Car", "Non-Symptomatic Carrier"),
+        ("Man", "Manifesting carrier"), # Trac #30
     )
 
     patient = models.OneToOneField(Patient, primary_key=True)
@@ -101,7 +102,7 @@ class Surgery(models.Model):
     diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
     surgery = models.NullBooleanField(verbose_name="scoliosis surgery", help_text="Scoliosis: lateral curvature of the spine in the coronal plane with a Cobb angle measuring more than 10°; surgery: any type of surgical procedure")
 
-    class Meta: 
+    class Meta:
         verbose_name_plural = "surgeries"
 
     def __unicode__(self):
@@ -226,6 +227,3 @@ def signal_patient_post_save(sender, **kwargs):
 
 # connect up django signals
 post_save.connect(signal_patient_post_save, sender=Patient)
-
-
-
