@@ -315,11 +315,11 @@ class ConsentForm(forms.ModelForm):
         model = Consent
 
 class FatigueForm(forms.ModelForm):
-    fatigue = forms.CharField(label='Fatigue', widget=RadioSelect(choices=Fatigue.YN_CHOICES), required=False, help_text="Does fatigue or daytime sleepiness currently have a negative effect on the patient's normal daily activities")
+    fatigue = forms.CharField(label='Fatigue', widget=RadioSelect(choices=Fatigue.FATIGUE_CHOICES), required=False, help_text="Does fatigue or daytime sleepiness currently have a negative effect on the patient's normal daily activities")
     sitting_reading = forms.CharField(label='sitting and reading', widget=RadioSelect(choices=Fatigue.DOZING_CHOICES), required=False)
     watching_tv = forms.CharField(label='watching TV', widget=RadioSelect(choices=Fatigue.DOZING_CHOICES), required=False)
     sitting_inactive_public = forms.CharField(label='sitting, inactive, in a public place', widget=RadioSelect(choices=Fatigue.DOZING_CHOICES), required=False)
-    passenger_car = forms.CharField(label='s a passenger in a car for an hour without a break', widget=RadioSelect(choices=Fatigue.DOZING_CHOICES), required=False)
+    passenger_car = forms.CharField(label='as a passenger in a car for an hour without a break', widget=RadioSelect(choices=Fatigue.DOZING_CHOICES), required=False)
     lying_down_afternoon = forms.CharField(label='lying down to rest in the afternoon when circumstances permit', widget=RadioSelect(choices=Fatigue.DOZING_CHOICES), required=False)
     sitting_talking = forms.CharField(label='sitting and talking to someone', widget=RadioSelect(choices=Fatigue.DOZING_CHOICES), required=False)
     sitting_quietly_lunch = forms.CharField(label='sitting quietly after lunch without alcohol', widget=RadioSelect(choices=Fatigue.DOZING_CHOICES), required=False)

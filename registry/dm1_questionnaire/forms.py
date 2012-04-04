@@ -272,7 +272,7 @@ class FeedingFunctionForm(forms.ModelForm):
 
 
 class FatigueForm(forms.ModelForm):
-    FATIGUE_CHOICES = (('', "---"),) + models.Fatigue.YN_CHOICES
+    FATIGUE_CHOICES = (('', "---"),) + models.Fatigue.FATIGUE_CHOICES
     DOZING_CHOICES = (('', "-------"),) + models.Fatigue.DOZING_CHOICES
     fatigue = forms.CharField(widget=Select(choices=FATIGUE_CHOICES), required=False, label="Does fatigue or daytime sleepiness currently have a negative effect on your normal daily activities")
     sitting_reading = forms.IntegerField(label="Do you start to fall asleep in the following situations: Sitting and reading", widget=Select(choices=DOZING_CHOICES), required=False)
