@@ -281,6 +281,7 @@ class FeedingFunction(models.Model):
 
 
 class Fatigue(models.Model):
+    # need to be integers, since there is a calculation done in the form: 'score'
     DOZING_CHOICES = (
         (0, "Would never doze"),
         (1, "Slight chance of dozing"),
@@ -290,8 +291,9 @@ class Fatigue(models.Model):
 
     YN_CHOICES = (('N', 'No'), ('Y', 'Yes'))
 
+    FATIGUE_CHOICES = (('S', 'Yes, severely'), ('M', 'Yes, mildly'), ('N', 'No'))
 
-    fatigue = models.CharField(null=True, blank=True, max_length=6, choices=YN_CHOICES, help_text="Does fatigue or daytime sleepiness currently have a negative effect on the patient’s normal daily activities?")
+    fatigue = models.CharField(null=True, blank=True, choices=FATIGUE_CHOICES, max_length=1, help_text="Does fatigue or daytime sleepiness currently have a negative effect on the patient’s normal daily activities?")
 
     # Trac 16 DM1 Questionnaire #46
     # We just want the label text, not the field as a general caption for the fields that follow
