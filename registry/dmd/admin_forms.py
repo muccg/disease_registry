@@ -32,13 +32,13 @@ class FamilyMemberForm(forms.ModelForm):
         "Cousin",
         "Child",
     ]
-    registry_patient = forms.ModelChoiceField(queryset=Patient.objects.all(), label="Patient record within the registry (optional)", required=False, widget=LiveComboWidget(attrs={"minchars": 1}, backend=url("/admin/patients/patient/search/")))
+    #registry_patient = forms.ModelChoiceField(queryset=Patient.objects.all(), label="Patient record within the registry (optional)", required=False, widget=LiveComboWidget(attrs={"minchars": 1}, backend=url("/admin/patients/patient/search/")))
     relationship = forms.CharField(label="Relationship", widget=ComboWidget(options=OPTIONS))
 
     class Meta:
         model = FamilyMember
 
- 
+
 class HeartForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(HeartForm, self).__init__(*args, **kwargs)
@@ -53,7 +53,7 @@ class HeartForm(forms.ModelForm):
     class Meta:
         model = Heart
 
- 
+
 class RespiratoryForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(RespiratoryForm, self).__init__(*args, **kwargs)
