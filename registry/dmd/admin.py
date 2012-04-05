@@ -43,7 +43,8 @@ class OtherRegistriesInline(admin.TabularInline):
 class FamilyMemberInline(admin.TabularInline):
     form = FamilyMemberForm
     model = FamilyMember
-    raw_id_fields = ("registry_patient",)
+    # doesn't look like it's doing anything
+    #raw_id_fields = ("registry_patient",)
     extra = 3
 
 
@@ -69,7 +70,7 @@ class DiagnosisAdmin(admin.ModelAdmin):
     search_fields = ["patient__family_name", "patient__given_names"]
 
     #FJ added 'working group' field
-    list_display = ['patient_name', 'patient_working_group']    
+    list_display = ['patient_name', 'patient_working_group']
 
     def patient_name(self, obj):
         return ("%s") % (obj.patient, )
