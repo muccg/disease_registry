@@ -136,7 +136,6 @@ class MolecularDataAdmin(admin.ModelAdmin):
 
     def moleculardata_entered(self, obj):
         if not hasattr(obj, 'variation_set') or not obj.variation_set.all():
-            print "moleculardata has no variation_set or is empty"
             return ''
 
         imagefile = 'tick.png'
