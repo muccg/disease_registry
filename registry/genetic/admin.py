@@ -26,7 +26,7 @@ class GeneAdmin(admin.ModelAdmin):
     def search(self, request, term):
         genes = Gene.objects.filter(Q(name__icontains=term) | Q(symbol__icontains=term)).order_by("symbol")
         response = [[gene.symbol, gene.name] for gene in genes]
-        
+
         return HttpResponse(json.dumps(response), mimetype="application/json")
 
 
@@ -58,7 +58,8 @@ class MolecularDataAdmin(admin.ModelAdmin):
     ]
     search_fields = ["patient__family_name", "patient__given_names"]
     #FJ added 'working group' field
-    list_display = ['patient_name', 'patient_working_group']    
+    # Trac #32 added moleculardata_entered
+    list_display = ['patient_name', 'patient_working_group', 'moleculardata_entered']
 
     def patient_name(self, obj):
         return ("%s") % (obj.patient, )
@@ -78,7 +79,7 @@ class MolecularDataAdmin(admin.ModelAdmin):
             (r"validate/sequence$", self.admin_site.admin_view(self.validate_sequence)),
         )
         return local_urls + urls
-        
+
     def override_validation(self, request, type, id):
         variation = get_object_or_404(Variation, pk=int(id))
 
@@ -133,6 +134,21 @@ class MolecularDataAdmin(admin.ModelAdmin):
         except SequenceVariation.Error, e:
             return HttpResponseBadRequest(json.dumps([unicode(e)]), mimetype="application/json")
 
+    def moleculardata_entered(self, obj):
+        if not hasattr(obj, 'variation_set') or not obj.variation_set.all():
+            print "moleculardata has no variation_set or is empty"
+            return ''
+
+        imagefile = 'tick.png'
+
+        #genetic_url = '<a href="%s">' % urlresolvers.reverse('admin:genetic_moleculardata_change', args=(obj.id,))
+        #genetic_url += '<img src="%s"/>' % url("/static/images/" + imagefile)
+        genetic_url = '<img src="%s"/>' % url("/static/images/" + imagefile)
+        #genetic_url += '</a>'
+        return genetic_url
+
+    moleculardata_entered.allow_tags = True
+    moleculardata_entered.short_description = "Genetic Data"
 
 if settings.INSTALL_NAME == "dm1":
     from dm1.admin import DiagnosticCategoryInline
