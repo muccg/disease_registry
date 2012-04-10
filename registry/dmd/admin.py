@@ -70,7 +70,8 @@ class DiagnosisAdmin(admin.ModelAdmin):
     search_fields = ["patient__family_name", "patient__given_names"]
 
     #FJ added 'working group' field
-    list_display = ['patient_name', 'patient_working_group']
+    # Trac#32 added 'process_graph'
+    list_display = ['patient_name', 'patient_working_group', 'progress_graph']
 
     def patient_name(self, obj):
         return ("%s") % (obj.patient, )
@@ -109,5 +110,17 @@ class DiagnosisAdmin(admin.ModelAdmin):
         form = super(DiagnosisAdmin, self).get_form(request, obj, **kwargs)
         form.user = request.user
         return form
+
+    def progress_graph(self, obj):
+
+        #graph_html = '<a href="%s">' % urlresolvers.reverse('admin:%s_diagnosis_change' % settings.INSTALL_NAME, args=(obj.id,))
+        #graph_html += '<img title="%s" src="http://chart.apis.google.com/chart' % obj.diagnosis.incomplete_sections()
+        graph_html = '<img title="%s" src="http://chart.apis.google.com/chart' % obj.incomplete_sections()
+        graph_html += '?chf=bg,s,FFFFFF00&chs=200x15&cht=bhs&chco=4D89F9,C6D9FD&chd=t:%d|100&chbh=5"/>' % obj.percentage_complete()
+        #graph_html += '</a>'
+        return graph_html
+
+    progress_graph.allow_tags = True
+    progress_graph.short_description = "Diagnosis Entry Progress"
 
 admin.site.register(Diagnosis, DiagnosisAdmin)
