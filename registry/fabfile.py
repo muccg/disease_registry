@@ -45,17 +45,24 @@ def snapshot():
     """Snapshot deployment"""
     release = _ccg_deploy_snapshot()
     _munge_settings(release)
-    
-def release():
-    """Release deployment"""
-    release = _ccg_deploy_release()
+
+def release(*args, **kwargs):
+    """
+    Make a release deployment
+    """
+    migration = kwargs.get("migration", True)
+    requirements = kwargs.get("requirements", "requirements.txt")
+    tag = kwargs.get("tag", None)
+    env.ccg_requirements = requirements
+    env.auto_confirm=False
+    release = _ccg_deploy_release(tag=tag,migration=migration)
     _munge_settings(release)
-    
+
 def testrelease():
     """Release deployment with dev settings"""
     release = _ccg_deploy_release(devrelease=True)
     _munge_settings(release)
-    
+
 def purge():
     """Purge a user deployment"""
     _ccg_purge_user()
