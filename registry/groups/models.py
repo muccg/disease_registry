@@ -1,7 +1,6 @@
 from django.db import models, transaction
 
 import django.contrib.auth
-import ip
 
 
 class WorkingGroup(models.Model):
