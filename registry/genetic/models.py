@@ -7,8 +7,8 @@ import logging
 logger = logging.getLogger('genetic')
 
 class Gene(models.Model):
-    symbol = models.TextField(primary_key=True)
-    hgnc_id = models.TextField(unique=True, verbose_name="HGNC ID")
+    symbol = models.TextField()
+    hgnc_id = models.TextField(verbose_name="HGNC ID")
     name = models.TextField()
     status = models.TextField()
     chromosome = models.TextField()

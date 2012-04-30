@@ -7,6 +7,7 @@ from django.db import models
 class Migration(DataMigration):
 
     def forwards(self, orm):
+        
         from django.core.management import call_command
         call_command("loaddata", "initial_genes.json", exceptiononerror=True)
 
@@ -24,6 +25,7 @@ class Migration(DataMigration):
             'name': ('django.db.models.fields.TextField', [], {}),
             'refseq_id': ('django.db.models.fields.TextField', [], {}),
             'status': ('django.db.models.fields.TextField', [], {}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'symbol': ('django.db.models.fields.TextField', [], {'primary_key': 'True'})
         },
         'genetic.moleculardata': {

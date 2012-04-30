@@ -157,7 +157,7 @@ var Entry = {
             xhr.onreadystatechange = function (e) {
                 if (xhr.readyState == 4) {
                     var validity = document.getElementById("validity");
-
+                    console.log('status of XHR call was: ' + xhr.status);
                     if (xhr.status == 1223 || (xhr.status >= 200 && xhr.status <= 299)) {
                         validity.className = "validity valid";
                     }
