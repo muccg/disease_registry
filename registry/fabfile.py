@@ -58,6 +58,9 @@ def release(*args, **kwargs):
     release = _ccg_deploy_release(tag=tag,migration=migration)
     _munge_settings(release)
 
+def make_live(tag=env.user):
+    _make_live_symlinks(tag)
+
 def testrelease():
     """Release deployment with dev settings"""
     release = _ccg_deploy_release(devrelease=True)
