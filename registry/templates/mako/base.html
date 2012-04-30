@@ -1,0 +1,8 @@
+<%def name="url(path)"><%
+    from ccg.utils.webhelpers import url
+
+    if not path:
+        path = ""
+
+    return url(path)
+%></%def>
