@@ -36,7 +36,8 @@ class Command(BaseCommand):
 
                 data = hgnc.open(input)
                 for record in data.get_record():
-                    gene = Gene(symbol=record["approved symbol"])
+                    gene = Gene()
+                    gene.symbol = record["approved symbol"]
                     gene.hgnc_id = record["hgnc id"]
                     gene.name = record["approved name"] if "approved name" in record else ""
                     gene.status = record["status"] if "status" in record else ""

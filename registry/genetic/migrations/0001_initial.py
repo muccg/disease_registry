@@ -10,8 +10,9 @@ class Migration(SchemaMigration):
         
         # Adding model 'Gene'
         db.create_table('genetic_gene', (
-            ('symbol', self.gf('django.db.models.fields.TextField')(primary_key=True)),
-            ('hgnc_id', self.gf('django.db.models.fields.TextField')(unique=True)),
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('symbol', self.gf('django.db.models.fields.TextField')()),
+            ('hgnc_id', self.gf('django.db.models.fields.TextField')()),
             ('name', self.gf('django.db.models.fields.TextField')()),
             ('status', self.gf('django.db.models.fields.TextField')()),
             ('chromosome', self.gf('django.db.models.fields.TextField')()),
@@ -66,11 +67,13 @@ class Migration(SchemaMigration):
             'Meta': {'ordering': "['symbol']", 'object_name': 'Gene'},
             'accession_numbers': ('django.db.models.fields.TextField', [], {}),
             'chromosome': ('django.db.models.fields.TextField', [], {}),
-            'hgnc_id': ('django.db.models.fields.TextField', [], {'unique': 'True'}),
+            'hgnc_id': ('django.db.models.fields.TextField', [], {}),
             'name': ('django.db.models.fields.TextField', [], {}),
             'refseq_id': ('django.db.models.fields.TextField', [], {}),
             'status': ('django.db.models.fields.TextField', [], {}),
-            'symbol': ('django.db.models.fields.TextField', [], {'primary_key': 'True'})
+            'symbol': ('django.db.models.fields.TextField', [], {}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+
         },
         'genetic.moleculardata': {
             'Meta': {'ordering': "['patient']", 'object_name': 'MolecularData'},

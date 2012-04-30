@@ -9,7 +9,7 @@ def overrides(md):
     if md:
         for variation in md.variation_set.all():
             ids[variation.id] = variation.get_validation_overrides()
-
+        print 'variation override ids: ', ids
     return json.dumps(ids)
 %>
 

@@ -78,9 +78,11 @@ class MolecularDataAdmin(admin.ModelAdmin):
             (r"validate/protein$", self.admin_site.admin_view(self.validate_protein)),
             (r"validate/sequence$", self.admin_site.admin_view(self.validate_sequence)),
         )
+        print 'urls: ', local_urls + urls
         return local_urls + urls
 
     def override_validation(self, request, type, id):
+        print 'override_validation happening'
         variation = get_object_or_404(Variation, pk=int(id))
 
         if not request.user.has_perm("genetic.can_override_validation"):
@@ -108,6 +110,7 @@ class MolecularDataAdmin(admin.ModelAdmin):
             return MolecularData.objects.none()
 
     def validate_exon(self, request):
+        print 'validating exon'
         from humangenome.exon import ExonVariation
 
         try:
@@ -117,6 +120,7 @@ class MolecularDataAdmin(admin.ModelAdmin):
             return HttpResponseBadRequest(json.dumps([unicode(e)]), mimetype="application/json")
 
     def validate_protein(self, request):
+        print 'validating protein'
         from humangenome.protein import ProteinVariation
 
         try:
@@ -126,9 +130,11 @@ class MolecularDataAdmin(admin.ModelAdmin):
             return HttpResponseBadRequest(json.dumps([unicode(e)]), mimetype="application/json")
 
     def validate_sequence(self, request):
+        print 'validating sequence'
         from humangenome.sequence import SequenceVariation
 
         try:
+            print 'raw: ', request.raw_post_data
             SequenceVariation(request.raw_post_data)
             return HttpResponse(status=204)
         except SequenceVariation.Error, e:
