@@ -76,7 +76,7 @@ def purge_snapshot():
 
 def _munge_settings(deploy_type=''):
    for install_name in env.app_install_names:
-       target = os.path.join(env.app_root, install_name, deploy_type, install_name)
+       target = os.path.join(env.app_root, install_name, deploy_type, env.app_name)
        app_prefix = install_name.split('_')[0]
        print local('sed -i "s/INSTALL_NAME = \(.*\)/INSTALL_NAME = ' + "'" + app_prefix + "'" + '/g" ' + target + '/settings.py')
 
