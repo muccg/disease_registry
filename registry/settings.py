@@ -110,9 +110,9 @@ SITE_NAME = 'dm1'
 SECRET_KEY = 'qj#tl@9@7((%^)$i#iyw0gcfzf&#a*pobgb8yr#1%65+*6!@g$'
 EMAIL_APP_NAME = "Registry "
 
-INSTALL_NAME = 'dmd'
-#INSTALL_NAME = 'dm1'
-#INSTALL_NAME = 'sma'
+# set automagicaly by ccgbuild to either dmd_registry, dm1_registry or
+# sma_registry
+INSTALL_NAME = 'SET_THIS'
 INSTALL_FULL_NAMES = {'dmd': 'Australian National Duchenne Muscular Dystrophy',
                       'sma': 'Australian Spinal Muscular Atrophy',
                       'dm1': 'Australian Myotonic Dystrophy',

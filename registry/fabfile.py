@@ -55,8 +55,7 @@ def release(*args, **kwargs):
     tag = kwargs.get("tag", None)
     env.ccg_requirements = requirements
     env.auto_confirm=False
-    release = _ccg_deploy_release(tag=tag,migration=migration)
-    _munge_settings(release)
+    release = _ccg_deploy_release(tag=tag,migration=migration,mungeInstallName=True)
 
 def make_live(tag=env.user):
     _make_live_symlinks(tag)
@@ -73,12 +72,6 @@ def purge():
 def purge_snapshot():
     """Purge a snapshot deployment"""
     _ccg_purge_snapshot()
-
-def _munge_settings(deploy_type=''):
-   for install_name in env.app_install_names:
-       target = os.path.join(env.app_root, install_name, deploy_type, env.app_name)
-       app_prefix = install_name.split('_')[0]
-       print local('sed -i "s/INSTALL_NAME = \(.*\)/INSTALL_NAME = ' + "'" + app_prefix + "'" + '/g" ' + target + '/settings.py')
 
 def manage(*args):
     _django_env(args[0])
