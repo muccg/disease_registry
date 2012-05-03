@@ -113,9 +113,9 @@ EMAIL_APP_NAME = "Registry "
 # set automagicaly by ccgbuild to either dmd_registry, dm1_registry or
 # sma_registry
 INSTALL_NAME = 'SET_THIS'
-INSTALL_FULL_NAMES = {'dmd': 'Australian National Duchenne Muscular Dystrophy',
-                      'sma': 'Australian Spinal Muscular Atrophy',
-                      'dm1': 'Australian Myotonic Dystrophy',
+INSTALL_FULL_NAMES = {'dmd_registry': 'Australian National Duchenne Muscular Dystrophy',
+                      'sma_registry': 'Australian Spinal Muscular Atrophy',
+                      'dm1_registry': 'Australian Myotonic Dystrophy',
                       }
 
 MODULE_INSTALLED_APPS = {
