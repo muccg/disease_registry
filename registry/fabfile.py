@@ -6,7 +6,7 @@ from ccgfab.base import *
 env.username = os.environ["USER"]
 env.app_root = '/usr/local/python/ccgapps/'
 env.app_name = 'registry'
-env.app_install_names = ['dmd_registry','sma_registry','dm1_registry']
+env.app_install_names = ['dmd','sma','dm1']
 env.vc = 'mercurial'
 env.git_trunk_url = ""
 env.svn_trunk_url = ""
