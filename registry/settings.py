@@ -119,9 +119,9 @@ INSTALL_FULL_NAMES = {'dmd': 'Australian National Duchenne Muscular Dystrophy',
                       }
 
 MODULE_INSTALLED_APPS = {
-    "dmd": {"dmd": "DMD Registry"},
-    "sma": {"sma": "SMA Registry"},
-    "dm1": {
+    "dmd_registry": {"dmd": "DMD Registry"},
+    "sma_registry": {"sma": "SMA Registry"},
+    "dm1_registry": {
         "dm1": "Myotonic Dystrophy Registry",
         "dm1_questionnaire": "Online Questionnaire and Consent",
         "patients": "Registration", # to show the 'Patients' header as 'Registration' in the Admin UI
