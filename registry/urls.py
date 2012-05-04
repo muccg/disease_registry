@@ -19,11 +19,10 @@ def variation_entry(request):
 urlpatterns = patterns('',
     (r"^[/]*$", "django.views.generic.simple.direct_to_template", {"template": "%s/index.html" % settings.INSTALL_NAME,
                                                                "extra_context":{"INSTALL_NAME": settings.INSTALL_NAME, 'webhelpers': webhelpers},
-                                                               "SSL":False
                                                                }),
 
-    (r'^genetic/', include("genetic.urls"), {"SSL": False}), #was true
-    (r'^admin/', include(admin.site.urls), {'SSL':False}), #was true
+    (r'^genetic/', include("genetic.urls"), {}),
+    (r'^admin/', include(admin.site.urls), {}), 
 
 )
 
@@ -32,20 +31,17 @@ if settings.INSTALL_NAME == 'dmd':
     urlpatterns += patterns('',
         (r"^nz[/]*$", "django.views.generic.simple.direct_to_template", {"template": "%s/index_nz.html" % settings.INSTALL_NAME,
                                                                    "extra_context":{"INSTALL_NAME": settings.INSTALL_NAME, 'webhelpers': webhelpers},
-                                                                   "SSL":False
                                                                    })
     )
     # add the 2 sub pages from the main NZ page
     urlpatterns += patterns('',
         (r"index_nz1$", "django.views.generic.simple.direct_to_template", {"template": "%s/index_nz1.html" % settings.INSTALL_NAME,
                                                                    "extra_context":{"INSTALL_NAME": settings.INSTALL_NAME, 'webhelpers': webhelpers},
-                                                                   "SSL":False
                                                                    })
     )
     urlpatterns += patterns('',
         (r"index_nz2$", "django.views.generic.simple.direct_to_template", {"template": "%s/index_nz2.html" % settings.INSTALL_NAME,
                                                                    "extra_context":{"INSTALL_NAME": settings.INSTALL_NAME, 'webhelpers': webhelpers},
-                                                                   "SSL":False
                                                                    })
     )
 
@@ -56,7 +52,7 @@ if settings.INSTALL_NAME == 'dmd':
 # Add the questionnaire if DM1.
 if settings.INSTALL_NAME == "dm1":
     urlpatterns += patterns("",
-        (r"^questionnaire/", include("dm1_questionnaire.urls"), {"SSL": True}),
+        (r"^questionnaire/", include("dm1_questionnaire.urls")),
     )
 
 
