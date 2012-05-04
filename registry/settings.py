@@ -36,12 +36,14 @@ TEMPLATE_LOADERS = [
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
+    #'django.contrib.csrf.middleware.CsrfMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     #'django.middleware.transaction.TransactionMiddleware',
     #'madas.utils.json_exception_handler_middleware.JSONExceptionHandlerMiddleware',
     'django.middleware.doc.XViewMiddleware',
     'django.middleware.ssl.SSLRedirect'
+
 ]
 
 INSTALLED_APPS = [
@@ -112,7 +114,7 @@ EMAIL_APP_NAME = "Registry "
 
 # set automagicaly by ccgbuild to either dmd_registry, dm1_registry or
 # sma_registry
-INSTALL_NAME = 'SET_THIS'
+INSTALL_NAME = 'SET_THIS' # choices are 'dmd', 'dm1', 'sma'
 INSTALL_FULL_NAMES = {'dmd': 'Australian National Duchenne Muscular Dystrophy',
                       'sma': 'Australian Spinal Muscular Atrophy',
                       'dm1': 'Australian Myotonic Dystrophy',
@@ -136,7 +138,6 @@ INSTALLED_APPS.extend( [
     'genetic',
 ])
 
-INSTALLED_APPS.extend(MODULE_INSTALLED_APPS[INSTALL_NAME].keys())
 
 DATABASES = {
     'default': {
@@ -204,13 +205,13 @@ LOGGING = {
     'disable_existing_loggers': True,
     'formatters': {
         'verbose': {
-            'format': 'Registry [%(name)s:' + INSTALL_NAME + ':%(levelname)s:%(asctime)s:%(filename)s:%(lineno)s:%(funcName)s] %(message)s'
+            'format': 'Registry [%(name)s:%(levelname)s:%(asctime)s:%(filename)s:%(lineno)s:%(funcName)s] %(message)s'
         },
         'db': {
-            'format': 'Registry [%(name)s:' + INSTALL_NAME + ':%(duration)s:%(sql)s:%(params)s] %(message)s'
+            'format': 'Registry [%(name)s:%(duration)s:%(sql)s:%(params)s] %(message)s'
         },
         'simple': {
-            'format': 'Registry ' + INSTALL_NAME + ' %(levelname)s %(message)s'
+            'format': 'Registry %(levelname)s %(message)s'
         },
     },
     'filters': {
@@ -279,11 +280,11 @@ try:
 except ImportError, e:
     pass
 
+INSTALLED_APPS.extend(MODULE_INSTALLED_APPS[INSTALL_NAME].keys())
+
 APP_TITLES = MODULE_INSTALLED_APPS[INSTALL_NAME]
 DATABASES['default'] = DATABASES[INSTALL_NAME]
 SECRET_KEY = "%s_%s" % (SECRET_KEY, INSTALL_NAME)
 MEMCACHE_KEYSPACE = "%s_%s" % (INSTALL_NAME, MEMCACHE_KEYSPACE)
 EMAIL_APP_NAME = "%s %s" % (INSTALL_NAME.upper(), EMAIL_APP_NAME)
 CSRF_COOKIE_NAME = "%s_%s" % (CSRF_COOKIE_NAME, INSTALL_NAME)
-
-print DATABASES['default']
