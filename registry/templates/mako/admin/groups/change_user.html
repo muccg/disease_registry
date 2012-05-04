@@ -1,0 +1,81 @@
+<%inherit file="admin/base_site.html"/>
+<%namespace name="admin" module="django.contrib.admin.templatetags.adminmedia" />
+
+${self.block_stylesheet()}<%def name="block_stylesheet()">${admin.admin_media_prefix()}css/forms.css</%def>
+
+<%def name="block_extrahead()">
+<script type="text/javascript" src="../../../jsi18n/"></script>
+${ media }
+</%def>
+
+<%def name="block_breadcrumbs()">
+% if not is_popup:
+
+<div class="breadcrumbs">
+     <a href="../../../">${trans("Home")}</a> &rsaquo;
+     <a href="../../">${ capfirst(app_label)|escape }</a> &rsaquo; 
+     <a href="../">${capfirst(opts.verbose_name_plural)}</a> &rsaquo;
+     
+% if add:
+    ${trans("Add")} ${opts.verbose_name}
+% else:
+    ${user}
+% endif
+
+</div>
+
+% endif
+</%def>
+
+<%def name="block_content()">
+    <div id="content-main">
+
+        % if change:
+        <ul class="object-tools">
+            <li><a href="password/">${trans("Change password")}</a></li>
+            <li><a href="history/" class="historylink">${trans("History")}</a></li>
+        </ul>
+        % endif
+
+        % if errors:
+        <p class="errornote">
+            <%def name="blocktrans()"><!-- blocktrans count errors.items|length as counter -->Please correct the error${'s' if len(errors)>1 else ''} below.</%def>${blocktrans()}
+            % if "__all__" in errors:
+            ${errors["__all__"]}
+            % endif
+        </p>
+        % endif
+
+        <form action="${form_url or ''}" method="post">
+            ${ csrf_tag(csrf_token) }
+            <fieldset class="module aligned">
+                % for field in form:
+                <div class="form-row">
+                    % if errors and field.name in errors:
+                    ${errors[field.name]}
+                    % endif
+
+                    % if field.field.required:
+                    <label class="required" for="${field.html_name}">
+                    % else:
+                    <label for="${field.html_name}">
+                    % endif
+                        ${field.label}:
+                    </label>
+                    ${field}
+                </div>
+                % endfor
+            </fieldset>
+
+            <div class="submit-row">
+                % if has_delete_permission:
+                <p class="deletelink-box">
+                    <a class="deletelink" href="delete/">Delete</a>
+                </p>
+                % endif
+
+                <input class="default" type="submit" name="_save" value="Save" />
+            </div>
+        </form>
+    </div>
+</%def>
