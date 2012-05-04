@@ -5,8 +5,10 @@ from django.utils.webhelpers import url
 from date import DateWidget
 LubricatedDateWidget = DateWidget
 
+from django.forms.widgets import Select, Widget
 
 class ComboWidget(forms.TextInput):
+#class ComboWidget(Widget):
     class Media:
         css = {"all": [url("/static/combo/combo.css")]}
         js = [url("/static/combo/combo.js"), url("/static/js/json2.js"), url("/static/js/xhr.js")]
@@ -75,6 +77,10 @@ class LiveComboWidget(ComboWidget):
 
         self.attrs["class"] = self.attrs["class"].replace("combo", "live-combo")
         del self.attrs["options"]
+
+    #def render(self, name, value, attrs=None):
+        #print 'rendering ', value
+        #super(LiveComboWidget, self).render(name, value, attrs=attrs)
 
 
 class StaticWidget(forms.HiddenInput):

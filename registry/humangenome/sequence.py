@@ -108,13 +108,13 @@ class SequenceVariation:
 
     def parse(self, input):
         # Check for a gene.
-        print 'parsing gene'
+        #print 'parsing gene'
         (self.gene, input) = self.parse_gene(input)
 
-        print 'parsing type'
+        #print 'parsing type'
         (self.type, input) = self.parse_type(input)
 
-        print 'splitting alleles'
+        #print 'splitting alleles'
         # The next step is basically to split out the alleles and then parse
         # them individually.
         pattern = re.compile(r"\[([^\]]+)\]")

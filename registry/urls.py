@@ -22,8 +22,8 @@ urlpatterns = patterns('',
                                                                "SSL":False
                                                                }),
 
-    (r'^genetic/', include("genetic.urls"), {"SSL": True}),
-    (r'^admin/', include(admin.site.urls), {'SSL':True}),
+    (r'^genetic/', include("genetic.urls"), {"SSL": False}), #was true
+    (r'^admin/', include(admin.site.urls), {'SSL':False}), #was true
 
 )
 
