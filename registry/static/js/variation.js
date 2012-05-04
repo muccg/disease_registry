@@ -210,9 +210,9 @@ var Variation = function (element) {
                             }
                         }
                     };
-
-                    xhr.open("POST", "../override/" + self.type + "/" + self.id, true);
-                    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+                    xhr = prepare_xhr(xhr, {"method":"POST", "url" : "../override/" + self.type + "/" + self.id});
+                    //xhr.open("POST", "../override/" + self.type + "/" + self.id, true);
+                    //xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
                     xhr.send();
                 }
             };
@@ -258,8 +258,9 @@ var Variation = function (element) {
                     }
                 };
 
-                self.xhr.open("POST", self.element.getAttribute("backend"), true);
-                self.xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+                //djan.ajaxSend(self.xhr, {"type": "POST", "url" : self.element.getAttribute("backend")});
+               
+                self.xhr = prepare_xhr(self.xhr, {"method":"POST", "url" : self.element.getAttribute("backend")});
                 self.xhr.send(self.element.value);
             }, 1000);
         }
