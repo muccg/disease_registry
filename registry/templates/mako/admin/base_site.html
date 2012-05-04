@@ -1,7 +1,6 @@
 <%inherit file="admin/base.html"/>
 <%namespace name="ra" module="registry.admin"/>
 ${self.block_title()}<%def name="block_title()">${ra.get_full_registry_name()}</%def>
-
 ${self.block_branding()}<%def name="block_branding()">
 <h1 id="site-name">${ra.get_full_registry_name()}</h1>
 </%def>
