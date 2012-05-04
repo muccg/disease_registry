@@ -1,0 +1,40 @@
+<%inherit file="admin/change_form.html"/>
+
+<%!
+import json
+
+def overrides(md):
+    ids = {}
+
+    if md:
+        for variation in md.variation_set.all():
+            ids[variation.id] = variation.get_validation_overrides()
+        print 'variation override ids: ', ids
+    return json.dumps(ids)
+%>
+
+<%def name="block_extrahead()">
+    ${parent.block_extrahead()}
+
+    <script type="text/javascript">
+        var ValidationOverrides = {
+            available: ${int(user.has_perm("genetic.can_override_validation"))},
+% if add:
+            ids: {},
+% else:
+            ids: ${overrides(original)},
+% endif
+            contains: function (id, type) {
+                if (!id) {
+                    return false;
+                }
+
+                if (id in this.ids) {
+                    return this.ids[id][type];
+                }
+
+                return false;
+            }
+        };
+    </script>
+</%def>
