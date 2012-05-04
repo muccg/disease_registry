@@ -3,6 +3,27 @@ from django.utils.webhelpers import url
 from models import *
 from registry.forms.widgets import ComboWidget, LiveComboWidget, StaticWidget
 
+from genetic.models import *
+
+class GeneChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        print 'doing label from instance %i', obj.id
+        return obj.symbol
+
+    def prepare_value(self, value):
+        print 'preparing value: ', str(value)
+        #newval = ""
+        #try:
+        #    newval = Gene.objects.get(symbol=value).id
+        #except:
+        #    pass
+
+        return super(GeneChoiceField, self).prepare_value(value)
+        
+
+    def validate(self, value):
+        print 'validating model: ', value, str(dir(value)) 
+        return super(GeneChoiceField, self).validate(value)
 
 class VariationWidget(forms.TextInput):
     class Media:
@@ -43,7 +64,7 @@ class MolecularDataForm(forms.ModelForm):
 
 
 class VariationForm(forms.ModelForm):
-    gene = forms.ModelChoiceField(queryset=Gene.objects.all(), label="Gene", widget=LiveComboWidget(backend=url("/admin/genetic/gene/search/")))
+    gene = GeneChoiceField(queryset=Gene.objects.all(), label="Gene", widget=LiveComboWidget(backend=url("/admin/genetic/gene/search/")))
     exon = forms.CharField(label="Exon", required=False, widget=VariationWidget(backend=url("/admin/genetic/moleculardata/validate/exon"), attrs={"minchars": "0"}))
     protein_variation = forms.CharField(label="Protein variation", required=False, widget=VariationWidget(backend=url("/admin/genetic/moleculardata/validate/protein")))
     dna_variation = forms.CharField(label="DNA variation", required=False, widget=VariationWidget(backend=url("/admin/genetic/moleculardata/validate/sequence"), popup=url("/genetic/variation/")))

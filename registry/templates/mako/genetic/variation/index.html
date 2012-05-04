@@ -9,8 +9,16 @@
         <style text="text/css">
             <%include file="entry.css" />
         </style>
+    
+        <% 
+            from settings import CSRF_COOKIE_NAME
+        %>    
+        <script type="text/javascript">
+            CSRF_COOKIE_NAME = "${ CSRF_COOKIE_NAME }";
+        </script>
 
         <script type="text/javascript" src="${base.url('/static/js/xhr.js')}"></script>
+        
         <script type="text/javascript">
             <%include file="entry.js" />
         </script>

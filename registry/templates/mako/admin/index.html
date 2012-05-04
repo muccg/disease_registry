@@ -1,6 +1,6 @@
 <%inherit file="admin/base_site.html"/>
-<%namespace name="ra" module="registry.admin"/>
 
+<%namespace name="ra" module="registry.admin"/>
 ${self.block_stylesheet()}<%def name="block_stylesheet()"><%namespace name="admin" module="django.contrib.admin.templatetags.adminmedia" />${admin_media_prefix()}css/dashboard.css</%def>
 
 ${self.block_coltype()}<%def name="block_coltype()">colMS</%def>
@@ -9,6 +9,7 @@ ${self.block_bodyclass()}<%def name="block_bodyclass()">dashboard</%def>
 
 ${self.block_content()}<%def name="block_content()">
 <div id="content-main">
+
 % if app_list:
 % for app in app_list:
         <div class="module">

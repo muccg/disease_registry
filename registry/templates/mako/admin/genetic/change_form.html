@@ -2,6 +2,7 @@
 
 <%!
 import json
+from settings import CSRF_COOKIE_NAME
 
 def overrides(md):
     ids = {}
@@ -9,10 +10,8 @@ def overrides(md):
     if md:
         for variation in md.variation_set.all():
             ids[variation.id] = variation.get_validation_overrides()
-        print 'variation override ids: ', ids
     return json.dumps(ids)
 %>
-
 <%def name="block_extrahead()">
     ${parent.block_extrahead()}
 
@@ -36,5 +35,6 @@ def overrides(md):
                 return false;
             }
         };
+ 
     </script>
 </%def>
