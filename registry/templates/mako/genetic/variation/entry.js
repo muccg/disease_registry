@@ -170,8 +170,7 @@ var Entry = {
                 }
             };
 
-            xhr.open("POST", "${base.url('/admin/genetic/moleculardata/validate/sequence')}", true);
-            xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+            xhr = prepare_xhr(xhr, {"method":"POST", "url" : "${base.url('/admin/genetic/moleculardata/validate/sequence')}"});
             xhr.send(s);
         };
 

@@ -36,12 +36,14 @@ TEMPLATE_LOADERS = [
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
+    #'django.contrib.csrf.middleware.CsrfMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     #'django.middleware.transaction.TransactionMiddleware',
     #'madas.utils.json_exception_handler_middleware.JSONExceptionHandlerMiddleware',
     'django.middleware.doc.XViewMiddleware',
     'django.middleware.ssl.SSLRedirect'
+
 ]
 
 INSTALLED_APPS = [
@@ -287,3 +289,4 @@ EMAIL_APP_NAME = "%s %s" % (INSTALL_NAME.upper(), EMAIL_APP_NAME)
 CSRF_COOKIE_NAME = "%s_%s" % (CSRF_COOKIE_NAME, INSTALL_NAME)
 
 print DATABASES['default']
+print MIDDLEWARE_CLASSES
