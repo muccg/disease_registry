@@ -21,8 +21,8 @@ urlpatterns = patterns('',
                                                                "extra_context":{"INSTALL_NAME": settings.INSTALL_NAME, 'webhelpers': webhelpers},
                                                                }),
 
-    (r'^genetic/', include("genetic.urls"), {"SSL": False}), #was true
-    (r'^admin/', include(admin.site.urls), {'SSL':False}), #was true
+    (r'^genetic/', include("genetic.urls"), {}),
+    (r'^admin/', include(admin.site.urls), {}), 
 
 )
 
