@@ -97,13 +97,19 @@ LOGIN_REDIRECT_URL = url('/admin')
 
 
 #session and cookies
-MADAS_SESSION_TIMEOUT = 1800 #30 minute session timeout
+SESSION_COOKIE_AGE = 60*60
 SESSION_COOKIE_PATH = url('/')
 SESSION_SAVE_EVERY_REQUEST = True
 CSRF_COOKIE_NAME = "csrftoken_registry"
-SESSION_COOKIE_AGE = 60*60
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SECURE = False
+
+# see https://docs.djangoproject.com/en/dev/ref/settings/#session-engine
+# https://docs.djangoproject.com/en/1.3/ref/settings/#std:setting-SESSION_FILE_PATH
+# in production we would suggest using memcached for your session engine
+SESSION_ENGINE = 'django.contrib.sessions.backends.file'
+SESSION_FILE_PATH = WRITABLE_DIRECTORY
+
 
 #APPLICATION SPECIFIC SETTINGS
 AUTH_PROFILE_MODULE = 'groups.User'
@@ -270,6 +276,8 @@ LOGGING = {
         },
     }
 }
+
+MEMCACHE_KEYSPACE = 'registryapp'
 
 # Override defaults with your local instance settings.
 # They will be loaded from appsettings.<projectname>, which can exist anywhere
