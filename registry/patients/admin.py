@@ -84,7 +84,8 @@ class PatientAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return []
         else:
-            return ['active']
+            #return ['active'] # NB this seems to run into a mango bug that prevents Add Patient being used by non-superuser
+            return []        
 
     def formfield_for_dbfield(self, dbfield, *args, **kwargs):
         from groups.models import User, WorkingGroup
