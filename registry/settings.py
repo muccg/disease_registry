@@ -24,6 +24,14 @@ SSL_ENABLED = False
 TIME_ZONE = 'Australia/Perth'
 LANGUAGE_CODE = 'en-us'
 USE_I18N = True
+#added 2012-06-20 for consent form: dm1_questionnaire/forms.py
+DATE_INPUT_FORMATS = ('%d/%m/%Y', '%d/%m/%y',
+                      '%d-%m-%Y', '%d-%m-%y',
+                      '%d.%m.%Y', '%d.%m.%y', # this one doesn't work, probably needs to escape the '.'
+                      '%d %m %Y', '%d %m %y',
+                      '%d %b %Y',
+                      '%Y-%m-%d'
+                      )
 
 ##
 ## Django Core stuff
@@ -110,8 +118,8 @@ SITE_NAME = 'dm1'
 SECRET_KEY = 'qj#tl@9@7((%^)$i#iyw0gcfzf&#a*pobgb8yr#1%65+*6!@g$'
 EMAIL_APP_NAME = "Registry "
 
-INSTALL_NAME = 'dmd'
-#INSTALL_NAME = 'dm1'
+#INSTALL_NAME = 'dmd'
+INSTALL_NAME = 'dm1'
 #INSTALL_NAME = 'sma'
 INSTALL_FULL_NAMES = {'dmd': 'Australian National Duchenne Muscular Dystrophy',
                       'sma': 'Australian Spinal Muscular Atrophy',
