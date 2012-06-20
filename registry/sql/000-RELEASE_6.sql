@@ -1,0 +1,5 @@
+BEGIN;
+
+ALTER TABLE "patients_patient" ADD COLUMN "consent" BOOLEAN NOT NULL DEFAULT 't';
+
+COMMIT;
