@@ -212,7 +212,7 @@ def index(request):
     if request.method == "POST":
         #print "request: %s" % dir(request)
         #print "request.REQUEST: %s" % dir(request.REQUEST)
-        print "request.REQUEST: %s" % request.REQUEST # prints the params
+        #print "request.REQUEST: %s" % request.REQUEST # prints the params
         #print "request.POST: %s" % request.POST
 
         form = ConsentForm(request.POST)

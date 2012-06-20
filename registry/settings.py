@@ -24,6 +24,14 @@ SSL_ENABLED = False
 TIME_ZONE = 'Australia/Perth'
 LANGUAGE_CODE = 'en-us'
 USE_I18N = True
+#added 2012-06-20 for consent form: dm1_questionnaire/forms.py
+DATE_INPUT_FORMATS = ('%d/%m/%Y', '%d/%m/%y',
+                      '%d-%m-%Y', '%d-%m-%y',
+                      '%d.%m.%Y', '%d.%m.%y', # this one doesn't work, probably needs to escape the '.'
+                      '%d %m %Y', '%d %m %y',
+                      '%d %b %Y',
+                      '%Y-%m-%d'
+                      )
 
 ##
 ## Django Core stuff
@@ -118,9 +126,11 @@ SITE_NAME = 'dm1'
 SECRET_KEY = 'qj#tl@9@7((%^)$i#iyw0gcfzf&#a*pobgb8yr#1%65+*6!@g$'
 EMAIL_APP_NAME = "Registry "
 
+#INSTALL_NAME = 'dmd'
+INSTALL_NAME = 'dm1'
 # set automagicaly by ccgbuild to either dmd_registry, dm1_registry or
 # sma_registry
-INSTALL_NAME = 'SET_THIS' # choices are 'dmd', 'dm1', 'sma'
+#INSTALL_NAME = 'SET_THIS' # choices are 'dmd', 'dm1', 'sma'
 INSTALL_FULL_NAMES = {'dmd': 'Australian National Duchenne Muscular Dystrophy',
                       'sma': 'Australian Spinal Muscular Atrophy',
                       'dm1': 'Australian Myotonic Dystrophy',
@@ -144,6 +154,7 @@ INSTALLED_APPS.extend( [
     'genetic',
 ])
 
+INSTALLED_APPS.extend(MODULE_INSTALLED_APPS[INSTALL_NAME].keys())
 
 DATABASES = {
     'default': {
@@ -211,13 +222,13 @@ LOGGING = {
     'disable_existing_loggers': True,
     'formatters': {
         'verbose': {
-            'format': 'Registry [%(name)s:%(levelname)s:%(asctime)s:%(filename)s:%(lineno)s:%(funcName)s] %(message)s'
+            'format': 'Registry [%(name)s:' + INSTALL_NAME + ':%(levelname)s:%(asctime)s:%(filename)s:%(lineno)s:%(funcName)s] %(message)s'
         },
         'db': {
-            'format': 'Registry [%(name)s:%(duration)s:%(sql)s:%(params)s] %(message)s'
+            'format': 'Registry [%(name)s:' + INSTALL_NAME + ':%(duration)s:%(sql)s:%(params)s] %(message)s'
         },
         'simple': {
-            'format': 'Registry %(levelname)s %(message)s'
+            'format': 'Registry ' + INSTALL_NAME + ' %(levelname)s %(message)s'
         },
     },
     'filters': {
