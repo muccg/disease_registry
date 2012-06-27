@@ -11,7 +11,7 @@ def get_current_install_name(context):
     return settings.INSTALL_NAME
 
 def get_full_registry_name(context):
-    return settings.INSTALL_FULL_NAMES[settings.INSTALL_NAME]
+    return settings.INSTALL_FULL_NAME
 
 def url(context, url):
     return django_url(url)
