@@ -17,9 +17,17 @@ def variation_entry(request):
     return render_to_response("variation-entry/index.html")
 
 urlpatterns = patterns('',
-    (r"^[/]*$", "django.views.generic.simple.direct_to_template", {"template": "%s/index.html" % settings.INSTALL_NAME,
-                                                               "extra_context":{"INSTALL_NAME": settings.INSTALL_NAME, 'webhelpers': webhelpers},
+    (r"^dmd/", "django.views.generic.simple.direct_to_template", {"template": "dmd/index.html",
+                                                               "extra_context":{"INSTALL_NAME": 'dmd', 'webhelpers': webhelpers},
                                                                }),
+
+    (r"^sma/", "django.views.generic.simple.direct_to_template", {"template": "sma/index.html",
+                                                              "extra_context":{"INSTALL_NAME": 'dmd', 'webhelpers': webhelpers},
+                                                              }),
+                                                              
+    (r"^dm1/", "django.views.generic.simple.direct_to_template", {"template": "dm1/index.html",
+                                                             "extra_context":{"INSTALL_NAME": 'dmd', 'webhelpers': webhelpers},
+                                                             }),
 
     (r'^genetic/', include("genetic.urls"), {}),
     (r'^admin/', include(admin.site.urls), {}), 
@@ -27,21 +35,21 @@ urlpatterns = patterns('',
 )
 
 # add the New Zealand splash if DMD
-if settings.INSTALL_NAME == 'dmd':
+if 'dmd' in settings.INSTALLED_APPS:
     urlpatterns += patterns('',
-        (r"^nz[/]*$", "django.views.generic.simple.direct_to_template", {"template": "%s/index_nz.html" % settings.INSTALL_NAME,
-                                                                   "extra_context":{"INSTALL_NAME": settings.INSTALL_NAME, 'webhelpers': webhelpers},
+        (r"^nz[/]*$", "django.views.generic.simple.direct_to_template", {"template": "dmd/index_nz.html",
+                                                                   "extra_context":{"INSTALL_NAME": 'dmd', 'webhelpers': webhelpers},
                                                                    })
     )
     # add the 2 sub pages from the main NZ page
     urlpatterns += patterns('',
-        (r"index_nz1$", "django.views.generic.simple.direct_to_template", {"template": "%s/index_nz1.html" % settings.INSTALL_NAME,
-                                                                   "extra_context":{"INSTALL_NAME": settings.INSTALL_NAME, 'webhelpers': webhelpers},
+        (r"index_nz1$", "django.views.generic.simple.direct_to_template", {"template": "dmd/index_nz1.html",
+                                                                   "extra_context":{"INSTALL_NAME": 'dmd', 'webhelpers': webhelpers},
                                                                    })
     )
     urlpatterns += patterns('',
-        (r"index_nz2$", "django.views.generic.simple.direct_to_template", {"template": "%s/index_nz2.html" % settings.INSTALL_NAME,
-                                                                   "extra_context":{"INSTALL_NAME": settings.INSTALL_NAME, 'webhelpers': webhelpers},
+        (r"index_nz2$", "django.views.generic.simple.direct_to_template", {"template": "dmd/index_nz2.html",
+                                                                   "extra_context":{"INSTALL_NAME": 'dmd', 'webhelpers': webhelpers},
                                                                    })
     )
 
@@ -50,7 +58,7 @@ if settings.INSTALL_NAME == 'dmd':
     urlpatterns += patterns('', (r'^squerycsv$', 'dmd.views.squerycsv')) # CSV file output
 
 # Add the questionnaire if DM1.
-if settings.INSTALL_NAME == "dm1":
+if "dm1" in settings.INSTALLED_APPS:
     urlpatterns += patterns("",
         (r"^questionnaire/", include("dm1_questionnaire.urls")),
     )
