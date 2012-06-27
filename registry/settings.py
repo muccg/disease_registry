@@ -148,8 +148,7 @@ INSTALLED_APPS.extend( [
     'dmd',
     'sma',
     'dm1',
-    'dm1_questionairre',
-    'patients'
+    'dm1_questionairre'
 ])
 
 
@@ -248,14 +247,7 @@ LOGGING = {
 
 MEMCACHE_KEYSPACE = 'registryapp'
 
-# Override defaults with your local instance settings.
-# They will be loaded from appsettings.<projectname>, which can exist anywhere
-# in the instance's pythonpath. This is a CCG convention designed to support
-# global shared settings among multiple Django projects.
-try:
-    from appsettings.registry import *
-except ImportError, e:
-    pass
+
 
 
 
