@@ -126,24 +126,17 @@ SITE_NAME = 'dm1'
 SECRET_KEY = 'qj#tl@9@7((%^)$i#iyw0gcfzf&#a*pobgb8yr#1%65+*6!@g$'
 EMAIL_APP_NAME = "Registry "
 
-#INSTALL_NAME = 'dmd'
-INSTALL_NAME = 'dm1'
-# set automagicaly by ccgbuild to either dmd_registry, dm1_registry or
-# sma_registry
-#INSTALL_NAME = 'SET_THIS' # choices are 'dmd', 'dm1', 'sma'
-INSTALL_FULL_NAMES = {'dmd': 'Australian National Duchenne Muscular Dystrophy',
-                      'sma': 'Australian Spinal Muscular Atrophy',
-                      'dm1': 'Australian Myotonic Dystrophy',
-                      }
+INSTALL_NAME = 'registry'
+INSTALL_FULL_NAME = 'Australian National Duchenne Muscular Dystrophy, Spinal Muscular Atrophy and Myotonic Dystrophy'
 
-MODULE_INSTALLED_APPS = {
-    "dmd": {"dmd": "DMD Registry"},
-    "sma": {"sma": "SMA Registry"},
-    "dm1": {
-        "dm1": "Myotonic Dystrophy Registry",
-        "dm1_questionnaire": "Online Questionnaire and Consent",
-        "patients": "Registration", # to show the 'Patients' header as 'Registration' in the Admin UI
-    },
+# A hash of application titles used as a global
+# This could (should?) be provided by the apps themselves
+APP_TITLES = {
+"dmd": "DMD Registry",
+"sma": "SMA Registry",
+"dm1": "Myotonic Dystrophy Registry",
+"dm1_questionnaire": "Online Questionnaire and Consent",
+"patients": "Registration", # to show the 'Patients' header as 'Registration' in the Admin UI
 }
 
 #The ordering of these apps is important - they have been done in such a way that
@@ -152,57 +145,21 @@ INSTALLED_APPS.extend( [
     'groups',
     'patients',
     'genetic',
+    'dmd',
+    'sma',
+    'dm1',
+    'dm1_questionnaire'
 ])
 
-INSTALLED_APPS.extend(MODULE_INSTALLED_APPS[INSTALL_NAME].keys())
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'USER': '<your db user>',
-        'NAME': '<your db name>',
-        'PASSWORD': '<your db password>',
-        'HOST': '<your db host>',
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': 'root',
+        'NAME': 'diseaseregistry',
+        'PASSWORD': '',
+        'HOST': '',
         'PORT': '',
-    },
-    'dmd_archive': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'USER': '<your db user>',
-        'NAME': '<your db name>',
-        'PASSWORD': '<your db password>',
-        'HOST': '<your db host>',
-        'PORT': '',
-    },
-    'sma': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'USER': '<your db user>',
-        'NAME': '<your db name>',
-        'PASSWORD': '<your db password>',
-        'HOST': '<your db host>',
-        'PORT': '',
-    },
-    'sma_archive': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'USER': '<your db user>',
-        'NAME': '<your db name>',
-        'PASSWORD': '<your db password>',
-        'HOST': '<your db host>',
-        'PORT': '',
-    },
-    'dm1': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'USER': '<your db user>',
-        'NAME': '<your db name>',
-        'PASSWORD': '<your db password>',
-        'HOST': '<your db host>',
-        'PORT': '',
-    },
-    'dm1_archive': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'USER': '<your db user>',
-        'NAME': '<your db name>',
-        'PASSWORD': '<your db password>',
-        'HOST': '<your db host>',
     }
 }
 ##
@@ -290,20 +247,11 @@ LOGGING = {
 
 MEMCACHE_KEYSPACE = 'registryapp'
 
-# Override defaults with your local instance settings.
-# They will be loaded from appsettings.<projectname>, which can exist anywhere
-# in the instance's pythonpath. This is a CCG convention designed to support
-# global shared settings among multiple Django projects.
+# Override defaults with local settings if available
 try:
     from appsettings.registry import *
 except ImportError, e:
     pass
 
-INSTALLED_APPS.extend(MODULE_INSTALLED_APPS[INSTALL_NAME].keys())
 
-APP_TITLES = MODULE_INSTALLED_APPS[INSTALL_NAME]
-DATABASES['default'] = DATABASES[INSTALL_NAME]
-SECRET_KEY = "%s_%s" % (SECRET_KEY, INSTALL_NAME)
-MEMCACHE_KEYSPACE = "%s_%s" % (INSTALL_NAME, MEMCACHE_KEYSPACE)
-EMAIL_APP_NAME = "%s %s" % (INSTALL_NAME.upper(), EMAIL_APP_NAME)
-CSRF_COOKIE_NAME = "%s_%s" % (CSRF_COOKIE_NAME, INSTALL_NAME)
+
