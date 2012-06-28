@@ -22,7 +22,7 @@ class Diagnosis(models.Model):
         ("Unknown", "Unknown"),
     )
 
-    patient = models.OneToOneField(Patient, primary_key=True)
+    patient = models.OneToOneField(Patient, primary_key=True, related_name='sma_patient')
     diagnosis = models.CharField(max_length=3, choices=DIAGNOSIS_CHOICES)
     classification = models.CharField(max_length=7, choices=SMA_CLASSIFICATION_CHOICES)
     created = models.DateTimeField(editable=False)
