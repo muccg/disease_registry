@@ -18,7 +18,7 @@ class Diagnosis(models.Model):
         ("Man", "Manifesting carrier"), # Trac #30
     )
 
-    patient = models.OneToOneField(Patient, primary_key=True)
+    patient = models.OneToOneField(Patient, primary_key=True, related_name='dmd_patient')
     diagnosis = models.CharField(max_length=3, choices=DIAGNOSIS_CHOICES)
     muscle_biopsy = models.NullBooleanField(verbose_name="previous muscle biopsy")
     created = models.DateTimeField(editable=False)

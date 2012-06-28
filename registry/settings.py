@@ -148,7 +148,7 @@ INSTALLED_APPS.extend( [
     'dmd',
     'sma',
     'dm1',
-    'dm1_questionairre'
+    'dm1_questionnaire'
 ])
 
 
@@ -156,7 +156,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'USER': 'root',
-        'NAME': 'registry',
+        'NAME': 'diseaseregistry',
         'PASSWORD': '',
         'HOST': '',
         'PORT': '',
@@ -247,9 +247,11 @@ LOGGING = {
 
 MEMCACHE_KEYSPACE = 'registryapp'
 
-
-
-
+# Override defaults with local settings if available
+try:
+    from appsettings.registry import *
+except ImportError, e:
+    pass
 
 
 

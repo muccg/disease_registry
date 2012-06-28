@@ -23,7 +23,7 @@ class Patient(BasePatient):
 '''
 
 class Diagnosis(base.Diagnosis):
-    patient = models.OneToOneField(Patient, primary_key=True)
+    patient = models.OneToOneField(Patient, primary_key=True, related_name='dm1_patient')
 
     created = models.DateTimeField(editable=False)
     updated = models.DateTimeField(editable=False)
