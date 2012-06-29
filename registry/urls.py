@@ -17,22 +17,30 @@ def variation_entry(request):
     return render_to_response("variation-entry/index.html")
 
 urlpatterns = patterns('',
-    (r"^dmd/", "django.views.generic.simple.direct_to_template", {"template": "dmd/index.html",
-                                                               "extra_context":{"INSTALL_NAME": 'dmd', 'webhelpers': webhelpers},
-                                                               }),
-
-    (r"^sma/", "django.views.generic.simple.direct_to_template", {"template": "sma/index.html",
-                                                              "extra_context":{"INSTALL_NAME": 'dmd', 'webhelpers': webhelpers},
-                                                              }),
-                                                              
-    (r"^dm1/", "django.views.generic.simple.direct_to_template", {"template": "dm1/index.html",
-                                                             "extra_context":{"INSTALL_NAME": 'dmd', 'webhelpers': webhelpers},
-                                                             }),
-
     (r'^genetic/', include("genetic.urls"), {}),
     (r'^admin/', include(admin.site.urls), {}), 
-
 )
+
+if hasattr(settings, 'ROOT_APP'):
+    urlpatterns += patterns('',
+        (r"^[/]*$", "django.views.generic.simple.direct_to_template",
+            {"template": "%s/index.html"%(settings.ROOT_APP),
+             "extra_context":{"INSTALL_NAME": settings.ROOT_APP, 'webhelpers': webhelpers}}),
+    )
+else:
+    urlpatterns += patterns('',
+        (r"^dmd/", "django.views.generic.simple.direct_to_template",
+            {"template": "dmd/index.html",
+             "extra_context":{"INSTALL_NAME": 'dmd', 'webhelpers': webhelpers}}),
+
+        (r"^sma/", "django.views.generic.simple.direct_to_template",
+            {"template": "sma/index.html",
+             "extra_context":{"INSTALL_NAME": 'dmd', 'webhelpers': webhelpers}}),
+                                                              
+        (r"^dm1/", "django.views.generic.simple.direct_to_template",
+            {"template": "dm1/index.html",
+             "extra_context":{"INSTALL_NAME": 'dmd', 'webhelpers': webhelpers}}),
+    )
 
 # add the New Zealand splash if DMD
 if 'dmd' in settings.INSTALLED_APPS:
