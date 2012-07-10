@@ -107,7 +107,8 @@ class MotorFunction(models.Model):
     walk_assisted_age = models.IntegerField(verbose_name="at what age did the patient commence using devices to assist with walking", null=True, blank=True, help_text="age in years")
     # removed v3
     #sit = models.BooleanField(verbose_name="currently able to sit without support", help_text="Able to maintain a sitting position on a chair or a wheelchair without support of upper limbs or leaning against the back of the chair")
-    best_function = models.CharField(choices=MOTOR_FUNCTION_CHOICES, default='', null=True, blank=True, max_length=8, verbose_name="What is the best motor function level the patient has achieved", help_text="[Motor functions are listed in order with higher functions at the top, please choose one]<br/>Walking: walking with or without help (orthoses or assistive device or human assistance), inside or outdoors<br/>Sitting independently: able to maintain a sitting position on a chair or a wheelchair without support of upper limbs or leaning against the back of the chair")
+    # Trac #33
+    best_function = models.CharField(choices=MOTOR_FUNCTION_CHOICES, default='', null=True, blank=True, max_length=8, verbose_name="What is the best motor function level the patient has achieved", help_text="[Motor functions are listed in order with higher functions at the top, please choose one]<br/>Walking: walking with or without help (orthoses or assistive device or human assistance), inside or outdoors")
     #removed v3
     #acquisition_age = models.IntegerField(verbose_name="At what age did the patient start walking", null=True, blank=True, help_text="Indicate age in years when the patient started walking")
     wheelchair_use = models.CharField(verbose_name="wheel chair use", default='', max_length=12, choices=WHEELCHAIR_USE_CHOICES, help_text="<b>Yes (permanent):</b> patient is not able to walk and needs a wheelchair to move<br/><b>Yes (intermittent):</b> patient is still able to walk") #required
@@ -133,11 +134,13 @@ class Surgery(models.Model):
     )
 
     #cardiac_implant = models.NullBooleanField(verbose_name="cardiac implant", help_text="Have you had an operation to implant a device to control/normalise your heart rhythm?")
-    cardiac_implant = models.CharField(verbose_name="cardiac implant", blank=True, null=True, max_length=30, choices=CARDIAC_IMPLANT_CHOICES, help_text="Have you had an operation to implant a device to control/normalise your heart rhythm?")
+    # Trac #34
+    cardiac_implant = models.CharField(verbose_name="Cardiac implant", blank=True, null=True, max_length=30, choices=CARDIAC_IMPLANT_CHOICES, help_text="Have you had an operation to implant a device to control/normalise your heart rhythm?")
     cardiac_implant_age = models.IntegerField(verbose_name="age cardiac implant received", null=True, blank=True, help_text="Age at which cardiac implant received")
     cataract_diagnosis = models.BooleanField()
     #cataract = models.NullBooleanField(verbose_name="cataract surgery")
-    cataract = models.CharField(max_length=1, choices=UYN_CHOICES, verbose_name="cataract surgery", null=True, blank=True)
+    # Trac #34
+    cataract = models.CharField(max_length=1, choices=UYN_CHOICES, verbose_name="Cataract surgery", null=True, blank=True)
 
     cataract_age = models.IntegerField(verbose_name="age at cataract surgery", null=True, blank=True, help_text="Age at which cataract surgery was performed")
 
@@ -407,6 +410,7 @@ class GeneralMedicalFactors(models.Model):
 
     # TODO: make sure all this fields about cancer are not required, since they are not in Questionnaire
     cancer = models.CharField(max_length=3, choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Has the patient been diagnosed with cancer or a tumour", help_text='Please tick the check box if the patient has been diagnosed with or identifies as having any of the following')
+    # Trac #35: TODO
     cancertype = models.CharField(max_length=30, null=True, blank=True, choices=CANCER_TYPE_CHOICES, verbose_name="if yes, please choose from the following options in it")
     cancerothers = models.CharField(max_length=30, null=True, blank=True, verbose_name="Others")
     cancerorgan = models.CharField(max_length=30, null=True, blank=True, verbose_name="If the patient was diagnosed with cancer please indicate the body organ it was diagnosed in")
@@ -433,7 +437,8 @@ class GeneralMedicalFactors(models.Model):
     medicalert = models.CharField(verbose_name="Does the patient wear a Medicalert bracelet", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
 
     physiotherapy = models.CharField(verbose_name="Has the patient received any of the following: Physiotherapy", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
-    psychologicalcounseling = models.CharField(verbose_name="Emotional & psychological counseling", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
+    # Trac #36
+    psychologicalcounseling = models.CharField(verbose_name="Emotional & psychological counselling", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
     speechtherapy = models.CharField(verbose_name="Speech therapy", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
     occupationaltherapy = models.CharField(verbose_name="Occupational therapy", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
     vocationaltraining = models.CharField(verbose_name="Vocational rehabilitation", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
@@ -592,9 +597,10 @@ class Consent(models.Model):
 
 # moved from dm1/models.py to base to add to the questionnaire
 class FamilyMember(models.Model):
+    # Trac #37
     DIAGNOSIS_CHOICES = (
-        ("DM1", "Myotonic distrophy Type 1 (DM1)"),
-        ("DM2", "Myotonic distrophy Type 2 (DM2)"),
+        ("DM1", "Myotonic dystrophy Type 1 (DM1)"),
+        ("DM2", "Myotonic dystrophy Type 2 (DM2)"),
         ("Unknown", "Unknown"),
     )
 
