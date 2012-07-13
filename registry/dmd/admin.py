@@ -112,9 +112,6 @@ class DiagnosisAdmin(admin.ModelAdmin):
         return form
 
     def progress_graph(self, obj):
-
-        #graph_html = '<a href="%s">' % urlresolvers.reverse('admin:%s_diagnosis_change' % settings.INSTALL_NAME, args=(obj.id,))
-        #graph_html += '<img title="%s" src="http://chart.apis.google.com/chart' % obj.diagnosis.incomplete_sections()
         graph_html = '<img title="%s" src="http://chart.apis.google.com/chart' % obj.incomplete_sections()
         graph_html += '?chf=bg,s,FFFFFF00&chs=200x15&cht=bhs&chco=4D89F9,C6D9FD&chd=t:%d|100&chbh=5"/>' % obj.percentage_complete()
         #graph_html += '</a>'
