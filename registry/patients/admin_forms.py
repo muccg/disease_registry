@@ -42,12 +42,23 @@ class PatientForm(forms.ModelForm):
     def clean(self):
         cleaneddata = self.cleaned_data
         #print "PatientForm self %s" % dir(self)
-        #print "cleaneddata: %s" % cleaneddata
+        print "cleaneddata: %s" % cleaneddata
         #print "instance %s" % self.instance.pk
 
-        familyname = stripspaces(cleaneddata['family_name']).upper()
-        givennames = stripspaces(cleaneddata['given_names'])
-        workinggroup = cleaneddata['working_group']
+        family_name = cleaneddata.get('family_name')
+        if family_name:
+            familyname = stripspaces(family_name).upper()
+
+        givennames = cleaneddata.get('given_names')
+        if givennames:
+            givennames = stripspaces(givennames)
+
+        # working_group can be None, which is annoying for the db query below
+        # so working_group should be required, but how do we make it required in the model?
+        # working_group = models.ForeignKey(groups.models.WorkingGroup)
+        workinggroup = cleaneddata.get('working_group')
+        if not workinggroup:
+            raise forms.ValidationError('The working group is required.')
 
         #print "familyname: %s givennames %s workinggroup %s" % (familyname, givennames, workinggroup)
 
@@ -55,17 +66,16 @@ class PatientForm(forms.ModelForm):
             id = self.instance.pk
         else:
             id = None
-
+        print "PatientForm.clean: familyname: %s, givennames: %s, workinggroup: %s" % (familyname, givennames, workinggroup)
         patients = Patient.objects.filter(family_name__iexact=familyname, given_names__iexact=givennames, working_group=workinggroup)
         #print "Patients: %s" % patients
 
         exists = False
         if len(patients) > 0:
-            if id == None: # creating a new patient and existing on ein the DB already
+            if id == None: # creating a new patient and existing one in the DB already
                 exists = True
             elif id != patients[0].pk: # modifying an existing patient, check if there is another patient with same names but different pk
                 exists = True
         if exists:
             raise forms.ValidationError('There is already a patient with the same family and given names in this working group: "%s %s %s".' % (familyname, givennames, workinggroup))
         return cleaneddata
-
