@@ -28,7 +28,7 @@ class State(models.Model):
 
     class Meta:
         ordering = ["country__name", "name"]
-        
+
     def __unicode__(self):
         return self.name
 
@@ -55,6 +55,8 @@ class Patient(models.Model):
     else:
         SEX_CHOICES = ( ("M", "Male"), ("F", "Female"), ("X", "Other/Intersex") )
 
+    # unfortunately, there is no 'required' attribute on this field tyep, so the check is done in the form.clean() method
+    # Caution: this would have to be done in each of the forms if there are several forms.
     working_group = models.ForeignKey(groups.models.WorkingGroup)
     consent = models.BooleanField(null=False, blank=False, help_text="Consent must be given for the patient to be entered on the registry", verbose_name="consent given")
     family_name = models.CharField(max_length=100, db_index=True)
@@ -91,7 +93,7 @@ class Patient(models.Model):
         if self.active:
             return "%s %s" % (self.family_name, self.given_names)
         else:
-            return "%s %s (Archived)" % (self.family_name, self.given_names)            
+            return "%s %s (Archived)" % (self.family_name, self.given_names)
 
     def save(self, *args, **kwargs):
         # store the field in uppercase in the DB
@@ -127,4 +129,3 @@ class PatientDoctor(models.Model):
     class Meta:
         verbose_name = "medical professionals for patient"
         verbose_name_plural = "medical professionals for patient"
-
