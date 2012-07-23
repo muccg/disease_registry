@@ -376,6 +376,10 @@ class SocioeconomicFactors(models.Model):
 class CancerTypeChoices(models.Model):
     description = models.CharField(max_length=50, verbose_name='Cancer Type Choice')
 
+    class Meta:
+        ordering = ['description']
+        verbose_name_plural = "Cancer Types"
+
     def __unicode__(self):
         return "%s" % self.description
 
