@@ -276,7 +276,11 @@ class GeneralMedicalFactorsForm(forms.ModelForm):
     diabetes = forms.CharField(label="Diabetes", widget=RadioSelect(choices=GeneralMedicalFactors.DIABETES_CHOICES), required=False)
     pneumonia = forms.CharField(label="Pneumonia", widget=RadioSelect(choices=GeneralMedicalFactors.YESNO_CHOICES), required=False)
     cancer = forms.CharField(label="Has the patient been diagnosed with cancer or a tumour", widget=RadioSelect(choices=GeneralMedicalFactors.YESNO_CHOICES), required=False, help_text='Please tick the check box if the patient has been diagnosed with or identifies as having any of the following')
-    cancertype = forms.CharField(label="if yes, please choose from the following options", widget=RadioSelect(choices=GeneralMedicalFactors.CANCER_TYPE_CHOICES), required=False)
+
+    # Trac #35, change choices to manytomany field
+    #cancertype = forms.CharField(label="if yes, please choose from the following options", widget=RadioSelect(choices=GeneralMedicalFactors.CANCER_TYPE_CHOICES), required=False)
+    cancertype = forms.ModelMultipleChoiceField(label="if yes, please choose from the following options", queryset=base.CancerTypeChoices.objects.all(), required=False, widget=forms.CheckboxSelectMultiple)
+
     cognitive_impairment = forms.CharField(label="Cognitive impairment", widget=RadioSelect(choices=GeneralMedicalFactors.COGNITIVE_CHOICES), required=False)
     medicalert = forms.CharField(label="Does the patient wear a Medicalert bracelet", widget=RadioSelect(choices=GeneralMedicalFactors.UYN_CHOICES), required=False)
     physiotherapy = forms.CharField(label="Has the patient received any of the following: Physiotherapy", widget=RadioSelect(choices=GeneralMedicalFactors.UYN_CHOICES), required=False)
