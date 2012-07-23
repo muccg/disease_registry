@@ -371,6 +371,13 @@ class SocioeconomicFactors(models.Model):
     class Meta:
         abstract = True
 
+# Trac #35
+# replaces the CANCER_TYPE_CHOICES tuples, now in the DB
+class CancerTypeChoices(models.Model):
+    description = models.CharField(max_length=50, verbose_name='Cancer Type Choice')
+
+    def __unicode__(self):
+        return "%s" % self.description
 
 class GeneralMedicalFactors(models.Model):
     YESNO_CHOICES = ( ('N', 'No'), ('Y','Yes') ) # need to keep the values in sync with UYN_CHOICES
@@ -390,6 +397,9 @@ class GeneralMedicalFactors(models.Model):
         ('Type2', 'Yes, Type 2 Diabetes'),
     )
 
+    # Trac #35
+    # Now in the db with CancerType Choices
+    # reverted to choices, until South migration is fixed
     CANCER_TYPE_CHOICES = (
         ('Basal', 'Basal cell carcinomas'),
         ('Insulinomas', 'Insulinomas'),
@@ -410,8 +420,13 @@ class GeneralMedicalFactors(models.Model):
 
     # TODO: make sure all this fields about cancer are not required, since they are not in Questionnaire
     cancer = models.CharField(max_length=3, choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Has the patient been diagnosed with cancer or a tumour", help_text='Please tick the check box if the patient has been diagnosed with or identifies as having any of the following')
-    # Trac #35: TODO
-    cancertype = models.CharField(max_length=30, null=True, blank=True, choices=CANCER_TYPE_CHOICES, verbose_name="if yes, please choose from the following options in it")
+
+    # reverted to previous version until South Migration is fixed
+    # Trac #35
+    #cancertype = models.CharField(max_length=30, null=True, blank=True, choices=CANCER_TYPE_CHOICES, verbose_name="if yes, please choose from the following options in it")
+    # moved to dm1/models.py and dm1_questionnaire/models.py to avoid relation clash and provide 2 different names
+    #cancertype = models.ManyToManyField(CancerTypeChoices, related_name='cancertypechoices_cancertype', blank=True, null=True,)
+
     cancerothers = models.CharField(max_length=30, null=True, blank=True, verbose_name="Others")
     cancerorgan = models.CharField(max_length=30, null=True, blank=True, verbose_name="If the patient was diagnosed with cancer please indicate the body organ it was diagnosed in")
     liver = models.BooleanField(verbose_name="Has the patient been diagnosed with: liver disease")

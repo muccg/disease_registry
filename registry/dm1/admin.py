@@ -2,6 +2,7 @@ from django.contrib import admin
 from ccg.utils.webhelpers import url
 from admin_forms import *
 from models import *
+from base import CancerTypeChoices
 
 
 class MotorFunctionInline(admin.StackedInline):
@@ -56,6 +57,12 @@ class SocioeconomicFactorsInline(admin.StackedInline):
 class GeneralMedicalFactorsInline(admin.StackedInline):
     form = GeneralMedicalFactorsForm   # can't get it to work, choices ignored
     model = GeneralMedicalFactors
+    # TRAC #35, cancertype is displayed at the end of the form if 'fields' not specified, bummer
+    fields = ('diabetes', 'diabetesage', 'pneumonia', 'pneumoniaage', 'pneumoniainfections', 'cancer', 'cancertype',
+              'cancerothers', 'cancerorgan', 'liver', 'miscarriage', 'gor', 'gall_bladder', 'infection', 'sexual_dysfunction',
+              'constipation', 'cholesterol', 'cognitive_impairment', 'psychological', 'anxiety', 'depression', 'apathy',
+              'weight', 'height', 'endocrine', 'obgyn', 'medicalert', 'physiotherapy', 'psychologicalcounseling', 'speechtherapy',
+              'occupationaltherapy', 'vocationaltraining')
 
 class GeneticTestDetailsInline(admin.StackedInline):
     form = GeneticTestDetailsForm
@@ -162,3 +169,9 @@ admin.site.register(Diagnosis, DiagnosisAdmin)
 #    form = PatientForm
 
 #admin.site.register(Patient, PatientAdmin)
+
+#Trac #35
+class CancerTypeChoicesAdmin(admin.ModelAdmin):
+    search_fields = ["description"]
+
+admin.site.register(CancerTypeChoices, CancerTypeChoicesAdmin)

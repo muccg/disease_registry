@@ -279,6 +279,9 @@ class SocioeconomicFactors(ApproveMixin, base.SocioeconomicFactors):
 class GeneralMedicalFactors(ApproveMixin, base.GeneralMedicalFactors):
     diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
 
+    # Trac #35: moved here from base.py, was creating a relation issue
+    cancertype = models.ManyToManyField(base.CancerTypeChoices, related_name='dm1questcancertypechoices', blank=True, null=True)
+
     def __unicode__(self):
         return unicode(self.diagnosis)
 
@@ -294,7 +297,6 @@ class GeneticTestDetails(ApproveMixin, base.GeneticTestDetails):
 
     def approve(self, diagnosis):
         return super(GeneticTestDetails, self).approve(dm1.models.GeneticTestDetails, diagnosis=diagnosis, commit=True, delete=True)
-
 
 class EthnicOrigin(ApproveMixin, base.EthnicOrigin):
     diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
