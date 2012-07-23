@@ -59,7 +59,6 @@ class PatientForm(forms.ModelForm):
         workinggroup = cleaneddata.get('working_group')
         if not workinggroup:
             raise forms.ValidationError('The working group is required.')
-
         #print "familyname: %s givennames %s workinggroup %s" % (familyname, givennames, workinggroup)
 
         if self.instance:

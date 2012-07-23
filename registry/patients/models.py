@@ -55,9 +55,7 @@ class Patient(models.Model):
     else:
         SEX_CHOICES = ( ("M", "Male"), ("F", "Female"), ("X", "Other/Intersex") )
 
-    # unfortunately, there is no 'required' attribute on this field tyep, so the check is done in the form.clean() method
-    # Caution: this would have to be done in each of the forms if there are several forms.
-    working_group = models.ForeignKey(groups.models.WorkingGroup)
+    working_group = models.ForeignKey(groups.models.WorkingGroup, null=False, blank=False)
     consent = models.BooleanField(null=False, blank=False, help_text="Consent must be given for the patient to be entered on the registry", verbose_name="consent given")
     family_name = models.CharField(max_length=100, db_index=True)
     given_names = models.CharField(max_length=100, db_index=True)
