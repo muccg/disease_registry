@@ -113,7 +113,7 @@ class MotorFunction(models.Model):
     #acquisition_age = models.IntegerField(verbose_name="At what age did the patient start walking", null=True, blank=True, help_text="Indicate age in years when the patient started walking")
     wheelchair_use = models.CharField(verbose_name="wheel chair use", default='', max_length=12, choices=WHEELCHAIR_USE_CHOICES, help_text="<b>Yes (permanent):</b> patient is not able to walk and needs a wheelchair to move<br/><b>Yes (intermittent):</b> patient is still able to walk") #required
     wheelchair_usage_age = models.IntegerField(null=True, blank=True, help_text="If using wheelchair specify age at start of wheelchair use") # required but need to check Yes previous question
-    dysarthria = models.IntegerField(choices=DYSARTHRIA_CHOICES,null=True, blank=True, default='')
+    dysarthria = models.IntegerField(choices=DYSARTHRIA_CHOICES,null=True, blank=True, default=0)
 
     class Meta:
         abstract = True

@@ -7,12 +7,13 @@ from django.db import models
 class Migration(DataMigration):
 
     def forwards(self, orm):
-        "Write your forwards methods here."
-
-    def backwards(self, orm):
         # CAUTION: if the file doesn't exist or has the wrong name, no error...
         # CAUTION: make sure the fixutre have the same fields as the db schema, otherwise exceptions...
-        call_command("loaddata", "dm1.CancerTypeChoices.json", exceptiononerror=True) # added to create an admin user during automatic deployment (admin/admin)
+        from django.core.management import call_command
+        call_command("loaddata", "dm1.cancertypechoices.json", exceptiononerror=True) # added to create an admin user during automatic deployment (admin/admin)
+
+    def backwards(self, orm):
+        pass
 
     models = {
         'dm1.cancertypechoices': {

@@ -223,7 +223,7 @@ class SocioeconomicFactors(base.SocioeconomicFactors):
 
 
 class GeneralMedicalFactors(base.GeneralMedicalFactors):
-    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
+    diagnosis = models.OneToOneField(Diagnosis, primary_key=True, related_name='dm1.diagnosis')
 
     # Trac #35: moved here from base.py, was creating a relation issue
     cancertype = models.ManyToManyField(base.CancerTypeChoices, related_name='dm1cancertypechoices', blank=True, null=True)
