@@ -73,7 +73,7 @@ EMAIL_HOST = 'ccg.murdoch.edu.au'
 SERVER_EMAIL = "apache@ccg.murdoch.edu.au"                      # from address
 RETURN_EMAIL = "apache@ccg.murdoch.edu.au"                      # from address
 EMAIL_SUBJECT_PREFIX = "DEV "
-RETURN_EMAIL = 'bpower@ccg.murdoch.edu.au'
+RETURN_EMAIL = 'admin@ccg.murdoch.edu.au'
 # default emails
 ADMINS = [
     ( 'Tech Alerts', 'alerts@ccg.murdoch.edu.au' )
@@ -126,8 +126,44 @@ SITE_NAME = 'dm1'
 SECRET_KEY = 'qj#tl@9@7((%^)$i#iyw0gcfzf&#a*pobgb8yr#1%65+*6!@g$'
 EMAIL_APP_NAME = "Registry "
 
-INSTALL_NAME = 'registry'
-INSTALL_FULL_NAME = 'Australian National Duchenne Muscular Dystrophy, Spinal Muscular Atrophy and Myotonic Dystrophy'
+# INSTALL_NAME = 'registry' breaks templates/mako/admin/change_list.html in
+# <link rel="stylesheet" type="text/css" media="screen" href="${ra.url('/static/css/%s_admin.css' % ra.get_current_install_name())}" />
+# results in:
+# <link rel="stylesheet" type="text/css" media="screen" href="/static/css/registry_admin.css" />
+# registry_admin.css should be dm1_admin.css or dmd_admin.css
+#INSTALL_NAME = 'registry'
+####### change the app name here to run one or another
+# caution, the DB params should be changed as well
+INSTALL_NAME= 'dm1'
+#INSTALL_NAME= 'dmd'
+#INSTALL_NAME= 'sma'
+
+if INSTALL_NAME == 'dm1':
+    INSTALL_FULL_NAME = 'Australian Myotonic Dystrophy'
+    INSTALLED_APPS.extend( [
+        'groups',
+        'patients',
+        'genetic',
+        'dm1',
+        'dm1_questionnaire'
+    ])
+
+if INSTALL_NAME == 'dmd':
+    INSTALL_FULL_NAME = 'Australian National Duchenne Muscular Dystrophy'
+    INSTALLED_APPS.extend( [
+        'groups',
+        'patients',
+        'genetic',
+        'dmd'
+    ])
+if INSTALL_NAME == 'sma':
+    INSTALL_FULL_NAME = 'Spinal Muscular Atrophy'
+    INSTALLED_APPS.extend( [
+        'groups',
+        'patients',
+        'genetic',
+        'sma'
+    ])
 
 # A hash of application titles used as a global
 # This could (should?) be provided by the apps themselves
@@ -139,18 +175,20 @@ APP_TITLES = {
 "patients": "Registration", # to show the 'Patients' header as 'Registration' in the Admin UI
 }
 
+# replaced by the code above
+'''
 #The ordering of these apps is important - they have been done in such a way that
 #python manage.py migrate --all will work.
 INSTALLED_APPS.extend( [
     'groups',
     'patients',
     'genetic',
-    'dmd',
-    'sma',
+#    'dmd',
+#    'sma',
     'dm1',
     'dm1_questionnaire'
 ])
-
+'''
 
 DATABASES = {
     'default': {
@@ -252,6 +290,3 @@ try:
     from appsettings.registry import *
 except ImportError, e:
     pass
-
-
-
