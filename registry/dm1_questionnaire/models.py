@@ -277,7 +277,7 @@ class SocioeconomicFactors(ApproveMixin, base.SocioeconomicFactors):
 
 
 class GeneralMedicalFactors(ApproveMixin, base.GeneralMedicalFactors):
-    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
+    diagnosis = models.OneToOneField(Diagnosis, primary_key=True, related_name='dm1_quest.diagnosis')
 
     # Trac #35: moved here from base.py, was creating a relation issue
     cancertype = models.ManyToManyField(base.CancerTypeChoices, related_name='dm1questcancertypechoices', blank=True, null=True)

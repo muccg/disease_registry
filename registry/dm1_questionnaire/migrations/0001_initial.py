@@ -7,7 +7,7 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
+
         # Adding model 'Patient'
         db.create_table('dm1_questionnaire_patient', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -48,7 +48,7 @@ class Migration(SchemaMigration):
             ('best_function', self.gf('django.db.models.fields.CharField')(default='', max_length=8, null=True, blank=True)),
             ('wheelchair_use', self.gf('django.db.models.fields.CharField')(default='', max_length=12)),
             ('wheelchair_usage_age', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-            ('dysarthria', self.gf('django.db.models.fields.IntegerField')(default='', null=True, blank=True)),
+            ('dysarthria', self.gf('django.db.models.fields.IntegerField')(default=0, null=True, blank=True)),
             ('diagnosis', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dm1_questionnaire.Diagnosis'], unique=True, primary_key=True)),
         ))
         db.send_create_signal('dm1_questionnaire', ['MotorFunction'])
@@ -308,7 +308,7 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        
+
         # Deleting model 'Patient'
         db.delete_table('dm1_questionnaire_patient')
 
