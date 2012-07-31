@@ -3,6 +3,7 @@ import datetime
 from south.db import db
 from south.v2 import DataMigration
 from django.db import models
+import sys
 
 class Migration(DataMigration):
 
@@ -38,79 +39,137 @@ class Migration(DataMigration):
         
         # Step 1:
         # Add the id column
-        db.add_column('genetic_gene', 'id', django.models.IntegerField)
-        id_counter = 0
-
+        
+        print 'Step 1: Add ID Column'
+        db.add_column('genetic_gene', 'id', models.IntegerField(null=True) )
+        
         # Step 2:
         # populate the id field by just enumerating the records
-        gene_recordset = orm.genetic.gene.objects.all()
+    
+        print 'Step 2: Populate ID fields'
+        db.start_transaction()
+        id_counter = 0
+        gene_recordset = orm['genetic.gene'].objects.all()
         for record in gene_recordset:
             try:
                 record.id = id_counter
                 record.save()
                 id_counter += 1
+                sys.stdout.write('.')
+                sys.stdout.flush()
             except Exception, e:
+                print
                 print 'could not set id %d on record %s' % (id_counter, record.symbol)
+                db.rollback_transaction()
+        db.commit_transaction()
 
         # Step 3:
         # create a sequence to continue numbering these ids
         # for an id like this it would be 'genetic_gene_id_seq'
 
+        print 'Step 3: Create seq'
         db.execute("CREATE SEQUENCE genetic_gene_id_seq INCREMENT BY 1 START %d;" % (id_counter))
         
-        
+
         # Step 4: Build a gene/variation mapping
+        
+        
+        print 'Step 4: build gene/variation mapping'
         variationmap = {}
-        variations = orm.genetic.variation.objects.all()
+        variations = orm['genetic.variation'].objects.all()
         for variation in variations:
             linked_gene = variation.gene
             if linked_gene is not None:
+                print '.',
                 variationmap[variation.id] = linked_gene.id
-
-        print 'Built %d variations' % (len(variationmap.keys())
-        
+        print 
+        print 'Built %d variations' % (len(variationmap.keys()) )
+        for k in variationmap.keys():
+            print 'Variation [%s] links to gene [%s]' % ( str(k), str(variationmap[k]) )
         
         # Step 5:
         # Drop FK constraint variation.gene
-
-        db.delete_foreign_key('genetic.variation', 'gene')
-
+        
+        
+        print 'Step 5: Remove FK'
+        try:
+            db.delete_foreign_key('genetic_variation', 'gene_id')
+        except Exception, e:
+            print 'No foreign key constraint existed. Continuing.'
+        
         # Step 6:
         # Drop PK on Gene.symbol
+        
+        print 'Step 6: Recreate Gene PK'
+        db.delete_primary_key('genetic_gene') #remove the current PK
 
-        db.delete_primary_key('genetic.gene', 'symbol')
-        db.create_primary_key('genetic.gene', 'id')
+        numrows = len(orm['genetic.gene'].objects.all())
+        numnull = len(orm['genetic.gene'].objects.filter(id=None))
+
+        print 'Of %d records in the DB, %d have a null id!' % (numrows, numnull)
+
+
+        db.create_primary_key('genetic_gene', 'id')
         #Need something here to make next value come from seq?
-        db.execute('ALTER_TABLE genetic_gene ALTER COLUMN id SET DEFAULT nextval(\'genetic_gene_id_seq\':regclass);')
+        db.execute('ALTER TABLE genetic_gene ALTER COLUMN id SET DEFAULT nextval(\'genetic_gene_id_seq\');')
         #Need to create index?
-        db.create_index('genetic_gene', 'id')
+        db.create_index('genetic_gene', ['id'])
 
         # Step 7:
         # Recreate FK
+        # This is an undocumented method, but it is part of the south API
+        
+        print 'Step 7: Recreate Vatiation FK->Gene'
+        db.delete_column('genetic_variation', 'gene_id')
+        db.add_column('genetic_variation', 'gene_id', models.IntegerField(null=True) )
 
-        db.create_foreign_key('genetic_variation', 'gene', ???)
 
         # Step 8:
         # Remap
+        
+        print 'Step 8: Re-link all variations to genes'
+        # Alter the models
+        # This is for south's benefit - for the time being we are going to store a
+        # raw integer in the gene_id field, and make it a FK in step 9.
+        # We call the field gene_id because we know that is what the db field is called - 
+        # django automatically names FK fields <whatever_id>. We are using this knowledge to
+        # construct a temporary member called gene_id which we can store id's in, that will
+        # make sense with later models which have variation.gene as a foreign key.
+        orm['genetic.variation'].gene_id = models.IntegerField(null=True)
 
+        
+        remaps = 0
         for variationid in variationmap.keys():
-            targetgene = orm.genetic.gene.objects.get(symbol=variationmap[variationid])
-            if targetgene is not None:
-                variation = orm.genetic.variation.objects.get(id=variationid)
-                if variation is not None:
-                    variation.gene = targetgene
-                else:
-                    print 'Unable to find variation %d. This should not happen' % (variationid)
-                    
-            else:
+            targetgene = None
+            try:
+                targetgene = orm['genetic.gene'].objects.get(id=variationmap[variationid])
+            except Exception, e:
                 print 'Unable to find target gene for variation %d. This should not happen' % (variationid)
-         
+
+
+            if targetgene is not None:
+                variation = None
+                try:
+                    variation = orm['genetic.variation'].objects.get(id=variationid)
+                except Exception, e:
+                    print 'Unable to find variation %d. This should not happen' % (variationid)
+
+                if variation is not None:
+                    variation.gene_id = targetgene.id
+                    variation.save()
+                    remaps += 1
+
+        print 'Step 9: Recreate FK Constraint'
+        fk_sql = db.foreign_key_sql('genetic_variation', 'gene_id', 'genetic_gene', 'id')
+        db.execute(fk_sql)
+
+        print 'Done. %d genes renumbered, %d variations remapped.' % (id_counter, remaps)
 
     def backwards(self, orm):
         "Write your backwards methods here."
 
 
-models = {
+    models = {
         'genetic.gene': {
             'Meta': {'ordering': "['symbol']", 'object_name': 'Gene'},
             'accession_numbers': ('django.db.models.fields.TextField', [], {}),
@@ -119,7 +178,7 @@ models = {
             'name': ('django.db.models.fields.TextField', [], {}),
             'refseq_id': ('django.db.models.fields.TextField', [], {}),
             'status': ('django.db.models.fields.TextField', [], {}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'id': ('django.db.models.fields.IntegerField', [], {}), # {'primary_key': 'True'}),
             'symbol': ('django.db.models.fields.TextField', [], {'primary_key': 'True'})
         },
         'genetic.moleculardata': {
