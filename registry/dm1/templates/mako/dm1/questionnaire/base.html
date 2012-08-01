@@ -1,0 +1,99 @@
+<%!
+    from django.conf import settings
+    from django.utils import webhelpers
+%>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <title>Australian Myotonic Dystrophy Registry &mdash; Questionnaire</title>
+
+        <link rel="stylesheet" type="text/css" href="${webhelpers.url('/static/css/dm1.css')}"/>
+        <link rel="stylesheet" type="text/css" href="${webhelpers.url('/static/css/questionnaire.css')}"/>
+
+        <!--[if IE 6]>
+        <link rel="stylesheet" type="text/css" href="${webhelpers.url('/static/css/ie6.css')}"/>
+        <![endif]-->
+
+        <!--[if IE 7]>
+        <link rel="stylesheet" type="text/css" href="${webhelpers.url('/static/css/ie7.css')}"/>
+        <![endif]-->
+
+        ${self.head()}
+    </head>
+    <body>
+        <div id="header-container">
+            <h1>Australian Myotonic Dystrophy Registry</h1>
+        </div>
+
+        <div id="container">
+            ${self.content()}
+        </div> <!-- id="container" -->
+
+        <div id="footer-container">
+            <div id="footer">
+                Authorised by Hugh Dawkins for the
+                <a href="http://www.genomics.health.wa.gov.au/">Office of Population Health Genomics</a>.
+                <br/>
+                All content &copy; 2011 <a href="http://www.genomics.health.wa.gov.au/">Office of Population Health Genomics</a> on behalf of the Australian Myotonic Dystrophy Registry.
+                <br/>
+                Supported by <a href="http://www.ivec.org/">iVEC</a> and the <a href="http://www.genomics.health.wa.gov.au/">Office of Population Health Genomics</a>.
+                <br/>
+                Developed and hosted by the <a href="http://ccg.murdoch.edu.au/">Centre for Comparative Genomics</a>, <a href="http://www.murdoch.edu.au/">Murdoch University</a>.
+                <br/>
+                <a href="${webhelpers.url('/admin/')}">Administration</a>
+            </div>
+        </div>
+    </body>
+</html>
+
+<%def name="head()" />
+
+<%def name="output_form(form)">
+    <% row = 0 %>
+
+% for field in form:
+    <%
+        row += 1
+        cls = "even" if row % 2 else "odd"
+
+        if field.field.required:
+            cls += " required"
+    %>
+
+%    if field.errors:
+        <div class="row error-message ${cls}">
+            <div class="cell">&nbsp;</div>
+            <div class="cell">
+%        for error in field.errors:
+                <div>${error}</div>
+%        endfor
+            </div>
+        </div>
+
+        <div class="row error ${cls}">
+            ${field.label_tag()}
+            <div class="cell">
+                ${field.as_widget()}
+%        if field.field.help_text:
+                <div class="help-text">
+                    ${field.field.help_text}
+                </div>
+%        endif
+            </div>
+        </div>
+%    else:
+        <div class="row ${cls}">
+            ${field.label_tag()}
+            <div class="cell">
+                ${field.as_widget()}
+%        if field.field.help_text:
+                <div class="help-text">
+                    ${field.field.help_text}
+                </div>
+%        endif
+            </div>
+        </div>
+%    endif
+% endfor
+</%def>
