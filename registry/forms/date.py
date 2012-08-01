@@ -2,7 +2,7 @@ from datetime import date, datetime
 from django import forms
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext
-from django.utils.webhelpers import url
+from ccg.utils.webhelpers import url
 
 
 class DateFormatError(ValueError):
