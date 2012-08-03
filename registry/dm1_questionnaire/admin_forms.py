@@ -69,12 +69,18 @@ class PatientForm(forms.ModelForm):
     def clean(self):
         cleaneddata = self.cleaned_data
         #print "PatientForm self %s" % dir(self)
-        #print "cleaneddata: %s" % cleaneddata
+        print "cleaneddata: %s" % cleaneddata
         #print "instance %s" % self.instance.pk
+
+        # Trac #62 : key error when no data
+        fname = cleaneddata.get('family_name')
+        gname = cleaneddata.get('given_names')
+        workinggroup = cleaneddata.get('working_group')
+        if not fname or not gname or not workinggroup:
+            raise forms.ValidationError('Missing either family name, given names or working group')
 
         familyname = stripspaces(cleaneddata['family_name']).upper()
         givennames = stripspaces(cleaneddata['given_names'])
-        workinggroup = cleaneddata['working_group']
 
         # show the names the way we'll store them
         cleaneddata['family_name'] = familyname
