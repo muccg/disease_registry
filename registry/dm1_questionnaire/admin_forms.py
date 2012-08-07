@@ -1,6 +1,6 @@
 # vim: set fileencoding=UTF-8:
 from django import forms
-from django.utils.webhelpers import url
+from ccg.utils.webhelpers import url
 from models import *
 from registry.forms.widgets import ComboWidget, LiveComboWidget, LubricatedDateWidget, StaticWidget, PercentageWidget
 

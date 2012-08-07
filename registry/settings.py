@@ -50,7 +50,7 @@ MIDDLEWARE_CLASSES = [
     #'django.middleware.transaction.TransactionMiddleware',
     #'madas.utils.json_exception_handler_middleware.JSONExceptionHandlerMiddleware',
     'django.middleware.doc.XViewMiddleware',
-    'django.middleware.ssl.SSLRedirect'
+    'ccg.middleware.ssl.SSLRedirect'
 
 ]
 
