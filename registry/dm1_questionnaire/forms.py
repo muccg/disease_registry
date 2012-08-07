@@ -385,7 +385,6 @@ class PatientForm(forms.ModelForm):
             "address": forms.Textarea(attrs={"cols": 60, "rows": 3}),
         }
 
-    #FJ start
     # add check on uniqueness in the dm1_questionnaire.patients table and registry.patients as well
     def clean(self):
         '''
@@ -405,10 +404,7 @@ class PatientForm(forms.ModelForm):
         if givennames:
             givennames = stripspaces(givennames)
 
-        if not familyname or not givennames:
-            return cleaneddata  # the other validation will catch the empty fields
-
-        workinggroup = cleaneddata['working_group']
+        workinggroup = cleaneddata.get('working_group')
 
         #print "familyname: %s givennames %s workinggroup %s" % (familyname, givennames, workinggroup)
 
@@ -422,7 +418,6 @@ class PatientForm(forms.ModelForm):
             #print "raise forms.ValidationError"
             raise forms.ValidationError('There is already a patient with the same family and given names in this working group: "%s %s %s".' % (familyname, givennames, workinggroup))
         return cleaneddata
-    #FJ end
 
 class FamilyMemberForm(forms.ModelForm):
     class Meta:
