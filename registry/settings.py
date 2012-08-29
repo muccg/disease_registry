@@ -290,3 +290,5 @@ try:
     from appsettings.registry import *
 except ImportError, e:
     pass
+
+DATABASES['default'] = DATABASES[INSTALL_NAME]
