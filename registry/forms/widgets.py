@@ -1,5 +1,5 @@
 from django import forms
-from django.utils.webhelpers import url
+from ccg.utils.webhelpers import url
 
 
 from date import DateWidget
