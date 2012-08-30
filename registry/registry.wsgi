@@ -36,7 +36,8 @@ except OSError, ose:
 os.environ['PYTHON_EGG_CACHE']=eggdir
 
 # setup the settings module for the WSGI app
-os.environ['DJANGO_SETTINGS_MODULE'] = 'appsettings.%s'%(os.path.basename(PROJECT_DIR))
+#os.environ['DJANGO_SETTINGS_MODULE'] = 'appsettings.%s'%(os.path.basename(PROJECT_DIR))
+os.environ['DJANGO_SETTINGS_MODULE'] = '%s.settings'%(os.path.basename(PROJECT_DIR))
 
 import django.core.handlers.wsgi
 
