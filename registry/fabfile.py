@@ -39,12 +39,10 @@ localPaths = LocalPaths()
 def deploy():
     """User deployment"""
     release = _ccg_deploy_user()
-    _munge_settings(release)
 
 def snapshot():
     """Snapshot deployment"""
     release = _ccg_deploy_snapshot()
-    _munge_settings(release)
 
 def release(*args, **kwargs):
     """
@@ -63,7 +61,6 @@ def make_live(tag=env.user):
 def testrelease():
     """Release deployment with dev settings"""
     release = _ccg_deploy_release(devrelease=True)
-    _munge_settings(release)
 
 def purge():
     """Purge a user deployment"""
