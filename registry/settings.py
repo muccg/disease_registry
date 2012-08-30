@@ -292,3 +292,4 @@ except ImportError, e:
     pass
 
 DATABASES['default'] = DATABASES[INSTALL_NAME]
+ROOT_APP = INSTALL_NAME
