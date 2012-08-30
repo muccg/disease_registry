@@ -1,0 +1,16 @@
+<%inherit file="admin/base.html"/>
+<%namespace name="ra" module="registry.admin"/>
+${self.block_title()}<%def name="block_title()">${ra.get_full_registry_name()}</%def>
+${self.block_branding()}<%def name="block_branding()">
+<h1 id="site-name">${ra.get_full_registry_name()}</h1>
+</%def>
+
+${self.block_nav_global()}<%def name="block_nav_global()"></%def>
+
+${self.block_breadcrumbs()}<%def name="block_breadcrumbs()"></%def>
+
+${self.block_extrastyle()}
+<%def name="block_extrastyle()">
+    <link rel="stylesheet" type="text/css" media="print" href="${ra.url('/static/css/print.css')}" />
+    <link rel="stylesheet" type="text/css" media="screen" href="${ra.url('/static/css/%s_admin.css' % ra.get_current_install_name())}" />
+</%def>
