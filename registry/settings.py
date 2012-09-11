@@ -126,6 +126,9 @@ SITE_NAME = 'dm1'
 SECRET_KEY = 'qj#tl@9@7((%^)$i#iyw0gcfzf&#a*pobgb8yr#1%65+*6!@g$'
 EMAIL_APP_NAME = "Registry "
 
+INSTALL_NAME = 'registry'
+INSTALL_FULL_NAME = 'Australian National Duchenne Muscular Dystrophy, Spinal Muscular Atrophy and Myotonic Dystrophy'
+
 # INSTALL_NAME = 'registry' breaks templates/mako/admin/change_list.html in
 # <link rel="stylesheet" type="text/css" media="screen" href="${ra.url('/static/css/%s_admin.css' % ra.get_current_install_name())}" />
 # results in:
@@ -134,36 +137,36 @@ EMAIL_APP_NAME = "Registry "
 #INSTALL_NAME = 'registry'
 ####### change the app name here to run one or another
 # caution, the DB params should be changed as well
-INSTALL_NAME= 'dm1'
+#INSTALL_NAME= 'dm1'
 #INSTALL_NAME= 'dmd'
 #INSTALL_NAME= 'sma'
 
-if INSTALL_NAME == 'dm1':
-    INSTALL_FULL_NAME = 'Australian Myotonic Dystrophy'
-    INSTALLED_APPS.extend( [
-        'groups',
-        'patients',
-        'genetic',
-        'dm1',
-        'dm1_questionnaire'
-    ])
+#if INSTALL_NAME == 'dm1':
+#    INSTALL_FULL_NAME = 'Australian Myotonic Dystrophy'
+#    INSTALLED_APPS.extend( [
+#        'groups',
+#        'patients',
+#        'genetic',
+#        'dm1',
+#        'dm1_questionnaire'
+#    ])
 
-if INSTALL_NAME == 'dmd':
-    INSTALL_FULL_NAME = 'Australian National Duchenne Muscular Dystrophy'
-    INSTALLED_APPS.extend( [
-        'groups',
-        'patients',
-        'genetic',
-        'dmd'
-    ])
-if INSTALL_NAME == 'sma':
-    INSTALL_FULL_NAME = 'Spinal Muscular Atrophy'
-    INSTALLED_APPS.extend( [
-        'groups',
-        'patients',
-        'genetic',
-        'sma'
-    ])
+#if INSTALL_NAME == 'dmd':
+#    INSTALL_FULL_NAME = 'Australian National Duchenne Muscular Dystrophy'
+#    INSTALLED_APPS.extend( [
+#        'groups',
+#        'patients',
+#        'genetic',
+#        'dmd'
+#    ])
+#if INSTALL_NAME == 'sma':
+#    INSTALL_FULL_NAME = 'Spinal Muscular Atrophy'
+#    INSTALLED_APPS.extend( [
+#        'groups',
+#        'patients',
+#        'genetic',
+#        'sma'
+#    ])
 
 # A hash of application titles used as a global
 # This could (should?) be provided by the apps themselves
@@ -183,8 +186,8 @@ INSTALLED_APPS.extend( [
     'groups',
     'patients',
     'genetic',
-#    'dmd',
-#    'sma',
+    'dmd',
+    'sma',
     'dm1',
     'dm1_questionnaire'
 ])
@@ -291,5 +294,5 @@ try:
 except ImportError, e:
     pass
 
-DATABASES['default'] = DATABASES[INSTALL_NAME]
-ROOT_APP = INSTALL_NAME
+#DATABASES['default'] = DATABASES[INSTALL_NAME]
+#ROOT_APP = INSTALL_NAME
