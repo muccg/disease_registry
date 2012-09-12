@@ -6,3 +6,4 @@
 ^registry/log/*
 ^registry/virtualenv*
 ^.*appsettings*
+^bootstrap/
