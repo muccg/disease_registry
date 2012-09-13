@@ -129,45 +129,6 @@ EMAIL_APP_NAME = "Registry "
 INSTALL_NAME = 'registry'
 INSTALL_FULL_NAME = 'Australian National Duchenne Muscular Dystrophy, Spinal Muscular Atrophy and Myotonic Dystrophy'
 
-# INSTALL_NAME = 'registry' breaks templates/mako/admin/change_list.html in
-# <link rel="stylesheet" type="text/css" media="screen" href="${ra.url('/static/css/%s_admin.css' % ra.get_current_install_name())}" />
-# results in:
-# <link rel="stylesheet" type="text/css" media="screen" href="/static/css/registry_admin.css" />
-# registry_admin.css should be dm1_admin.css or dmd_admin.css
-#INSTALL_NAME = 'registry'
-####### change the app name here to run one or another
-# caution, the DB params should be changed as well
-#INSTALL_NAME= 'dm1'
-#INSTALL_NAME= 'dmd'
-#INSTALL_NAME= 'sma'
-
-#if INSTALL_NAME == 'dm1':
-#    INSTALL_FULL_NAME = 'Australian Myotonic Dystrophy'
-#    INSTALLED_APPS.extend( [
-#        'groups',
-#        'patients',
-#        'genetic',
-#        'dm1',
-#        'dm1_questionnaire'
-#    ])
-
-#if INSTALL_NAME == 'dmd':
-#    INSTALL_FULL_NAME = 'Australian National Duchenne Muscular Dystrophy'
-#    INSTALLED_APPS.extend( [
-#        'groups',
-#        'patients',
-#        'genetic',
-#        'dmd'
-#    ])
-#if INSTALL_NAME == 'sma':
-#    INSTALL_FULL_NAME = 'Spinal Muscular Atrophy'
-#    INSTALLED_APPS.extend( [
-#        'groups',
-#        'patients',
-#        'genetic',
-#        'sma'
-#    ])
-
 # A hash of application titles used as a global
 # This could (should?) be provided by the apps themselves
 APP_TITLES = {
@@ -183,13 +144,13 @@ APP_TITLES = {
 #The ordering of these apps is important - they have been done in such a way that
 #python manage.py migrate --all will work.
 INSTALLED_APPS.extend( [
-    'groups',
-    'patients',
-    'genetic',
-    'dmd',
-    'sma',
-    'dm1',
-    'dm1_questionnaire'
+    'ccg.django.apps.groups',
+    'ccg.django.apps.patients',
+    'ccg.django.apps.genetic',
+    'ccg.django.apps.dmd',
+    'ccg.django.apps.sma',
+    'ccg.django.apps.dm1',
+    'ccg.django.apps.dm1_questionnaire'
 ])
 '''
 
@@ -220,13 +181,13 @@ LOGGING = {
     'disable_existing_loggers': True,
     'formatters': {
         'verbose': {
-            'format': 'Registry [%(name)s:' + INSTALL_NAME + ':%(levelname)s:%(asctime)s:%(filename)s:%(lineno)s:%(funcName)s] %(message)s'
+            'format': 'Registry [%(name)s:registry:%(levelname)s:%(asctime)s:%(filename)s:%(lineno)s:%(funcName)s] %(message)s'
         },
         'db': {
-            'format': 'Registry [%(name)s:' + INSTALL_NAME + ':%(duration)s:%(sql)s:%(params)s] %(message)s'
+            'format': 'Registry [%(name)s:registry:%(duration)s:%(sql)s:%(params)s] %(message)s'
         },
         'simple': {
-            'format': 'Registry ' + INSTALL_NAME + ' %(levelname)s %(message)s'
+            'format': 'Registry registry %(levelname)s %(message)s'
         },
     },
     'filters': {
@@ -257,7 +218,7 @@ LOGGING = {
         'db_logfile':{
             'level':'DEBUG',
             'class':'logging.handlers.TimedRotatingFileHandler',
-            'filename': os.path.join(LOG_DIRECTORY, 'madas_db.log'),
+            'filename': os.path.join(LOG_DIRECTORY, 'registry_db.log'),
             'when':'midnight',
             'formatter': 'db'
         },
@@ -288,11 +249,3 @@ LOGGING = {
 
 MEMCACHE_KEYSPACE = 'registryapp'
 
-# Override defaults with local settings if available
-try:
-    from appsettings.registry import *
-except ImportError, e:
-    pass
-
-#DATABASES['default'] = DATABASES[INSTALL_NAME]
-#ROOT_APP = INSTALL_NAME
