@@ -9,7 +9,7 @@ import json
 
 from admin_forms import *
 from models import *
-from patients.models import Patient
+from ccg.django.app.patients.models import Patient
 
 
 class GeneAdmin(admin.ModelAdmin):
