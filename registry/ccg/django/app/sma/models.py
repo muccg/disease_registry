@@ -3,7 +3,7 @@ import traceback, datetime
 from django.db import models
 from django.db.models.signals import post_save
 from django.core.exceptions import ObjectDoesNotExist
-from patients.models import Patient
+from ccg.django.app.patients.models import Patient
 
 import logging
 logger = logging.getLogger('sma')

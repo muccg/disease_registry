@@ -6,13 +6,6 @@ import os
 from ccg.utils import webhelpers
 from ccg.utils.webhelpers import url
 
-# SCRIPT_NAME isnt set when not under wsgi
-if not os.environ.has_key('SCRIPT_NAME'):
-    os.environ['SCRIPT_NAME']=''
-
-SCRIPT_NAME =   os.environ['SCRIPT_NAME']
-PROJECT_DIRECTORY = os.environ['PROJECT_DIRECTORY']
-
 #general site config
 DEBUG = True
 DEV_SERVER = True
@@ -61,6 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.admin',
     'django_extensions',
+    'django.contrib.staticfiles',
     'south'
 ]
 
@@ -81,21 +75,25 @@ ADMINS = [
 MANAGERS = ADMINS
 
 
+STATIC_ROOT=os.path.join('/usr/local/webapps/registrydmd', 'static')
+STATIC_URL='/static/'
+MEDIA_ROOT=os.path.join('/usr/local/webapps/registrydmd', 'media')
+MEDIA_URL = '/media/'
+
 # for local development, this is set to the static serving directory. For deployment use Apache Alias
-STATIC_SERVER_PATH = os.path.join(PROJECT_DIRECTORY,"static")
+STATIC_SERVER_PATH = os.path.join('/usr/local/webapps/registrydmd',"static")
 # a directory that will be writable by the webserver, for storing various files...
-WRITABLE_DIRECTORY = os.path.join(PROJECT_DIRECTORY,"scratch")
+WRITABLE_DIRECTORY = os.path.join('/usr/local/webapps/registrydmd',"scratch")
 TEMPLATE_DIRS = [
-    #os.path.join(PROJECT_DIRECTORY,"templates", "admin"),
-    os.path.join(PROJECT_DIRECTORY,"templates"),
+    #os.path.join('/usr/local/webapps/registrydmd',"templates", "admin"),
+    os.path.join('/usr/local/webapps/registrydmd',"templates"),
 ]
 # mako compiled templates directory
 MAKO_MODULE_DIR = os.path.join(WRITABLE_DIRECTORY, "templates")
 # mako module name
 MAKO_MODULENAME_CALLABLE = ''
 
-MEDIA_ROOT = os.path.join(PROJECT_DIRECTORY,"static")
-MEDIA_URL = '/static/'
+
 ADMIN_MEDIA_PREFIX = url('/static/admin-media/')
 
 TEMPLATE_DEBUG = DEBUG
@@ -121,13 +119,52 @@ SESSION_FILE_PATH = WRITABLE_DIRECTORY
 
 #APPLICATION SPECIFIC SETTINGS
 AUTH_PROFILE_MODULE = 'groups.User'
-ROOT_URLCONF = 'registry.urls'
+ROOT_URLCONF = 'ccg.django.app.dmd.urls'
 SITE_NAME = 'dm1'
 SECRET_KEY = 'qj#tl@9@7((%^)$i#iyw0gcfzf&#a*pobgb8yr#1%65+*6!@g$'
 EMAIL_APP_NAME = "Registry "
 
 INSTALL_NAME = 'registry'
 INSTALL_FULL_NAME = 'Australian National Duchenne Muscular Dystrophy, Spinal Muscular Atrophy and Myotonic Dystrophy'
+
+# INSTALL_NAME = 'registry' breaks templates/mako/admin/change_list.html in
+# <link rel="stylesheet" type="text/css" media="screen" href="${ra.url('/static/css/%s_admin.css' % ra.get_current_install_name())}" />
+# results in:
+# <link rel="stylesheet" type="text/css" media="screen" href="/static/css/registry_admin.css" />
+# registry_admin.css should be dm1_admin.css or dmd_admin.css
+#INSTALL_NAME = 'registry'
+####### change the app name here to run one or another
+# caution, the DB params should be changed as well
+#INSTALL_NAME= 'dm1'
+#INSTALL_NAME= 'dmd'
+#INSTALL_NAME= 'sma'
+
+#if INSTALL_NAME == 'dm1':
+#    INSTALL_FULL_NAME = 'Australian Myotonic Dystrophy'
+#    INSTALLED_APPS.extend( [
+#        'groups',
+#        'patients',
+#        'genetic',
+#        'dm1',
+#        'dm1_questionnaire'
+#    ])
+
+#if INSTALL_NAME == 'dmd':
+#    INSTALL_FULL_NAME = 'Australian National Duchenne Muscular Dystrophy'
+#    INSTALLED_APPS.extend( [
+#        'groups',
+#        'patients',
+#        'genetic',
+#        'dmd'
+#    ])
+#if INSTALL_NAME == 'sma':
+#    INSTALL_FULL_NAME = 'Spinal Muscular Atrophy'
+#    INSTALLED_APPS.extend( [
+#        'groups',
+#        'patients',
+#        'genetic',
+#        'sma'
+#    ])
 
 # A hash of application titles used as a global
 # This could (should?) be provided by the apps themselves
@@ -139,20 +176,19 @@ APP_TITLES = {
 "patients": "Registration", # to show the 'Patients' header as 'Registration' in the Admin UI
 }
 
-# replaced by the code above
-'''
 #The ordering of these apps is important - they have been done in such a way that
 #python manage.py migrate --all will work.
+
+
 INSTALLED_APPS.extend( [
-    'ccg.django.apps.groups',
-    'ccg.django.apps.patients',
-    'ccg.django.apps.genetic',
-    'ccg.django.apps.dmd',
-    'ccg.django.apps.sma',
-    'ccg.django.apps.dm1',
-    'ccg.django.apps.dm1_questionnaire'
+    'ccg.django.app.groups',
+    'ccg.django.app.patients',
+    'ccg.django.app.genetic',
+    'ccg.django.app.dmd',
+    'ccg.django.app.sma',
+    'ccg.django.app.dm1',
+    'ccg.django.app.dm1_questionnaire'
 ])
-'''
 
 DATABASES = {
     'default': {
@@ -168,7 +204,7 @@ DATABASES = {
 ## LOGGING
 ##
 
-LOG_DIRECTORY = os.path.join(PROJECT_DIRECTORY, "logs")
+LOG_DIRECTORY = os.path.join('/usr/local/webapps/registrydmd', "logs")
 try:
     if not os.path.exists(LOG_DIRECTORY):
         os.mkdir(LOG_DIRECTORY)
@@ -181,13 +217,13 @@ LOGGING = {
     'disable_existing_loggers': True,
     'formatters': {
         'verbose': {
-            'format': 'Registry [%(name)s:registry:%(levelname)s:%(asctime)s:%(filename)s:%(lineno)s:%(funcName)s] %(message)s'
+            'format': 'Registry [%(name)s:' + INSTALL_NAME + ':%(levelname)s:%(asctime)s:%(filename)s:%(lineno)s:%(funcName)s] %(message)s'
         },
         'db': {
-            'format': 'Registry [%(name)s:registry:%(duration)s:%(sql)s:%(params)s] %(message)s'
+            'format': 'Registry [%(name)s:' + INSTALL_NAME + ':%(duration)s:%(sql)s:%(params)s] %(message)s'
         },
         'simple': {
-            'format': 'Registry registry %(levelname)s %(message)s'
+            'format': 'Registry ' + INSTALL_NAME + ' %(levelname)s %(message)s'
         },
     },
     'filters': {
@@ -218,7 +254,7 @@ LOGGING = {
         'db_logfile':{
             'level':'DEBUG',
             'class':'logging.handlers.TimedRotatingFileHandler',
-            'filename': os.path.join(LOG_DIRECTORY, 'registry_db.log'),
+            'filename': os.path.join(LOG_DIRECTORY, 'madas_db.log'),
             'when':'midnight',
             'formatter': 'db'
         },
@@ -249,3 +285,7 @@ LOGGING = {
 
 MEMCACHE_KEYSPACE = 'registryapp'
 
+
+
+#DATABASES['default'] = DATABASES[INSTALL_NAME]
+#ROOT_APP = INSTALL_NAME

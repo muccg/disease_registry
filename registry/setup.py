@@ -12,6 +12,7 @@ setup(name='django-diseaseregistry',
     namespace_packages=['ccg', 'ccg.django', 'ccg.django.app'],
     packages=[
         'ccg',
+        'ccg.django',
         'ccg.django.app',
         'ccg.django.app.dm1',
         'ccg.django.app.dm1_questionnaire',
