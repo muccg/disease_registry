@@ -2,7 +2,7 @@
 from __future__ import division
 from django.db import models
 
-from patients.models import Patient
+from ccg.django.app.patients.models import Patient
 
 # Base abstract models for fields common to the registry proper and
 # questionnaire.

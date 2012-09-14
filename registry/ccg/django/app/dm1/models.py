@@ -4,10 +4,10 @@ import traceback, datetime
 from django.db import models
 from django.db.models.signals import post_save
 from django.core.exceptions import ObjectDoesNotExist
-from dm1 import base
-from genetic.models import MolecularData
+from ccg.django.app.dm1 import base
+from ccg.django.app.genetic.models import MolecularData
 #from patients.models import Patient as BasePatient
-from patients.models import Patient
+from ccg.django.app.patients.models import Patient
 
 import logging
 logger = logging.getLogger('dm1')

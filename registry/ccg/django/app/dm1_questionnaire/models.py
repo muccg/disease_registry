@@ -2,12 +2,12 @@
 # vim: set fileencoding=UTF-8:
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from dm1 import base
-from groups.models import WorkingGroup
-from patients.models import Country, State
+from ccg.django.app.dm1 import base
+from ccg.django.app.groups.models import WorkingGroup
+from ccg.django.app.patients.models import Country, State
 
-import dm1.models
-import patients.models
+import ccg.django.app.dm1.models
+import ccg.django.app.patients.models
 
 class ApproveMixin(object):
     """

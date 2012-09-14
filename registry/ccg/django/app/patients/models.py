@@ -2,7 +2,7 @@ import copy
 from django.db import models
 from django.db.models.signals import post_save, pre_delete
 
-import groups.models
+import ccg.django.app.groups.models
 
 import logging
 logger = logging.getLogger('patient')
@@ -55,7 +55,7 @@ class Patient(models.Model):
     else:
         SEX_CHOICES = ( ("M", "Male"), ("F", "Female"), ("X", "Other/Intersex") )
 
-    working_group = models.ForeignKey(groups.models.WorkingGroup, null=False, blank=False)
+    working_group = models.ForeignKey(ccg.django.app.groups.models.WorkingGroup, null=False, blank=False)
     consent = models.BooleanField(null=False, blank=False, help_text="Consent must be given for the patient to be entered on the registry", verbose_name="consent given")
     family_name = models.CharField(max_length=100, db_index=True)
     given_names = models.CharField(max_length=100, db_index=True)
