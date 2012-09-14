@@ -119,7 +119,7 @@ SESSION_FILE_PATH = WRITABLE_DIRECTORY
 
 #APPLICATION SPECIFIC SETTINGS
 AUTH_PROFILE_MODULE = 'groups.User'
-ROOT_URLCONF = 'ccg.django.app.dmd.urls'
+ROOT_URLCONF = 'devurls'
 SITE_NAME = 'dm1'
 SECRET_KEY = 'qj#tl@9@7((%^)$i#iyw0gcfzf&#a*pobgb8yr#1%65+*6!@g$'
 EMAIL_APP_NAME = "Registry "

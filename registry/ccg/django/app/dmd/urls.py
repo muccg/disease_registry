@@ -23,7 +23,7 @@ urlpatterns = patterns('',
 
 
 urlpatterns += patterns('',
-    (r"^dmd/", "django.views.generic.simple.direct_to_template",
+    (r"^$", "django.views.generic.simple.direct_to_template",
         {"template": "dmd/index.html",
          "extra_context":{"INSTALL_NAME": 'dmd', 'webhelpers': webhelpers}}),
 )
