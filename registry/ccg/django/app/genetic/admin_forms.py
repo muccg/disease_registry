@@ -3,7 +3,7 @@ from ccg.utils.webhelpers import url
 from models import *
 from registry.forms.widgets import ComboWidget, LiveComboWidget, StaticWidget
 
-from genetic.models import *
+from ccg.django.app.genetic.models import *
 
 class GeneChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
