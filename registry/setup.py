@@ -1,5 +1,5 @@
 import setuptools
-from glob import glob
+import os
 from setuptools import setup
 
 
@@ -13,6 +13,7 @@ setup(name='django-diseaseregistry',
     packages=[
         'ccg',
         'ccg.django',
+        'ccg.django.registryutils',
         'ccg.django.app',
         'ccg.django.app.dm1',
         'ccg.django.app.dm1_questionnaire',
@@ -23,11 +24,9 @@ setup(name='django-diseaseregistry',
         'ccg.django.app.groups',
     ],
     package_data={
-        '': [
-            'templates/*/*',
-            'static/*/*/*/*',
-            'migrations/*'
-        ] 
+        '': [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk('templates') for f in files] +
+            [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk('static') for f in files] +
+            [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk('migrations') for f in files]
     },
     zip_safe=True,
     install_requires=[
