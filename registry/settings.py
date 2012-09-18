@@ -6,6 +6,8 @@ import os
 from ccg.utils import webhelpers
 from ccg.utils.webhelpers import url
 
+WEBAPP_ROOT = os.path.dirname(os.path.abspath(__file__))
+
 #general site config
 DEBUG = True
 DEV_SERVER = True
@@ -75,18 +77,18 @@ ADMINS = [
 MANAGERS = ADMINS
 
 
-STATIC_ROOT=os.path.join('/usr/local/webapps/registrydmd', 'static')
+STATIC_ROOT=os.path.join(WEBAPP_ROOT, 'static')
 STATIC_URL='/static/'
-MEDIA_ROOT=os.path.join('/usr/local/webapps/registrydmd', 'media')
+MEDIA_ROOT=os.path.join(WEBAPP_ROOT, 'media')
 MEDIA_URL = '/media/'
 
 # for local development, this is set to the static serving directory. For deployment use Apache Alias
-STATIC_SERVER_PATH = os.path.join('/usr/local/webapps/registrydmd',"static")
+STATIC_SERVER_PATH = os.path.join(WEBAPP_ROOT,"static")
 # a directory that will be writable by the webserver, for storing various files...
-WRITABLE_DIRECTORY = os.path.join('/usr/local/webapps/registrydmd',"scratch")
+WRITABLE_DIRECTORY = os.path.join(WEBAPP_ROOT,"scratch")
 TEMPLATE_DIRS = [
     #os.path.join('/usr/local/webapps/registrydmd',"templates", "admin"),
-    os.path.join('/usr/local/webapps/registrydmd',"templates"),
+    os.path.join(WEBAPP_ROOT,"templates"),
 ]
 # mako compiled templates directory
 MAKO_MODULE_DIR = os.path.join(WRITABLE_DIRECTORY, "templates")
@@ -127,45 +129,6 @@ EMAIL_APP_NAME = "Registry "
 INSTALL_NAME = 'registry'
 INSTALL_FULL_NAME = 'Australian National Duchenne Muscular Dystrophy, Spinal Muscular Atrophy and Myotonic Dystrophy'
 
-# INSTALL_NAME = 'registry' breaks templates/mako/admin/change_list.html in
-# <link rel="stylesheet" type="text/css" media="screen" href="${ra.url('/static/css/%s_admin.css' % ra.get_current_install_name())}" />
-# results in:
-# <link rel="stylesheet" type="text/css" media="screen" href="/static/css/registry_admin.css" />
-# registry_admin.css should be dm1_admin.css or dmd_admin.css
-#INSTALL_NAME = 'registry'
-####### change the app name here to run one or another
-# caution, the DB params should be changed as well
-#INSTALL_NAME= 'dm1'
-#INSTALL_NAME= 'dmd'
-#INSTALL_NAME= 'sma'
-
-#if INSTALL_NAME == 'dm1':
-#    INSTALL_FULL_NAME = 'Australian Myotonic Dystrophy'
-#    INSTALLED_APPS.extend( [
-#        'groups',
-#        'patients',
-#        'genetic',
-#        'dm1',
-#        'dm1_questionnaire'
-#    ])
-
-#if INSTALL_NAME == 'dmd':
-#    INSTALL_FULL_NAME = 'Australian National Duchenne Muscular Dystrophy'
-#    INSTALLED_APPS.extend( [
-#        'groups',
-#        'patients',
-#        'genetic',
-#        'dmd'
-#    ])
-#if INSTALL_NAME == 'sma':
-#    INSTALL_FULL_NAME = 'Spinal Muscular Atrophy'
-#    INSTALLED_APPS.extend( [
-#        'groups',
-#        'patients',
-#        'genetic',
-#        'sma'
-#    ])
-
 # A hash of application titles used as a global
 # This could (should?) be provided by the apps themselves
 APP_TITLES = {
@@ -178,8 +141,6 @@ APP_TITLES = {
 
 #The ordering of these apps is important - they have been done in such a way that
 #python manage.py migrate --all will work.
-
-
 INSTALLED_APPS.extend( [
     'ccg.django.app.groups',
     'ccg.django.app.patients',
@@ -204,7 +165,7 @@ DATABASES = {
 ## LOGGING
 ##
 
-LOG_DIRECTORY = os.path.join('/usr/local/webapps/registrydmd', "logs")
+LOG_DIRECTORY = os.path.join(WEBAPP_ROOT, "logs")
 try:
     if not os.path.exists(LOG_DIRECTORY):
         os.mkdir(LOG_DIRECTORY)
@@ -254,7 +215,7 @@ LOGGING = {
         'db_logfile':{
             'level':'DEBUG',
             'class':'logging.handlers.TimedRotatingFileHandler',
-            'filename': os.path.join(LOG_DIRECTORY, 'madas_db.log'),
+            'filename': os.path.join(LOG_DIRECTORY, 'registry_db.log'),
             'when':'midnight',
             'formatter': 'db'
         },
@@ -284,8 +245,3 @@ LOGGING = {
 }
 
 MEMCACHE_KEYSPACE = 'registryapp'
-
-
-
-#DATABASES['default'] = DATABASES[INSTALL_NAME]
-#ROOT_APP = INSTALL_NAME
