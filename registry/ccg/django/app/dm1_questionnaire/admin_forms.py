@@ -2,9 +2,9 @@
 from django import forms
 from ccg.utils.webhelpers import url
 from models import *
-from registry.forms.widgets import ComboWidget, LiveComboWidget, LubricatedDateWidget, StaticWidget, PercentageWidget
+from ccg.django.registryforms.widgets import ComboWidget, LiveComboWidget, LubricatedDateWidget, StaticWidget, PercentageWidget
 
-from utils.stripspaces import stripspaces
+from ccg.django.registryutils.stripspaces import stripspaces
 
 # This is a straight copy of dm1.admin_forms at the moment. It would probably
 # be sensible to refactor this à la the models at some point.
@@ -79,8 +79,8 @@ class PatientForm(forms.ModelForm):
         if not fname or not gname or not workinggroup:
             raise forms.ValidationError('Missing either family name, given names or working group')
 
-        familyname = stripspaces(cleaneddata['family_name']).upper()
-        givennames = stripspaces(cleaneddata['given_names'])
+        familyname = registryutils(cleaneddata['family_name']).upper()
+        givennames = registryutils(cleaneddata['given_names'])
 
         # show the names the way we'll store them
         cleaneddata['family_name'] = familyname

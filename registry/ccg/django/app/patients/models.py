@@ -7,7 +7,7 @@ import ccg.django.app.groups.models
 import logging
 logger = logging.getLogger('patient')
 
-from utils.stripspaces import stripspaces
+from ccg.django.registryutils.stripspaces import stripspaces
 from django.conf import settings # for APP_NAME
 
 class Country(models.Model):
@@ -96,10 +96,10 @@ class Patient(models.Model):
     def save(self, *args, **kwargs):
         # store the field in uppercase in the DB
         if hasattr(self, 'family_name'):
-            self.family_name = stripspaces(self.family_name).upper()
+            self.family_name = registryutils(self.family_name).upper()
 
         if hasattr(self, 'given_names'):
-            self.given_names = stripspaces(self.given_names)
+            self.given_names = registryutils(self.given_names)
 
         if not self.pk:
             self.active = True

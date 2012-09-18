@@ -14,6 +14,7 @@ setup(name='django-diseaseregistry',
         'ccg',
         'ccg.django',
         'ccg.django.registryutils',
+        'ccg.django.registryforms',
         'ccg.django.app',
         'ccg.django.app.dm1',
         'ccg.django.app.dm1_questionnaire',
@@ -28,7 +29,7 @@ setup(name='django-diseaseregistry',
             [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk('static') for f in files] +
             [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk('migrations') for f in files]
     },
-    zip_safe=True,
+    zip_safe=False,
     install_requires=[
         'Mango-py==1.3.1-ccg1-3',
         'django-picklefield==0.1.9',
