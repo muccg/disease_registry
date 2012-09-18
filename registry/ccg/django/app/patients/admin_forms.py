@@ -1,9 +1,9 @@
 from django import forms
 from ccg.utils.webhelpers import url
 from models import *
-from registry.forms.widgets import ComboWidget, LubricatedDateWidget
+from ccg.django.registryforms.widgets import ComboWidget, LubricatedDateWidget
 
-from utils.stripspaces import stripspaces
+from ccg.django.registryutils.stripspaces import stripspaces
 
 class PatientDoctorForm(forms.ModelForm):
     OPTIONS = [
@@ -47,11 +47,11 @@ class PatientForm(forms.ModelForm):
 
         family_name = cleaneddata.get('family_name')
         if family_name:
-            familyname = stripspaces(family_name).upper()
+            familyname = registryutils(family_name).upper()
 
         givennames = cleaneddata.get('given_names')
         if givennames:
-            givennames = stripspaces(givennames)
+            givennames = registryutils(givennames)
 
         # working_group can be None, which is annoying for the db query below
         # so working_group should be required, but how do we make it required in the model?

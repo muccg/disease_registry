@@ -1,7 +1,7 @@
 from django import forms
 from ccg.utils.webhelpers import url
 from models import *
-from registry.forms.widgets import ComboWidget, LiveComboWidget, LubricatedDateWidget, StaticWidget, FVCPercentageWidget, PercentageWidget
+from ccg.django.registryforms.widgets import ComboWidget, LiveComboWidget, LubricatedDateWidget, StaticWidget, FVCPercentageWidget, PercentageWidget
 
 from django.forms import Select
 from django.forms.widgets import RadioSelect

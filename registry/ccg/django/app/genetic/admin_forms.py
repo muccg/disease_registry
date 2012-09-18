@@ -1,7 +1,7 @@
 from django import forms
 from ccg.utils.webhelpers import url
 from models import *
-from registry.forms.widgets import ComboWidget, LiveComboWidget, StaticWidget
+from ccg.django.registryforms.widgets import ComboWidget, LiveComboWidget, StaticWidget
 
 from ccg.django.app.genetic.models import *
 

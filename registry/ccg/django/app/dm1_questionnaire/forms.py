@@ -1,7 +1,7 @@
 from django import forms
 from django.forms.models import inlineformset_factory
 from django.forms.widgets import HiddenInput, DateInput, TextInput, Select, Textarea, RadioSelect
-from registry.forms.widgets import LubricatedDateWidget
+from ccg.django.registryforms.widgets import LubricatedDateWidget
 import models
 from dm1 import base
 from django.forms import Select
@@ -9,7 +9,7 @@ from django.forms import Select
 from models import Patient as Dm1Patient
 from patients.models import Patient as RegistryPatient
 
-from utils.stripspaces import stripspaces
+from ccg.django.registryutils.stripspaces import stripspaces
 from settings import DATE_INPUT_FORMATS
 
 class ConsentForm(forms.ModelForm):
@@ -398,11 +398,11 @@ class PatientForm(forms.ModelForm):
 
         familyname = cleaneddata.get('family_name')
         if familyname:
-            familyname = stripspaces(familyname).upper()
+            familyname = registryutils(familyname).upper()
 
         givennames = cleaneddata.get('given_names')
         if givennames:
-            givennames = stripspaces(givennames)
+            givennames = registryutils(givennames)
 
         workinggroup = cleaneddata.get('working_group')
 

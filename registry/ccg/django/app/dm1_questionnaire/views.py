@@ -8,7 +8,7 @@ from groups.models import WorkingGroup
 from patients.models import State
 from patients.models import Country
 
-from utils.stripspaces import stripspaces
+from ccg.django.registryutils.stripspaces import stripspaces
 
 @transaction.commit_on_success
 def clinical(request):
@@ -159,11 +159,11 @@ def personal(request):
 
         familyname = postdata.get('family_name')
         if familyname:
-            postdata['family_name'] = stripspaces(familyname).upper()
+            postdata['family_name'] = registryutils(familyname).upper()
 
         givennames = postdata.get('given_names')
         if givennames:
-            postdata['given_names'] = stripspaces(givennames)
+            postdata['given_names'] = registryutils(givennames)
 
         form = PatientForm(postdata)
         if form.is_valid():
