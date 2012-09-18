@@ -1,0 +1,29 @@
+<%inherit file="base.html" />
+
+<%def name="head()">
+##    ${form.media}
+</%def>
+
+<%def name="content()">
+    <h2>Myotonic Dystrophy Questionnaire</h2>
+
+% if family_name:
+    <div class='patient'>Questionnaire for <span class='familyname'>${family_name}</span>, <span class='givennames'>${given_names}</span></div>
+% endif
+
+    <div class='requirednote'>
+        <span>Note:</span> All fields in <span>BOLD</span> are required
+    </div>
+
+    <form method="POST">
+% for label, form, save in forms:
+
+        <div class='subform'>
+            <div class='label'>${label}</div>
+            <div class='content'>${self.output_form(form)}</div>
+        </div>
+% endfor
+        ## FJ MD Questionnaire item 7
+        <input type="submit" value="Submit">
+    </form>
+</%def>

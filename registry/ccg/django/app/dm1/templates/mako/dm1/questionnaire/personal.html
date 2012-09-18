@@ -1,0 +1,29 @@
+<%inherit file="base.html" />
+
+<%def name="head()">
+    ${form.media}
+</%def>
+
+<%def name="content()">
+    <h2>Myotonic Dystrophy Questionnaire</h2>
+
+    <div class='requirednote'>
+        <span>Note:</span> All fields in <span>BOLD</span> are required
+    </div>
+
+% if form.errors and form.errors.get('__all__'):
+    <p class="error">Please correct the error(s) below:</p>
+    ${ str(form.errors['__all__']) }
+%endif
+
+    <form method="POST">
+
+        <div class='subform'>
+            <div class='label'>${label}</div>
+            <div class='content'>${self.output_form(form)}</div>
+        </div>
+
+        <input type="submit" value="Continue">
+
+    </form>
+</%def>
