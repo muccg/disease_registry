@@ -30,7 +30,7 @@ urlpatterns += patterns('',
 
 # Add the questionnaire if DM1.
 urlpatterns += patterns("",
-    (r"^questionnaire/", include("dm1_questionnaire.urls")),
+    (r"^questionnaire/", include("ccg.django.app.dm1_questionnaire.urls")),
 )
 
 def handler404(request):

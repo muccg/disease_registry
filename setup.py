@@ -6,7 +6,7 @@ from setuptools import setup
 
 data_files = {}
 start_dir = os.getcwd()
-for package in ('dm1', 'dmd', 'sma', 'patients', 'genetic', 'groups'):
+for package in ('dm1', 'dm1_questionnaire', 'dmd', 'sma', 'patients', 'genetic', 'groups'):
     data_files['ccg.django.app.' + package] = []
     os.chdir(os.path.join('registry/ccg/django/app', package))
     for data_dir in ('templates', 'static', 'migrations'):

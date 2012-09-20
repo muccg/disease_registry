@@ -12,8 +12,8 @@ class DiagnosisForm(forms.ModelForm):
         if "instance" in kwargs:
             self.fields["patient"] = forms.ModelChoiceField(Patient.objects.all(), widget=StaticWidget(text=unicode(kwargs["instance"])))
         else:
-            import groups.models
-            user = groups.models.User.objects.get(user=self.user)
+            import ccg.django.app.groups.models
+            user = ccg.django.app.groups.models.User.objects.get(user=self.user)
             if self.user.is_superuser:
                 self.fields["patient"] = forms.ModelChoiceField(Patient.objects.all())
             else:
