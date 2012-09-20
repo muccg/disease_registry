@@ -90,7 +90,7 @@ class DiagnosisAdmin(admin.ModelAdmin):
         }
 
     def queryset(self, request):
-        import groups.models
+        import ccg.django.app.groups.models
 
         if request.user.is_superuser:
             return Diagnosis.objects.all()

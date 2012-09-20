@@ -3,11 +3,11 @@ from django.forms.models import inlineformset_factory
 from django.forms.widgets import HiddenInput, DateInput, TextInput, Select, Textarea, RadioSelect
 from ccg.django.registryforms.widgets import LubricatedDateWidget
 import models
-from dm1 import base
+from ccg.django.app.dm1 import base
 from django.forms import Select
 
 from models import Patient as Dm1Patient
-from patients.models import Patient as RegistryPatient
+from ccg.django.app.patients.models import Patient as RegistryPatient
 
 from ccg.django.registryutils.stripspaces import stripspaces
 from settings import DATE_INPUT_FORMATS

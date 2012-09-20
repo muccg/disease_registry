@@ -88,7 +88,7 @@ class PatientAdmin(admin.ModelAdmin):
             return []        
 
     def formfield_for_dbfield(self, dbfield, *args, **kwargs):
-        from groups.models import User, WorkingGroup
+        from ccg.django.app.groups.models import User, WorkingGroup
 
         request = kwargs.get('request')
         user = request.user
@@ -108,12 +108,12 @@ class PatientAdmin(admin.ModelAdmin):
         return local_urls + urls
 
     def queryset(self, request):
-        import groups.models
+        import ccg.django.app.groups.models
 
         if request.user.is_superuser:
             return Patient.objects.all()
 
-        user = groups.models.User.objects.get(user=request.user)
+        user = ccg.django.app.groups.models.User.objects.get(user=request.user)
         return Patient.objects.filter(working_group=user.working_group).filter(active=True)
 
     def search(self, request, term):

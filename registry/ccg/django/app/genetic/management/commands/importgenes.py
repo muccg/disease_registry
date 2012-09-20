@@ -16,8 +16,8 @@ class Command(BaseCommand):
 
     @transaction.commit_manually
     def handle(self, *args, **options):
-        from genetic.models import Gene
-        from humangenome import hgnc
+        from ccg.django.app.genetic.models import Gene
+        from ccg.django.app.humangenome import hgnc
 
         if len(args) == 0:
             args = [HGNC_GENENAMES_URL]

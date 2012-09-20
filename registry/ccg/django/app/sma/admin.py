@@ -62,12 +62,12 @@ class DiagnosisAdmin(admin.ModelAdmin):
         }
 
     def queryset(self, request):
-        import groups.models
+        import ccg.django.app.groups.models
 
         if request.user.is_superuser:
             return Diagnosis.objects.all()
 
-        user = groups.models.User.objects.get(user=request.user)
+        user = ccg.django.app.groups.models.User.objects.get(user=request.user)
 
         if self.has_change_permission(request):
             return Diagnosis.objects.filter(patient__working_group=user.working_group).filter(patient__active=True)
