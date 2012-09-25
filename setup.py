@@ -9,7 +9,7 @@ start_dir = os.getcwd()
 for package in ('dm1', 'dm1_questionnaire', 'dmd', 'sma', 'patients', 'genetic', 'groups'):
     data_files['ccg.django.app.' + package] = []
     os.chdir(os.path.join('registry/ccg/django/app', package))
-    for data_dir in ('templates', 'static', 'migrations'):
+    for data_dir in ('templates', 'static', 'migrations', 'fixtures'):
 	data_files['ccg.django.app.' + package].extend(
 	    [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files]) 
     os.chdir(start_dir)
