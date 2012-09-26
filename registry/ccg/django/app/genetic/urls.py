@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
 
 urlpatterns = patterns("",
-    (r"^variation/", "genetic.views.entry", {}),
+    (r"^variation/", "ccg.django.app.genetic.views.entry", {}),
 )

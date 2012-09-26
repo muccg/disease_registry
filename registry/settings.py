@@ -33,7 +33,6 @@ DATE_INPUT_FORMATS = ('%d/%m/%Y', '%d/%m/%y',
 ##
 TEMPLATE_LOADERS = [
     'ccg.template.loaders.makoloader.filesystem.Loader',
-    'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
 ]
 
@@ -50,6 +49,7 @@ MIDDLEWARE_CLASSES = [
 ]
 
 INSTALLED_APPS = [
+    'ccg.django.app.dm1',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -147,7 +147,7 @@ INSTALLED_APPS.extend( [
     'ccg.django.app.genetic',
     'ccg.django.app.dmd',
     'ccg.django.app.sma',
-    'ccg.django.app.dm1',
+
     'ccg.django.app.dm1_questionnaire'
 ])
 

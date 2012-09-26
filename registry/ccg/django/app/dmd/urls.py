@@ -17,7 +17,7 @@ def variation_entry(request):
     return render_to_response("variation-entry/index.html")
 
 urlpatterns = patterns('',
-    (r'^genetic/', include("genetic.urls"), {}),
+    (r'^genetic/', include("ccg.django.app.genetic.urls"), {}),
     (r'^admin/', include(admin.site.urls), {}), 
 )
 
@@ -47,8 +47,8 @@ urlpatterns += patterns('',
 )
 
 # 2011-09-28 for special query
-urlpatterns += patterns('', (r'^squery$', 'dmd.views.squery')) # string output for debug
-urlpatterns += patterns('', (r'^squerycsv$', 'dmd.views.squerycsv')) # CSV file output
+urlpatterns += patterns('', (r'^squery$', 'ccg.django.app.dmd.views.squery')) # string output for debug
+urlpatterns += patterns('', (r'^squerycsv$', 'ccg.django.app.dmd.views.squerycsv')) # CSV file output
 
 def handler404(request):
     return render_to_response("error/404.html")
