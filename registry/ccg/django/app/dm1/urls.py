@@ -17,7 +17,7 @@ def variation_entry(request):
     return render_to_response("variation-entry/index.html")
 
 urlpatterns = patterns('',
-    (r'^genetic/', include("genetic.urls"), {}),
+    (r'^genetic/', include("ccg.django.app.genetic.urls"), {}),
     (r'^admin/', include(admin.site.urls), {}), 
 )
 
