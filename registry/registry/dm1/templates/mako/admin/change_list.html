@@ -1,7 +1,7 @@
 ## overide of template just so we can add the extra stylesheet in the block_extrastyle
 <%inherit file="admin/base_site.html"/>
 <%namespace name="admin" module="django.contrib.admin.templatetags.adminmedia" />
-<%namespace name="ra" module="ccg.django.registrymako.admin"/>
+<%namespace name="ra" module="registry.mako.admin"/>
 
 ${self.block_stylesheet()}<%def name="block_stylesheet()">${ admin_media_prefix() }css/changelists.css</%def>
 

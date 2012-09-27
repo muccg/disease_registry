@@ -9,7 +9,7 @@ import json
 
 from admin_forms import *
 from models import *
-from ccg.django.app.patients.models import Patient
+from registry.patients.models import Patient
 
 
 class GeneAdmin(admin.ModelAdmin):
@@ -97,12 +97,12 @@ class MolecularDataAdmin(admin.ModelAdmin):
         return HttpResponse(status=204)
 
     def queryset(self, request):
-        import ccg.django.app.groups.models
+        import registry.groups.models
 
         if request.user.is_superuser:
             return MolecularData.objects.all()
 
-        user = ccg.django.app.groups.models.User.objects.get(user=request.user)
+        user = registry.groups.models.User.objects.get(user=request.user)
 
         if self.has_change_permission(request):
             return MolecularData.objects.filter(patient__working_group=user.working_group).filter(patient__active=True)
@@ -111,7 +111,7 @@ class MolecularDataAdmin(admin.ModelAdmin):
 
     def validate_exon(self, request):
         #print 'validating exon'
-        from ccg.django.app.humangenome.exon import ExonVariation
+        from registry.humangenome.exon import ExonVariation
 
         try:
             ExonVariation(request.raw_post_data)
@@ -121,7 +121,7 @@ class MolecularDataAdmin(admin.ModelAdmin):
 
     def validate_protein(self, request):
         #print 'validating protein'
-        from ccg.django.app.humangenome.protein import ProteinVariation
+        from registry.humangenome.protein import ProteinVariation
 
         try:
             ProteinVariation(request.raw_post_data)
@@ -131,7 +131,7 @@ class MolecularDataAdmin(admin.ModelAdmin):
 
     def validate_sequence(self, request):
         #print 'validating sequence'
-        from ccg.django.app.humangenome.sequence import SequenceVariation
+        from registry.humangenome.sequence import SequenceVariation
 
         try:
             SequenceVariation(request.raw_post_data)
@@ -155,7 +155,7 @@ class MolecularDataAdmin(admin.ModelAdmin):
     moleculardata_entered.short_description = "Genetic Data"
 
 if settings.INSTALL_NAME == "dm1":
-    from ccg.django.app.dm1.admin import DiagnosticCategoryInline
+    from registry.dm1.admin import DiagnosticCategoryInline
     MolecularDataAdmin.inlines = [DiagnosticCategoryInline] + MolecularDataAdmin.inlines
 
 

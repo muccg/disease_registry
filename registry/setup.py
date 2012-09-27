@@ -7,10 +7,10 @@ from setuptools import setup
 data_files = {}
 start_dir = os.getcwd()
 for package in ('dm1', 'dm1_questionnaire', 'dmd', 'sma', 'patients', 'genetic', 'groups'):
-    data_files['ccg.django.app.' + package] = []
-    os.chdir(os.path.join('registry/ccg/django/app', package))
+    data_files['registry.' + package] = []
+    os.chdir(os.path.join('registry', package))
     for data_dir in ('templates', 'static', 'migrations', 'fixtures'):
-	data_files['ccg.django.app.' + package].extend(
+	data_files['registry.' + package].extend(
 	    [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files]) 
     os.chdir(start_dir)
 
@@ -20,24 +20,19 @@ setup(name='django-diseaseregistry',
     long_description='Collection Django applications implementing various disease registries',
     author='Centre for Comparative Genomics',
     author_email='web@ccg.murdoch.edu.au',
-    namespace_packages=['ccg', 'ccg.django', 'ccg.django.app'],
     packages=[
-        'ccg',
-	'ccg.django',
-	'ccg.django.registryutils',
-	'ccg.django.registryforms',
-	'ccg.django.app',
-	'ccg.django.app.dm1',
-	'ccg.django.app.dm1_questionnaire',
-	'ccg.django.app.dmd',
-	'ccg.django.app.sma',
-	'ccg.django.app.patients',
-	'ccg.django.app.genetic',
-	'ccg.django.app.groups',
+        'registry',
+        'registry.dm1',
+        'registry.dm1_questionnaire',
+        'registry.dmd',
+        'registry.sma',
+        'registry.patients',
+        'registry.genetic',
+        'registry.groups',
+        'registry.utils',
+        'registry.forms',
+        'registry.mako',
     ],
-    package_dir={
-	'': 'registry'
-    },
     package_data=data_files,
     zip_safe=False,
     install_requires=[

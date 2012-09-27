@@ -4,11 +4,11 @@ from django.shortcuts import render_to_response
 from forms import *
 import re
 
-from ccg.django.app.groups.models import WorkingGroup
-from ccg.django.app.patients.models import State
-from ccg.django.app.patients.models import Country
+from registry.groups.models import WorkingGroup
+from registry.patients.models import State
+from registry.patients.models import Country
 
-from ccg.django.registryutils.stripspaces import stripspaces
+from registry.utils.stripspaces import stripspaces
 
 @transaction.commit_on_success
 def clinical(request):

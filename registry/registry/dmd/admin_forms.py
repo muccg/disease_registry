@@ -1,7 +1,7 @@
 from django import forms
 from ccg.utils.webhelpers import url
 from models import *
-from ccg.django.registryforms.widgets import ComboWidget, LiveComboWidget, LubricatedDateWidget, StaticWidget, PercentageWidget
+from registry.forms.widgets import ComboWidget, LiveComboWidget, LubricatedDateWidget, StaticWidget, PercentageWidget
 
 class DiagnosisForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -12,8 +12,8 @@ class DiagnosisForm(forms.ModelForm):
         if "instance" in kwargs:
             self.fields["patient"] = forms.ModelChoiceField(Patient.objects.all(), widget=StaticWidget(text=unicode(kwargs["instance"])))
         else:
-            import ccg.django.app.groups.models
-            user = ccg.django.app.groups.models.User.objects.get(user=self.user)
+            import registry.groups.models
+            user = registry.groups.models.User.objects.get(user=self.user)
             if self.user.is_superuser:
                 self.fields["patient"] = forms.ModelChoiceField(Patient.objects.all())
             else:
