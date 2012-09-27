@@ -2,9 +2,9 @@
 from django import forms
 from ccg.utils.webhelpers import url
 from models import *
-from ccg.django.registryforms.widgets import ComboWidget, LiveComboWidget, LubricatedDateWidget, StaticWidget, PercentageWidget
+from registry.forms.widgets import ComboWidget, LiveComboWidget, LubricatedDateWidget, StaticWidget, PercentageWidget
 
-from ccg.django.registryutils.stripspaces import stripspaces
+from registry.utils.stripspaces import stripspaces
 
 # This is a straight copy of dm1.admin_forms at the moment. It would probably
 # be sensible to refactor this à la the models at some point.

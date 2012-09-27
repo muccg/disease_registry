@@ -1,9 +1,9 @@
 from django import forms
 from ccg.utils.webhelpers import url
 from models import *
-from ccg.django.registryforms.widgets import ComboWidget, LiveComboWidget, StaticWidget
+from registry.forms.widgets import ComboWidget, LiveComboWidget, StaticWidget
 
-from ccg.django.app.genetic.models import *
+from registry.genetic.models import *
 
 class GeneChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):

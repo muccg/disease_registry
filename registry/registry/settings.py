@@ -49,7 +49,7 @@ MIDDLEWARE_CLASSES = [
 ]
 
 INSTALLED_APPS = [
-    'ccg.django.app.dm1',
+    'registry.dm1',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -142,13 +142,13 @@ APP_TITLES = {
 #The ordering of these apps is important - they have been done in such a way that
 #python manage.py migrate --all will work.
 INSTALLED_APPS.extend( [
-    'ccg.django.app.groups',
-    'ccg.django.app.patients',
-    'ccg.django.app.genetic',
-    'ccg.django.app.dmd',
-    'ccg.django.app.sma',
+    'registry.groups',
+    'registry.patients',
+    'registry.genetic',
+    'registry.dmd',
+    'registry.sma',
 
-    'ccg.django.app.dm1_questionnaire'
+    'registry.dm1_questionnaire'
 ])
 
 DATABASES = {

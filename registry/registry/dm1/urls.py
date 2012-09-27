@@ -17,7 +17,7 @@ def variation_entry(request):
     return render_to_response("variation-entry/index.html")
 
 urlpatterns = patterns('',
-    (r'^genetic/', include("ccg.django.app.genetic.urls"), {}),
+    (r'^genetic/', include("registry.genetic.urls"), {}),
     (r'^admin/', include(admin.site.urls), {}), 
 )
 
@@ -30,7 +30,7 @@ urlpatterns += patterns('',
 
 # Add the questionnaire if DM1.
 urlpatterns += patterns("",
-    (r"^questionnaire/", include("ccg.django.app.dm1_questionnaire.urls")),
+    (r"^questionnaire/", include("registry.dm1_questionnaire.urls")),
 )
 
 def handler404(request):
