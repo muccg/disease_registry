@@ -1,8 +1,12 @@
 .*\.pyc$
-^registry/virt_registry/*
+virt_registry/*
 ^registry/tmp/*
 ^registry/fab-tmp/*
 ^registry/scratch/*
 ^registry/log/*
 ^registry/virtualenv*
 ^.*appsettings*
+bootstrap/
+build/
+dist/
+

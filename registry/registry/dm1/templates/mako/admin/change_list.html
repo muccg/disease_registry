@@ -1,0 +1,133 @@
+## overide of template just so we can add the extra stylesheet in the block_extrastyle
+<%inherit file="admin/base_site.html"/>
+<%namespace name="admin" module="django.contrib.admin.templatetags.adminmedia" />
+<%namespace name="ra" module="registry.mako.admin"/>
+
+${self.block_stylesheet()}<%def name="block_stylesheet()">${ admin_media_prefix() }css/changelists.css</%def>
+
+<%def name="block_extrastyle()">
+% if cl.formset:
+    <link rel="stylesheet" type="text/css" href="${ admin_media_prefix() }css/forms.css" />
+% endif
+% if cl.formset or action_form:
+    <script type="text/javascript" src="../../jsi18n/"></script>
+% endif
+${ "".join([S for S in media.render_css()]) }
+% if not actions_on_top and not actions_on_bottom:
+    <style>
+      #changelist table thead th:first-child {width: inherit}
+    </style>
+% endif
+
+<link rel="stylesheet" type="text/css" media="screen" href="${ra.url('/static/css/%s_admin.css' % ra.get_current_install_name())}" />
+</%def>
+${self.block_extrastyle()}
+
+<%def name="block_extrahead()">
+${ "".join([S for S in media.render_js()]) }
+% if action_form:
+    % if actions_on_top or actions_on_bottom:
+<script type="text/javascript">
+(function($) {
+    $(document).ready(function($) {
+        $("tr input.action-select").actions();
+    });
+})(django.jQuery);
+</script>
+    % endif
+% endif
+</%def>
+
+${self.block_bodyclass()}<%def name="block_bodyclass()">change-list</%def>
+
+
+% if not is_popup:
+${self.block_breadcrumbs()}<%def name="block_breadcrumbs()"><div class="breadcrumbs"><a href="../../">${trans("Home")}</a> &rsaquo; <a href="../">${ escape(capfirst(app_label)) }</a> &rsaquo; ${ capfirst(cl.opts.verbose_name_plural)|escape }</div></%def>
+% endif
+
+
+${self.block_coltype()}<%def name="block_coltype()">flex</%def>
+
+${self.block_content()}<%def name="block_content()">
+<div id="content-main">
+<%def name="block_object_tools()">
+
+% if has_add_permission:
+<ul class="object-tools"><li><a href="add/${'?_popup=1' if is_popup else ''}" class="addlink"><%def name="blocktrans()">Add ${cl.opts.verbose_name|escape}</%def>${blocktrans()}</a></li></ul>
+% endif
+
+</%def>${block_object_tools()}
+<div class="module ${'filtered' if cl.has_filters else ''}" id="changelist">
+<%def name="block_search()"><% show_result_count = (cl.result_count != cl.full_result_count) %><%include file="admin/search_form.html"/></%def>${block_search()}
+<%def name="block_date_hierarchy()">${ date_hierarchy(cl) }</%def>
+
+<%def name="block_filters()">
+
+% if cl.has_filters:
+
+<div id="changelist-filter">
+<h2>${trans('Filter')}</h2>
+
+<%namespace file="filter.html" name="filter"/>
+<%
+    def admin_list_filter(cl, spec):
+        if spec.HAS_OWN_OUTPUT:
+                filter.filter(title=spec.title(), output=spec.output(cl), multi=spec.multiselect, multitag=spec.multitag, displaymulti=spec.displaymulti)
+        else:
+                filter.filter(title=spec.title(), choices=list(spec.choices(cl)), multi=spec.multiselect, multitag=spec.multitag, displaymulti=spec.displaymulti)
+                
+        return ""
+%>
+% for spec in cl.filter_specs:
+
+   ${ admin_list_filter(cl,spec) }
+
+% endfor
+
+</div>
+
+% endif
+
+</%def>${block_filters()}
+
+<form action="" method="post"
+% if cl.formset and cl.formset.is_multipart:
+enctype="multipart/form-data"
+% endif
+>${ csrf_tag(csrf_token) }
+      % if cl.formset:
+        ${ cl.formset.management_form }
+      % endif
+
+<%def name="block_result_list()">
+<%
+    from django.contrib.admin.templatetags.admin_list import result_list
+%>
+% if action_form and actions_on_top and cl.full_result_count:
+    <%namespace file="actions.html" name="admin_actions"/>
+    ${ admin_actions.admin_actions(action_form) }
+% endif
+<%namespace file="change_list_results.html" name="clr"/>
+<% results = result_list(cl) %>
+${ clr.change_list_results(results['cl'], results['result_headers'], results['results'] ) }
+% if action_form and actions_on_bottom and cl.full_result_count:
+    <%namespace file="actions.html" name="admin_actions"/>
+    ${ admin_actions.admin_actions(action_form) }
+% endif
+</%def>${ block_result_list() }
+
+
+
+<%def name="block_pagination()">
+<%
+    from django.contrib.admin.templatetags.admin_list import pagination
+%>
+<%namespace file="pagination.html" name="pag"/>
+<% result = pagination(cl) %>
+${ pag.pagination( result['cl'], result['pagination_required'], result['show_all_url'], result['page_range'], result['ALL_VAR']) }
+
+</%def>${ block_pagination() }
+
+</div>
+</div>
+</%def>
