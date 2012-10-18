@@ -27,7 +27,7 @@ ${self.block_extrahead()}<%def name="block_extrahead()"></%def>
 ${self.block_blockbots()}<%def name="block_blockbots()"><meta name="bang" content="pop"/><meta name="robots" content="NONE,NOARCHIVE" /></%def>
 
 <% 
-    from settings import CSRF_COOKIE_NAME
+    from registry.settings import CSRF_COOKIE_NAME
 %>    
 <script type="text/javascript">
     CSRF_COOKIE_NAME = "${ CSRF_COOKIE_NAME }";

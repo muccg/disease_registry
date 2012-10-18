@@ -18,7 +18,7 @@ def variation_entry(request):
 
 urlpatterns = patterns('',
     (r'^genetic/', include("registry.genetic.urls"), {}),
-    (r'^admin/', include(admin.site.urls), {}), 
+    (r'^admin/', include(admin.site.urls), {}),
 )
 
 

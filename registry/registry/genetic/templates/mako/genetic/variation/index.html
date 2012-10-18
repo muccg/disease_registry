@@ -1,5 +1,5 @@
 <%namespace name="admin" module="django.contrib.admin.templatetags.adminmedia" />
-<%namespace name="base" file="/base.html" />
+<%namespace name="base" file="../base.html" />
 <!DOCTYPE HTML>
 <html>
     <head>
@@ -11,7 +11,7 @@
         </style>
     
         <% 
-            from settings import CSRF_COOKIE_NAME
+            from registry.settings import CSRF_COOKIE_NAME
         %>    
         <script type="text/javascript">
             CSRF_COOKIE_NAME = "${ CSRF_COOKIE_NAME }";
