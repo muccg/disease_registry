@@ -6,7 +6,7 @@ import os
 from ccg.utils import webhelpers
 from ccg.utils.webhelpers import url
 
-WEBAPP_ROOT = os.path.dirname(os.path.abspath(__file__))
+WEBAPP_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 #general site config
 DEBUG = True
@@ -33,7 +33,8 @@ DATE_INPUT_FORMATS = ('%d/%m/%Y', '%d/%m/%y',
 ##
 TEMPLATE_LOADERS = [
     'ccg.template.loaders.makoloader.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
+#    'django.template.loaders.eggs.Loader',
+#    'django.template.loaders.app_directories.Loader',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -57,7 +58,8 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django_extensions',
     'django.contrib.staticfiles',
-    'south'
+    'south',
+    'userlog'
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -78,7 +80,7 @@ MANAGERS = ADMINS
 
 
 STATIC_ROOT=os.path.join(WEBAPP_ROOT, 'static')
-STATIC_URL='/static/'
+STATIC_URL=url('/static/')
 MEDIA_ROOT=os.path.join(WEBAPP_ROOT, 'media')
 MEDIA_URL = '/media/'
 

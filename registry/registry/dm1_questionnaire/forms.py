@@ -10,7 +10,7 @@ from models import Patient as Dm1Patient
 from registry.patients.models import Patient as RegistryPatient
 
 from registry.utils.stripspaces import stripspaces
-from settings import DATE_INPUT_FORMATS
+from registry.settings import DATE_INPUT_FORMATS
 
 class ConsentForm(forms.ModelForm):
     CHOICES = (('N', 'NO'), ('Y', 'YES'))
