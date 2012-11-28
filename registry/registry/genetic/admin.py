@@ -155,7 +155,8 @@ class MolecularDataAdmin(admin.ModelAdmin):
     moleculardata_entered.short_description = "Genetic Data"
 
 if settings.INSTALL_NAME == "dm1":
-    from registry.dm1.admin import DiagnosticCategoryInline
+    #from registry.dm1.admin import DiagnosticCategoryInline
+    from dm1.dm1app.admin import DiagnosticCategoryInline
     MolecularDataAdmin.inlines = [DiagnosticCategoryInline] + MolecularDataAdmin.inlines
 
 
