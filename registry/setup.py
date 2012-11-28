@@ -6,7 +6,7 @@ from setuptools import setup
 
 data_files = {}
 start_dir = os.getcwd()
-for package in ('dm1', 'dm1_questionnaire', 'dmd', 'sma', 'patients', 'genetic', 'groups'):
+for package in ('patients', 'genetic', 'groups'):
     data_files['registry.' + package] = []
     os.chdir(os.path.join('registry', package))
     for data_dir in ('templates', 'static', 'migrations', 'fixtures'):
@@ -22,10 +22,6 @@ setup(name='django-diseaseregistry',
     author_email='web@ccg.murdoch.edu.au',
     packages=[
         'registry',
-        'registry.dm1',
-        'registry.dm1_questionnaire',
-        'registry.dmd',
-        'registry.sma',
         'registry.patients',
         'registry.genetic',
         'registry.groups',
