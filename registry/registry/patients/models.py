@@ -96,10 +96,10 @@ class Patient(models.Model):
     def save(self, *args, **kwargs):
         # store the field in uppercase in the DB
         if hasattr(self, 'family_name'):
-            self.family_name = registryutils(self.family_name).upper()
+            self.family_name = stripspaces(self.family_name).upper()
 
         if hasattr(self, 'given_names'):
-            self.given_names = registryutils(self.given_names)
+            self.given_names = stripspaces(self.given_names)
 
         if not self.pk:
             self.active = True

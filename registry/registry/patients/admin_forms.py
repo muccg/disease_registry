@@ -47,11 +47,11 @@ class PatientForm(forms.ModelForm):
 
         family_name = cleaneddata.get('family_name')
         if family_name:
-            familyname = registryutils(family_name).upper()
+            familyname = stripspaces(family_name).upper()
 
         givennames = cleaneddata.get('given_names')
         if givennames:
-            givennames = registryutils(givennames)
+            givennames = stripspaces(givennames)
 
         # working_group can be None, which is annoying for the db query below
         # so working_group should be required, but how do we make it required in the model?
