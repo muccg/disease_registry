@@ -11,6 +11,7 @@ from admin_forms import *
 from models import *
 from registry.patients.models import Patient
 
+print 'imported genetic admin'
 
 class GeneAdmin(admin.ModelAdmin):
     list_display = ["symbol", "name", "status", "chromosome"]
