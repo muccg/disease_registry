@@ -1,4 +1,4 @@
-<%namespace name="base" file="/base.html" />
+<%namespace name="base" file="/genetic/base.html" />
 var Entry = {
     asString: function () {
         var s = document.getElementById("sequence-type").value + ".";
