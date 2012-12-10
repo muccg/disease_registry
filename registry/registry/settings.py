@@ -50,7 +50,6 @@ MIDDLEWARE_CLASSES = [
 ]
 
 INSTALLED_APPS = [
-    'registry.dm1',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -147,10 +146,7 @@ INSTALLED_APPS.extend( [
     'registry.groups',
     'registry.patients',
     'registry.genetic',
-    'registry.dmd',
-    'registry.sma',
-
-    'registry.dm1_questionnaire'
+    'registry.humangenome',
 ])
 
 DATABASES = {
