@@ -45,11 +45,11 @@ class Variation(models.Model):
     protein_variation = models.TextField(verbose_name="protein variation", help_text="Variation in standard HGVS sequence variation nomenclature", blank=True)
     protein_variation_validation_override = models.BooleanField(default=False)
     technique = models.TextField()
-    deletion_all_exons_tested = models.NullBooleanField(default=True, verbose_name="All Exons<br/>Tested<br/>(Deletions)")
-    duplication_all_exons_tested = models.NullBooleanField(default=True, verbose_name="All Exons<br/>Tested<br/>(Duplications)")
-    exon_boundaries_known = models.NullBooleanField(default=True, verbose_name="Exon<br/>Boundaries<br/>Known")
-    point_mutation_all_exons_sequenced = models.NullBooleanField(default=True, verbose_name="All Exons<br/>Sequenced<br/>(Point Mutations)")
-    all_exons_in_male_relative = models.NullBooleanField(verbose_name="All Exons<br/>Tested In<br/>Male Relative")
+    deletion_all_exons_tested = models.NullBooleanField(default=True, verbose_name="All Exons Tested (Deletions)")
+    duplication_all_exons_tested = models.NullBooleanField(default=True, verbose_name="All Exons Tested (Duplications)")
+    exon_boundaries_known = models.NullBooleanField(default=True, verbose_name="Exon Boundaries Known")
+    point_mutation_all_exons_sequenced = models.NullBooleanField(default=True, verbose_name="All Exons Sequenced (Point Mutations)")
+    all_exons_in_male_relative = models.NullBooleanField(verbose_name="All Exons Tested In Male Relative")
 
     VALIDATION_FIELDS = {
         "exon": "exon_validation_override",
