@@ -1,6 +1,7 @@
 from django.db import models, transaction
 
 import django.contrib.auth
+from django.contrib.auth.models import User as DjangoUser
 
 
 class WorkingGroup(models.Model):
@@ -14,7 +15,7 @@ class WorkingGroup(models.Model):
 
 
 class User(models.Model):
-    user = models.OneToOneField(django.contrib.auth.models.User, primary_key=True)
+    user = models.OneToOneField(DjangoUser, primary_key=True)
     title = models.CharField(max_length=50, verbose_name="position")
     working_group = models.ForeignKey(WorkingGroup, null=True)
 
