@@ -6,11 +6,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render_to_response
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext, ugettext_lazy as _
-from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
-from django.contrib.auth.models import User as AuthUser
-
 from admin_forms import *
-from models import User as RegistryUser
+from models import *
+
 
 def list_username(user):
     return user.user.username
@@ -25,205 +23,182 @@ def list_last_name(user):
 list_last_name.short_description = "Last name"
 
 
-# class UserAdmin(admin.ModelAdmin):
-#     list_display = [list_username, list_first_name, list_last_name, "title", "working_group"]
-#     list_filter = ["title"]
-#     search_fields = ["user__username", "user__first_name", "user__last_name"]
+class UserAdmin(admin.ModelAdmin):
+    list_display = [list_username, list_first_name, list_last_name, "title", "working_group"]
+    list_filter = ["title"]
+    search_fields = ["user__username", "user__first_name", "user__last_name"]
 
-#     @transaction.commit_on_success
-#     def add_view(self, request, form_url="", extra_context=None):
-#         if not (self.has_change_permission(request) and self.has_add_permission(request)):
-#             raise PermissionDenied
+    @transaction.commit_on_success
+    def add_view(self, request, form_url="", extra_context=None):
+        if not (self.has_change_permission(request) and self.has_add_permission(request)):
+            raise PermissionDenied
 
-#         if request.method == "POST":
-#             form = UserNewForm(request.user, request.POST)
-#             if form.is_valid():
-#                 import django.contrib.auth.models
+        if request.method == "POST":
+            form = UserNewForm(request.user, request.POST)
+            if form.is_valid():
+                import django.contrib.auth.models
 
-#                 # Create the Django user.
-#                 django_user = django.contrib.auth.models.User.objects.create_user(form.cleaned_data["username"], form.cleaned_data["email_address"], form.cleaned_data["password"])
-#                 django_user.first_name = form.cleaned_data["first_name"]
-#                 django_user.last_name = form.cleaned_data["last_name"]
-#                 django_user.is_staff = True
-#                 django_user.is_active = True
-#                 django_user.save()
+                # Create the Django user.
+                django_user = django.contrib.auth.models.User.objects.create_user(form.cleaned_data["username"], form.cleaned_data["email_address"], form.cleaned_data["password"])
+                django_user.first_name = form.cleaned_data["first_name"]
+                django_user.last_name = form.cleaned_data["last_name"]
+                django_user.is_staff = True
+                django_user.is_active = True
+                django_user.save()
 
-#                 # Set up the correct group.
-#                 for group in form.cleaned_data["groups"]:
-#                     django_user.groups.add(group)
+                # Set up the correct group.
+                for group in form.cleaned_data["groups"]:
+                    django_user.groups.add(group)
 
-#                 # Now create the internal user record.
-#                 user = User(user=django_user)
-#                 user.title = form.cleaned_data["title"]
-#                 user.working_group = form.cleaned_data["working_group"]
-#                 user.save()
+                # Now create the internal user record.
+                user = User(user=django_user)
+                user.title = form.cleaned_data["title"]
+                user.working_group = form.cleaned_data["working_group"]
+                user.save()
 
-#                 return HttpResponseRedirect("../")
-#         else:
-#             form = UserNewForm(request.user)
+                return HttpResponseRedirect("../")
+        else:
+            form = UserNewForm(request.user)
 
-#         media = self.media + form.media
+        media = self.media + form.media
 
-#         return render_to_response("admin/groups/change_user.html", {
-#             "title": _("Add user"),
-#             "form": form,
-#             "is_popup": "_popup" in request.REQUEST,
-#             "add": True,
-#             "change": False,
-#             "has_add_permission": True,
-#             "has_delete_permission": False,
-#             "has_change_permission": True,
-#             "has_file_field": False,
-#             "has_absolute_url": False,
-#             "auto_populated_fields": (),
-#             "opts": self.model._meta,
-#             "save_as": False,
-#             "root_path": self.admin_site.root_path,
-#             "app_label": self.model._meta.app_label,
-#             "media": mark_safe(media),
-#             "errors": form.errors,
-#         }, context_instance=template.RequestContext(request))
+        return render_to_response("admin/groups/change_user.html", {
+            "title": _("Add user"),
+            "form": form,
+            "is_popup": "_popup" in request.REQUEST,
+            "add": True,
+            "change": False,
+            "has_add_permission": True,
+            "has_delete_permission": False,
+            "has_change_permission": True,
+            "has_file_field": False,
+            "has_absolute_url": False,
+            "auto_populated_fields": (),
+            "opts": self.model._meta,
+            "save_as": False,
+            "root_path": self.admin_site.root_path,
+            "app_label": self.model._meta.app_label,
+            "media": mark_safe(media),
+            "errors": form.errors,
+        }, context_instance=template.RequestContext(request))
 
-#     def change_password(self, request, id):
-#         if not self.has_change_permission(request):
-#             raise PermissionDenied
+    def change_password(self, request, id):
+        if not self.has_change_permission(request):
+            raise PermissionDenied
 
-#         user = get_object_or_404(self.model, pk=id)
+        user = get_object_or_404(self.model, pk=id)
 
-#         if request.method == "POST":
-#             form = ChangePasswordForm(request.POST)
-#             if form.is_valid():
-#                 user.user.set_password(form.cleaned_data["password"])
-#                 user.user.save()
+        if request.method == "POST":
+            form = ChangePasswordForm(request.POST)
+            if form.is_valid():
+                user.user.set_password(form.cleaned_data["password"])
+                user.user.save()
 
-#                 return HttpResponseRedirect("../../")
-#         else:
-#             form = ChangePasswordForm()
+                return HttpResponseRedirect("../../")
+        else:
+            form = ChangePasswordForm()
 
-#         media = self.media + form.media
+        media = self.media + form.media
 
-#         return render_to_response("admin/groups/change_user.html", {
-#             "title": _("Change password: %s") % user,
-#             "form": form,
-#             "has_add_permission": False,
-#             "has_change_permission": True,
-#             "has_delete_permission": False,
-#             "has_file_field": False,
-#             "has_absolute_url": False,
-#             "auto_populated_fields": (),
-#             "opts": self.model._meta,
-#             "save_as": False,
-#             "root_path": self.admin_site.root_path,
-#             "app_label": self.model._meta.app_label,
-#             "media": mark_safe(media),
-#             "errors": form.errors,
-#         }, context_instance=template.RequestContext(request))
+        return render_to_response("admin/groups/change_user.html", {
+            "title": _("Change password: %s") % user,
+            "form": form,
+            "has_add_permission": False,
+            "has_change_permission": True,
+            "has_delete_permission": False,
+            "has_file_field": False,
+            "has_absolute_url": False,
+            "auto_populated_fields": (),
+            "opts": self.model._meta,
+            "save_as": False,
+            "root_path": self.admin_site.root_path,
+            "app_label": self.model._meta.app_label,
+            "media": mark_safe(media),
+            "errors": form.errors,
+        }, context_instance=template.RequestContext(request))
 
 
-#     @transaction.commit_on_success
-#     def change_view(self, request, object_id, extra_context=None):
-#         if not self.has_change_permission(request):
-#             raise PermissionDenied
+    @transaction.commit_on_success
+    def change_view(self, request, object_id, extra_context=None):
+        if not self.has_change_permission(request):
+            raise PermissionDenied
             
-#         user = get_object_or_404(self.model, pk=object_id)
+        user = get_object_or_404(self.model, pk=object_id)
 
-#         if request.method == "POST":
-#             form = UserChangeForm(request.user, request.POST)
-#             if form.is_valid():
-#                 # Update the Django user.
-#                 user.user.first_name = form.cleaned_data["first_name"]
-#                 user.user.last_name = form.cleaned_data["last_name"]
-#                 user.user.email = form.cleaned_data["email_address"] # Fix Trac #8, email wasn't saved when changed
-#                 user.user.save()
+        if request.method == "POST":
+            form = UserChangeForm(request.user, request.POST)
+            if form.is_valid():
+                # Update the Django user.
+                user.user.first_name = form.cleaned_data["first_name"]
+                user.user.last_name = form.cleaned_data["last_name"]
+                user.user.email = form.cleaned_data["email_address"] # Fix Trac #8, email wasn't saved when changed
+                user.user.save()
 
-#                 # Set up the correct group.
-#                 user.user.groups.clear()
-#                 for group in form.cleaned_data["groups"]:
-#                     user.user.groups.add(group)
+                # Set up the correct group.
+                user.user.groups.clear()
+                for group in form.cleaned_data["groups"]:
+                    user.user.groups.add(group)
 
-#                 # Now update the internal user record.
-#                 user.title = form.cleaned_data["title"]
-#                 user.working_group = form.cleaned_data["working_group"]
-#                 user.save()
+                # Now update the internal user record.
+                user.title = form.cleaned_data["title"]
+                user.working_group = form.cleaned_data["working_group"]
+                user.save()
 
-#                 return HttpResponseRedirect("../")
-#         else:
-#             form = UserChangeForm(request.user, {
-#                 "first_name": user.user.first_name,
-#                 "last_name": user.user.last_name,
-#                 "email_address": user.user.email,
-#                 "groups": [group.id for group in user.user.groups.all()],
-#                 "title": user.title,
-#                 "working_group": user.working_group.id if user.working_group else None,
-#             })
+                return HttpResponseRedirect("../")
+        else:
+            form = UserChangeForm(request.user, {
+                "first_name": user.user.first_name,
+                "last_name": user.user.last_name,
+                "email_address": user.user.email,
+                "groups": [group.id for group in user.user.groups.all()],
+                "title": user.title,
+                "working_group": user.working_group.id if user.working_group else None,
+            })
 
-#         media = self.media + form.media
+        media = self.media + form.media
 
-#         return render_to_response("admin/groups/change_user.html", {
-#             "title": _("Change user: %s") % user,
-#             "form": form,
-#             "is_popup": "_popup" in request.REQUEST,
-#             "add": False,
-#             "change": True,
-#             "has_add_permission": False,
-#             "has_delete_permission": self.has_delete_permission(request),
-#             "has_change_permission": True,
-#             "has_file_field": False,
-#             "has_absolute_url": False,
-#             "auto_populated_fields": (),
-#             "opts": self.model._meta,
-#             "save_as": False,
-#             "root_path": self.admin_site.root_path,
-#             "app_label": self.model._meta.app_label,
-#             "media": mark_safe(media),
-#             "errors": form.errors,
-#         }, context_instance=template.RequestContext(request))
+        return render_to_response("admin/groups/change_user.html", {
+            "title": _("Change user: %s") % user,
+            "form": form,
+            "is_popup": "_popup" in request.REQUEST,
+            "add": False,
+            "change": True,
+            "has_add_permission": False,
+            "has_delete_permission": self.has_delete_permission(request),
+            "has_change_permission": True,
+            "has_file_field": False,
+            "has_absolute_url": False,
+            "auto_populated_fields": (),
+            "opts": self.model._meta,
+            "save_as": False,
+            "root_path": self.admin_site.root_path,
+            "app_label": self.model._meta.app_label,
+            "media": mark_safe(media),
+            "errors": form.errors,
+        }, context_instance=template.RequestContext(request))
 
-#     def get_urls(self):
-#         urls = super(UserAdmin, self).get_urls()
-#         local_urls = patterns("",
-#             (r"^(\d+)/password/$", self.admin_site.admin_view(self.change_password))
-#         )
-#         return local_urls + urls
+    def get_urls(self):
+        urls = super(UserAdmin, self).get_urls()
+        local_urls = patterns("",
+            (r"^(\d+)/password/$", self.admin_site.admin_view(self.change_password))
+        )
+        return local_urls + urls
 
-#     def queryset(self, request):
-#         if request.user.is_superuser:
-#             return User.objects.all()
+    def queryset(self, request):
+        if request.user.is_superuser:
+            return User.objects.all()
 
-#         user = User.objects.get(user=request.user)
+        user = User.objects.get(user=request.user)
 
-#         if self.has_change_permission(request):
-#             return User.objects.filter(working_group=user.working_group)
-#         else:
-#             return User.objects.none()
+        if self.has_change_permission(request):
+            return User.objects.filter(working_group=user.working_group)
+        else:
+            return User.objects.none()
 
 
 class WorkingGroupAdmin(admin.ModelAdmin):
     search_fields = ["name"]
 
 
-
-
-
-#from my_user_profile_app.models import UserProfile
-
-# Define an inline admin descriptor for UserProfile model
-# which acts a bit like a singleton
-class UserProfileInline(admin.StackedInline):
-    model = RegistryUser
-    can_delete = False
-    verbose_name_plural = 'profile'
-
-# Define a new User admin
-class UserAdmin(AuthUserAdmin):
-    #pass
-    inlines = [UserProfileInline]
-
-# Re-register UserAdmin
-#admin.site.register(User)
-admin.site.unregister(AuthUser)
-admin.site.register(AuthUser, UserAdmin)
-
-
-#admin.site.register(User, UserAdmin)
+admin.site.register(User, UserAdmin)
 admin.site.register(WorkingGroup, WorkingGroupAdmin)
