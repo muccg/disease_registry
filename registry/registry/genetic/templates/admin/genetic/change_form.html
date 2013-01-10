@@ -1,15 +1,19 @@
 {% extends "admin/change_form.html" %}
+
 {% load overrides %}
 {% block extrahead %}
+{{ block.super }}
 
 <script type="text/javascript">
 var ValidationOverrides = {
-    available: {{ perms.genetic.can_override_validation }},
+    available: Boolean("{{ perms.genetic.can_override_validation }}"),
+
+    // overides function called "original" - do not know where that var comes from
 
     {% if add %}
     ids: {},
     {% else %}
-    ids: {{ overrides  }}, // was "original" - do not know where that var comes from
+    ids: {},
     {% endif %}
     contains: function (id, type) {
         if (!id) {
