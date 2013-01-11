@@ -1,5 +1,6 @@
 from django.conf import settings
-from django.conf.urls.defaults import patterns
+from django.conf.urls.defaults import patterns, url
+from django.conf.urls import defaults
 from django.contrib import admin
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
@@ -77,7 +78,7 @@ class MolecularDataAdmin(admin.ModelAdmin):
             (r"override/(?P<type>(exon)|([dr]na)|(protein))/(?P<id>\d+)$", self.admin_site.admin_view(self.override_validation)),
             (r"validate/exon$", self.admin_site.admin_view(self.validate_exon)),
             (r"validate/protein$", self.admin_site.admin_view(self.validate_protein)),
-            (r"validate/sequence$", self.admin_site.admin_view(self.validate_sequence)),
+            defaults.url(r"validate/sequence$", self.admin_site.admin_view(self.validate_sequence), name="validate_sequence"),
         )
         #print 'urls: ', local_urls + urls
         return local_urls + urls
