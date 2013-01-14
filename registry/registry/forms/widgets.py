@@ -1,11 +1,11 @@
-from django import forms
 from ccg.utils.webhelpers import url
-
+from django import forms
+from django.utils.html import escape
+from django.utils.safestring import mark_safe
 
 from date import DateWidget
 LubricatedDateWidget = DateWidget
 
-from django.forms.widgets import Select, Widget
 
 class ComboWidget(forms.TextInput):
 #class ComboWidget(Widget):
@@ -89,14 +89,11 @@ class StaticWidget(forms.HiddenInput):
         super(StaticWidget, self).__init__(attrs)
 
     def render(self, name, value, attrs=None):
-        from cgi import escape
-
         if self.text:
             text = self.text
         else:
             text = value
-
-        return super(StaticWidget, self).render(name, value, attrs) + escape(unicode(text))
+        return mark_safe(super(StaticWidget, self).render(name, value, attrs) + escape(unicode(text)))
 
     def _has_changed(self, initial, data):
         # Static input fields never change.
@@ -118,6 +115,7 @@ class PercentageWidget(forms.TextInput):
 
     def render(self, name, value, attrs=None):
         return super(PercentageWidget, self).render(name, value, attrs) + " %"
+
 
 # to add the text after the input field
 class FVCPercentageWidget(forms.TextInput):
