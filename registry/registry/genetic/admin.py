@@ -49,7 +49,6 @@ class VariationInline(admin.TabularInline):
     }
 
 
-
 class MolecularDataAdmin(admin.ModelAdmin):
     actions = None
     add_form_template = "admin/genetic/change_form.html"
@@ -71,6 +70,17 @@ class MolecularDataAdmin(admin.ModelAdmin):
 
     patient_name.short_description = 'Name'
     patient_working_group.short_description = 'Working Group'
+
+    # add_view and change_view allow passing of CSRF_COOKIE_NAME to admin template
+    def add_view(self, request, form_url='', extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['CSRF_COOKIE_NAME'] = settings.CSRF_COOKIE_NAME
+        return super(MolecularDataAdmin, self).add_view(request, form_url, extra_context=extra_context)
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['CSRF_COOKIE_NAME'] = settings.CSRF_COOKIE_NAME
+        return super(MolecularDataAdmin, self).change_view(request, object_id, form_url, extra_context=extra_context)
 
     def get_urls(self):
         urls = super(MolecularDataAdmin, self).get_urls()
