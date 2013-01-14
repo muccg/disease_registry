@@ -28,7 +28,7 @@ class GeneChoiceField(forms.ModelChoiceField):
 class VariationWidget(forms.TextInput):
     class Media:
         css = {"all": [url("/static/css/variation.css")]}
-        js = [url("/static/js/json2.js"), url("/static/js/xhr.js"), url("/static/js/variation.js")]
+        js = [url("/static/js/json2.js"), url("/static/js/xhr.js"), url("/static/variation/variation.js")]
 
     def __init__(self, attrs={}, backend=None, popup=None):
         """
