@@ -83,5 +83,20 @@
                 <input type="button" id="close" value="Close">
             </div>
         </form>
+
+
+{% block aftercontent %}
+<script>
+    var validate_sequence_url = "{{ base_url }}admin/genetic/moleculardata/validate/sequence"
+    var CSRF_COOKIE_NAME = "{{ CSRF_COOKIE_NAME }}"
+</script>
+
+{% endblock %}
+
+            
+
     </body>
 </html>
+
+
+            
