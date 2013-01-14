@@ -114,7 +114,7 @@ class PercentageWidget(forms.TextInput):
         super(PercentageWidget, self).__init__(attrs, *args, **kwargs)
 
     def render(self, name, value, attrs=None):
-        return super(PercentageWidget, self).render(name, value, attrs) + " %"
+        return mark_safe(super(PercentageWidget, self).render(name, value, attrs) + " %")
 
 
 # to add the text after the input field
