@@ -135,14 +135,11 @@ class PatientAdmin(admin.ModelAdmin):
 
         return HttpResponse(json.dumps(response), mimetype="application/json")
 
-
     def progress_graph(self, obj):
-        if not hasattr(obj, 'diagnosis'):
+        if not hasattr(obj, 'patient_diagnosis'):
             return ''
-
-        graph_html = '<a href="%s">' % urlresolvers.reverse('admin:%s_diagnosis_change' % settings.INSTALL_NAME, args=(obj.id,))
-        graph_html += '<img title="%s" src="http://chart.apis.google.com/chart' % obj.diagnosis.incomplete_sections()
-        graph_html += '?chf=bg,s,FFFFFF00&chs=200x15&cht=bhs&chco=4D89F9,C6D9FD&chd=t:%d|100&chbh=5"/>' % obj.diagnosis.percentage_complete()
+        graph_html = '<a href="%s">' % urlresolvers.reverse('admin:{0}_diagnosis_change'.format(obj.patient_diagnosis._meta.app_label), args=(obj.id,))
+        graph_html += obj.patient_diagnosis.progress_graph()
         graph_html += '</a>'
         return graph_html
     progress_graph.allow_tags = True
