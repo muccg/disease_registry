@@ -47,7 +47,7 @@
 
 <fieldset class="module aligned">
 {% for field in form %}
-    <p>{{field.label_tag}}{{field}}{{field.errors}}</p>
+    <p {% if field.field.required %}class='required'{% endif %}>{{field.label_tag}}{{field}}{{field.errors}}</p>
 {% endfor %}
 </fieldset>
 
