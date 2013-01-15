@@ -26,15 +26,12 @@ setup(name='django-diseaseregistry',
         'registry.groups',
         'registry.utils',
         'registry.forms',
-        'registry.mako',
         'registry.humangenome'
     ],
     package_data=data_files,
     zip_safe=False,
     install_requires=[
-        'Mako>=0.5.0',
         'South>=0.7.3',
-        'ccg-makoloader==0.2.4',
     ],
 )
 
