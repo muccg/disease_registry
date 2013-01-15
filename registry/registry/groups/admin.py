@@ -171,7 +171,7 @@ class UserAdmin(admin.ModelAdmin):
             "auto_populated_fields": (),
             "opts": self.model._meta,
             "save_as": False,
-            "root_path": self.admin_site.root_path,
+            #"root_path": self.admin_site.root_path,
             "app_label": self.model._meta.app_label,
             "media": mark_safe(media),
             "errors": form.errors,
