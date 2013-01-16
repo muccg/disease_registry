@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.conf.urls.defaults import patterns, url
+from django.conf.urls.defaults import url as djangourl
 from django.conf.urls import defaults
 from django.contrib import admin
 from django.db.models import Q
@@ -21,7 +22,7 @@ class GeneAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super(GeneAdmin, self).get_urls()
         local_urls = patterns("",
-            (r"search/(.*)$", self.admin_site.admin_view(self.search))
+            djangourl(r"search/(.*)$", self.admin_site.admin_view(self.search), name="gene_search")
         )
         return local_urls + urls
 
