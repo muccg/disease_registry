@@ -3,7 +3,7 @@ from ccg.utils.webhelpers import url
 from models import *
 from registry.forms.widgets import ComboWidget, LubricatedDateWidget
 
-from registry.utils.stripspaces import stripspaces
+from registry.utils import stripspaces
 
 class PatientDoctorForm(forms.ModelForm):
     OPTIONS = [

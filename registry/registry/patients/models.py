@@ -7,7 +7,7 @@ import registry.groups.models
 import logging
 logger = logging.getLogger('patient')
 
-from registry.utils.stripspaces import stripspaces
+from registry.utils import stripspaces
 from django.conf import settings # for APP_NAME
 
 class Country(models.Model):
