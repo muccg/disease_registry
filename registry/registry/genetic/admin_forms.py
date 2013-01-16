@@ -1,9 +1,11 @@
-from django import forms
 from ccg.utils.webhelpers import url
-from models import *
+from django import forms
 from registry.forms.widgets import ComboWidget, LiveComboWidget, StaticWidget
-
 from registry.genetic.models import *
+from registry.utils import get_static_url
+
+from models import *
+
 
 class GeneChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
@@ -27,8 +29,11 @@ class GeneChoiceField(forms.ModelChoiceField):
 
 class VariationWidget(forms.TextInput):
     class Media:
-        css = {"all": [url("/static/css/variation.css")]}
-        js = [url("/static/js/json2.js"), url("/static/js/xhr.js"), url("/static/variation/variation.js")]
+        css = {"all": [get_static_url("css/variation.css")]}
+        js = [get_static_url("js/json2.js"),
+              get_static_url("js/xhr.js"),
+              get_static_url("variation/variation.js")
+              ]
 
     def __init__(self, attrs={}, backend=None, popup=None):
         """
