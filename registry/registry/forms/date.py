@@ -1,9 +1,10 @@
-from datetime import date, datetime
+from datetime import date
+
 from django import forms
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext
-from ccg.utils.webhelpers import url
 from registry.utils import get_static_url
+
 
 class DateFormatError(ValueError):
     pass
@@ -34,7 +35,7 @@ class DateWidget(forms.Widget):
             from json import dumps
 
             popup = {
-                "image": url("/static/images/icon_calendar.gif"),
+                "image": get_static_url("images/icon_calendar.gif"),
                 "weekdays": [(id, unicode(name)) for (id, name) in WEEKDAYS_ABBR.items()],
             }
 

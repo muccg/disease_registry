@@ -1,12 +1,13 @@
-from ccg.utils.webhelpers import url
 from django import forms
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
+from registry.utils import get_static_url
 
 from date import DateWidget
+
+
 LubricatedDateWidget = DateWidget
 
-from registry.utils import get_static_url
 
 class ComboWidget(forms.TextInput):
     class Media:
