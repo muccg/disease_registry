@@ -1,3 +1,5 @@
+from django.conf import settings
+
 # Utility function to clean a string
 def stripspaces(s):
     """Remove whitespace chars from both ends of the string returns a new
@@ -8,6 +10,13 @@ def stripspaces(s):
     if s == None or not isinstance(s, basestring):
         return ""
     return " ".join(s.strip().split())
+
+
+def get_static_url(url):
+    """This method is simply to make formatting urls with static url shorter and tidier"""
+    return "{0}{1}".format(settings.STATIC_URL, url)
+
+
 
 #to run the tests:
 #python stripspaces.py

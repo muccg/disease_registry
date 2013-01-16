@@ -1,9 +1,9 @@
 from django import forms
-from ccg.utils.webhelpers import url
-from models import *
 from registry.forms.widgets import ComboWidget, LubricatedDateWidget
+from registry.utils import get_static_url
 
-from registry.utils import stripspaces
+from models import *
+
 
 class PatientDoctorForm(forms.ModelForm):
     OPTIONS = [
@@ -31,7 +31,7 @@ class PatientForm(forms.ModelForm):
     next_of_kin_address = forms.CharField(widget=forms.Textarea(attrs=ADDRESS_ATTRS))
 
     class Media:
-        js = [url("/static/js/patient.js")]
+        js = [get_static_url("js/patient.js")]
 
     class Meta:
         model = Patient
