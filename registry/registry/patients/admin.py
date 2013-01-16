@@ -28,7 +28,7 @@ class PatientAdmin(admin.ModelAdmin):
     form = PatientForm
     inlines = [PatientDoctorAdmin]
     search_fields = ["family_name", "given_names"]
-    list_display = ['__unicode__', 'progress_graph', 'moleculardata_entered', 'freshness', 'working_group', 'last_updated']
+    list_display = ['__unicode__', 'progress_graph', 'moleculardata_entered', 'freshness', 'working_group', 'diagnosis_last_update']
 
     def create_fieldset(self, superuser=False):
         """Function to dynamically create the fieldset, adding 'active' field if user is a superuser"""
@@ -135,6 +135,12 @@ class PatientAdmin(admin.ModelAdmin):
 
         return HttpResponse(json.dumps(response), mimetype="application/json")
 
+    def diagnosis_last_update(self, obj):
+        return "%s" % obj.patient_diagnosis.updated
+
+    diagnosis_last_update.allow_tags = True
+    diagnosis_last_update.short_description = "Last Updated"
+
     def progress_graph(self, obj):
         if not hasattr(obj, 'patient_diagnosis'):
             return ''
@@ -142,6 +148,7 @@ class PatientAdmin(admin.ModelAdmin):
         graph_html += obj.patient_diagnosis.progress_graph()
         graph_html += '</a>'
         return graph_html
+        
     progress_graph.allow_tags = True
     progress_graph.short_description = "Diagnosis Entry Progress"
 
@@ -162,10 +169,10 @@ class PatientAdmin(admin.ModelAdmin):
 
     def freshness(self, obj):
         """Used to show how recently the diagnosis was updated"""
-        if not hasattr(obj, 'diagnosis'):
+        if not hasattr(obj, 'patient_diagnosis'):
             return ''
 
-        delta = datetime.datetime.now() - obj.diagnosis.updated
+        delta = datetime.datetime.now() - obj.patient_diagnosis.updated
         age = delta.days
 
         if age > 365:
