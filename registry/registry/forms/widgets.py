@@ -6,12 +6,12 @@ from django.utils.safestring import mark_safe
 from date import DateWidget
 LubricatedDateWidget = DateWidget
 
+from registry.utils import get_static_url
 
 class ComboWidget(forms.TextInput):
-#class ComboWidget(Widget):
     class Media:
-        css = {"all": [url("/static/combo/combo.css")]}
-        js = [url("/static/combo/combo.js"), url("/static/js/json2.js"), url("/static/js/xhr.js")]
+        css = {"all": [get_static_url("combo/combo.css")]}
+        js = [get_static_url("combo/combo.js"), get_static_url("js/json2.js"), get_static_url("js/xhr.js")]
 
     def __init__(self, attrs={}, options=[]):
         """
@@ -35,8 +35,8 @@ class ComboWidget(forms.TextInput):
 
 class LiveComboWidget(ComboWidget):
     class Media:
-        css = {"all": ComboWidget.Media.css["all"] + [url("/static/combo/live.css")]}
-        js = ComboWidget.Media.js + [url("/static/combo/live.js")]
+        css = {"all": ComboWidget.Media.css["all"] + [get_static_url("combo/live.css")]}
+        js = ComboWidget.Media.js + [get_static_url("combo/live.js")]
 
     def __init__(self, attrs={}, backend=""):
         """
