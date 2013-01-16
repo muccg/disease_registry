@@ -24,7 +24,6 @@ setup(name='django-diseaseregistry',
         'registry.patients',
         'registry.genetic',
         'registry.groups',
-        'registry.utils',
         'registry.forms',
         'registry.humangenome'
     ],
