@@ -6,6 +6,7 @@ from django.core import urlresolvers
 from django.conf import settings
 import json, datetime
 
+from registry.utils import get_static_url
 from admin_forms import *
 from models import *
 
@@ -159,7 +160,7 @@ class PatientAdmin(admin.ModelAdmin):
         imagefile = 'tick.png'
 
         genetic_url = '<a href="%s">' % urlresolvers.reverse('admin:genetic_moleculardata_change', args=(obj.id,))
-        genetic_url += '<img src="%s"/>' % url("/static/images/" + imagefile)
+        genetic_url += '<img src="%s"/>' % get_static_url("images/" + imagefile)
         genetic_url += '</a>'
         return genetic_url
 
@@ -180,7 +181,7 @@ class PatientAdmin(admin.ModelAdmin):
         else:
             imagefile = 'tick.png'
 
-        return '<img src="%s"/>' % url("/static/images/" + imagefile)
+        return '<img src="%s"/>' % get_static_url("images/" + imagefile)
         
     freshness.allow_tags = True
     freshness.short_description = "Currency (updated in the last 365 days)"
