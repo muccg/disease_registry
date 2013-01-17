@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 
 from admin_forms import *
 from models import *
-
+from registry.utils import get_static_url
 
 class GeneAdmin(admin.ModelAdmin):
     list_display = ["symbol", "name", "status", "chromosome"]
@@ -157,7 +157,7 @@ class MolecularDataAdmin(admin.ModelAdmin):
 
         #genetic_url = '<a href="%s">' % urlresolvers.reverse('admin:genetic_moleculardata_change', args=(obj.id,))
         #genetic_url += '<img src="%s"/>' % url("/static/images/" + imagefile)
-        genetic_url = '<img src="%s"/>' % url("/static/images/" + imagefile)
+        genetic_url = '<img src="%s"/>' % (get_static_url("images/") + imagefile)
         #genetic_url += '</a>'
         return genetic_url
 
