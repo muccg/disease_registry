@@ -1,19 +1,16 @@
+import json
+
+import django.forms
 from django.conf import settings
 from django.conf.urls.defaults import patterns, url
-from django.conf.urls.defaults import url as djangourl
-from django.conf.urls import defaults
 from django.contrib import admin
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
-import django.forms
-import json
 
 from admin_forms import *
 from models import *
-from registry.patients.models import Patient
 
-print 'imported genetic admin'
 
 class GeneAdmin(admin.ModelAdmin):
     list_display = ["symbol", "name", "status", "chromosome"]
@@ -22,7 +19,7 @@ class GeneAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super(GeneAdmin, self).get_urls()
         local_urls = patterns("",
-            djangourl(r"search/(.*)$", self.admin_site.admin_view(self.search), name="gene_search")
+            url(r"search/(.*)$", self.admin_site.admin_view(self.search), name="gene_search")
         )
         return local_urls + urls
 
@@ -86,10 +83,10 @@ class MolecularDataAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super(MolecularDataAdmin, self).get_urls()
         local_urls = patterns("",
-            (r"override/(?P<type>(exon)|([dr]na)|(protein))/(?P<id>\d+)$", self.admin_site.admin_view(self.override_validation)),
-            (r"validate/exon$", self.admin_site.admin_view(self.validate_exon)),
-            (r"validate/protein$", self.admin_site.admin_view(self.validate_protein)),
-            defaults.url(r"validate/sequence$", self.admin_site.admin_view(self.validate_sequence), name="validate_sequence"),
+            url(r"override/(?P<type>(exon)|([dr]na)|(protein))/(?P<id>\d+)$", self.admin_site.admin_view(self.override_validation), name="override"),
+            url(r"validate/exon$", self.admin_site.admin_view(self.validate_exon), name="validate_exon"),
+            url(r"validate/protein$", self.admin_site.admin_view(self.validate_protein), name="validate_protein"),
+            url(r"validate/sequence$", self.admin_site.admin_view(self.validate_sequence), name="validate_sequence"),
         )
         #print 'urls: ', local_urls + urls
         return local_urls + urls
