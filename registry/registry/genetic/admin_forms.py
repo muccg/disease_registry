@@ -1,5 +1,6 @@
 from django import forms
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy, get_script_prefix
+
 from registry.forms.widgets import ComboWidget, LiveComboWidget, StaticWidget
 from registry.genetic.models import *
 from registry.utils import get_static_url
@@ -26,6 +27,7 @@ class GeneChoiceField(forms.ModelChoiceField):
     def validate(self, value):
         print 'validating model: ', value, str(dir(value)) 
         return super(GeneChoiceField, self).validate(value)
+
 
 class VariationWidget(forms.TextInput):
     class Media:
@@ -54,7 +56,7 @@ class VariationWidget(forms.TextInput):
         else:
             attrs["class"] = "variation"
 
-        #self.popup=reverse_lazy("registry:entry") # do not think this is required, have left in case needed under wsgi
+        self.popup=reverse_lazy("registry:entry") # do not think this is required, have left in case needed under wsgi
         super(VariationWidget, self).__init__(attrs)
 
 
@@ -73,8 +75,8 @@ class VariationForm(forms.ModelForm):
     gene = GeneChoiceField(queryset=Gene.objects.all(), label="Gene", widget=LiveComboWidget(backend=reverse_lazy("admin:gene_search", args=("",))))    
     exon = forms.CharField(label="Exon", required=False, widget=VariationWidget(backend=reverse_lazy("admin:validate_exon"), attrs={"minchars": "0"}))
     protein_variation = forms.CharField(label="Protein variation", required=False, widget=VariationWidget(backend=reverse_lazy("admin:validate_protein")))
-    dna_variation = forms.CharField(label="DNA variation", required=False, widget=VariationWidget(backend=reverse_lazy("admin:validate_sequence"), popup='/genetic/variation/'))
-    rna_variation = forms.CharField(label="RNA variation", required=False, widget=VariationWidget(backend=reverse_lazy("admin:validate_sequence"), popup='/genetic/variation/'))
+    dna_variation = forms.CharField(label="DNA variation", required=False, widget=VariationWidget(backend=reverse_lazy("admin:validate_sequence"), popup=get_script_prefix()+'genetic/variation/'))
+    rna_variation = forms.CharField(label="RNA variation", required=False, widget=VariationWidget(backend=reverse_lazy("admin:validate_sequence"), popup=get_script_prefix()+'genetic/variation/'))
     technique = forms.CharField(label="Technique", widget=ComboWidget(options=["MLPA", "Genomic DNA sequencing", "cDNA sequencing", "Array"]))
 
     class Meta:
