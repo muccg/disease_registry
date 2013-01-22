@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 
 from admin_forms import *
 from models import *
-
+from registry.utils import get_static_url
 
 class GeneAdmin(admin.ModelAdmin):
     list_display = ["symbol", "name", "status", "chromosome"]
@@ -156,6 +156,7 @@ class MolecularDataAdmin(admin.ModelAdmin):
         imagefile = 'tick.png'
 
         genetic_url = '<img src="%s"/>' % (settings.STATIC_URL + "images/" + imagefile)
+
         return genetic_url
 
     moleculardata_entered.allow_tags = True
