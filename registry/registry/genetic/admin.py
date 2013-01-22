@@ -155,10 +155,8 @@ class MolecularDataAdmin(admin.ModelAdmin):
 
         imagefile = 'tick.png'
 
-        #genetic_url = '<a href="%s">' % urlresolvers.reverse('admin:genetic_moleculardata_change', args=(obj.id,))
-        #genetic_url += '<img src="%s"/>' % url("/static/images/" + imagefile)
-        genetic_url = '<img src="%s"/>' % (get_static_url("images/") + imagefile)
-        #genetic_url += '</a>'
+        genetic_url = '<img src="%s"/>' % (settings.STATIC_URL + "images/" + imagefile)
+
         return genetic_url
 
     moleculardata_entered.allow_tags = True
