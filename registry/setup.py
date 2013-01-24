@@ -21,6 +21,7 @@ setup(name='django-diseaseregistry',
     url="http://ccg.murdoch.edu.au",
     packages=[
         'registry',
+        'registry.errors',
         'registry.patients',
         'registry.genetic',
         'registry.groups',
