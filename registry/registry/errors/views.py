@@ -1,10 +1,10 @@
 from django.http import HttpResponseServerError
 from django.http import HttpResponseNotFound
+from django.core.context_processors import csrf
 
 from django.shortcuts import render_to_response
 import os
 
-_TEMPLATE_PATH=""
 
 def _getHTMLFormattedReuest(request, message="Disease Registry Default Page not found"):
     """
@@ -24,15 +24,21 @@ def debug_handler500(request):
     """
     return HttpResponseServerError(_getHTMLFormattedReuest(request, "Disease Registry Default Server Error"))
 
-def _getTemplatePath(name):
-    """
-    Returns the correct template path
-    """
-    return render_to_response(os.path.join(_TEMPLATE_PATH, name))
-
 def handler404(request):
-    return _getTemplatePath("404.html")
+    return render_to_response("404.html")
 
 def handler500(request):
-    return _getTemplatePath("500.html")
+    return render_to_response("500.html")
     
+# These views are for test and validation purposes.
+# with debug = False, static data is not being served by django so the following views
+# are provided to render nice test error pages which are not available in debug mode.
+def test404(request):
+    context = {}
+    context.update(csrf(request))
+    return render_to_response("404.html", context)
+
+def test500(request):
+    context = {}
+    context.update(csrf(request))
+    return render_to_response("500.html", context)
