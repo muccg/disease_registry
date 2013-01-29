@@ -2,21 +2,19 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
-        <title>Australian XXX Registry &mdash;</title>
-
+        <title>{% block headertitle %} Australian Rare disease Registry {% endblock %}  &mdash;</title>
         <link rel="stylesheet" type="text/css" href="{% static '/static/css/registry.css' %}"/>
-
         <!--[if IE 6]>
         <link rel="stylesheet" type="text/css" href="${webhelpers.url('/static/css/ie6.css')}"/>
         <![endif]-->
         <!--[if IE 7]>
         <link rel="stylesheet" type="text/css" href="${webhelpers.url('/static/css/ie7.css')}"/>
-        <![endif]-->
-        
+        <![endif]-->        
     </head>
+    
     <body>
         <div id="header-container">
-            <h1>Australian Rare Disease Registry</h1>
+            <h1>{% block bodytitle %} Australian Rare disease Registry {% endblock %}</h1>
         </div>
 
         <div id="container">
