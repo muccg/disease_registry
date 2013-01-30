@@ -4,6 +4,7 @@
     <head>
         <title>{% block headertitle %} Australian Rare disease Registry {% endblock %}  &mdash;</title>
         <link rel="stylesheet" type="text/css" href="{% static '/static/css/registry.css' %}"/>
+        {% block extra_head %}{% endblock %}
         <!--[if IE 6]>
         <link rel="stylesheet" type="text/css" href="${webhelpers.url('/static/css/ie6.css')}"/>
         <![endif]-->
@@ -18,7 +19,7 @@
         </div>
 
         <div id="container">
-			{% block content %}{% endblock %}
+			{% block content %} {% endblock %}
         </div> 
 
         <div id="footer-container">
