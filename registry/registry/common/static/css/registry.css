@@ -1,3 +1,4 @@
+
 html, body {
     font-family: Sans-Serif;
     margin: 0;
@@ -22,7 +23,7 @@ a {
 
 #header-container {
     position: absolute;
-    background: #194c9d;
+    background: #3D6E2B;
     color: white;
     height: 4em;
     top: 0;
@@ -68,7 +69,6 @@ a {
 #stakeholders {
     float: right;
     width: 30%;
-    margin-top: 20px;
     padding-bottom: 2em;
 }
 
@@ -88,24 +88,31 @@ a {
     list-style: none;
     margin: 0;
     padding: 0;
+    font-size: 90%;
 }
 
 #stakeholders a {
     color: #444;
     display: block;
-    text-decoration: underline;
+    text-decoration: none;
     margin: 0;
     padding: 0.4ex 0.4ex;
+    border-bottom: solid 1px #eee;
 }
 
 #stakeholders a:hover {
-    background: #6f94ce;
+    background: #3D6E2B;
     color: white;
 }
 
+#stakeholders ul li:first-child a {
+    border-top: solid 1px #eee;
+}
+
+
 #footer-container {
     clear: both;
-    background: #194c9d;
+    background: #3D6E2B;
     color: #eee;
     left: 0;
     right: 0;
@@ -127,43 +134,5 @@ a {
     text-align: left;
 }
 
-.boxes {
-	margin-top: 20px;
-	margin-bottom: 20px;
-}
-.boxes .left {
-	float: left;
-	width: 45%;
-}
 
-.boxes .right {
-	float: right;
-	width: 45%;
-}
-
-.clearboth, .boxes .bottom {
-	clear: both;
-}
-
-.dmdsma.boxes .left, .dmdsma.boxes .right {
-	border: solid 1px #eee;
-	margin-top: 5px;
-	margin-bottom: 5px;
-	margin-left: 5px;
-	margin-right: 5px;
-}
-
-.dmdsma.boxes .left {
-	background-color: #1E90FF; /* DodgerBlue */
-}
-
-.dmdsma.boxes .right {
-	background-color: #FFB6C1;	/* lightpink */
-}
-
-#support {
-    font-size: 90%;
-    margin-top: 20px;
-    text-align: justify;
-}
 /* vim: set nocin ai et ts=4 sw=4: */
