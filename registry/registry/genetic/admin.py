@@ -51,8 +51,8 @@ class VariationInline(admin.TabularInline):
 
 class MolecularDataAdmin(admin.ModelAdmin):
     actions = None
-    add_form_template = "templates/admin/genetic/change_form.html"
-    change_form_template = "templates/admin/genetic/change_form.html"
+    add_form_template = "admin/genetic/change_form.html"
+    change_form_template = "admin/genetic/change_form.html"
     form = MolecularDataForm
     inlines = [
         VariationInline,
