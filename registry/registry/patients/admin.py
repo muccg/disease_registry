@@ -6,6 +6,7 @@ from django.core import urlresolvers
 from django.conf import settings
 import json, datetime
 
+from registry.utils import get_static_url
 from admin_forms import *
 from models import *
 
@@ -28,7 +29,7 @@ class PatientAdmin(admin.ModelAdmin):
     form = PatientForm
     inlines = [PatientDoctorAdmin]
     search_fields = ["family_name", "given_names"]
-    list_display = ['__unicode__', 'progress_graph', 'moleculardata_entered', 'freshness', 'working_group', 'last_updated']
+    list_display = ['__unicode__', 'progress_graph', 'moleculardata_entered', 'freshness', 'working_group', 'diagnosis_last_update']
 
     def create_fieldset(self, superuser=False):
         """Function to dynamically create the fieldset, adding 'active' field if user is a superuser"""
@@ -135,16 +136,20 @@ class PatientAdmin(admin.ModelAdmin):
 
         return HttpResponse(json.dumps(response), mimetype="application/json")
 
+    def diagnosis_last_update(self, obj):
+        return "%s" % obj.patient_diagnosis.updated
+
+    diagnosis_last_update.allow_tags = True
+    diagnosis_last_update.short_description = "Last Updated"
 
     def progress_graph(self, obj):
-        if not hasattr(obj, 'diagnosis'):
+        if not hasattr(obj, 'patient_diagnosis'):
             return ''
-
-        graph_html = '<a href="%s">' % urlresolvers.reverse('admin:%s_diagnosis_change' % settings.INSTALL_NAME, args=(obj.id,))
-        graph_html += '<img title="%s" src="http://chart.apis.google.com/chart' % obj.diagnosis.incomplete_sections()
-        graph_html += '?chf=bg,s,FFFFFF00&chs=200x15&cht=bhs&chco=4D89F9,C6D9FD&chd=t:%d|100&chbh=5"/>' % obj.diagnosis.percentage_complete()
+        graph_html = '<a href="%s">' % urlresolvers.reverse('admin:{0}_diagnosis_change'.format(obj.patient_diagnosis._meta.app_label), args=(obj.id,))
+        graph_html += obj.patient_diagnosis.progress_graph()
         graph_html += '</a>'
         return graph_html
+        
     progress_graph.allow_tags = True
     progress_graph.short_description = "Diagnosis Entry Progress"
 
@@ -155,7 +160,7 @@ class PatientAdmin(admin.ModelAdmin):
         imagefile = 'tick.png'
 
         genetic_url = '<a href="%s">' % urlresolvers.reverse('admin:genetic_moleculardata_change', args=(obj.id,))
-        genetic_url += '<img src="%s"/>' % url("/static/images/" + imagefile)
+        genetic_url += '<img src="%s"/>' % get_static_url("images/" + imagefile)
         genetic_url += '</a>'
         return genetic_url
 
@@ -165,10 +170,10 @@ class PatientAdmin(admin.ModelAdmin):
 
     def freshness(self, obj):
         """Used to show how recently the diagnosis was updated"""
-        if not hasattr(obj, 'diagnosis'):
+        if not hasattr(obj, 'patient_diagnosis'):
             return ''
 
-        delta = datetime.datetime.now() - obj.diagnosis.updated
+        delta = datetime.datetime.now() - obj.patient_diagnosis.updated
         age = delta.days
 
         if age > 365:
@@ -176,7 +181,7 @@ class PatientAdmin(admin.ModelAdmin):
         else:
             imagefile = 'tick.png'
 
-        return '<img src="%s"/>' % url("/static/images/" + imagefile)
+        return '<img src="%s"/>' % get_static_url("images/" + imagefile)
         
     freshness.allow_tags = True
     freshness.short_description = "Currency (updated in the last 365 days)"

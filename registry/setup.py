@@ -7,7 +7,7 @@ start_dir = os.getcwd()
 for package in ('patients', 'genetic', 'groups', 'humangenome'):
     data_files['registry.' + package] = []
     os.chdir(os.path.join('registry', package))
-    for data_dir in ('templates', 'static', 'migrations', 'fixtures'):
+    for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags'):
 	data_files['registry.' + package].extend(
 	    [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files]) 
     os.chdir(start_dir)
@@ -24,17 +24,13 @@ setup(name='django-diseaseregistry',
         'registry.patients',
         'registry.genetic',
         'registry.groups',
-        'registry.utils',
         'registry.forms',
-        'registry.mako',
         'registry.humangenome'
     ],
     package_data=data_files,
     zip_safe=False,
     install_requires=[
-        'Mako>=0.5.0',
         'South>=0.7.3',
-        'ccg-makoloader==0.2.4',
     ],
 )
 

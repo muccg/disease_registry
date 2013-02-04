@@ -1,17 +1,16 @@
+import json
+
+import django.forms
 from django.conf import settings
-from django.conf.urls.defaults import patterns
+from django.conf.urls.defaults import patterns, url
 from django.contrib import admin
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
-import django.forms
-import json
 
 from admin_forms import *
 from models import *
-from registry.patients.models import Patient
-
-print 'imported genetic admin'
+from registry.utils import get_static_url
 
 class GeneAdmin(admin.ModelAdmin):
     list_display = ["symbol", "name", "status", "chromosome"]
@@ -20,7 +19,7 @@ class GeneAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super(GeneAdmin, self).get_urls()
         local_urls = patterns("",
-            (r"search/(.*)$", self.admin_site.admin_view(self.search))
+            url(r"search/(.*)$", self.admin_site.admin_view(self.search), name="gene_search")
         )
         return local_urls + urls
 
@@ -48,7 +47,6 @@ class VariationInline(admin.TabularInline):
     }
 
 
-
 class MolecularDataAdmin(admin.ModelAdmin):
     actions = None
     add_form_template = "admin/genetic/change_form.html"
@@ -71,13 +69,24 @@ class MolecularDataAdmin(admin.ModelAdmin):
     patient_name.short_description = 'Name'
     patient_working_group.short_description = 'Working Group'
 
+    # add_view and change_view allow passing of CSRF_COOKIE_NAME to admin template
+    def add_view(self, request, form_url='', extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['CSRF_COOKIE_NAME'] = settings.CSRF_COOKIE_NAME
+        return super(MolecularDataAdmin, self).add_view(request, form_url, extra_context=extra_context)
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['CSRF_COOKIE_NAME'] = settings.CSRF_COOKIE_NAME
+        return super(MolecularDataAdmin, self).change_view(request, object_id, form_url, extra_context=extra_context)
+
     def get_urls(self):
         urls = super(MolecularDataAdmin, self).get_urls()
         local_urls = patterns("",
-            (r"override/(?P<type>(exon)|([dr]na)|(protein))/(?P<id>\d+)$", self.admin_site.admin_view(self.override_validation)),
-            (r"validate/exon$", self.admin_site.admin_view(self.validate_exon)),
-            (r"validate/protein$", self.admin_site.admin_view(self.validate_protein)),
-            (r"validate/sequence$", self.admin_site.admin_view(self.validate_sequence)),
+            url(r"override/(?P<type>(exon)|([dr]na)|(protein))/(?P<id>\d+)$", self.admin_site.admin_view(self.override_validation), name="override"),
+            url(r"validate/exon$", self.admin_site.admin_view(self.validate_exon), name="validate_exon"),
+            url(r"validate/protein$", self.admin_site.admin_view(self.validate_protein), name="validate_protein"),
+            url(r"validate/sequence$", self.admin_site.admin_view(self.validate_sequence), name="validate_sequence"),
         )
         #print 'urls: ', local_urls + urls
         return local_urls + urls
@@ -146,10 +155,8 @@ class MolecularDataAdmin(admin.ModelAdmin):
 
         imagefile = 'tick.png'
 
-        #genetic_url = '<a href="%s">' % urlresolvers.reverse('admin:genetic_moleculardata_change', args=(obj.id,))
-        #genetic_url += '<img src="%s"/>' % url("/static/images/" + imagefile)
-        genetic_url = '<img src="%s"/>' % url("/static/images/" + imagefile)
-        #genetic_url += '</a>'
+        genetic_url = '<img src="%s"/>' % (settings.STATIC_URL + "images/" + imagefile)
+
         return genetic_url
 
     moleculardata_entered.allow_tags = True
