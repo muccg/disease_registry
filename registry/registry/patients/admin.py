@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import patterns
+from django.conf.urls.defaults import patterns, url
 from django.contrib import admin
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseBadRequest
@@ -104,7 +104,7 @@ class PatientAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super(PatientAdmin, self).get_urls()
         local_urls = patterns("",
-            (r"search/(.*)$", self.admin_site.admin_view(self.search))
+            url(r"search/(.*)$", self.admin_site.admin_view(self.search), name="patient_search")
         )
         return local_urls + urls
 
