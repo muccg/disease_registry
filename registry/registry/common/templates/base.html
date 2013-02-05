@@ -3,13 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <title>{% block headertitle %} Australian Rare disease Registry {% endblock %}  &mdash;</title>
-        <link rel="stylesheet" type="text/css" href="{% static '/static/css/registry.css' %}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/registry.css' %}"/>
         {% block extra_head %}{% endblock %}
         <!--[if IE 6]>
-        <link rel="stylesheet" type="text/css" href="${webhelpers.url('/static/css/ie6.css')}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/ie6.css' %}"/>
         <![endif]-->
         <!--[if IE 7]>
-        <link rel="stylesheet" type="text/css" href="${webhelpers.url('/static/css/ie7.css')}"/>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/ie7.css' %}"/>
         <![endif]-->        
     </head>
     
