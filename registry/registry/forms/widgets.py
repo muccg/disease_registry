@@ -3,11 +3,6 @@ from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from registry.utils import get_static_url
 
-from date import DateWidget
-
-
-LubricatedDateWidget = DateWidget
-
 
 class ComboWidget(forms.TextInput):
     class Media:
