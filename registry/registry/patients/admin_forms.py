@@ -1,5 +1,6 @@
 from django import forms
-from registry.forms.widgets import ComboWidget, LubricatedDateWidget
+from registry.forms.widgets import ComboWidget
+from registry.forms.date import DateWidget
 from registry.utils import get_static_url
 
 from models import *
@@ -26,7 +27,7 @@ class PatientForm(forms.ModelForm):
     }
 
     consent = forms.BooleanField(required=True, help_text="Consent must be given for the patient to be entered on the registry", label="Consent given")
-    date_of_birth = forms.DateField(widget=LubricatedDateWidget(format="%d %B %Y", popup=True, years=-30))
+    date_of_birth = forms.DateField(widget=DateWidget(format="%d %B %Y", popup=True, years=-30))
     address = forms.CharField(widget=forms.Textarea(attrs=ADDRESS_ATTRS))
     next_of_kin_address = forms.CharField(widget=forms.Textarea(attrs=ADDRESS_ATTRS))
 
