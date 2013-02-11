@@ -1,9 +1,10 @@
 from django import forms
-from ccg.utils.webhelpers import url
-from models import *
-from registry.forms.widgets import ComboWidget, LubricatedDateWidget
+from registry.forms.widgets import ComboWidget
+from registry.forms.date import DateWidget
+from registry.utils import get_static_url
 
-from registry.utils.stripspaces import stripspaces
+from models import *
+
 
 class PatientDoctorForm(forms.ModelForm):
     OPTIONS = [
@@ -26,12 +27,12 @@ class PatientForm(forms.ModelForm):
     }
 
     consent = forms.BooleanField(required=True, help_text="Consent must be given for the patient to be entered on the registry", label="Consent given")
-    date_of_birth = forms.DateField(widget=LubricatedDateWidget(format="%d %B %Y", popup=True, years=-30))
+    date_of_birth = forms.DateField(widget=DateWidget(format="%d %B %Y", popup=True, years=-30))
     address = forms.CharField(widget=forms.Textarea(attrs=ADDRESS_ATTRS))
     next_of_kin_address = forms.CharField(widget=forms.Textarea(attrs=ADDRESS_ATTRS))
 
     class Media:
-        js = [url("/static/js/patient.js")]
+        js = [get_static_url("js/patient.js")]
 
     class Meta:
         model = Patient
@@ -47,11 +48,11 @@ class PatientForm(forms.ModelForm):
 
         family_name = cleaneddata.get('family_name')
         if family_name:
-            familyname = registryutils(family_name).upper()
+            familyname = stripspaces(family_name).upper()
 
         givennames = cleaneddata.get('given_names')
         if givennames:
-            givennames = registryutils(givennames)
+            givennames = stripspaces(givennames)
 
         # working_group can be None, which is annoying for the db query below
         # so working_group should be required, but how do we make it required in the model?

@@ -1,9 +1,12 @@
 from django import forms
-from ccg.utils.webhelpers import url
-from models import *
-from registry.forms.widgets import ComboWidget, LiveComboWidget, StaticWidget
+from django.core.urlresolvers import reverse_lazy, get_script_prefix
 
+from registry.forms.widgets import ComboWidget, LiveComboWidget, StaticWidget
 from registry.genetic.models import *
+from registry.utils import get_static_url
+
+from models import *
+
 
 class GeneChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
@@ -25,10 +28,14 @@ class GeneChoiceField(forms.ModelChoiceField):
         print 'validating model: ', value, str(dir(value)) 
         return super(GeneChoiceField, self).validate(value)
 
+
 class VariationWidget(forms.TextInput):
     class Media:
-        css = {"all": [url("/static/css/variation.css")]}
-        js = [url("/static/js/json2.js"), url("/static/js/xhr.js"), url("/static/js/variation.js")]
+        css = {"all": [get_static_url("css/variation.css")]}
+        js = [get_static_url("js/json2.js"),
+              get_static_url("js/xhr.js"),
+              get_static_url("variation/variation.js")
+              ]
 
     def __init__(self, attrs={}, backend=None, popup=None):
         """
@@ -49,6 +56,7 @@ class VariationWidget(forms.TextInput):
         else:
             attrs["class"] = "variation"
 
+        self.popup=reverse_lazy("registry:entry") # do not think this is required, have left in case needed under wsgi
         super(VariationWidget, self).__init__(attrs)
 
 
@@ -64,11 +72,11 @@ class MolecularDataForm(forms.ModelForm):
 
 
 class VariationForm(forms.ModelForm):
-    gene = GeneChoiceField(queryset=Gene.objects.all(), label="Gene", widget=LiveComboWidget(backend=url("/admin/genetic/gene/search/")))
-    exon = forms.CharField(label="Exon", required=False, widget=VariationWidget(backend=url("/admin/genetic/moleculardata/validate/exon"), attrs={"minchars": "0"}))
-    protein_variation = forms.CharField(label="Protein variation", required=False, widget=VariationWidget(backend=url("/admin/genetic/moleculardata/validate/protein")))
-    dna_variation = forms.CharField(label="DNA variation", required=False, widget=VariationWidget(backend=url("/admin/genetic/moleculardata/validate/sequence"), popup=url("/genetic/variation/")))
-    rna_variation = forms.CharField(label="RNA variation", required=False, widget=VariationWidget(backend=url("/admin/genetic/moleculardata/validate/sequence"), popup=url("/genetic/variation/")))
+    gene = GeneChoiceField(queryset=Gene.objects.all(), label="Gene", widget=LiveComboWidget(backend=reverse_lazy("admin:gene_search", args=("",))))    
+    exon = forms.CharField(label="Exon", required=False, widget=VariationWidget(backend=reverse_lazy("admin:validate_exon"), attrs={"minchars": "0"}))
+    protein_variation = forms.CharField(label="Protein variation", required=False, widget=VariationWidget(backend=reverse_lazy("admin:validate_protein")))
+    dna_variation = forms.CharField(label="DNA variation", required=False, widget=VariationWidget(backend=reverse_lazy("admin:validate_sequence"), popup=get_script_prefix()+'genetic/variation/'))
+    rna_variation = forms.CharField(label="RNA variation", required=False, widget=VariationWidget(backend=reverse_lazy("admin:validate_sequence"), popup=get_script_prefix()+'genetic/variation/'))
     technique = forms.CharField(label="Technique", widget=ComboWidget(options=["MLPA", "Genomic DNA sequencing", "cDNA sequencing", "Array"]))
 
     class Meta:

@@ -1,17 +1,13 @@
 from django import forms
-from ccg.utils.webhelpers import url
+from django.utils.html import escape
+from django.utils.safestring import mark_safe
+from registry.utils import get_static_url
 
-
-from date import DateWidget
-LubricatedDateWidget = DateWidget
-
-from django.forms.widgets import Select, Widget
 
 class ComboWidget(forms.TextInput):
-#class ComboWidget(Widget):
     class Media:
-        css = {"all": [url("/static/combo/combo.css")]}
-        js = [url("/static/combo/combo.js"), url("/static/js/json2.js"), url("/static/js/xhr.js")]
+        css = {"all": [get_static_url("combo/combo.css")]}
+        js = [get_static_url("combo/combo.js"), get_static_url("js/json2.js"), get_static_url("js/xhr.js")]
 
     def __init__(self, attrs={}, options=[]):
         """
@@ -35,8 +31,8 @@ class ComboWidget(forms.TextInput):
 
 class LiveComboWidget(ComboWidget):
     class Media:
-        css = {"all": ComboWidget.Media.css["all"] + [url("/static/combo/live.css")]}
-        js = ComboWidget.Media.js + [url("/static/combo/live.js")]
+        css = {"all": ComboWidget.Media.css["all"] + [get_static_url("combo/live.css")]}
+        js = ComboWidget.Media.js + [get_static_url("combo/live.js")]
 
     def __init__(self, attrs={}, backend=""):
         """
@@ -89,14 +85,11 @@ class StaticWidget(forms.HiddenInput):
         super(StaticWidget, self).__init__(attrs)
 
     def render(self, name, value, attrs=None):
-        from cgi import escape
-
         if self.text:
             text = self.text
         else:
             text = value
-
-        return super(StaticWidget, self).render(name, value, attrs) + escape(unicode(text))
+        return mark_safe(super(StaticWidget, self).render(name, value, attrs) + escape(unicode(text)))
 
     def _has_changed(self, initial, data):
         # Static input fields never change.
@@ -117,7 +110,8 @@ class PercentageWidget(forms.TextInput):
         super(PercentageWidget, self).__init__(attrs, *args, **kwargs)
 
     def render(self, name, value, attrs=None):
-        return super(PercentageWidget, self).render(name, value, attrs) + " %"
+        return mark_safe(super(PercentageWidget, self).render(name, value, attrs) + " %")
+
 
 # to add the text after the input field
 class FVCPercentageWidget(forms.TextInput):
