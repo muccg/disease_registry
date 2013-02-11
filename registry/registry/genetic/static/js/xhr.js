@@ -27,14 +27,17 @@ var XHR = {
     }
 };
 
+
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {
         var cookies = document.cookie.split(';');
         for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i]; //jQuery.trim(cookies[i]);
+            var cookie = cookies[i];
+            cookie = cookie.replace(/^\s+|\s+$/g,''); // trim whitespace
+
             // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+            if (cookie.search(name) != -1) {
                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                 break;
             }
@@ -42,6 +45,7 @@ function getCookie(name) {
     }
     return cookieValue;
 };
+
 
 function sameOrigin(url) {
     // url could be relative or scheme relative or absolute

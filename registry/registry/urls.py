@@ -1,9 +1,9 @@
-from django.conf.urls.defaults import *
-from django.contrib import admin
+from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('',
-    (r'^dm1/', include("registry.dm1.urls"), {}),
-    (r'^dmd/', include("registry.dmd.urls"), {}),
-    (r'^sma/', include("registry.sma.urls"), {}),
-    (r'^admin/', include(admin.site.urls), {}),
+    url(r'^genetic/', include("registry.genetic.urls")),
+    url(r'^groups/', include("registry.groups.urls")),
+    url(r'^humangenome/', include("registry.humangenome.urls")),
+    url(r'^patients/', include("registry.patients.urls")),
+    url(r'^errortest/', include("registry.common.urls")),
 )
