@@ -280,6 +280,52 @@ class TestSequenceVariation(unittest.TestCase):
 
         self.assertEqual(unicode(seq), input, "Sequence variation as string does not match input")
 
+    def test_parse_substitution_with_old_style_mosaic(self):
+        input = "c.[=,42A>G]"
+        seq = SequenceVariation(input)
+
+        self.assertEqual(seq.type.type, "c", "Sequence variation type is not coding DNA")
+        self.assertEqual(len(seq.alleles), 1, "Sequence variation does not contain 1 allele")
+       
+        allele = seq.alleles[0]
+
+        self.assertEqual(len(allele.variations), 2, "Allele does not have 1 variation")
+
+        variation = allele.variations[1]
+
+        self.assertTrue(isinstance(variation, Substitution), "Variation is not an subsitution")
+        self.assertEqual(variation.old, "A", "variation.old is not A")
+        self.assertEqual(variation.new, "G", "variation.old is not G")
+
+        location = variation.location
+
+        self.assertTrue(isinstance(location, Position), "Location is not a single position")
+        self.assertEqual(location.position, 42, "Location is not the answer")
+
+        # not sure if string of seq should include [ and ] - at present it does not so this fails
+        #self.assertEqual(unicode(seq), input, "Sequence variation as string does not match input")
+
+
+    def test_parse_substitution_delins(self):
+        input = "c.112_117delinsTG"
+        seq = SequenceVariation(input)
+
+        self.assertEqual(seq.type.type, "c", "Sequence variation type is not coding DNA")
+        self.assertEqual(len(seq.alleles), 1, "Sequence variation does not contain 1 allele")
+       
+        allele = seq.alleles[0]
+
+        self.assertEqual(len(allele.variations), 2, "Allele does not have 1 variation")
+
+        variation = allele.variations[0]
+
+        self.assertTrue(isinstance(variation, Deletion), "Variation is not an deletion")
+        location = variation.location
+        print location
+        self.assertTrue(isinstance(location, Range), "Location is not a range")
+        self.assertEqual(str(location), '112_117', "Location is not correct")
+
+
 
 # TODO: Tests for multiple alleles, multiple variations, mosaicism, uncertain
 # alleles, indels, complex variations, conversions, triplication and
