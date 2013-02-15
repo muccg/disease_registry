@@ -1,5 +1,5 @@
 import unittest
-from protein import *
+from registry.humangenome.protein import *
 
 
 class TestProteinVariation(unittest.TestCase):

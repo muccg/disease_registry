@@ -4,6 +4,8 @@ import sequence
 
 class Allele(sequence.Allele):
     def parse(self, input):
+        # TODO not sure that protein variations can include mosaics
+        # http://www.hgvs.org/mutnomen/FAQ.html#mosaic
         if "," in input:
             self.mosaic = True
             variations = input.split(",")

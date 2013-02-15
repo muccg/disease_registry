@@ -1,5 +1,5 @@
 import unittest
-from exon import *
+from registry.humangenome.exon import *
 
 
 class TestExonVariation(unittest.TestCase):
