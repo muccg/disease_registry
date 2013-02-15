@@ -1,5 +1,5 @@
 import unittest
-from sequence import *
+from registry.humangenome.sequence import *
 
 
 class TestSequenceVariation(unittest.TestCase):
