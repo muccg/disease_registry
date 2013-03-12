@@ -1,6 +1,6 @@
 .*\.pyc$
 .ccgplatform
-virt_registry/*
+^virt_*/*
 ^registry/tmp/*
 ^registry/fab-tmp/*
 ^registry/scratch/*
