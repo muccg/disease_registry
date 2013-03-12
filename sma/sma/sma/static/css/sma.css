@@ -1,0 +1,31 @@
+#header-container {
+    position: absolute;
+    background: #3D6E2B;
+    color: white;
+    height: 4em;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+#footer-container {
+    clear: both;
+    background: #3D6E2B;
+    color: #eee;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0;
+    margin: 0;
+}
+
+a {
+    color: #3D6E2B;
+}
+
+#stakeholders a:hover {
+    background: #3D6E2B;
+    color: white;
+}
+
+/* VIM: set nocin ai et ts=4 sw=4: */
