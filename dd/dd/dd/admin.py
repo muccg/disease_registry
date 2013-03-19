@@ -2,6 +2,7 @@ from django.contrib import admin
 from dd.dd.models import *
 from admin_forms import *
 from registry.utils import get_static_url
+from registry import groups
 
 class DDMedicalHistoryAdminInline(admin.TabularInline):
     model = DDMedicalHistoryRecord
@@ -79,8 +80,6 @@ class DDDiagnosisAdmin(admin.ModelAdmin):
         }
 
     def queryset(self, request):
-        import registry.groups.models
-
         if request.user.is_superuser:
             return DDDiagnosis.objects.all()
 

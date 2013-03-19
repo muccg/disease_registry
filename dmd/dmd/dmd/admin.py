@@ -2,6 +2,7 @@ from django.contrib import admin
 from admin_forms import *
 from models import *
 from registry.groups.models import User as RegistryUser
+from registry import groups
 from registry.utils import get_static_url
 
 class MotorFunctionInline(admin.StackedInline):
@@ -100,8 +101,6 @@ class DiagnosisAdmin(admin.ModelAdmin):
         }
 
     def queryset(self, request):
-        import registry.groups.models
-
         if request.user.is_superuser:
             return Diagnosis.objects.all()
 
