@@ -1,0 +1,14 @@
+.*\.pyc$
+.ccgplatform
+^virt_*/*
+^registry/tmp/*
+^registry/fab-tmp/*
+^registry/scratch/*
+^registry/log/*
+^registry/virtualenv*
+^.*appsettings*
+bootstrap/
+build/
+dist/
+registry/registry/logs*
+^registry/django_diseaseregistry.egg-info*
