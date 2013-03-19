@@ -3,6 +3,7 @@ from admin_forms import *
 from models import *
 from base import CancerTypeChoices
 from registry.utils import get_static_url
+from registry import groups
 
 
 class MotorFunctionInline(admin.StackedInline):
@@ -133,8 +134,6 @@ class DiagnosisAdmin(admin.ModelAdmin):
         }
 
     def queryset(self, request):
-        import registry.groups.models
-
         if request.user.is_superuser:
             return Diagnosis.objects.all()
 
