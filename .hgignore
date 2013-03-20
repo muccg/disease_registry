@@ -12,3 +12,8 @@ build/
 dist/
 registry/registry/logs*
 ^registry/django_diseaseregistry.egg-info*
+^dd/django_ddregistry.egg-info*
+^dmd/django_dmdregistry.egg-info*
+^dm1/django_dm1registry.egg-info*
+^sma/django_smaregistry.egg-info*
+.*\.rpm$
