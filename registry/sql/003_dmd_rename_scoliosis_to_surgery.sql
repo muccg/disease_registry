@@ -1,1 +1,0 @@
-ALTER TABLE dmd_scoliosis RENAME TO dmd_surgery;

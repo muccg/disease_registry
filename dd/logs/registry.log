@@ -1,0 +1,6 @@
+Registry [DEBUG:2013-03-19 11:29:45,242:models.py:389:signal_patient_post_save] patient post_save signal
+Registry [DEBUG:2013-03-19 11:29:45,246:models.py:394:signal_patient_post_save] Diagnosis record created
+Registry [DEBUG:2013-03-19 11:53:19,536:models.py:389:signal_patient_post_save] patient post_save signal
+Registry [DEBUG:2013-03-19 11:53:19,539:models.py:394:signal_patient_post_save] Diagnosis record already existed
+Registry [DEBUG:2013-03-19 12:02:55,409:models.py:389:signal_patient_post_save] patient post_save signal
+Registry [DEBUG:2013-03-19 12:02:55,412:models.py:394:signal_patient_post_save] Diagnosis record created

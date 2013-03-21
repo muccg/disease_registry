@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block headertitle %} Australian National Duchenne Muscular Dystrophy Registry {% endblock %}
+{% block bodytitle %} Australian National Duchenne Muscular Dystrophy Registry {% endblock %}
+{% block extra_head %}<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/dmd.css">{% endblock %}
+
+{% block content %}
+<div id="container">
+    <div id="introduction">
+        <div id="background">
+            <h2>Background</h2>
+
+            <p>
+                Recent scientific and medical advances have led to substantial
+                changes in the treatment of many neuromuscular diseases (NMD).
+                New therapeutic strategies are being developed and, for some of
+                these treatments, plans for large studies involving patients
+                from more than one country are already in place.
+            </p>
+            <p>
+                The Australian National Duchenne Muscular Dystrophy (DMD) Registry
+                has been developed to collate a patient's DMD gene sequence and
+                clinical information about their disease. The Registry provides an
+                important enabling tool for clinicians and clinical trial sponsors
+                to quickly identify patients suitable for each study, particularly
+                those therapeutic strategies that target specific genetic defects.
+                Potentially eligible patients will be informed about new trials and
+                studies through the Registry's clinical network.
+            </p>
+        </div>
+
+        <div id="purpose">
+            <h2>Purpose</h2>
+
+            <p>
+                To provide Australian Duchenne Muscular Dystrophy families with an
+                opportunity to improve the outcomes of individuals affected by DMD.
+            </p>
+        </div>
+
+        <div id="objectives">
+            <h2>Objectives</h2>
+
+            <p>
+                To improve care of DMD patients through the coordination of
+                diagnosis and therapy and by ensuring new intervention strategies
+                are available on an equitable and consistent manner across Australia; and
+            </p>
+            <p>
+                To improve opportunities for international collaboration by
+                facilitating and accelerating recruitment process of Australian DMD
+                patients into new clinical trials and for participating in studies
+                for the benefit of the world DMD community and the advancement of medical science.
+            </p>
+
+            <p>
+                The Australian National DMD Registry adheres to the <a
+                href="http://www.nhmrc.gov.au/publications/ethics/2007_humans/contents.htm">National
+                Health and Medical Research Council's National
+                Statement</a>, forms part of an international effort
+                led by
+                <a href="http://www.treat-nmd.eu/home.php">TREAT-NMD</a>,
+                which brings together patients and specialists working
+                on treatments for neuromuscular (NMD) disorders, and
+                has received approval reference #2010/23 from the
+                <a href="http://www.health.wa.gov.au/healthdata/HREC/index.cfm">Department
+                of Health WA Human Research Ethics Committee</a>.
+            </p>
+        </div>
+
+        <div id="contact">
+            <h2>Contact</h2>
+
+            <p>
+                For more information on the Australian National
+                Duchenne Muscular Dystrophy Registry, please <a
+                href="http://www.genomics.health.wa.gov.au/contact/index.cfm">contact
+                the Office of Population Health Genomics</a>.
+            </p>
+
+            <p>
+                The consent form for patients wishing to participate in
+                the registry can be
+                <a href="{{ STATIC_URL }}Australian_National_DMD_Registry_consent_form_100930.pdf">downloaded here</a>.          
+            </p>
+        </div>
+    </div>
+
+    <div id="stakeholders">
+        <h2>Stakeholders</h2>
+
+        <h3>Muscular Dystrophy Associations</h3>
+
+        <ul>
+            <li><a href="http://www.duchennefoundation.org.au/">Duchenne Foundation</a></li>
+            <li><a href="http://mdaustralia.org.au/">Muscular Dystrophy Foundation Australia</a></li>
+            <li><a href="http://mda.org.au/">Muscular Dystrophy Australia</a></li>
+            <li><a href="http://mdnsw.org.au/">Muscular Dystrophy New South Wales</a></li>
+            <li><a href="http://mdqld.org.au/">Muscular Dystrophy Queensland</a></li>
+            <li><a href="http://mdasa.org.au/">Muscular Dystrophy South Australia</a></li>
+            <li><a href="http://mdtasmania.org.au/">Muscular Dystrophy Tasmania</a></li>
+            <li><a href="http://www.mdawa.asn.au/">Muscular Dystrophy Western Australia</a></li>
+        </ul>
+
+        <h3>Government Bodies</h3>
+
+        <ul>
+            <li><a href="http://www.chw.edu.au/">The Children's Hospital at Westmead</a></li>
+            <li><a href="http://www.sch.edu.au/">Sydney Children's Hospital</a></li>
+            <li><a href="http://www.health.nt.gov.au/">Department of Health and Families (NT)</a></li>
+            <li><a href="http://www.health.qld.gov.au/">Queensland Health</a></li>
+            <li><a href="http://www.health.sa.gov.au/">Department of Health (SA)</a></li>
+            <li><a href="http://www.dhhs.tas.gov.au/">Department of Health and Human Services (Tasmania)</a></li>
+            <li><a href="http://www.health.vic.gov.au/">Department of Health (Victoria)</a></li>
+            <li><a href="http://www.health.wa.gov.au/">Department of Health (WA)</a></li>
+        </ul>
+    </div>
+
+    <div style="clear: both"></div>
+</div>
+
+{% endblock %}
