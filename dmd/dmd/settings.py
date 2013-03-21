@@ -68,6 +68,8 @@ INSTALLED_APPS.extend([
     'registry.patients',
     'registry.genetic',
     'registry.common',
+    'django_qbe',
+    'django_qbe.savedqueries'
 ])
 
 # these determine which authentication method to use
