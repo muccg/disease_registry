@@ -1,0 +1,88 @@
+a:link, a:visited {
+    color: #194c9d;
+    text-decoration: none;
+}
+
+h1 {
+    font-size: 21px;
+    color: #333;
+    padding: 0 6px 0 0;
+    margin: 0 0 .2em 0;
+    font-family: Helvetica, Arial, Sans-Serif;
+}
+
+.row1 {
+    background: #E6EFFF;
+}
+
+
+.module h2, .module caption, .inline-group h2 {
+    margin: 0;
+    padding: 2px 5px 3px 5px;
+    font-size: 11px;
+    text-align: left;
+    font-weight: bold;
+    background: #7F3704;
+    color: white;
+}
+
+
+#header {
+    background: #7F3704;
+    color: #eee;
+    overflow: hidden;
+}
+
+#branding h1 {
+    padding: 0 10px;
+    margin: 8px 0;
+    font-weight: bold;
+    color: white;
+}
+
+#user-tools {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 1.4em 10px;
+    font-size: 11px;
+    text-align: right;
+}
+
+#content-related .module h2 {
+    background: #eee;
+    color: #666;
+}
+
+.calendar caption {
+    text-align: center;
+}
+
+/* Trac 16 #1 "Note: All fields in BOLD are required" */
+div.requirednote {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    font-size: 0.9em;
+}
+
+div.requirednote span {
+    font-weight: bold;
+}
+
+div.asymptomaticnote {
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+div.asymptomaticnote span {
+    font-weight: bold;
+}
+
+input#id_respiratory-0-predictedfvc, input#id_respiratory-0-ci {
+    text-align: right; /* for percentage */
+}
+
+/* for the Consent form in the Registry Admin form */
+div#consent-group div.q1 label, div#consent-group div.q2 label, div#consent-group div.q3 label, div#consent-group div.q3 label, div#consent-group div.q4 label,
+div#consent-group div.q5 label, div#consent-group div.q6 label, div#consent-group div.q7 label {
+    width: 40%;
+}

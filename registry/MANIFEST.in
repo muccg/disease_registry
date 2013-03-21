@@ -1,0 +1,6 @@
+recursive-include registry/common *
+recursive-include registry/forms *
+recursive-include registry/genetic *
+recursive-include registry/groups *
+recursive-include registry/humangenome *
+recursive-include registry/patients *
