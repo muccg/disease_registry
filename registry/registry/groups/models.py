@@ -1,6 +1,6 @@
 from django.db import models, transaction
 
-import django.contrib.auth
+from django.contrib.auth.models import User
 
 
 class WorkingGroup(models.Model):
@@ -14,7 +14,7 @@ class WorkingGroup(models.Model):
 
 
 class User(models.Model):
-    user = models.OneToOneField(django.contrib.auth.models.User, primary_key=True)
+    user = models.OneToOneField(User, primary_key=True)
     title = models.CharField(max_length=50, verbose_name="position")
     working_group = models.ForeignKey(WorkingGroup, null=True)
 
@@ -40,4 +40,4 @@ from django.db.models.signals import post_save
 def user_post_save_handler(sender, instance, **kwargs):
     profile, new = User.objects.get_or_create(user=instance)
 
-post_save.connect(user_post_save_handler, sender=django.contrib.auth.models.User)
+post_save.connect(user_post_save_handler, sender=User)
