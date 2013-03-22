@@ -52,6 +52,8 @@ class DDMRIDataAdmin(admin.ModelAdmin):
     inlines = [DDMRIDataRecordInline]
 
 class DDDiagnosisAdmin(admin.ModelAdmin):
+    form = DDDiagnosisForm
+    
     inlines = [
                DDMedicalHistoryAdminInline,
                DDClinicalDataInline,
@@ -104,7 +106,6 @@ class DDDiagnosisAdmin(admin.ModelAdmin):
 
     progress_graph.allow_tags = True
     progress_graph.short_description = "Diagnosis Entry Progress"
-
     
 #admin.site.register(MedicalHistoryItem)
 #admin.site.register(MedicalHistoryGrouping)
