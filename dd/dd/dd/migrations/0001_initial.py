@@ -114,6 +114,8 @@ class Migration(SchemaMigration):
             ('age_at_clinical_diagnosis', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
             ('age_at_molecular_diagnosis', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
             ('orphanet', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.OrphanetChoices'], null=True, blank=True)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')()),
+            ('updated', self.gf('django.db.models.fields.DateTimeField')()),
         ))
         db.send_create_signal('dd', ['DDDiagnosis'])
 
@@ -291,10 +293,12 @@ class Migration(SchemaMigration):
             'affected_status': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '30'}),
             'age_at_clinical_diagnosis': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'age_at_molecular_diagnosis': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'created': ('django.db.models.fields.DateTimeField', [], {}),
             'diagnosis': ('django.db.models.fields.CharField', [], {'default': "'UNK'", 'max_length': '3'}),
             'first_suspected_by': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'orphanet': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.OrphanetChoices']", 'null': 'True', 'blank': 'True'}),
-            'patient': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'patient_diagnosis'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['dd.Patient']"})
+            'patient': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'patient_diagnosis'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['dd.Patient']"}),
+            'updated': ('django.db.models.fields.DateTimeField', [], {})
         },
         'dd.ddlabdata': {
             'Meta': {'object_name': 'DDLabData', '_ormbases': ['dd.LabData']},
@@ -447,6 +451,11 @@ class Migration(SchemaMigration):
             'suburb': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'surgery_name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'})
         },
+        'patients.nextofkinrelationship': {
+            'Meta': {'object_name': 'NextOfKinRelationship'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'relationship': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+        },
         'patients.patient': {
             'Meta': {'ordering': "['family_name', 'given_names', 'date_of_birth']", 'unique_together': "(('family_name', 'given_names', 'working_group'),)", 'object_name': 'Patient'},
             'active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
@@ -467,6 +476,7 @@ class Migration(SchemaMigration):
             'next_of_kin_home_phone': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
             'next_of_kin_mobile_phone': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
             'next_of_kin_postcode': ('django.db.models.fields.IntegerField', [], {}),
+            'next_of_kin_relationship': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['patients.NextOfKinRelationship']", 'null': 'True', 'blank': 'True'}),
             'next_of_kin_state': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'next_of_kin_set'", 'to': "orm['patients.State']"}),
             'next_of_kin_suburb': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'next_of_kin_work_phone': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
