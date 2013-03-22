@@ -12,7 +12,7 @@ class PatientDoctorForm(forms.ModelForm):
         "Paediatric Neurologist",
         "Neurologist",
         "Geneticist",
-        "Specialist",
+        "Specialist - Other",
     ]
     relationship = forms.CharField(label="Relationship", widget=ComboWidget(options=OPTIONS))
 
