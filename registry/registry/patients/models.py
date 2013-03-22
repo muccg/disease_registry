@@ -48,6 +48,14 @@ class Doctor(models.Model):
     def __unicode__(self):
         return "%s %s" % (self.family_name.upper(), self.given_names)
 
+class NextOfKinRelationship(models.Model):
+    relationship = models.CharField(max_length=100, verbose_name="Relationship")
+    
+    class Meta:
+        verbose_name = 'Next of Kin Relationship'
+    
+    def __unicode__(self):
+        return self.relationship
 
 class Patient(models.Model):
     if settings.INSTALL_NAME == 'dm1':   # Trac #16 item 9
@@ -71,6 +79,7 @@ class Patient(models.Model):
     email = models.EmailField(blank=True, null=True)
     next_of_kin_family_name = models.CharField(max_length=100, verbose_name="family name")
     next_of_kin_given_names = models.CharField(max_length=100, verbose_name="given names")
+    next_of_kin_relationship = models.ForeignKey(NextOfKinRelationship, verbose_name="Relationship", blank=True, null=True)
     next_of_kin_address = models.TextField(verbose_name="Address")
     next_of_kin_suburb = models.CharField(max_length=50, verbose_name="Suburb/Town")
     next_of_kin_state = models.ForeignKey(State, verbose_name="State/Province/Territory", related_name="next_of_kin_set")

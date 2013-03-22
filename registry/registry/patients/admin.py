@@ -65,6 +65,7 @@ class PatientAdmin(admin.ModelAdmin):
             "fields":
             ("next_of_kin_family_name",
              "next_of_kin_given_names",
+             "next_of_kin_relationship",
              "next_of_kin_address",
              "next_of_kin_suburb",
              "next_of_kin_state",
@@ -206,11 +207,14 @@ class StateAdmin(admin.ModelAdmin):
     list_display = ["name", "country"]
     search_fields = ["name"]
 
+class NextOfKinRelationshipAdmin(admin.ModelAdmin):
+    model = NextOfKinRelationship
 
 admin.site.register(Country, CountryAdmin)
 admin.site.register(Doctor, DoctorAdmin)
 admin.site.register(Patient, PatientAdmin)
 admin.site.register(State, StateAdmin)
+admin.site.register(NextOfKinRelationship, NextOfKinRelationshipAdmin)
 
 
 admin.site.disable_action('delete_selected')
