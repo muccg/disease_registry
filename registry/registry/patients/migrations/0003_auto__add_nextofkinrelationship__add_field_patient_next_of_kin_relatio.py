@@ -1,18 +1,32 @@
-# encoding: utf-8
+# -*- coding: utf-8 -*-
 import datetime
 from south.db import db
-from south.v2 import DataMigration
+from south.v2 import SchemaMigration
 from django.db import models
 
-class Migration(DataMigration):
+
+class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        from django.core.management import call_command
-        call_command("loaddata", "initial_patients.json", exceptiononerror=True)
+        # Adding model 'NextOfKinRelationship'
+        db.create_table('patients_nextofkinrelationship', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('relationship', self.gf('django.db.models.fields.CharField')(max_length=100)),
+        ))
+        db.send_create_signal('patients', ['NextOfKinRelationship'])
+
+        # Adding field 'Patient.next_of_kin_relationship'
+        db.add_column('patients_patient', 'next_of_kin_relationship',
+                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['patients.NextOfKinRelationship'], null=True, blank=True),
+                      keep_default=False)
 
 
     def backwards(self, orm):
-        "Write your backwards methods here."
+        # Deleting model 'NextOfKinRelationship'
+        db.delete_table('patients_nextofkinrelationship')
+
+        # Deleting field 'Patient.next_of_kin_relationship'
+        db.delete_column('patients_patient', 'next_of_kin_relationship_id')
 
 
     models = {
@@ -38,6 +52,11 @@ class Migration(DataMigration):
             'suburb': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'surgery_name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'})
         },
+        'patients.nextofkinrelationship': {
+            'Meta': {'object_name': 'NextOfKinRelationship'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'relationship': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+        },
         'patients.patient': {
             'Meta': {'ordering': "['family_name', 'given_names', 'date_of_birth']", 'unique_together': "(('family_name', 'given_names', 'working_group'),)", 'object_name': 'Patient'},
             'active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
@@ -58,6 +77,7 @@ class Migration(DataMigration):
             'next_of_kin_home_phone': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
             'next_of_kin_mobile_phone': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
             'next_of_kin_postcode': ('django.db.models.fields.IntegerField', [], {}),
+            'next_of_kin_relationship': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['patients.NextOfKinRelationship']", 'null': 'True', 'blank': 'True'}),
             'next_of_kin_state': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'next_of_kin_set'", 'to': "orm['patients.State']"}),
             'next_of_kin_suburb': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'next_of_kin_work_phone': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
