@@ -181,6 +181,9 @@ class DDDiagnosis(models.Model):
     age_at_molecular_diagnosis = models.IntegerField('age in years at molecular diagnosis', null=True, blank=True)
 
     orphanet = models.ForeignKey(OrphanetChoices, null=True, blank = True)
+    
+    created = models.DateTimeField(editable=False)
+    updated = models.DateTimeField(editable=False)
 
     def __unicode__(self):
         return str(self.patient)
@@ -188,6 +191,13 @@ class DDDiagnosis(models.Model):
     class Meta:
         verbose_name = "Demyelinating Disease Diagnosis"
         verbose_name_plural = "Demyelinating Disease Diagnoses"
+
+    def save(self, *args, **kwargs):
+        '''On save, update timestamps, auto-fields reportedly unreliable'''
+        if not self.created:
+            self.created = datetime.datetime.now()
+        self.updated = datetime.datetime.now()
+        super(DDDiagnosis, self).save(*args, **kwargs)
 
     def percentage_complete(self):
         score = 0.0
