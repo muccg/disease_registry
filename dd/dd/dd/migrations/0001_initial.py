@@ -36,12 +36,28 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('dd', ['LongitudinalData'])
 
+        # Adding model 'MedicalHistoryDisease'
+        db.create_table('dd_medicalhistorydisease', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('disease', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('chronic', self.gf('django.db.models.fields.BooleanField')(default=False)),
+        ))
+        db.send_create_signal('dd', ['MedicalHistoryDisease'])
+
         # Adding model 'MedicalHistory'
         db.create_table('dd_medicalhistory', (
             ('longitudinalset_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dd.LongitudinalSet'], unique=True, primary_key=True)),
             ('patient', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['patients.Patient'])),
         ))
         db.send_create_signal('dd', ['MedicalHistory'])
+
+        # Adding M2M table for field disease on 'MedicalHistory'
+        db.create_table('dd_medicalhistory_disease', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('medicalhistory', models.ForeignKey(orm['dd.medicalhistory'], null=False)),
+            ('medicalhistorydisease', models.ForeignKey(orm['dd.medicalhistorydisease'], null=False))
+        ))
+        db.create_unique('dd_medicalhistory_disease', ['medicalhistory_id', 'medicalhistorydisease_id'])
 
         # Adding model 'MedicalHistoryRecord'
         db.create_table('dd_medicalhistoryrecord', (
@@ -222,8 +238,14 @@ class Migration(SchemaMigration):
         # Deleting model 'LongitudinalData'
         db.delete_table('dd_longitudinaldata')
 
+        # Deleting model 'MedicalHistoryDisease'
+        db.delete_table('dd_medicalhistorydisease')
+
         # Deleting model 'MedicalHistory'
         db.delete_table('dd_medicalhistory')
+
+        # Removing M2M table for field disease on 'MedicalHistory'
+        db.delete_table('dd_medicalhistory_disease')
 
         # Deleting model 'MedicalHistoryRecord'
         db.delete_table('dd_medicalhistoryrecord')
@@ -379,8 +401,15 @@ class Migration(SchemaMigration):
         },
         'dd.medicalhistory': {
             'Meta': {'object_name': 'MedicalHistory', '_ormbases': ['dd.LongitudinalSet']},
+            'disease': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['dd.MedicalHistoryDisease']", 'symmetrical': 'False'}),
             'longitudinalset_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dd.LongitudinalSet']", 'unique': 'True', 'primary_key': 'True'}),
             'patient': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['patients.Patient']"})
+        },
+        'dd.medicalhistorydisease': {
+            'Meta': {'object_name': 'MedicalHistoryDisease'},
+            'chronic': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'disease': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         'dd.medicalhistoryrecord': {
             'Meta': {'object_name': 'MedicalHistoryRecord', '_ormbases': ['dd.LongitudinalData']},
