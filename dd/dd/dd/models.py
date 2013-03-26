@@ -95,6 +95,7 @@ class MedicalHistoryDisease(models.Model):
 
     class Meta:
         verbose_name = "Medical History Disease"
+        verbose_name_plural = "Medical History Diseases"
 
 class MedicalHistory(LongitudinalSet):
     patient = models.ForeignKey(RegistryPatient)
