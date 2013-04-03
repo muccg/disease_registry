@@ -1,4 +1,6 @@
 from django.http import HttpResponse
+from django.db.models import Q
+
 import csv, StringIO
 
 from models import *
@@ -19,12 +21,12 @@ def squerycsv(request):
     response['Content-Disposition'] = 'attachment; filename=query.csv'
     return response
 
-def squery(request):
+def squery(request, working_group):
 
-    results = specialquery()
+    results = specialquery(working_group)
     return HttpResponse("squery results: %s" % results)
 
-def specialquery():
+def specialquery(working_group):
     dateranges = (
         ('2011-06-16', '2020-12-31'),
         ('2008-06-16', '2011-06-15'),
@@ -36,10 +38,10 @@ def specialquery():
         ('1900-01-01', '1993-06-15')
         )
 
-    results = [getqueryresults(d) for d in dateranges]
+    results = [getqueryresults(d, working_group) for d in dateranges]
     return results
 
-def getqueryresults(daterange):
+def getqueryresults(daterange, working_group):
     '''
     returns a dictionary with STRING values for: startbirthdate, endbirthdate
                 ambulant, nonambulant, ambulantunknown,
@@ -51,8 +53,15 @@ def getqueryresults(daterange):
 
     # get the diagnoses for the patients in the age range requested
     q0 = Diagnosis.objects.filter(patient__date_of_birth__gte=daterange[0])
+
+    # filter by working group
+    if working_group == 'nz':
+        q_wg = q0.filter(patient__working_group__name__iexact='NEW ZEALAND')
+    if working_group == 'au':
+        q_wg = q0.filter(~Q(patient__working_group__name__iexact='NEW ZEALAND'))
+
     # q1 has all the diagnoses for patients with their birth date wihton the date range
-    q1 = q0.filter(patient__date_of_birth__lte=daterange[1])
+    q1 = q_wg.filter(patient__date_of_birth__lte=daterange[1])
 
     print "patients: %s" % str([d.patient.family_name for d in q1])
     total = q1.count()
