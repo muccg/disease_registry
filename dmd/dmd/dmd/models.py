@@ -120,7 +120,7 @@ class Surgery(models.Model):
 class Heart(models.Model):
     diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
     current = models.NullBooleanField(verbose_name="current cardiac medication")
-    failure = models.NullBooleanField(verbose_name="heart failure/​cardiomyopathy")
+    failure = models.NullBooleanField(verbose_name="heart failure/ cardiomyopathy")
     lvef = models.IntegerField(null=True, blank=True, verbose_name="LVEF score", help_text="Left Ventricular Ejection Fraction (LVEF) determined by ultrasound examination of the heart; expressed in % [%=(End disatolic volume - End systolic volume) ÷ End diastolic volume] to specify last LVEF(%) and date of examination")
     lvef_date = models.DateField(null=True, blank=True, verbose_name="LVEF date")
 
