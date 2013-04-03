@@ -55,10 +55,11 @@ setup(name='django-dmdregistry',
         'ccg-auth==0.3.2',
         'ccg-extras==0.1.5',
         'django-userlog==0.2.1',
-        'MySQL-python==1.2.3'          
+        'MySQL-python==1.2.3',
+        'django_qbe'       
     ],
     dependency_links = [
         "http://repo.ccgapps.com.au",
-        "https://bitbucket.org/ahunter_ccg/django-userlog/downloads/django_userlog-0.2.1.tar.gz",
+        "https://bitbucket.org/ccgmurdoch/django-userlog/downloads/django_userlog-0.2.1.tar.gz",
     ],
 )

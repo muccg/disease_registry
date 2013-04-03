@@ -60,6 +60,6 @@ setup(name='django-ddregistry',
     ],
     dependency_links = [
         "http://repo.ccgapps.com.au",
-        "https://bitbucket.org/ahunter_ccg/django-userlog/downloads/django_userlog-0.2.1.tar.gz",
+        "https://bitbucket.org/ccgmurdoch/django-userlog/downloads/django_userlog-0.2.1.tar.gz",
     ],
 )
