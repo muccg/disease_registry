@@ -20,5 +20,5 @@ urlpatterns = patterns('',
 
 # 2011-09-28 for special query
 urlpatterns += patterns('', (r'^squery/(?P<working_group>\w{2})$', views.squery))  # string output for debug
-urlpatterns += patterns('', (r'^squerycsv$', views.squerycsv))  # CSV file output
+urlpatterns += patterns('', (r'^squerycsv/(?P<working_group>\w{2})$', views.squerycsv))  # CSV file output
 

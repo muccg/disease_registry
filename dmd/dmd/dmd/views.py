@@ -6,19 +6,19 @@ import csv, StringIO
 from models import *
 
 # special query for Hugh
-def squerycsv(request):
+def squerycsv(request, working_group):
 
     # from the book Python Web Development with Django p 246
     response = HttpResponse(mimetype="text/csv")
     writer = csv.writer(response)
 
-    results = specialquery()
+    results = specialquery(working_group)
     for r in results:
         writer.writerow((r["startbirthdate"], r["endbirthdate"],
                 r["ambulant"], r["nonambulant"], r["ambulantunknown"],
                 r["onsteroids"], r["notonsteroids"], r["steroidsunknown"],
                 r["trial"], r["total"]))
-    response['Content-Disposition'] = 'attachment; filename=query.csv'
+    response['Content-Disposition'] = 'attachment; filename=query_' + working_group + '.csv'
     return response
 
 def squery(request, working_group):
