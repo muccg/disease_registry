@@ -10,7 +10,9 @@ admin.autodiscover() # very important so that registry admins (genetic, patient,
 urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)),
     (r'', include("dmd.dmd.urls")),
-    (r'', include(common_urls, namespace="registry")),    
+    (r'', include(common_urls, namespace="registry")),
+    (r'^htsql/', include('htsql_django.urls')),
+    (r'^qbe/', include('django_qbe.urls')),
 )
 
 handler404 = views.handler404
