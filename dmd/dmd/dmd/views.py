@@ -26,6 +26,26 @@ def squery(request, working_group):
     results = specialquery(working_group)
     return HttpResponse("squery results: %s" % results)
 
+def squeryreport(request, working_group):
+    results = get_report(working_group)
+    return HttpResponse("%s" % results)
+
+def squeryreportcsv(results, working_group):
+    response = HttpResponse(mimetype="text/csv")
+    writer = csv.writer(response)
+    
+    results = get_report(working_group)
+    
+    for result in results:
+        writer.writerow((
+            str(result.patient.date_of_birth.strftime('%m/%Y')), 
+            str(result.updated.strftime('%d/%m/%Y')),
+            str(result.patient.postcode)
+        ))
+    
+    response['Content-Disposition'] = 'attachment; filename=report_' + working_group + '.csv'
+    return response
+
 def specialquery(working_group):
     dateranges = (
         ('2011-06-16', '2020-12-31'),
@@ -95,3 +115,13 @@ def getqueryresults(daterange, working_group):
 
     # print "results: %s" % (str(results),)
     return results
+
+def get_report(working_group):
+    query = Diagnosis.objects.all()
+
+    if working_group == 'nz':
+        q0 = query.filter(patient__working_group__name__iexact='NEW ZEALAND')
+    if working_group == 'au':
+        q0 = query.filter(~Q(patient__working_group__name__iexact='NEW ZEALAND'))
+
+    return q0
