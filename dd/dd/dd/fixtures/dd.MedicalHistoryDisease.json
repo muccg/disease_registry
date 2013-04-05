@@ -1,0 +1,122 @@
+[
+    {
+        "pk": 1, 
+        "model": "dd.medicalhistorydisease", 
+        "fields": {
+            "chronic": false, 
+            "disease": "Rheumatoid Arthritis"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "dd.medicalhistorydisease", 
+        "fields": {
+            "chronic": false, 
+            "disease": "Crohn's Disease"
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "dd.medicalhistorydisease", 
+        "fields": {
+            "chronic": false, 
+            "disease": "Ulcerative Colitis"
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "dd.medicalhistorydisease", 
+        "fields": {
+            "chronic": false, 
+            "disease": "Psoriasis"
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "dd.medicalhistorydisease", 
+        "fields": {
+            "chronic": false, 
+            "disease": "Myasthenia Gravis"
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "dd.medicalhistorydisease", 
+        "fields": {
+            "chronic": false, 
+            "disease": "Vitiligo"
+        }
+    }, 
+    {
+        "pk": 7, 
+        "model": "dd.medicalhistorydisease", 
+        "fields": {
+            "chronic": false, 
+            "disease": "Thyroid Disease"
+        }
+    }, 
+    {
+        "pk": 8, 
+        "model": "dd.medicalhistorydisease", 
+        "fields": {
+            "chronic": false, 
+            "disease": "Hypothyroidism"
+        }
+    }, 
+    {
+        "pk": 9, 
+        "model": "dd.medicalhistorydisease", 
+        "fields": {
+            "chronic": false, 
+            "disease": "Hashimoto's Thyroiditis"
+        }
+    }, 
+    {
+        "pk": 10, 
+        "model": "dd.medicalhistorydisease", 
+        "fields": {
+            "chronic": false, 
+            "disease": "Graves' Disease"
+        }
+    }, 
+    {
+        "pk": 11, 
+        "model": "dd.medicalhistorydisease", 
+        "fields": {
+            "chronic": false, 
+            "disease": "Sjorgens Syndrome"
+        }
+    }, 
+    {
+        "pk": 12, 
+        "model": "dd.medicalhistorydisease", 
+        "fields": {
+            "chronic": false, 
+            "disease": "Pernicious Anemia"
+        }
+    }, 
+    {
+        "pk": 13, 
+        "model": "dd.medicalhistorydisease", 
+        "fields": {
+            "chronic": false, 
+            "disease": "Systemic Lupus Erythematosus"
+        }
+    }, 
+    {
+        "pk": 14, 
+        "model": "dd.medicalhistorydisease", 
+        "fields": {
+            "chronic": false, 
+            "disease": "Alopecia"
+        }
+    }, 
+    {
+        "pk": 15, 
+        "model": "dd.medicalhistorydisease", 
+        "fields": {
+            "chronic": false, 
+            "disease": "Family history of MS, NMO (or other autoimmune disease)"
+        }
+    }
+]
