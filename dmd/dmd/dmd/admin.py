@@ -64,10 +64,17 @@ class FamilyMemberInline(admin.TabularInline):
 class NotesInline(admin.TabularInline):
     model = Notes
 
-
 class DiagnosisAdmin(admin.ModelAdmin):
     actions = None
     form = DiagnosisForm
+    fieldsets = (
+        (None, {
+            'fields': ('patient', 'diagnosis', 'muscle_biopsy')
+        }),
+        ('Phenotype', {
+            'fields': ('phenotype_hpo', 'phenotype_orpha')
+        }),
+    )
     inlines = [
         MotorFunctionInline,
         SteroidsInline,
@@ -127,3 +134,5 @@ class DiagnosisAdmin(admin.ModelAdmin):
     progress_graph.short_description = "Diagnosis Entry Progress"
 
 admin.site.register(Diagnosis, DiagnosisAdmin)
+admin.site.register(PhenotypeHpo)
+admin.site.register(PhenotypeOrpha)
