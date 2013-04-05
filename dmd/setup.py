@@ -56,7 +56,8 @@ setup(name='django-dmdregistry',
         'ccg-extras==0.1.5',
         'django-userlog==0.2.1',
         'MySQL-python==1.2.3',
-        'django_qbe'       
+        'django_qbe',       
+        'django_nose'       
     ],
     dependency_links = [
         "http://repo.ccgapps.com.au",
