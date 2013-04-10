@@ -27,7 +27,7 @@
         "pk": 3, 
         "model": "dmd.phenotypeorpha", 
         "fields": {
-            "orpha_number": "ORPHA206546", 
+            "orpha_number": "206546", 
             "synonym": "N/A", 
             "icd_10": "G71.0"
         }
@@ -36,7 +36,7 @@
         "pk": 1, 
         "model": "dmd.phenotypeorpha", 
         "fields": {
-            "orpha_number": "ORPHA262", 
+            "orpha_number": "262", 
             "synonym": "Severe dystrophinopathy, Duchenne and Becker type", 
             "icd_10": "G71.0"
         }
@@ -45,7 +45,7 @@
         "pk": 2, 
         "model": "dmd.phenotypeorpha", 
         "fields": {
-            "orpha_number": "ORPHA98896", 
+            "orpha_number": "98896", 
             "synonym": "DMD Severe dystrophinopathy, Duchenne type", 
             "icd_10": "G71.0"
         }
