@@ -213,6 +213,9 @@ LOGGING = {
 
 INSTALL_NAME = 'dmd'
 
+QBE_ACCESS_FOR = lambda user: user.is_superuser
+LOGIN_URL = '{0}/admin'.format(os.environ.get("SCRIPT_NAME", ""))
+
 try:
     print "Attempting to import default settings as appsettings.dmd"
     from appsettings.dmd import *
