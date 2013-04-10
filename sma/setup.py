@@ -24,7 +24,7 @@ for package in ('common', 'patients', 'genetic', 'groups', 'humangenome'):
 os.chdir('../sma')
 
 setup(name='django-smaregistry',
-    version='1.0',
+    version='1.0.2',
     description='Django Disease Registry - SMA',
     long_description='Django Disease registry for SMA',
     author='Centre for Comparative Genomics',
@@ -54,10 +54,11 @@ setup(name='django-smaregistry',
         'ccg-auth==0.3.2',
         'ccg-extras==0.1.5',
         'MySQL-python==1.2.3',
-        'django-userlog==0.2.1',        
+        'django-userlog==0.2.1',
+        'django_nose'        
     ],
     dependency_links = [
         "http://repo.ccgapps.com.au",
-        "https://bitbucket.org/ahunter_ccg/django-userlog/downloads/django_userlog-0.2.1.tar.gz",
+        "https://bitbucket.org/ccgmurdoch/django-userlog/downloads/django_userlog-0.2.1.tar.gz",
     ],
 )

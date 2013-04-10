@@ -68,6 +68,8 @@ INSTALLED_APPS.extend([
     'registry.patients',
     'registry.genetic',
     'registry.common',
+    'django_qbe',
+    'django_qbe.savedqueries'
 ])
 
 # these determine which authentication method to use
@@ -210,6 +212,9 @@ LOGGING = {
 ################################################################################
 
 INSTALL_NAME = 'dmd'
+
+QBE_ACCESS_FOR = lambda user: user.is_superuser
+LOGIN_URL = '{0}/admin'.format(os.environ.get("SCRIPT_NAME", ""))
 
 try:
     print "Attempting to import default settings as appsettings.dmd"

@@ -41,7 +41,6 @@ class DDTreatmentOverviewInline(admin.StackedInline):
 class DDClinicalDataInline(admin.TabularInline):
     model = DDClinicalData
 
-
 class DDMRIDataInline(admin.TabularInline):
     model = DDMRIData
 
@@ -52,6 +51,8 @@ class DDMRIDataAdmin(admin.ModelAdmin):
     inlines = [DDMRIDataRecordInline]
 
 class DDDiagnosisAdmin(admin.ModelAdmin):
+    form = DDDiagnosisForm
+    
     inlines = [
                DDMedicalHistoryAdminInline,
                DDClinicalDataInline,
@@ -105,7 +106,9 @@ class DDDiagnosisAdmin(admin.ModelAdmin):
     progress_graph.allow_tags = True
     progress_graph.short_description = "Diagnosis Entry Progress"
 
-    
+class MedicalHistoryDiseaseAdmin(admin.ModelAdmin):
+    list_display = ['disease', 'chronic']
+
 #admin.site.register(MedicalHistoryItem)
 #admin.site.register(MedicalHistoryGrouping)
 admin.site.register(MedicalHistory, MedicalHistoryAdmin)
@@ -117,5 +120,6 @@ admin.site.register(DDDiagnosis, DDDiagnosisAdmin)
 admin.site.register(DDClinicalData)
 admin.site.register(DDMRIData, DDMRIDataAdmin)
 admin.site.register(Patient)
+admin.site.register(MedicalHistoryDisease, MedicalHistoryDiseaseAdmin)
 #admin.site.register(DDLabDataRecord)
 

@@ -85,8 +85,21 @@ class LongitudinalData(models.Model):
     date = models.DateField()
     #longitudinal_set = models.ForeignKey(LongitudinalSet)
 
+
+class MedicalHistoryDisease(models.Model):
+    disease = models.CharField(max_length = 100)
+    chronic = models.BooleanField(default = False, verbose_name = "Chronic / incurable")
+    
+    def __unicode__(self):
+        return str(self.disease)
+
+    class Meta:
+        verbose_name = "Medical History Disease"
+        verbose_name_plural = "Medical History Diseases"
+
 class MedicalHistory(LongitudinalSet):
     patient = models.ForeignKey(RegistryPatient)
+    disease = models.ManyToManyField(MedicalHistoryDisease)
     
     def __unicode__(self):
         return str(self.patient)
@@ -181,6 +194,9 @@ class DDDiagnosis(models.Model):
     age_at_molecular_diagnosis = models.IntegerField('age in years at molecular diagnosis', null=True, blank=True)
 
     orphanet = models.ForeignKey(OrphanetChoices, null=True, blank = True)
+    
+    created = models.DateTimeField(editable=False)
+    updated = models.DateTimeField(editable=False)
 
     def __unicode__(self):
         return str(self.patient)
@@ -188,6 +204,13 @@ class DDDiagnosis(models.Model):
     class Meta:
         verbose_name = "Demyelinating Disease Diagnosis"
         verbose_name_plural = "Demyelinating Disease Diagnoses"
+
+    def save(self, *args, **kwargs):
+        '''On save, update timestamps, auto-fields reportedly unreliable'''
+        if not self.created:
+            self.created = datetime.datetime.now()
+        self.updated = datetime.datetime.now()
+        super(DDDiagnosis, self).save(*args, **kwargs)
 
     def percentage_complete(self):
         score = 0.0
@@ -223,10 +246,8 @@ class DDDiagnosis(models.Model):
         graph_html += '?chf=bg,s,FFFFFF00&chs=200x15&cht=bhs&chco=4D89F9,C6D9FD&chd=t:%d|100&chbh=5"/>' % self.percentage_complete()
         return graph_html
 
-
 class DDMedicalHistoryRecord(MedicalHistoryRecord):
     diagnosis                    = models.ForeignKey(DDDiagnosis, null=True, blank=True)
-
     diabetes                     = models.BooleanField(default = False, verbose_name="Diabetes")
     diabetes_insulin             = models.BooleanField(default = False, verbose_name="If yes, do you use insulin?")
     diabetes_onset_age           = models.IntegerField(default = 1,     verbose_name = "Age of onset")

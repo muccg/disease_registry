@@ -25,7 +25,7 @@ for package in ('common', 'patients', 'genetic', 'groups', 'humangenome'):
 os.chdir('../dmd')
 
 setup(name='django-dmdregistry',
-    version='1.0.1',
+    version='1.0.2',
     description='Django Disease Registry - DMD',
     long_description='Django Disease registry for Duchenne Muscular Dystrophy',
     author='Centre for Comparative Genomics',
@@ -55,10 +55,12 @@ setup(name='django-dmdregistry',
         'ccg-auth==0.3.2',
         'ccg-extras==0.1.5',
         'django-userlog==0.2.1',
-        'MySQL-python==1.2.3'          
+        'MySQL-python==1.2.3',
+        'django_qbe',       
+        'django_nose'       
     ],
     dependency_links = [
         "http://repo.ccgapps.com.au",
-        "https://bitbucket.org/ahunter_ccg/django-userlog/downloads/django_userlog-0.2.1.tar.gz",
+        "https://bitbucket.org/ccgmurdoch/django-userlog/downloads/django_userlog-0.2.1.tar.gz",
     ],
 )
