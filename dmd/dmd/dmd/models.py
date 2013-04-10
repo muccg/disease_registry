@@ -8,32 +8,6 @@ from django.core.exceptions import ObjectDoesNotExist
 import logging
 logger = logging.getLogger('dmd')
 
-class PhenotypeHpo(models.Model):
-    code = models.CharField(max_length=20)
-    description = models.CharField(max_length=100)
-    
-    class Meta:
-        verbose_name = 'Human Phenotype Ontology'
-        verbose_name_plural = 'Human Phenotype Ontologies'
-        ordering = ["code"]
-    
-    def __unicode__(self):
-        return self.code + ' - ' + self.description
-
-class PhenotypeOrpha(models.Model):
-    orpha_number = models.CharField(max_length=20)
-    synonym = models.TextField()
-    icd_10 = models.CharField(max_length=15, verbose_name='ICD-10')
-
-    class Meta:
-        verbose_name = 'ORPHA'
-        verbose_name_plural = 'ORPHAs'
-        ordering = ["orpha_number"]
-        ordering = ["orpha_number"]
-    
-    def __unicode__(self):
-        return self.orpha_number + ' - ' + self.synonym
-
 class Diagnosis(models.Model):
     DIAGNOSIS_CHOICES = (
         ("DMD", "Duchenne Muscular Dystrophy"),
@@ -44,8 +18,6 @@ class Diagnosis(models.Model):
         ("Man", "Manifesting carrier"), # Trac #30
     )
 
-    phenotype_hpo = models.OneToOneField(PhenotypeHpo, null=True, blank=True, verbose_name='HPO')
-    phenotype_orpha = models.OneToOneField(PhenotypeOrpha, null=True, blank=True, verbose_name="ORPHA")
     patient = models.OneToOneField(Patient, primary_key=True, related_name='patient_diagnosis')
     diagnosis = models.CharField(max_length=3, choices=DIAGNOSIS_CHOICES)
     muscle_biopsy = models.NullBooleanField(verbose_name="previous muscle biopsy")
