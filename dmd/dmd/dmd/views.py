@@ -1,11 +1,14 @@
 from django.http import HttpResponse
 from django.db.models import Q
 
+from django.contrib.auth.decorators import login_required
+
 import csv, StringIO
 
 from models import *
 
 # special query for Hugh
+@login_required
 def squerycsv(request, working_group):
 
     # from the book Python Web Development with Django p 246
@@ -21,15 +24,18 @@ def squerycsv(request, working_group):
     response['Content-Disposition'] = 'attachment; filename=query_' + working_group + '.csv'
     return response
 
+@login_required
 def squery(request, working_group):
 
     results = specialquery(working_group)
     return HttpResponse("squery results: %s" % results)
 
+@login_required
 def squeryreport(request, working_group):
     results = get_report(working_group)
     return HttpResponse("%s" % results)
 
+@login_required
 def squeryreportcsv(results, working_group):
     response = HttpResponse(mimetype="text/csv")
     writer = csv.writer(response)
