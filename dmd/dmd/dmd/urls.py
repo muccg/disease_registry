@@ -24,3 +24,8 @@ urlpatterns += patterns('', (r'^squerycsv/(?P<working_group>\w{2})$', views.sque
 
 urlpatterns += patterns('', (r'^squeryreport/(?P<working_group>\w{2})$', views.squeryreport))
 urlpatterns += patterns('', (r'^squeryreportcsv/(?P<working_group>\w{2})$', views.squeryreportcsv))
+
+urlpatterns += patterns('', (r'^get_disease/(?P<orpha>\w+)$', views.get_disease))
+urlpatterns += patterns('', (r'^get_disability/(?P<orpha>\w+)$', views.get_disability))
+
+urlpatterns += patterns('', (r'^chaining/', include('smart_selects.urls')))

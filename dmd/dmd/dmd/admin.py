@@ -64,6 +64,14 @@ class FamilyMemberInline(admin.TabularInline):
 class NotesInline(admin.TabularInline):
     model = Notes
 
+
+class OrphaThesaurusAdmin(admin.ModelAdmin):
+    form = OrphaDisabilityThesaurusForm
+
+    class Media:
+        js = ("http://code.jquery.com/jquery-1.9.1.min.js", "js/CascadeDropdownBox.js")
+
+
 class DiagnosisAdmin(admin.ModelAdmin):
     actions = None
     form = DiagnosisForm
@@ -72,7 +80,7 @@ class DiagnosisAdmin(admin.ModelAdmin):
             'fields': ('patient', 'diagnosis', 'muscle_biopsy')
         }),
         ('Phenotype', {
-            'fields': ('phenotype_hpo', 'phenotype_orpha')
+            'fields': ('phenotype_hpo', 'phenotype_orpha', 'orpha_disability_thesaurus')
         }),
     )
     inlines = [
@@ -136,3 +144,6 @@ class DiagnosisAdmin(admin.ModelAdmin):
 admin.site.register(Diagnosis, DiagnosisAdmin)
 admin.site.register(PhenotypeHpo)
 admin.site.register(PhenotypeOrpha)
+admin.site.register(OrphaDisabilityThesaurus)
+admin.site.register(PhenotypeOrphaDisability)
+admin.site.register(PhenotypeOrphaDisabilityType)

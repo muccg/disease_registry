@@ -3,6 +3,14 @@ from django.core.urlresolvers import reverse_lazy
 from models import *
 from registry.forms.widgets import ComboWidget, LiveComboWidget, PercentageWidget, StaticWidget
 from registry.forms.date import DateWidget
+from widgets import EmptyCombo
+
+class OrphaDisabilityThesaurusForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(OrphaDisabilityThesaurusForm, self).__init__(*args, **kwargs)
+        
+        self.fields["orpha"] = forms.ModelChoiceField(PhenotypeOrpha.objects)
+        self.fields["disability"] = forms.ModelChoiceField(PhenotypeOrphaDisability.objects, widget=EmptyCombo)
 
 class DiagnosisForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):

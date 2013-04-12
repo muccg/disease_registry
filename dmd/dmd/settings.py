@@ -69,7 +69,8 @@ INSTALLED_APPS.extend([
     'registry.genetic',
     'registry.common',
     'django_qbe',
-    'django_qbe.savedqueries'
+    'django_qbe.savedqueries',
+    'smart_selects'
 ])
 
 # these determine which authentication method to use
