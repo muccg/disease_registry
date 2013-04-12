@@ -5,6 +5,8 @@ from django.db.models.signals import post_save
 from registry.patients.models import Patient
 from django.core.exceptions import ObjectDoesNotExist
 
+from smart_selects.db_fields import ChainedForeignKey
+
 import logging
 logger = logging.getLogger('dmd')
 
@@ -34,6 +36,43 @@ class PhenotypeOrpha(models.Model):
     def __unicode__(self):
         return self.orpha_number + ' - ' + self.synonym
 
+class PhenotypeOrphaDisability(models.Model):
+    orpha = models.ForeignKey(PhenotypeOrpha)
+    disability = models.CharField(max_length=100)
+
+    def __unicode__(self):
+        return self.disability
+
+class PhenotypeOrphaDisabilityType(models.Model):
+    disability = models.ForeignKey(PhenotypeOrphaDisability)
+    disability_type = models.CharField(max_length=30)
+
+    def __unicode__(self):
+        return self.disability_type
+
+class OrphaDisabilityThesaurus(models.Model):
+    orpha = models.ForeignKey(PhenotypeOrpha, related_name="orpha")
+    disease = models.CharField(max_length=100)
+    disability = ChainedForeignKey(
+        PhenotypeOrphaDisability,
+        chained_field = 'orpha',
+        chained_model_field = 'orpha',
+        show_all = False,
+        auto_choose = True,
+        related_name = 'disability_th'
+    )
+    disability_type = ChainedForeignKey(
+        PhenotypeOrphaDisabilityType,
+        chained_field = 'disability',
+        chained_model_field = 'disability',
+        show_all = False,
+        auto_choose = True
+    )
+    severity = models.CharField(max_length=1)
+    frequency = models.CharField(max_length=2)
+    loss_of_ability = models.BooleanField()
+    environmental_factor = models.BooleanField()
+
 class Diagnosis(models.Model):
     DIAGNOSIS_CHOICES = (
         ("DMD", "Duchenne Muscular Dystrophy"),
@@ -44,6 +83,7 @@ class Diagnosis(models.Model):
         ("Man", "Manifesting carrier"), # Trac #30
     )
 
+    orpha_disability_thesaurus = models.OneToOneField(OrphaDisabilityThesaurus, null=True, blank=True)
     phenotype_hpo = models.OneToOneField(PhenotypeHpo, null=True, blank=True, verbose_name='HPO')
     phenotype_orpha = models.OneToOneField(PhenotypeOrpha, null=True, blank=True, verbose_name="ORPHA")
     patient = models.OneToOneField(Patient, primary_key=True, related_name='patient_diagnosis')

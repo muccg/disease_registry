@@ -1,6 +1,8 @@
 from django.http import HttpResponse
 from django.db.models import Q
 
+from django.utils import simplejson
+
 import csv, StringIO
 
 from models import *
@@ -125,3 +127,20 @@ def get_report(working_group):
         q0 = query.filter(~Q(patient__working_group__name__iexact='NEW ZEALAND'))
 
     return q0
+    
+def get_disease(request, orpha):
+    orpha_obj = PhenotypeOrpha.objects.get(pk=orpha)
+
+    json_data = simplejson.dumps({"disease_name": orpha_obj.synonym})
+    return HttpResponse(json_data, mimetype="application/json")
+
+def get_disability(request, orpha):
+    disability_objs = PhenotypeOrphaDisability.objects.filter(orpha_id=orpha)
+
+    json_data = simplejson.dumps([dict(disability=d.id) for d in disability_objs])
+
+    print simplejson.dumps(disability_objs[0].disability)
+
+    print json_data
+
+    return HttpResponse(json_data, mimetype="application/json")
