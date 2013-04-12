@@ -36,6 +36,16 @@ class PhenotypeOrpha(models.Model):
     def __unicode__(self):
         return self.orpha_number + ' - ' + self.synonym
 
+class PhenotypeOrphaThesaurus(models.Model):
+    orpha = models.CharField(max_length=20)
+    disease = models.CharField(max_length=150)
+    
+    class Meta:
+        ordering = ['orpha']
+
+    def __unicode__(self):
+        return self.orpha + ' - ' + self.disease
+
 class PhenotypeOrphaDisability(models.Model):
     orpha = models.ForeignKey(PhenotypeOrpha)
     disability = models.CharField(max_length=100)
@@ -50,9 +60,22 @@ class PhenotypeOrphaDisabilityType(models.Model):
     def __unicode__(self):
         return self.disability_type
 
+class PhenotypeOrphaSeverity(models.Model):
+    disability_type = models.ForeignKey(PhenotypeOrphaDisabilityType)
+    severity = models.CharField(max_length=30)
+
+    def __unicode__(self):
+        return self.severity
+
+class PhenotypeOrphaFrequency(models.Model):
+    severity = models.ForeignKey(PhenotypeOrphaSeverity)
+    frequency = models.CharField(max_length=30)
+
+    def __unicode__(self):
+        return self.frequency
+
 class OrphaDisabilityThesaurus(models.Model):
-    orpha = models.ForeignKey(PhenotypeOrpha, related_name="orpha")
-    disease = models.CharField(max_length=100)
+    orpha = models.ForeignKey(PhenotypeOrphaThesaurus, related_name="orpha_thesaurus")
     disability = ChainedForeignKey(
         PhenotypeOrphaDisability,
         chained_field = 'orpha',
@@ -68,10 +91,30 @@ class OrphaDisabilityThesaurus(models.Model):
         show_all = False,
         auto_choose = True
     )
-    severity = models.CharField(max_length=1)
-    frequency = models.CharField(max_length=2)
+    severity = ChainedForeignKey(
+        PhenotypeOrphaSeverity,
+        chained_field = 'disability_type',
+        chained_model_field = 'disability_type',
+        show_all = False,
+        auto_choose = True
+    )
+    frequency = ChainedForeignKey(
+        PhenotypeOrphaFrequency,
+        chained_field = 'severity',
+        chained_model_field = 'severity',
+        show_all = False,
+        auto_choose = True,
+        related_name = 'frequency_th'
+    )
     loss_of_ability = models.BooleanField()
     environmental_factor = models.BooleanField()
+
+    def __unicode__(self):
+        return self.orpha.orpha + ' - ' + self.orpha.disease + ', ' + self.disability.disability + ', ' + self.disability_type.disability_type + ', ' + self.severity.severity + ', ' + self.frequency.frequency
+        
+    class Meta:
+        verbose_name = 'ORPHA Disability'
+        verbose_name_plural = 'ORPHA Disabilities'
 
 class Diagnosis(models.Model):
     DIAGNOSIS_CHOICES = (
@@ -83,7 +126,7 @@ class Diagnosis(models.Model):
         ("Man", "Manifesting carrier"), # Trac #30
     )
 
-    orpha_disability_thesaurus = models.OneToOneField(OrphaDisabilityThesaurus, null=True, blank=True)
+    orpha_disability_thesaurus = models.OneToOneField(OrphaDisabilityThesaurus, null=True, blank=True, verbose_name="ORPHA Disability")
     phenotype_hpo = models.OneToOneField(PhenotypeHpo, null=True, blank=True, verbose_name='HPO')
     phenotype_orpha = models.OneToOneField(PhenotypeOrpha, null=True, blank=True, verbose_name="ORPHA")
     patient = models.OneToOneField(Patient, primary_key=True, related_name='patient_diagnosis')

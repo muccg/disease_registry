@@ -1,3 +1,5 @@
+Attempting to import default settings as appsettings.dmd
+Failed to import appsettings.dmd
 [
     {
         "pk": 1, 
@@ -48,6 +50,123 @@
             "orpha_number": "98896", 
             "synonym": "DMD Severe dystrophinopathy, Duchenne type", 
             "icd_10": "G71.0"
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "dmd.phenotypeorphathesaurus", 
+        "fields": {
+            "orpha": "206546", 
+            "disease": " Symptomatic form of muscular dystrophy of Duchenne and Becker in female carriers"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "dmd.phenotypeorphathesaurus", 
+        "fields": {
+            "orpha": "98895", 
+            "disease": " Becker muscular dystrophy"
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "dmd.phenotypeorphathesaurus", 
+        "fields": {
+            "orpha": "98896", 
+            "disease": " Duchenne muscular dystrophy"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "dmd.phenotypeorphadisability", 
+        "fields": {
+            "orpha": 2, 
+            "disability": "Understanding"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "dmd.phenotypeorphadisabilitytype", 
+        "fields": {
+            "disability_type": "Permanent", 
+            "disability": 1
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "dmd.phenotypeorphaseverity", 
+        "fields": {
+            "disability_type": 1, 
+            "severity": "L (low)"
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "dmd.phenotypeorphaseverity", 
+        "fields": {
+            "disability_type": 1, 
+            "severity": "M (moderate)"
+        }
+    }, 
+    {
+        "pk": 4, 
+        "model": "dmd.phenotypeorphaseverity", 
+        "fields": {
+            "disability_type": 1, 
+            "severity": "S (severe)"
+        }
+    }, 
+    {
+        "pk": 5, 
+        "model": "dmd.phenotypeorphaseverity", 
+        "fields": {
+            "disability_type": 1, 
+            "severity": "C (complete)"
+        }
+    }, 
+    {
+        "pk": 6, 
+        "model": "dmd.phenotypeorphaseverity", 
+        "fields": {
+            "disability_type": 1, 
+            "severity": "U (unspecified)"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "dmd.phenotypeorphafrequency", 
+        "fields": {
+            "frequency": "VF ( very frequent)", 
+            "severity": 2
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "dmd.phenotypeorphafrequency", 
+        "fields": {
+            "frequency": "F (frequent)", 
+            "severity": 2
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "dmd.phenotypeorphafrequency", 
+        "fields": {
+            "frequency": "O (occasional)", 
+            "severity": 3
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "dmd.orphadisabilitythesaurus", 
+        "fields": {
+            "severity": 2, 
+            "orpha": 2, 
+            "disability": 1, 
+            "loss_of_ability": false, 
+            "frequency": 2, 
+            "disability_type": 1, 
+            "environmental_factor": false
         }
     }
 ]

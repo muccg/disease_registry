@@ -8,19 +8,34 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Adding model 'PhenotypeOrphaSeverity'
+        db.create_table('dmd_phenotypeorphaseverity', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('disability_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dmd.PhenotypeOrphaDisabilityType'])),
+            ('severity', self.gf('django.db.models.fields.CharField')(max_length=30)),
+        ))
+        db.send_create_signal('dmd', ['PhenotypeOrphaSeverity'])
+
         # Adding model 'OrphaDisabilityThesaurus'
         db.create_table('dmd_orphadisabilitythesaurus', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('orpha', self.gf('django.db.models.fields.related.ForeignKey')(related_name='orpha', to=orm['dmd.PhenotypeOrpha'])),
-            ('disease', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('orpha', self.gf('django.db.models.fields.related.ForeignKey')(related_name='orpha_thesaurus', to=orm['dmd.PhenotypeOrphaThesaurus'])),
             ('disability', self.gf('smart_selects.db_fields.ChainedForeignKey')(related_name='disability_th', to=orm['dmd.PhenotypeOrphaDisability'])),
             ('disability_type', self.gf('smart_selects.db_fields.ChainedForeignKey')(to=orm['dmd.PhenotypeOrphaDisabilityType'])),
-            ('severity', self.gf('django.db.models.fields.CharField')(max_length=1)),
-            ('frequency', self.gf('django.db.models.fields.CharField')(max_length=2)),
+            ('severity', self.gf('smart_selects.db_fields.ChainedForeignKey')(to=orm['dmd.PhenotypeOrphaSeverity'])),
+            ('frequency', self.gf('smart_selects.db_fields.ChainedForeignKey')(related_name='frequency_th', to=orm['dmd.PhenotypeOrphaFrequency'])),
             ('loss_of_ability', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('environmental_factor', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal('dmd', ['OrphaDisabilityThesaurus'])
+
+        # Adding model 'PhenotypeOrphaFrequency'
+        db.create_table('dmd_phenotypeorphafrequency', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('severity', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dmd.PhenotypeOrphaSeverity'])),
+            ('frequency', self.gf('django.db.models.fields.CharField')(max_length=30)),
+        ))
+        db.send_create_signal('dmd', ['PhenotypeOrphaFrequency'])
 
         # Adding model 'PhenotypeOrphaDisability'
         db.create_table('dmd_phenotypeorphadisability', (
@@ -38,6 +53,14 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('dmd', ['PhenotypeOrphaDisabilityType'])
 
+        # Adding model 'PhenotypeOrphaThesaurus'
+        db.create_table('dmd_phenotypeorphathesaurus', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('orpha', self.gf('django.db.models.fields.CharField')(max_length=20)),
+            ('disease', self.gf('django.db.models.fields.CharField')(max_length=150)),
+        ))
+        db.send_create_signal('dmd', ['PhenotypeOrphaThesaurus'])
+
         # Adding field 'Diagnosis.orpha_disability_thesaurus'
         db.add_column('dmd_diagnosis', 'orpha_disability_thesaurus',
                       self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dmd.OrphaDisabilityThesaurus'], unique=True, null=True, blank=True),
@@ -45,14 +68,23 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
+        # Deleting model 'PhenotypeOrphaSeverity'
+        db.delete_table('dmd_phenotypeorphaseverity')
+
         # Deleting model 'OrphaDisabilityThesaurus'
         db.delete_table('dmd_orphadisabilitythesaurus')
+
+        # Deleting model 'PhenotypeOrphaFrequency'
+        db.delete_table('dmd_phenotypeorphafrequency')
 
         # Deleting model 'PhenotypeOrphaDisability'
         db.delete_table('dmd_phenotypeorphadisability')
 
         # Deleting model 'PhenotypeOrphaDisabilityType'
         db.delete_table('dmd_phenotypeorphadisabilitytype')
+
+        # Deleting model 'PhenotypeOrphaThesaurus'
+        db.delete_table('dmd_phenotypeorphathesaurus')
 
         # Deleting field 'Diagnosis.orpha_disability_thesaurus'
         db.delete_column('dmd_diagnosis', 'orpha_disability_thesaurus_id')
@@ -120,13 +152,12 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'OrphaDisabilityThesaurus'},
             'disability': ('smart_selects.db_fields.ChainedForeignKey', [], {'related_name': "'disability_th'", 'to': "orm['dmd.PhenotypeOrphaDisability']"}),
             'disability_type': ('smart_selects.db_fields.ChainedForeignKey', [], {'to': "orm['dmd.PhenotypeOrphaDisabilityType']"}),
-            'disease': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'environmental_factor': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'frequency': ('django.db.models.fields.CharField', [], {'max_length': '2'}),
+            'frequency': ('smart_selects.db_fields.ChainedForeignKey', [], {'related_name': "'frequency_th'", 'to': "orm['dmd.PhenotypeOrphaFrequency']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'loss_of_ability': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'orpha': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'orpha'", 'to': "orm['dmd.PhenotypeOrpha']"}),
-            'severity': ('django.db.models.fields.CharField', [], {'max_length': '1'})
+            'orpha': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'orpha_thesaurus'", 'to': "orm['dmd.PhenotypeOrphaThesaurus']"}),
+            'severity': ('smart_selects.db_fields.ChainedForeignKey', [], {'to': "orm['dmd.PhenotypeOrphaSeverity']"})
         },
         'dmd.otherregistries': {
             'Meta': {'object_name': 'OtherRegistries'},
@@ -158,6 +189,24 @@ class Migration(SchemaMigration):
             'disability': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dmd.PhenotypeOrphaDisability']"}),
             'disability_type': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+        },
+        'dmd.phenotypeorphafrequency': {
+            'Meta': {'object_name': 'PhenotypeOrphaFrequency'},
+            'frequency': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'severity': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dmd.PhenotypeOrphaSeverity']"})
+        },
+        'dmd.phenotypeorphaseverity': {
+            'Meta': {'object_name': 'PhenotypeOrphaSeverity'},
+            'disability_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dmd.PhenotypeOrphaDisabilityType']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'severity': ('django.db.models.fields.CharField', [], {'max_length': '30'})
+        },
+        'dmd.phenotypeorphathesaurus': {
+            'Meta': {'object_name': 'PhenotypeOrphaThesaurus'},
+            'disease': ('django.db.models.fields.CharField', [], {'max_length': '150'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'orpha': ('django.db.models.fields.CharField', [], {'max_length': '20'})
         },
         'dmd.respiratory': {
             'Meta': {'object_name': 'Respiratory'},
