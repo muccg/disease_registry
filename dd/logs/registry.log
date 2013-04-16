@@ -21,3 +21,7 @@ NameError: global name 'Diagnosis' is not defined
 
 Registry [DEBUG:2013-03-22 14:16:15,163:models.py:399:signal_patient_post_save] patient post_save signal
 Registry [DEBUG:2013-03-22 14:16:15,167:models.py:404:signal_patient_post_save] Diagnosis record created
+Registry [DEBUG:2013-04-16 13:53:36,695:models.py:412:signal_patient_post_save] patient post_save signal
+Registry [DEBUG:2013-04-16 13:53:36,699:models.py:417:signal_patient_post_save] Diagnosis record created
+Registry [DEBUG:2013-04-16 14:34:09,474:models.py:412:signal_patient_post_save] patient post_save signal
+Registry [DEBUG:2013-04-16 14:34:09,477:models.py:417:signal_patient_post_save] Diagnosis record created

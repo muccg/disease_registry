@@ -96,10 +96,10 @@ class MedicalHistoryDisease(models.Model):
     class Meta:
         verbose_name = "Medical History Disease"
         verbose_name_plural = "Medical History Diseases"
+        ordering = ['disease']
 
 class MedicalHistory(LongitudinalSet):
     patient = models.ForeignKey(RegistryPatient)
-    disease = models.ManyToManyField(MedicalHistoryDisease)
     
     def __unicode__(self):
         return str(self.patient)
@@ -246,26 +246,29 @@ class DDDiagnosis(models.Model):
         graph_html += '?chf=bg,s,FFFFFF00&chs=200x15&cht=bhs&chco=4D89F9,C6D9FD&chd=t:%d|100&chbh=5"/>' % self.percentage_complete()
         return graph_html
 
-class DDMedicalHistoryRecord(MedicalHistoryRecord):
-    diagnosis                    = models.ForeignKey(DDDiagnosis, null=True, blank=True)
-    diabetes                     = models.BooleanField(default = False, verbose_name="Diabetes")
-    diabetes_insulin             = models.BooleanField(default = False, verbose_name="If yes, do you use insulin?")
-    diabetes_onset_age           = models.IntegerField(default = 1,     verbose_name = "Age of onset")
-    rheumatoid_arthritis         = models.BooleanField(default = False, verbose_name = "Rheumatoid Arthritis")
-    crohns_disease               = models.BooleanField(default = False, verbose_name = "Crohn's Disease")
-    ulcerative_colitis           = models.BooleanField(default = False, verbose_name = "Ulcerative Colitis")
-    psoriasis                    = models.BooleanField(default = False, verbose_name = "Psoriasis")
-    myasthenia_gravis            = models.BooleanField(default = False, verbose_name = "Myasthenia Gravis")
-    vitiligo                     = models.BooleanField(default = False, verbose_name = "Vitiligo")
-    thyroid_disease              = models.BooleanField(default = False, verbose_name = "Thyroid Disease")
-    thyroid_hypothyroidism       = models.BooleanField(default = False, verbose_name = "Hypothyroidism")
-    thyroid_hashimotos           = models.BooleanField(default = False, verbose_name = "Hashimoto's Thyroiditis")
-    graves_disease               = models.BooleanField(default = False, verbose_name = "Graves' Disease")
-    sjogrens_syndrome            = models.BooleanField(default = False, verbose_name = "Sjorgens Syndrome")
-    pernicious_anemia            = models.BooleanField(default = False, verbose_name = "Pernicious Anemia")
-    systemic_lupus_erythematosus = models.BooleanField(default = False, verbose_name = "Systemic Lupus Erythematosus")
-    alopecia                     = models.BooleanField(default = False, verbose_name = "Alopecia")
-    family_history_of_ms         = models.BooleanField(default = False, verbose_name = "Family history of MS, NMO (or other autoimmune disease)")
+class DDMedicalHistoryRecord(models.Model):
+    diagnosis = models.ForeignKey(DDDiagnosis, null=True, blank=True)
+    date = models.DateField()
+    disease = models.ForeignKey(MedicalHistoryDisease)
+    medical_history = models.ForeignKey(MedicalHistory)
+#    diabetes                     = models.BooleanField(default = False, verbose_name="Diabetes")
+#    diabetes_insulin             = models.BooleanField(default = False, verbose_name="If yes, do you use insulin?")
+#    diabetes_onset_age           = models.IntegerField(default = 1,     verbose_name = "Age of onset")
+#    rheumatoid_arthritis         = models.BooleanField(default = False, verbose_name = "Rheumatoid Arthritis")
+#    crohns_disease               = models.BooleanField(default = False, verbose_name = "Crohn's Disease")
+#    ulcerative_colitis           = models.BooleanField(default = False, verbose_name = "Ulcerative Colitis")
+#    psoriasis                    = models.BooleanField(default = False, verbose_name = "Psoriasis")
+#    myasthenia_gravis            = models.BooleanField(default = False, verbose_name = "Myasthenia Gravis")
+#    vitiligo                     = models.BooleanField(default = False, verbose_name = "Vitiligo")
+#    thyroid_disease              = models.BooleanField(default = False, verbose_name = "Thyroid Disease")
+#    thyroid_hypothyroidism       = models.BooleanField(default = False, verbose_name = "Hypothyroidism")
+#    thyroid_hashimotos           = models.BooleanField(default = False, verbose_name = "Hashimoto's Thyroiditis")
+#    graves_disease               = models.BooleanField(default = False, verbose_name = "Graves' Disease")
+#    sjogrens_syndrome            = models.BooleanField(default = False, verbose_name = "Sjorgens Syndrome")
+#    pernicious_anemia            = models.BooleanField(default = False, verbose_name = "Pernicious Anemia")
+#    systemic_lupus_erythematosus = models.BooleanField(default = False, verbose_name = "Systemic Lupus Erythematosus")
+#    alopecia                     = models.BooleanField(default = False, verbose_name = "Alopecia")
+#    family_history_of_ms         = models.BooleanField(default = False, verbose_name = "Family history of MS, NMO (or other autoimmune disease)")
     other                        = models.TextField(verbose_name="Other", blank=True)
 
     class Meta:
