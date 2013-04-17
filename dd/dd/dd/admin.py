@@ -4,6 +4,8 @@ from admin_forms import *
 from registry.utils import get_static_url
 from registry import groups
 
+#from registry.patients.admin import PatientAdmin
+
 class DDMedicalHistoryAdminInline(admin.TabularInline):
     model = DDMedicalHistoryRecord
     extra = 1
@@ -82,14 +84,14 @@ class DDDiagnosisAdmin(admin.ModelAdmin):
 
     def queryset(self, request):
         if request.user.is_superuser:
-            return DDDiagnosis.objects.all()
+            return Diagnosis.objects.all()
 
         user = groups.models.User.objects.get(user=request.user)
 
         if self.has_change_permission(request):
-            return DDDiagnosis.objects.filter(patient__working_group=user.working_group).filter(patient__active=True)
+            return Diagnosis.objects.filter(patient__working_group=user.working_group).filter(patient__active=True)
         else:
-            return DDDiagnosis.objects.none()
+            return Diagnosis.objects.none()
 
     def get_form(self, request, obj=None, **kwargs):
         """
@@ -116,10 +118,10 @@ admin.site.register(MedicalHistory, MedicalHistoryAdmin)
 admin.site.register(DDLabData, DDLabDataAdmin)
 admin.site.register(Treatment, TreatmentAdmin)
 admin.site.register(DDTreatmentOverview, DDTreatmentOverviewAdmin)
-admin.site.register(DDDiagnosis, DDDiagnosisAdmin)
+admin.site.register(Diagnosis, DDDiagnosisAdmin)
 admin.site.register(DDClinicalData)
 admin.site.register(DDMRIData, DDMRIDataAdmin)
-admin.site.register(Patient)
+#admin.site.register(RegistryPatient, PatientAdmin)
 admin.site.register(MedicalHistoryDisease, MedicalHistoryDiseaseAdmin)
 #admin.site.register(DDLabDataRecord)
 

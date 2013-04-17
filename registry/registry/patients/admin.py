@@ -45,6 +45,7 @@ class PatientAdmin(admin.ModelAdmin):
                                    "family_name",
                                    "given_names",
                                    "date_of_birth",
+                                   "place_of_birth",
                                    "sex",
                                    "address",
                                    "suburb",

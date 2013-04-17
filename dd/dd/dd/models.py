@@ -4,15 +4,10 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.core.exceptions import ObjectDoesNotExist
 #from registry.genetic.models import MolecularData
-from registry.patients.models import Patient as RegistryPatient
+from registry.patients.models import Patient
 
 import logging
 logger = logging.getLogger('registry_log')
-
-class Patient(RegistryPatient):
-    SEX_CHOICES = ( ("M", "Male"), ("F", "Female"), ("X", "Other/Intersex") )
-
-    place_of_birth = models.CharField(max_length=100, null=True, blank=True, verbose_name="Place Of Birth")
 
 #Longitudinal sets will have many instances of longitudinal data
 #pointing at them through a foreign key relationship.
@@ -98,7 +93,7 @@ class MedicalHistoryDisease(models.Model):
         ordering = ['disease']
 
 class MedicalHistory(LongitudinalSet):
-    patient = models.ForeignKey(RegistryPatient)
+    patient = models.ForeignKey(Patient)
     
     def __unicode__(self):
         return str(self.patient)
@@ -114,7 +109,7 @@ class MedicalHistoryRecord(LongitudinalData):
         return "%s (%s)" % (str(self.medical_history.patient), str(self.date) )
 
 class LabData(LongitudinalSet):
-    patient = models.ForeignKey(RegistryPatient)
+    patient = models.ForeignKey(Patient)
 
 
 class LabDataRecord(LongitudinalData):
@@ -123,7 +118,7 @@ class LabDataRecord(LongitudinalData):
         return "%s (%s)" % (str(self.labdata_history.patient), str(self.date) )
 
 class MRIData(LongitudinalSet):
-    patient = models.ForeignKey(RegistryPatient)
+    patient = models.ForeignKey(Patient)
 
     def __unicode__(self):
         return str(self.patient)
@@ -132,7 +127,7 @@ class MRIDataRecord(LongitudinalData):
     mri_history = models.ForeignKey(MRIData, related_name = 'logitudinal_series')
 
 class TreatmentOverview(models.Model):
-    patient = models.ForeignKey(RegistryPatient)
+    patient = models.ForeignKey(Patient)
 
     def __unicode__(self):
         return str(self.patient)
@@ -157,7 +152,7 @@ class TreatmentCourse(models.Model):
     notes = models.TextField(blank = True)
 
 
-class DDDiagnosis(models.Model):
+class Diagnosis(models.Model):
 
     DD_AFFECTED_STATUS_CHOICES = (
         ('FamilyHistory', 'Not yet diagnosed/Family history only'),
@@ -209,7 +204,7 @@ class DDDiagnosis(models.Model):
         if not self.created:
             self.created = datetime.datetime.now()
         self.updated = datetime.datetime.now()
-        super(DDDiagnosis, self).save(*args, **kwargs)
+        super(Diagnosis, self).save(*args, **kwargs)
 
     def percentage_complete(self):
         score = 0.0
@@ -246,7 +241,7 @@ class DDDiagnosis(models.Model):
         return graph_html
 
 class DDMedicalHistoryRecord(models.Model):
-    diagnosis = models.ForeignKey(DDDiagnosis, null=True, blank=True)
+    diagnosis = models.ForeignKey(Diagnosis, null=True, blank=True)
     date = models.DateField()
     disease = models.ForeignKey(MedicalHistoryDisease)
     chronic = models.BooleanField(default = False, verbose_name = "Chronic / incurable")
@@ -321,7 +316,7 @@ class DDClinicalData(models.Model):
                           ('10.0', "Death due to MS")
                         )
 
-    diagnosis               = models.ForeignKey(DDDiagnosis)
+    diagnosis               = models.ForeignKey(Diagnosis)
     date                    = models.DateField(verbose_name = "Clinical Data date")
     date_first_symtoms      = models.DateField(verbose_name = "Date of first symptoms")
     edss_rating             = models.CharField(max_length=4, choices=EDSSRatingChoices)
@@ -352,13 +347,13 @@ class DDMRIDataRecord(MRIDataRecord):
 
 
 class DDMRIData(MRIData):
-    diagnosis = models.ForeignKey(DDDiagnosis, null=True, blank = True)
+    diagnosis = models.ForeignKey(Diagnosis, null=True, blank = True)
     class Meta:
         verbose_name = "MRI Data"
         verbose_name_plural = "MRI Data"
 
 class DDLabData(LabData):
-    diagnosis = models.ForeignKey(DDDiagnosis, null=True, blank = True)
+    diagnosis = models.ForeignKey(Diagnosis, null=True, blank = True)
 
     def __unicode__(self):
         return str(self.diagnosis)
@@ -368,7 +363,7 @@ class DDLabData(LabData):
         verbose_name_plural = "Lab Data"
 
 class DDTreatmentOverview(TreatmentOverview):
-    diagnosis = models.ForeignKey(DDDiagnosis, null=True, blank = True)
+    diagnosis = models.ForeignKey(Diagnosis, null=True, blank = True)
     treatments = models.ManyToManyField(Treatment, null=True, blank = True)
 
     def populate_initial_items(self):
@@ -414,7 +409,7 @@ def signal_patient_post_save(sender, **kwargs):
 
     try:
         patient = kwargs['instance']
-        diagnosis, created = DDDiagnosis.objects.get_or_create(patient=patient)
+        diagnosis, created = Diagnosis.objects.get_or_create(patient=patient)
         logger.debug("Diagnosis record %s" % ("created" if created else "already existed"))
     except Exception, e:
         logger.critical(e)
