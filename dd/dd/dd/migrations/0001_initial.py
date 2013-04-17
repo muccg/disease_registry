@@ -40,7 +40,6 @@ class Migration(SchemaMigration):
         db.create_table('dd_medicalhistorydisease', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('disease', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('chronic', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal('dd', ['MedicalHistoryDisease'])
 
@@ -133,6 +132,7 @@ class Migration(SchemaMigration):
             ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.DDDiagnosis'], null=True, blank=True)),
             ('date', self.gf('django.db.models.fields.DateField')()),
             ('disease', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.MedicalHistoryDisease'])),
+            ('chronic', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('medical_history', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.MedicalHistory'])),
             ('other', self.gf('django.db.models.fields.TextField')(blank=True)),
         ))
@@ -312,6 +312,7 @@ class Migration(SchemaMigration):
         },
         'dd.ddmedicalhistoryrecord': {
             'Meta': {'object_name': 'DDMedicalHistoryRecord'},
+            'chronic': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'date': ('django.db.models.fields.DateField', [], {}),
             'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.DDDiagnosis']", 'null': 'True', 'blank': 'True'}),
             'disease': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.MedicalHistoryDisease']"}),
@@ -365,7 +366,6 @@ class Migration(SchemaMigration):
         },
         'dd.medicalhistorydisease': {
             'Meta': {'ordering': "['disease']", 'object_name': 'MedicalHistoryDisease'},
-            'chronic': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'disease': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },

@@ -88,10 +88,9 @@ class LongitudinalData(models.Model):
 
 class MedicalHistoryDisease(models.Model):
     disease = models.CharField(max_length = 100)
-    chronic = models.BooleanField(default = False, verbose_name = "Chronic / incurable")
     
     def __unicode__(self):
-        return str(self.disease)
+        return '%s' % (self.disease,)
 
     class Meta:
         verbose_name = "Medical History Disease"
@@ -250,6 +249,7 @@ class DDMedicalHistoryRecord(models.Model):
     diagnosis = models.ForeignKey(DDDiagnosis, null=True, blank=True)
     date = models.DateField()
     disease = models.ForeignKey(MedicalHistoryDisease)
+    chronic = models.BooleanField(default = False, verbose_name = "Chronic / incurable")
     medical_history = models.ForeignKey(MedicalHistory)
 #    diabetes                     = models.BooleanField(default = False, verbose_name="Diabetes")
 #    diabetes_insulin             = models.BooleanField(default = False, verbose_name="If yes, do you use insulin?")
