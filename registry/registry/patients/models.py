@@ -68,6 +68,7 @@ class Patient(models.Model):
     family_name = models.CharField(max_length=100, db_index=True)
     given_names = models.CharField(max_length=100, db_index=True)
     date_of_birth = models.DateField()
+    place_of_birth = models.CharField(max_length=100, null=True, blank=True, verbose_name="Place of Birth")
     sex = models.CharField(max_length=1, choices=SEX_CHOICES)
     address = models.TextField()
     suburb = models.CharField(max_length=50, verbose_name="Suburb/Town")
