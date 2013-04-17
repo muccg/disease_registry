@@ -124,4 +124,5 @@ admin.site.register(DDMRIData, DDMRIDataAdmin)
 #admin.site.register(RegistryPatient, PatientAdmin)
 admin.site.register(MedicalHistoryDisease, MedicalHistoryDiseaseAdmin)
 #admin.site.register(DDLabDataRecord)
+admin.site.register(EdssRating)
 
