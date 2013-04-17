@@ -327,10 +327,16 @@ class DDClinicalData(models.Model):
                           ('10.0', "Death due to MS")
                         )
 
+    EVALUATION_TYPE_CHOICES = (
+        (1, "Formal"),
+        (2, "From notes"),
+    )
+
     diagnosis               = models.ForeignKey(Diagnosis)
     date                    = models.DateField(verbose_name = "Clinical Data date")
     date_first_symtoms      = models.DateField(verbose_name = "Date of first symptoms")
     edss_rating             = models.ForeignKey(EdssRating)
+    edss_evaluation_type    = models.CharField(max_length = 50, choices = EVALUATION_TYPE_CHOICES, verbose_name = "Evaluation type")
     past_medical_history    = models.ForeignKey(DDMedicalHistoryRecord, null=True, blank = True)
     date_of_visits          = models.DateField(verbose_name = "Date of visits")
 

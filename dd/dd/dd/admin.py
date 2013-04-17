@@ -6,6 +6,10 @@ from registry import groups
 
 #from registry.patients.admin import PatientAdmin
 
+class ClinicalDataAdmin(admin.ModelAdmin):
+    model = DDClinicalData
+    form = ClinicalDataForm
+
 class DDMedicalHistoryAdminInline(admin.TabularInline):
     model = DDMedicalHistoryRecord
     extra = 1
@@ -119,7 +123,7 @@ admin.site.register(DDLabData, DDLabDataAdmin)
 admin.site.register(Treatment, TreatmentAdmin)
 admin.site.register(DDTreatmentOverview, DDTreatmentOverviewAdmin)
 admin.site.register(Diagnosis, DDDiagnosisAdmin)
-admin.site.register(DDClinicalData)
+admin.site.register(DDClinicalData, ClinicalDataAdmin)
 admin.site.register(DDMRIData, DDMRIDataAdmin)
 #admin.site.register(RegistryPatient, PatientAdmin)
 admin.site.register(MedicalHistoryDisease, MedicalHistoryDiseaseAdmin)
