@@ -7,6 +7,16 @@ from django.forms import Select
 from django.forms.models import modelformset_factory, inlineformset_factory
 from django.forms.widgets import RadioSelect
 
+class ClinicalDataForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ClinicalDataForm, self).__init__(*args, **kwargs)
+    
+    class Meta:
+        model = DDClinicalData
+        widgets = {
+            'edss_evaluation_type': forms.RadioSelect()
+        }
+
 class DDMedicalHistoryForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(DDMedicalHistoryForm, self).__init__(*args, **kwargs)
