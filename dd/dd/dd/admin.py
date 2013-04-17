@@ -107,7 +107,7 @@ class DDDiagnosisAdmin(admin.ModelAdmin):
     progress_graph.short_description = "Diagnosis Entry Progress"
 
 class MedicalHistoryDiseaseAdmin(admin.ModelAdmin):
-    list_display = ['disease', 'chronic']
+    list_display = ['disease',]
 
 #admin.site.register(MedicalHistoryItem)
 #admin.site.register(MedicalHistoryGrouping)
