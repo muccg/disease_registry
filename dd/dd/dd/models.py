@@ -270,6 +270,17 @@ class DDMedicalHistoryRecord(models.Model):
         verbose_name = "Medical History Record"
         verbose_name_plural = "Medical History Records"
 
+class EdssRating(models.Model):
+    rating = models.FloatField()
+    name = models.CharField(max_length=300)
+    
+    class Meta:
+        verbose_name = "EDSS Rating"
+        ordering = ['rating',]
+    
+    def __unicode__(self):
+        return '(%s) %s' % (self.rating, self.name)
+
 class DDClinicalData(models.Model):
     ''' The full text of EDSS ratings. Possibly for use in a pop up widget - dropdown descriptions have been shortened for layout purposes.
     (0.0, "Normal Neurological Exam"),
@@ -319,7 +330,7 @@ class DDClinicalData(models.Model):
     diagnosis               = models.ForeignKey(Diagnosis)
     date                    = models.DateField(verbose_name = "Clinical Data date")
     date_first_symtoms      = models.DateField(verbose_name = "Date of first symptoms")
-    edss_rating             = models.CharField(max_length=4, choices=EDSSRatingChoices)
+    edss_rating             = models.ForeignKey(EdssRating)
     past_medical_history    = models.ForeignKey(DDMedicalHistoryRecord, null=True, blank = True)
     date_of_visits          = models.DateField(verbose_name = "Date of visits")
 

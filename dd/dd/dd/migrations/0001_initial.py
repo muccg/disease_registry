@@ -131,13 +131,21 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('dd', ['DDMedicalHistoryRecord'])
 
+        # Adding model 'EdssRating'
+        db.create_table('dd_edssrating', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('rating', self.gf('django.db.models.fields.FloatField')()),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=300)),
+        ))
+        db.send_create_signal('dd', ['EdssRating'])
+
         # Adding model 'DDClinicalData'
         db.create_table('dd_ddclinicaldata', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.Diagnosis'])),
             ('date', self.gf('django.db.models.fields.DateField')()),
             ('date_first_symtoms', self.gf('django.db.models.fields.DateField')()),
-            ('edss_rating', self.gf('django.db.models.fields.CharField')(max_length=4)),
+            ('edss_rating', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.EdssRating'])),
             ('past_medical_history', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.DDMedicalHistoryRecord'], null=True, blank=True)),
             ('date_of_visits', self.gf('django.db.models.fields.DateField')()),
         ))
@@ -241,6 +249,9 @@ class Migration(SchemaMigration):
         # Deleting model 'DDMedicalHistoryRecord'
         db.delete_table('dd_ddmedicalhistoryrecord')
 
+        # Deleting model 'EdssRating'
+        db.delete_table('dd_edssrating')
+
         # Deleting model 'DDClinicalData'
         db.delete_table('dd_ddclinicaldata')
 
@@ -270,7 +281,7 @@ class Migration(SchemaMigration):
             'date_first_symtoms': ('django.db.models.fields.DateField', [], {}),
             'date_of_visits': ('django.db.models.fields.DateField', [], {}),
             'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.Diagnosis']"}),
-            'edss_rating': ('django.db.models.fields.CharField', [], {'max_length': '4'}),
+            'edss_rating': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.EdssRating']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'past_medical_history': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.DDMedicalHistoryRecord']", 'null': 'True', 'blank': 'True'})
         },
@@ -329,6 +340,12 @@ class Migration(SchemaMigration):
             'orphanet': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.OrphanetChoices']", 'null': 'True', 'blank': 'True'}),
             'patient': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'patient_diagnosis'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['patients.Patient']"}),
             'updated': ('django.db.models.fields.DateTimeField', [], {})
+        },
+        'dd.edssrating': {
+            'Meta': {'object_name': 'EdssRating'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '300'}),
+            'rating': ('django.db.models.fields.FloatField', [], {})
         },
         'dd.labdata': {
             'Meta': {'object_name': 'LabData', '_ormbases': ['dd.LongitudinalSet']},
