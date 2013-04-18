@@ -361,7 +361,7 @@ class DDLabDataRecord(LabDataRecord):
 
 
 class DDMRIDataRecord(MRIDataRecord):
-    cds_available = models.BooleanField(default = False, verbose_name = "CDs Available")
+    mri_data_location = models.TextField(verbose_name = "MRI Data Location", blank=True, null=True)
     brain = models.BooleanField(default = False, verbose_name = "Brain")
     cervical = models.BooleanField(default = False, verbose_name = "Cervical")
     thoracic = models.BooleanField(default = False, verbose_name = "Thoracic")

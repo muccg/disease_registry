@@ -166,7 +166,7 @@ class Migration(SchemaMigration):
         # Adding model 'DDMRIDataRecord'
         db.create_table('dd_ddmridatarecord', (
             ('mridatarecord_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dd.MRIDataRecord'], unique=True, primary_key=True)),
-            ('cds_available', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('mri_data_location', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
             ('brain', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('cervical', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('thoracic', self.gf('django.db.models.fields.BooleanField')(default=False)),
@@ -319,8 +319,8 @@ class Migration(SchemaMigration):
         'dd.ddmridatarecord': {
             'Meta': {'object_name': 'DDMRIDataRecord', '_ormbases': ['dd.MRIDataRecord']},
             'brain': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'cds_available': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'cervical': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'mri_data_location': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'mridatarecord_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dd.MRIDataRecord']", 'unique': 'True', 'primary_key': 'True'}),
             'report_file': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
             'thoracic': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
