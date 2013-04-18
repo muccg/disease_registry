@@ -67,6 +67,7 @@ class Patient(models.Model):
     consent = models.BooleanField(null=False, blank=False, help_text="Consent must be given for the patient to be entered on the registry", verbose_name="consent given")
     family_name = models.CharField(max_length=100, db_index=True)
     given_names = models.CharField(max_length=100, db_index=True)
+    umrn = models.CharField(max_length=50, unique=True, db_index=True, null=True, blank=True, verbose_name="UMRN")
     date_of_birth = models.DateField()
     place_of_birth = models.CharField(max_length=100, null=True, blank=True, verbose_name="Place of Birth")
     sex = models.CharField(max_length=1, choices=SEX_CHOICES)
