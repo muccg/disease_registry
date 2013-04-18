@@ -170,6 +170,7 @@ class Migration(SchemaMigration):
             ('brain', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('cervical', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('thoracic', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('report_file', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
         ))
         db.send_create_signal('dd', ['DDMRIDataRecord'])
 
@@ -321,6 +322,7 @@ class Migration(SchemaMigration):
             'cds_available': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'cervical': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'mridatarecord_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dd.MRIDataRecord']", 'unique': 'True', 'primary_key': 'True'}),
+            'report_file': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
             'thoracic': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         },
         'dd.ddtreatmentoverview': {

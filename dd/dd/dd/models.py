@@ -1,3 +1,6 @@
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+
 import traceback
 import datetime
 from django.db import models
@@ -8,6 +11,8 @@ from registry.patients.models import Patient
 
 import logging
 logger = logging.getLogger('registry_log')
+
+file_system = FileSystemStorage(location=settings.MEDIA_ROOT, base_url=settings.MEDIA_URL)
 
 #Longitudinal sets will have many instances of longitudinal data
 #pointing at them through a foreign key relationship.
@@ -360,7 +365,7 @@ class DDMRIDataRecord(MRIDataRecord):
     brain = models.BooleanField(default = False, verbose_name = "Brain")
     cervical = models.BooleanField(default = False, verbose_name = "Cervical")
     thoracic = models.BooleanField(default = False, verbose_name = "Thoracic")
-
+    report_file = models.FileField(upload_to='mri_reports', storage=file_system, verbose_name="Report")
 
 class DDMRIData(MRIData):
     diagnosis = models.ForeignKey(Diagnosis, null=True, blank = True)
