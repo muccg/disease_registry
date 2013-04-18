@@ -44,6 +44,7 @@ class PatientAdmin(admin.ModelAdmin):
         personal_details_fields = ["working_group",
                                    "family_name",
                                    "given_names",
+                                   "umrn",
                                    "date_of_birth",
                                    "place_of_birth",
                                    "sex",
