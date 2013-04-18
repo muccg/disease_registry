@@ -358,7 +358,6 @@ class DDLabDataRecord(LabDataRecord):
 class DDMRIDataRecord(MRIDataRecord):
     cds_available = models.BooleanField(default = False, verbose_name = "CDs Available")
     brain = models.BooleanField(default = False, verbose_name = "Brain")
-    spinal_cord = models.BooleanField(default = False, verbose_name = "Spinal Cord")
     cervical = models.BooleanField(default = False, verbose_name = "Cervical")
     thoracic = models.BooleanField(default = False, verbose_name = "Thoracic")
 
