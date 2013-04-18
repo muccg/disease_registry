@@ -168,7 +168,6 @@ class Migration(SchemaMigration):
             ('mridatarecord_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dd.MRIDataRecord'], unique=True, primary_key=True)),
             ('cds_available', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('brain', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('spinal_cord', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('cervical', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('thoracic', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
@@ -322,7 +321,6 @@ class Migration(SchemaMigration):
             'cds_available': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'cervical': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'mridatarecord_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dd.MRIDataRecord']", 'unique': 'True', 'primary_key': 'True'}),
-            'spinal_cord': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'thoracic': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         },
         'dd.ddtreatmentoverview': {
@@ -476,6 +474,7 @@ class Migration(SchemaMigration):
             'sex': ('django.db.models.fields.CharField', [], {'max_length': '1'}),
             'state': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'patient_set'", 'to': "orm['patients.State']"}),
             'suburb': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'umrn': ('django.db.models.fields.CharField', [], {'db_index': 'True', 'max_length': '50', 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'work_phone': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
             'working_group': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['groups.WorkingGroup']"})
         },
