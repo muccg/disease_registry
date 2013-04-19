@@ -121,12 +121,12 @@ class Migration(SchemaMigration):
 
         # Adding model 'DDMedicalHistoryRecord'
         db.create_table('dd_ddmedicalhistoryrecord', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('medicalhistoryrecord_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dd.MedicalHistoryRecord'], unique=True, primary_key=True)),
             ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.Diagnosis'], null=True, blank=True)),
             ('date', self.gf('django.db.models.fields.DateField')()),
             ('disease', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.MedicalHistoryDisease'])),
             ('chronic', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('medical_history', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.MedicalHistory'])),
+            ('medical_history_file', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
             ('other', self.gf('django.db.models.fields.TextField')(blank=True)),
         ))
         db.send_create_signal('dd', ['DDMedicalHistoryRecord'])
@@ -302,13 +302,13 @@ class Migration(SchemaMigration):
             'protein': ('django.db.models.fields.FloatField', [], {'default': '0.0'})
         },
         'dd.ddmedicalhistoryrecord': {
-            'Meta': {'object_name': 'DDMedicalHistoryRecord'},
+            'Meta': {'object_name': 'DDMedicalHistoryRecord', '_ormbases': ['dd.MedicalHistoryRecord']},
             'chronic': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'date': ('django.db.models.fields.DateField', [], {}),
             'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.Diagnosis']", 'null': 'True', 'blank': 'True'}),
             'disease': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.MedicalHistoryDisease']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'medical_history': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.MedicalHistory']"}),
+            'medical_history_file': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
+            'medicalhistoryrecord_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dd.MedicalHistoryRecord']", 'unique': 'True', 'primary_key': 'True'}),
             'other': ('django.db.models.fields.TextField', [], {'blank': 'True'})
         },
         'dd.ddmridata': {
