@@ -245,12 +245,13 @@ class Diagnosis(models.Model):
         graph_html += '?chf=bg,s,FFFFFF00&chs=200x15&cht=bhs&chco=4D89F9,C6D9FD&chd=t:%d|100&chbh=5"/>' % self.percentage_complete()
         return graph_html
 
-class DDMedicalHistoryRecord(models.Model):
+class DDMedicalHistoryRecord(MedicalHistoryRecord):
     diagnosis = models.ForeignKey(Diagnosis, null=True, blank=True)
     date = models.DateField()
     disease = models.ForeignKey(MedicalHistoryDisease)
     chronic = models.BooleanField(default = False, verbose_name = "Chronic / incurable")
-    medical_history = models.ForeignKey(MedicalHistory)
+    medical_history_file = models.FileField(upload_to='medical_history', storage=file_system, verbose_name="Document")
+#    medical_history = models.ForeignKey(MedicalHistory)
 #    diabetes                     = models.BooleanField(default = False, verbose_name="Diabetes")
 #    diabetes_insulin             = models.BooleanField(default = False, verbose_name="If yes, do you use insulin?")
 #    diabetes_onset_age           = models.IntegerField(default = 1,     verbose_name = "Age of onset")
