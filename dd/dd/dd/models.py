@@ -152,7 +152,7 @@ class TreatmentCourse(models.Model):
     treatment = models.ForeignKey(Treatment)
     overview = models.ForeignKey(TreatmentOverview)
     start_date = models.DateField()
-    end_date = models.DateField(blank = True)
+    end_date = models.DateField(blank = True, null = True)
     dose = models.TextField()
     notes = models.TextField(blank = True)
 
