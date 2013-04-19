@@ -21,6 +21,9 @@ class PatientDoctorForm(forms.ModelForm):
 
 
 class PatientForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(PatientForm, self).__init__(*args, **kwargs)
+    
     ADDRESS_ATTRS = {
         "rows": 3,
         "cols": 30,
@@ -29,13 +32,15 @@ class PatientForm(forms.ModelForm):
     consent = forms.BooleanField(required=True, help_text="Consent must be given for the patient to be entered on the registry", label="Consent given")
     date_of_birth = forms.DateField(widget=DateWidget(format="%d %B %Y", popup=True, years=-30))
     address = forms.CharField(widget=forms.Textarea(attrs=ADDRESS_ATTRS))
-    next_of_kin_address = forms.CharField(widget=forms.Textarea(attrs=ADDRESS_ATTRS))
 
     class Media:
         js = [get_static_url("js/patient.js")]
 
     class Meta:
         model = Patient
+        widgets = {
+            'next_of_kin_address': forms.Textarea(attrs={"rows": 3,"cols": 30}),
+        }
 
     # Added to ensure unique (familyname, givennames, workinggroup)
     # Does not need a unique constraint on the DB
