@@ -57,6 +57,15 @@ class NextOfKinRelationship(models.Model):
     def __unicode__(self):
         return self.relationship
 
+class Parent(models.Model):
+    parent_given_names = models.CharField(max_length=100, verbose_name="Given names")
+    parent_family_name = models.CharField(max_length=100, verbose_name="Family name")
+    parent_place_of_birth = models.CharField(max_length=100, verbose_name="Place of birth")
+    parent_date_of_migration = models.DateField(null=True, blank=True, verbose_name="Migration")
+    
+    def __unicode__(self):
+        return '%s %s of %s' % (self.parent_given_names, self.parent_family_name, self.parent_place_of_birth)
+
 class Patient(models.Model):
     if settings.INSTALL_NAME == 'dm1':   # Trac #16 item 9
         SEX_CHOICES = ( ("M", "Male"), ("F", "Female") )
@@ -70,6 +79,7 @@ class Patient(models.Model):
     umrn = models.CharField(max_length=50, unique=True, db_index=True, null=True, blank=True, verbose_name="UMRN")
     date_of_birth = models.DateField()
     place_of_birth = models.CharField(max_length=100, null=True, blank=True, verbose_name="Place of Birth")
+    date_of_migration = models.DateField(help_text="If migrated", blank=True, null=True)
     sex = models.CharField(max_length=1, choices=SEX_CHOICES)
     address = models.TextField()
     suburb = models.CharField(max_length=50, verbose_name="Suburb/Town")
@@ -92,6 +102,7 @@ class Patient(models.Model):
     next_of_kin_email = models.EmailField(blank=True, null=True, verbose_name="email")
     doctors = models.ManyToManyField(Doctor, through="PatientDoctor")
     active = models.BooleanField(default=True, help_text="Ticked if active in the registry, ie not a deleted record, or deceased patient.")
+    parents = models.ManyToManyField(Parent, through="PatientParent")
 
     class Meta:
         ordering = ["family_name", "given_names", "date_of_birth"]
@@ -129,6 +140,16 @@ class Patient(models.Model):
             logger.debug("Deleting patient record.")
             super(Patient, self).delete(*args, **kwargs)
 
+class PatientParent(models.Model):
+    PARENT_TYPE = ( ("M", "Mother"), ("F", "Father") )
+    
+    patient = models.ForeignKey(Patient)
+    parent = models.ForeignKey(Parent)
+    relationship = models.CharField(max_length=20, choices=PARENT_TYPE)
+    
+    class Meta:
+        verbose_name = "Parent"
+        verbose_name_plural = "Parents"
 
 class PatientDoctor(models.Model):
     patient = models.ForeignKey(Patient)

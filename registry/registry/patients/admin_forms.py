@@ -19,6 +19,15 @@ class PatientDoctorForm(forms.ModelForm):
     class Meta:
         model = PatientDoctor
 
+class PatientParentForm(forms.ModelForm):
+    OPTIONS = [
+        "Mother", 
+        "Father"
+    ]
+    relationship = forms.CharField(label="Relationship", widget=ComboWidget(options=OPTIONS))
+    
+    class Meta:
+        model = PatientParent
 
 class PatientForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -31,6 +40,7 @@ class PatientForm(forms.ModelForm):
 
     consent = forms.BooleanField(required=True, help_text="Consent must be given for the patient to be entered on the registry", label="Consent given")
     date_of_birth = forms.DateField(widget=DateWidget(format="%d %B %Y", popup=True, years=-30))
+    date_of_migration = forms.DateField(widget=DateWidget(format="%d %B %Y", popup=True, years=-30), required=False, help_text="Date of migration", label="Migration")
     address = forms.CharField(widget=forms.Textarea(attrs=ADDRESS_ATTRS))
 
     class Media:

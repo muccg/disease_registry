@@ -24,10 +24,18 @@ class PatientDoctorAdmin(admin.TabularInline):
     form = PatientDoctorForm
     model = PatientDoctor
 
+class ParentAdmin(admin.ModelAdmin):
+    model = Parent
+
+class PatientParentAdmin(admin.TabularInline):
+    fields = ["relationship", "parent"]
+    form = PatientParentForm
+    model = PatientParent
+    extra = 1
 
 class PatientAdmin(admin.ModelAdmin):
     form = PatientForm
-    inlines = [PatientDoctorAdmin]
+    inlines = [PatientParentAdmin, PatientDoctorAdmin]
     search_fields = ["family_name", "given_names"]
     list_display = ['__unicode__', 'progress_graph', 'moleculardata_entered', 'freshness', 'working_group', 'diagnosis_last_update']
 
@@ -47,6 +55,7 @@ class PatientAdmin(admin.ModelAdmin):
                                    "umrn",
                                    "date_of_birth",
                                    "place_of_birth",
+                                   "date_of_migration",
                                    "sex",
                                    "address",
                                    "suburb",
@@ -217,6 +226,5 @@ admin.site.register(Doctor, DoctorAdmin)
 admin.site.register(Patient, PatientAdmin)
 admin.site.register(State, StateAdmin)
 admin.site.register(NextOfKinRelationship, NextOfKinRelationshipAdmin)
-
-
+admin.site.register(Parent, ParentAdmin)
 admin.site.disable_action('delete_selected')
