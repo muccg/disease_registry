@@ -188,11 +188,16 @@ class Diagnosis(models.Model):
     affected_status = models.CharField(max_length=30, choices=DD_AFFECTED_STATUS_CHOICES, verbose_name = "Affected Status", default = '')
 
     first_suspected_by = models.CharField(max_length=50, choices = DD_FIRST_SUSPECTED_CHOICES, null=True, blank=True)
+    date_of_first_symptom = models.DateField(null=True, blank=True)
+    date_of_diagnosis = models.DateField(null=True, blank=True)
 
     age_at_clinical_diagnosis = models.IntegerField('age in years at clinical diagnosis', null=True, blank=True)
     age_at_molecular_diagnosis = models.IntegerField('age in years at molecular diagnosis', null=True, blank=True)
 
     orphanet = models.ForeignKey(OrphanetChoices, null=True, blank = True)
+    
+    family_history = models.TextField(null=True, blank=True)
+    family_consent = models.BooleanField(default=False)
     
     created = models.DateTimeField(editable=False)
     updated = models.DateTimeField(editable=False)
