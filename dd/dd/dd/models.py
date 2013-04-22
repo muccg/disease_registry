@@ -154,7 +154,7 @@ class TreatmentCourse(models.Model):
     start_date = models.DateField()
     end_date = models.DateField(blank = True, null = True)
     dose = models.TextField()
-    notes = models.TextField(blank = True)
+    notes = models.TextField(blank = True, verbose_name="Notes / Adverse Events")
 
 
 class Diagnosis(models.Model):
