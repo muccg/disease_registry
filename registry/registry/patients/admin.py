@@ -43,9 +43,11 @@ class PatientAdmin(admin.ModelAdmin):
         """Function to dynamically create the fieldset, adding 'active' field if user is a superuser"""
 
         consent = ("Consent", {
-            "fields":
-            ("consent",
-             )})
+            "fields":(
+                "consent",
+                "consent_form"
+             )
+        })
 
         personal_details = ("Personal Details", {})
 

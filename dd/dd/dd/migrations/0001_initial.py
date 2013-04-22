@@ -468,6 +468,7 @@ class Migration(SchemaMigration):
             'active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'address': ('django.db.models.fields.TextField', [], {}),
             'consent': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'consent_form': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
             'date_of_birth': ('django.db.models.fields.DateField', [], {}),
             'date_of_migration': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             'doctors': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['patients.Doctor']", 'through': "orm['patients.PatientDoctor']", 'symmetrical': 'False'}),

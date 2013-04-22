@@ -1,6 +1,7 @@
 import copy
 from django.db import models
 from django.db.models.signals import post_save, pre_delete
+from django.core.files.storage import FileSystemStorage
 
 import registry.groups.models
 
@@ -9,6 +10,8 @@ logger = logging.getLogger('patient')
 
 from registry.utils import stripspaces
 from django.conf import settings # for APP_NAME
+
+file_system = FileSystemStorage(location=settings.MEDIA_ROOT, base_url=settings.MEDIA_URL)
 
 class Country(models.Model):
     name = models.CharField(max_length=50, primary_key=True)
@@ -74,6 +77,7 @@ class Patient(models.Model):
 
     working_group = models.ForeignKey(registry.groups.models.WorkingGroup, null=False, blank=False)
     consent = models.BooleanField(null=False, blank=False, help_text="Consent must be given for the patient to be entered on the registry", verbose_name="consent given")
+    consent_form = models.FileField(upload_to='consents', storage=file_system, verbose_name="Consent form", blank=True, null=True)
     family_name = models.CharField(max_length=100, db_index=True)
     given_names = models.CharField(max_length=100, db_index=True)
     umrn = models.CharField(max_length=50, unique=True, db_index=True, null=True, blank=True, verbose_name="UMRN")
