@@ -24,7 +24,7 @@ class DDMedicalHistoryForm(forms.ModelForm):
     class Meta:
         model = DDMedicalHistoryRecord
         widgets = {
-                "other" : forms.Textarea(attrs={"cols":60, "rows":3}),
+                "other" : forms.Textarea(attrs={"cols":30, "rows":4}),
         }
 
 class DDDiagnosisForm(forms.ModelForm):

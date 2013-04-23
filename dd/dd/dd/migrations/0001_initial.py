@@ -132,6 +132,7 @@ class Migration(SchemaMigration):
             ('chronic', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('medical_history_file', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
             ('other', self.gf('django.db.models.fields.TextField')(blank=True)),
+            ('misdiagnosed', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal('dd', ['DDMedicalHistoryRecord'])
 
@@ -313,6 +314,7 @@ class Migration(SchemaMigration):
             'disease': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.MedicalHistoryDisease']"}),
             'medical_history_file': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
             'medicalhistoryrecord_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dd.MedicalHistoryRecord']", 'unique': 'True', 'primary_key': 'True'}),
+            'misdiagnosed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'other': ('django.db.models.fields.TextField', [], {'blank': 'True'})
         },
         'dd.ddmridata': {
@@ -468,7 +470,7 @@ class Migration(SchemaMigration):
             'active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'address': ('django.db.models.fields.TextField', [], {}),
             'consent': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'consent_form': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
+            'consent_form': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'date_of_birth': ('django.db.models.fields.DateField', [], {}),
             'date_of_migration': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             'doctors': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['patients.Doctor']", 'through': "orm['patients.PatientDoctor']", 'symmetrical': 'False'}),
