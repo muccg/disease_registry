@@ -71,6 +71,7 @@ class PatientAdmin(admin.ModelAdmin):
 
         # fix for Trac #3, the field is now always displayed, but readonly for not superuser users, see get_readonly_fields below
         personal_details_fields.append("active")
+        personal_details_fields.append("inactive_reason")
         
         personal_details[1]["fields"] = tuple(personal_details_fields)
 
