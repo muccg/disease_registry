@@ -44,12 +44,16 @@ class PatientForm(forms.ModelForm):
     address = forms.CharField(widget=forms.Textarea(attrs=ADDRESS_ATTRS))
 
     class Media:
-        js = [get_static_url("js/patient.js")]
+        js = (
+            "https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js",
+            "js/patient.js"
+        )
 
     class Meta:
         model = Patient
         widgets = {
             'next_of_kin_address': forms.Textarea(attrs={"rows": 3,"cols": 30}),
+            'inactive_reason': forms.Textarea(attrs={"rows": 3,"cols": 30}),
         }
 
     # Added to ensure unique (familyname, givennames, workinggroup)

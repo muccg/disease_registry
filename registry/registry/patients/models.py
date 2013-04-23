@@ -106,6 +106,7 @@ class Patient(models.Model):
     next_of_kin_email = models.EmailField(blank=True, null=True, verbose_name="email")
     doctors = models.ManyToManyField(Doctor, through="PatientDoctor")
     active = models.BooleanField(default=True, help_text="Ticked if active in the registry, ie not a deleted record, or deceased patient.")
+    inactive_reason = models.TextField(blank=True, null=True, verbose_name="Reason", help_text="Please provide reason for deactivating the patient")
     parents = models.ManyToManyField(Parent, through="PatientParent")
 
     class Meta:
