@@ -275,7 +275,8 @@ class DDMedicalHistoryRecord(MedicalHistoryRecord):
 #    systemic_lupus_erythematosus = models.BooleanField(default = False, verbose_name = "Systemic Lupus Erythematosus")
 #    alopecia                     = models.BooleanField(default = False, verbose_name = "Alopecia")
 #    family_history_of_ms         = models.BooleanField(default = False, verbose_name = "Family history of MS, NMO (or other autoimmune disease)")
-    other                        = models.TextField(verbose_name="Other", blank=True)
+    other = models.TextField(verbose_name="Other", blank=True)
+    misdiagnosed = models.BooleanField(blank=True, default=False)
 
     class Meta:
         verbose_name = "Medical History Record"
