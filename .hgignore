@@ -17,3 +17,5 @@ registry/registry/logs*
 ^dm1/django_dm1registry.egg-info*
 ^sma/django_smaregistry.egg-info*
 .*\.rpm$
+^dd/logs/*
+^dd/media/*
