@@ -55,3 +55,21 @@ class DDLabDataForm(forms.ModelForm):
         res = super(DDLabDataForm, self).save(commit=commit)
         self.labdararecord_formset.save()
         return res
+
+
+class TreatmentCourseForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(TreatmentCourseForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        CHOICES = [
+            ('S','Standard'),
+            ('O','Other')
+        ]
+
+        model = TreatmentCourse
+        widgets = {
+            'dose_other': forms.Textarea(attrs={"cols": 35, "rows": 5}),
+            'notes': forms.Textarea(attrs={"cols": 35, "rows": 5}),
+            'dose_type': forms.RadioSelect(choices=CHOICES)
+        }

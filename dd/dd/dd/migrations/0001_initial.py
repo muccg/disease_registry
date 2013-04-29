@@ -100,7 +100,8 @@ class Migration(SchemaMigration):
             ('overview', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.TreatmentOverview'])),
             ('start_date', self.gf('django.db.models.fields.DateField')()),
             ('end_date', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
-            ('dose', self.gf('django.db.models.fields.TextField')()),
+            ('dose_type', self.gf('django.db.models.fields.CharField')(max_length=1, null=True, blank=True)),
+            ('dose_other', self.gf('django.db.models.fields.TextField')()),
             ('notes', self.gf('django.db.models.fields.TextField')(blank=True)),
         ))
         db.send_create_signal('dd', ['TreatmentCourse'])
@@ -417,7 +418,8 @@ class Migration(SchemaMigration):
         },
         'dd.treatmentcourse': {
             'Meta': {'object_name': 'TreatmentCourse'},
-            'dose': ('django.db.models.fields.TextField', [], {}),
+            'dose_other': ('django.db.models.fields.TextField', [], {}),
+            'dose_type': ('django.db.models.fields.CharField', [], {'max_length': '1', 'null': 'True', 'blank': 'True'}),
             'end_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'notes': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
