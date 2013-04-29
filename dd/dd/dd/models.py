@@ -153,7 +153,8 @@ class TreatmentCourse(models.Model):
     overview = models.ForeignKey(TreatmentOverview)
     start_date = models.DateField()
     end_date = models.DateField(blank = True, null = True)
-    dose = models.TextField()
+    dose_type = models.CharField(max_length=1, blank=True, null=True)
+    dose_other = models.TextField(verbose_name='Dose notes')
     notes = models.TextField(blank = True, verbose_name="Notes / Adverse Events")
 
 

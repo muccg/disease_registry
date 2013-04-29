@@ -30,6 +30,7 @@ class DDLabDataAdmin(admin.ModelAdmin):
 
 class TreatmentCourseInline(admin.TabularInline):
     model = TreatmentCourse
+    form = TreatmentCourseForm
 
 class TreatmentInline(admin.TabularInline):
     model = Treatment
