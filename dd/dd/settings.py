@@ -29,10 +29,10 @@ TEMPLATE_LOADERS = [
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'USER': 'root',
-        'NAME': 'ddregistry',
-        'PASSWORD': '',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': 'dd',
+        'NAME': 'dd',
+        'PASSWORD': 'dd',
         'HOST': '',
         'PORT': '',
     }
@@ -50,12 +50,10 @@ MIDDLEWARE_CLASSES = [
 
 # see: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = [
-    'dd.dd',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-    'django.contrib.admin',
     'django.contrib.staticfiles',
     'django.contrib.messages',
     'django_extensions',
@@ -65,6 +63,8 @@ INSTALLED_APPS = [
     'registry.patients',
     'registry.genetic',
     'registry.common',
+    'dd.dd',
+    'django.contrib.admin',
 ]
 
 
