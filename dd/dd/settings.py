@@ -91,7 +91,7 @@ STATIC_ROOT = os.path.join(WEBAPP_ROOT, 'static')
 STATIC_URL = '{0}/static/'.format(os.environ.get("SCRIPT_NAME", ""))
 
 MEDIA_ROOT = os.path.join(WEBAPP_ROOT, 'media')
-MEDIA_URL = '{0}/static/media/'.format(os.environ.get("SCRIPT_NAME", ""))
+MEDIA_URL = '{0}/media/'.format(os.environ.get("SCRIPT_NAME", ""))
 
 # for local development, this is set to the static serving directory. For deployment use Apache Alias
 STATIC_SERVER_PATH = os.path.join(WEBAPP_ROOT, "static")

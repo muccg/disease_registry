@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import include
 from django.conf.urls import patterns
 from django.contrib import admin
+from django.conf import settings
 
 import registry.urls
 
@@ -10,6 +11,7 @@ urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls), {}),
     (r'^$', include("dd.dd.urls"), {}),
     (r'', include(registry.urls, namespace="registry")),
+    (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT})
 )
 
 def handler404(request):

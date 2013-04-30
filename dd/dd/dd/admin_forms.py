@@ -7,6 +7,16 @@ from django.forms import Select
 from django.forms.models import modelformset_factory, inlineformset_factory
 from django.forms.widgets import RadioSelect
 
+class ClinicalDataForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ClinicalDataForm, self).__init__(*args, **kwargs)
+    
+    class Meta:
+        model = DDClinicalData
+        widgets = {
+            'edss_evaluation_type': forms.RadioSelect()
+        }
+
 class DDMedicalHistoryForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(DDMedicalHistoryForm, self).__init__(*args, **kwargs)
@@ -14,7 +24,7 @@ class DDMedicalHistoryForm(forms.ModelForm):
     class Meta:
         model = DDMedicalHistoryRecord
         widgets = {
-                "other" : forms.Textarea(attrs={"cols":60, "rows":3}),
+                "other" : forms.Textarea(attrs={"cols":30, "rows":4}),
         }
 
 class DDDiagnosisForm(forms.ModelForm):
@@ -45,3 +55,21 @@ class DDLabDataForm(forms.ModelForm):
         res = super(DDLabDataForm, self).save(commit=commit)
         self.labdararecord_formset.save()
         return res
+
+
+class TreatmentCourseForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(TreatmentCourseForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        CHOICES = [
+            ('S','Standard'),
+            ('O','Other')
+        ]
+
+        model = TreatmentCourse
+        widgets = {
+            'dose_other': forms.Textarea(attrs={"cols": 35, "rows": 5}),
+            'notes': forms.Textarea(attrs={"cols": 35, "rows": 5}),
+            'dose_type': forms.RadioSelect(choices=CHOICES)
+        }

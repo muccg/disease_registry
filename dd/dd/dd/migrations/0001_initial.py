@@ -8,13 +8,6 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Patient'
-        db.create_table('dd_patient', (
-            ('patient_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['patients.Patient'], unique=True, primary_key=True)),
-            ('place_of_birth', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
-        ))
-        db.send_create_signal('dd', ['Patient'])
-
         # Adding model 'LongitudinalSet'
         db.create_table('dd_longitudinalset', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -40,7 +33,6 @@ class Migration(SchemaMigration):
         db.create_table('dd_medicalhistorydisease', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('disease', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('chronic', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal('dd', ['MedicalHistoryDisease'])
 
@@ -50,14 +42,6 @@ class Migration(SchemaMigration):
             ('patient', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['patients.Patient'])),
         ))
         db.send_create_signal('dd', ['MedicalHistory'])
-
-        # Adding M2M table for field disease on 'MedicalHistory'
-        db.create_table('dd_medicalhistory_disease', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('medicalhistory', models.ForeignKey(orm['dd.medicalhistory'], null=False)),
-            ('medicalhistorydisease', models.ForeignKey(orm['dd.medicalhistorydisease'], null=False))
-        ))
-        db.create_unique('dd_medicalhistory_disease', ['medicalhistory_id', 'medicalhistorydisease_id'])
 
         # Adding model 'MedicalHistoryRecord'
         db.create_table('dd_medicalhistoryrecord', (
@@ -115,59 +99,60 @@ class Migration(SchemaMigration):
             ('treatment', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.Treatment'])),
             ('overview', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.TreatmentOverview'])),
             ('start_date', self.gf('django.db.models.fields.DateField')()),
-            ('end_date', self.gf('django.db.models.fields.DateField')(blank=True)),
-            ('dose', self.gf('django.db.models.fields.TextField')()),
+            ('end_date', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
+            ('dose_type', self.gf('django.db.models.fields.CharField')(max_length=1, null=True, blank=True)),
+            ('dose_other', self.gf('django.db.models.fields.TextField')()),
             ('notes', self.gf('django.db.models.fields.TextField')(blank=True)),
         ))
         db.send_create_signal('dd', ['TreatmentCourse'])
 
-        # Adding model 'DDDiagnosis'
-        db.create_table('dd_dddiagnosis', (
-            ('patient', self.gf('django.db.models.fields.related.OneToOneField')(related_name='patient_diagnosis', unique=True, primary_key=True, to=orm['dd.Patient'])),
+        # Adding model 'Diagnosis'
+        db.create_table('dd_diagnosis', (
+            ('patient', self.gf('django.db.models.fields.related.OneToOneField')(related_name='patient_diagnosis', unique=True, primary_key=True, to=orm['patients.Patient'])),
             ('diagnosis', self.gf('django.db.models.fields.CharField')(default='UNK', max_length=3)),
             ('affected_status', self.gf('django.db.models.fields.CharField')(default='', max_length=30)),
             ('first_suspected_by', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
+            ('date_of_first_symptom', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
+            ('date_of_diagnosis', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
             ('age_at_clinical_diagnosis', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
             ('age_at_molecular_diagnosis', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
             ('orphanet', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.OrphanetChoices'], null=True, blank=True)),
+            ('family_history', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('family_consent', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('created', self.gf('django.db.models.fields.DateTimeField')()),
             ('updated', self.gf('django.db.models.fields.DateTimeField')()),
         ))
-        db.send_create_signal('dd', ['DDDiagnosis'])
+        db.send_create_signal('dd', ['Diagnosis'])
 
         # Adding model 'DDMedicalHistoryRecord'
         db.create_table('dd_ddmedicalhistoryrecord', (
             ('medicalhistoryrecord_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dd.MedicalHistoryRecord'], unique=True, primary_key=True)),
-            ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.DDDiagnosis'], null=True, blank=True)),
-            ('diabetes', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('diabetes_insulin', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('diabetes_onset_age', self.gf('django.db.models.fields.IntegerField')(default=1)),
-            ('rheumatoid_arthritis', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('crohns_disease', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('ulcerative_colitis', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('psoriasis', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('myasthenia_gravis', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('vitiligo', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('thyroid_disease', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('thyroid_hypothyroidism', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('thyroid_hashimotos', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('graves_disease', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('sjogrens_syndrome', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('pernicious_anemia', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('systemic_lupus_erythematosus', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('alopecia', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('family_history_of_ms', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.Diagnosis'], null=True, blank=True)),
+            ('date', self.gf('django.db.models.fields.DateField')()),
+            ('disease', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.MedicalHistoryDisease'])),
+            ('chronic', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('medical_history_file', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
             ('other', self.gf('django.db.models.fields.TextField')(blank=True)),
+            ('misdiagnosed', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal('dd', ['DDMedicalHistoryRecord'])
+
+        # Adding model 'EdssRating'
+        db.create_table('dd_edssrating', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('rating', self.gf('django.db.models.fields.FloatField')()),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=300)),
+        ))
+        db.send_create_signal('dd', ['EdssRating'])
 
         # Adding model 'DDClinicalData'
         db.create_table('dd_ddclinicaldata', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.DDDiagnosis'])),
+            ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.Diagnosis'])),
             ('date', self.gf('django.db.models.fields.DateField')()),
             ('date_first_symtoms', self.gf('django.db.models.fields.DateField')()),
-            ('edss_rating', self.gf('django.db.models.fields.CharField')(max_length=4)),
+            ('edss_rating', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.EdssRating'])),
+            ('edss_evaluation_type', self.gf('django.db.models.fields.CharField')(max_length=50)),
             ('past_medical_history', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.DDMedicalHistoryRecord'], null=True, blank=True)),
             ('date_of_visits', self.gf('django.db.models.fields.DateField')()),
         ))
@@ -187,32 +172,32 @@ class Migration(SchemaMigration):
         # Adding model 'DDMRIDataRecord'
         db.create_table('dd_ddmridatarecord', (
             ('mridatarecord_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dd.MRIDataRecord'], unique=True, primary_key=True)),
-            ('cds_available', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('mri_data_location', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
             ('brain', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('spinal_cord', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('cervical', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('thoracic', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('report_file', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
         ))
         db.send_create_signal('dd', ['DDMRIDataRecord'])
 
         # Adding model 'DDMRIData'
         db.create_table('dd_ddmridata', (
             ('mridata_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dd.MRIData'], unique=True, primary_key=True)),
-            ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.DDDiagnosis'], null=True, blank=True)),
+            ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.Diagnosis'], null=True, blank=True)),
         ))
         db.send_create_signal('dd', ['DDMRIData'])
 
         # Adding model 'DDLabData'
         db.create_table('dd_ddlabdata', (
             ('labdata_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dd.LabData'], unique=True, primary_key=True)),
-            ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.DDDiagnosis'], null=True, blank=True)),
+            ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.Diagnosis'], null=True, blank=True)),
         ))
         db.send_create_signal('dd', ['DDLabData'])
 
         # Adding model 'DDTreatmentOverview'
         db.create_table('dd_ddtreatmentoverview', (
             ('treatmentoverview_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dd.TreatmentOverview'], unique=True, primary_key=True)),
-            ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.DDDiagnosis'], null=True, blank=True)),
+            ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.Diagnosis'], null=True, blank=True)),
         ))
         db.send_create_signal('dd', ['DDTreatmentOverview'])
 
@@ -226,9 +211,6 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        # Deleting model 'Patient'
-        db.delete_table('dd_patient')
-
         # Deleting model 'LongitudinalSet'
         db.delete_table('dd_longitudinalset')
 
@@ -243,9 +225,6 @@ class Migration(SchemaMigration):
 
         # Deleting model 'MedicalHistory'
         db.delete_table('dd_medicalhistory')
-
-        # Removing M2M table for field disease on 'MedicalHistory'
-        db.delete_table('dd_medicalhistory_disease')
 
         # Deleting model 'MedicalHistoryRecord'
         db.delete_table('dd_medicalhistoryrecord')
@@ -271,11 +250,14 @@ class Migration(SchemaMigration):
         # Deleting model 'TreatmentCourse'
         db.delete_table('dd_treatmentcourse')
 
-        # Deleting model 'DDDiagnosis'
-        db.delete_table('dd_dddiagnosis')
+        # Deleting model 'Diagnosis'
+        db.delete_table('dd_diagnosis')
 
         # Deleting model 'DDMedicalHistoryRecord'
         db.delete_table('dd_ddmedicalhistoryrecord')
+
+        # Deleting model 'EdssRating'
+        db.delete_table('dd_edssrating')
 
         # Deleting model 'DDClinicalData'
         db.delete_table('dd_ddclinicaldata')
@@ -305,26 +287,15 @@ class Migration(SchemaMigration):
             'date': ('django.db.models.fields.DateField', [], {}),
             'date_first_symtoms': ('django.db.models.fields.DateField', [], {}),
             'date_of_visits': ('django.db.models.fields.DateField', [], {}),
-            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.DDDiagnosis']"}),
-            'edss_rating': ('django.db.models.fields.CharField', [], {'max_length': '4'}),
+            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.Diagnosis']"}),
+            'edss_evaluation_type': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'edss_rating': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.EdssRating']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'past_medical_history': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.DDMedicalHistoryRecord']", 'null': 'True', 'blank': 'True'})
         },
-        'dd.dddiagnosis': {
-            'Meta': {'object_name': 'DDDiagnosis'},
-            'affected_status': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '30'}),
-            'age_at_clinical_diagnosis': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'age_at_molecular_diagnosis': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'created': ('django.db.models.fields.DateTimeField', [], {}),
-            'diagnosis': ('django.db.models.fields.CharField', [], {'default': "'UNK'", 'max_length': '3'}),
-            'first_suspected_by': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
-            'orphanet': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.OrphanetChoices']", 'null': 'True', 'blank': 'True'}),
-            'patient': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'patient_diagnosis'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['dd.Patient']"}),
-            'updated': ('django.db.models.fields.DateTimeField', [], {})
-        },
         'dd.ddlabdata': {
             'Meta': {'object_name': 'DDLabData', '_ormbases': ['dd.LabData']},
-            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.DDDiagnosis']", 'null': 'True', 'blank': 'True'}),
+            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.Diagnosis']", 'null': 'True', 'blank': 'True'}),
             'labdata_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dd.LabData']", 'unique': 'True', 'primary_key': 'True'})
         },
         'dd.ddlabdatarecord': {
@@ -338,47 +309,56 @@ class Migration(SchemaMigration):
         },
         'dd.ddmedicalhistoryrecord': {
             'Meta': {'object_name': 'DDMedicalHistoryRecord', '_ormbases': ['dd.MedicalHistoryRecord']},
-            'alopecia': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'crohns_disease': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'diabetes': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'diabetes_insulin': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'diabetes_onset_age': ('django.db.models.fields.IntegerField', [], {'default': '1'}),
-            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.DDDiagnosis']", 'null': 'True', 'blank': 'True'}),
-            'family_history_of_ms': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'graves_disease': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'chronic': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'date': ('django.db.models.fields.DateField', [], {}),
+            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.Diagnosis']", 'null': 'True', 'blank': 'True'}),
+            'disease': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.MedicalHistoryDisease']"}),
+            'medical_history_file': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
             'medicalhistoryrecord_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dd.MedicalHistoryRecord']", 'unique': 'True', 'primary_key': 'True'}),
-            'myasthenia_gravis': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'other': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'pernicious_anemia': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'psoriasis': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'rheumatoid_arthritis': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'sjogrens_syndrome': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'systemic_lupus_erythematosus': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'thyroid_disease': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'thyroid_hashimotos': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'thyroid_hypothyroidism': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'ulcerative_colitis': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'vitiligo': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
+            'misdiagnosed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'other': ('django.db.models.fields.TextField', [], {'blank': 'True'})
         },
         'dd.ddmridata': {
             'Meta': {'object_name': 'DDMRIData', '_ormbases': ['dd.MRIData']},
-            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.DDDiagnosis']", 'null': 'True', 'blank': 'True'}),
+            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.Diagnosis']", 'null': 'True', 'blank': 'True'}),
             'mridata_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dd.MRIData']", 'unique': 'True', 'primary_key': 'True'})
         },
         'dd.ddmridatarecord': {
             'Meta': {'object_name': 'DDMRIDataRecord', '_ormbases': ['dd.MRIDataRecord']},
             'brain': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'cds_available': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'cervical': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'mri_data_location': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'mridatarecord_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dd.MRIDataRecord']", 'unique': 'True', 'primary_key': 'True'}),
-            'spinal_cord': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'report_file': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
             'thoracic': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         },
         'dd.ddtreatmentoverview': {
             'Meta': {'object_name': 'DDTreatmentOverview', '_ormbases': ['dd.TreatmentOverview']},
-            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.DDDiagnosis']", 'null': 'True', 'blank': 'True'}),
+            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.Diagnosis']", 'null': 'True', 'blank': 'True'}),
             'treatmentoverview_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dd.TreatmentOverview']", 'unique': 'True', 'primary_key': 'True'}),
             'treatments': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['dd.Treatment']", 'null': 'True', 'blank': 'True'})
+        },
+        'dd.diagnosis': {
+            'Meta': {'object_name': 'Diagnosis'},
+            'affected_status': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '30'}),
+            'age_at_clinical_diagnosis': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'age_at_molecular_diagnosis': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'created': ('django.db.models.fields.DateTimeField', [], {}),
+            'date_of_diagnosis': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
+            'date_of_first_symptom': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
+            'diagnosis': ('django.db.models.fields.CharField', [], {'default': "'UNK'", 'max_length': '3'}),
+            'family_consent': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'family_history': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'first_suspected_by': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
+            'orphanet': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.OrphanetChoices']", 'null': 'True', 'blank': 'True'}),
+            'patient': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'patient_diagnosis'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['patients.Patient']"}),
+            'updated': ('django.db.models.fields.DateTimeField', [], {})
+        },
+        'dd.edssrating': {
+            'Meta': {'ordering': "['rating']", 'object_name': 'EdssRating'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '300'}),
+            'rating': ('django.db.models.fields.FloatField', [], {})
         },
         'dd.labdata': {
             'Meta': {'object_name': 'LabData', '_ormbases': ['dd.LongitudinalSet']},
@@ -401,13 +381,11 @@ class Migration(SchemaMigration):
         },
         'dd.medicalhistory': {
             'Meta': {'object_name': 'MedicalHistory', '_ormbases': ['dd.LongitudinalSet']},
-            'disease': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['dd.MedicalHistoryDisease']", 'symmetrical': 'False'}),
             'longitudinalset_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dd.LongitudinalSet']", 'unique': 'True', 'primary_key': 'True'}),
             'patient': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['patients.Patient']"})
         },
         'dd.medicalhistorydisease': {
-            'Meta': {'object_name': 'MedicalHistoryDisease'},
-            'chronic': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'Meta': {'ordering': "['disease']", 'object_name': 'MedicalHistoryDisease'},
             'disease': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
@@ -432,11 +410,6 @@ class Migration(SchemaMigration):
             'description': ('django.db.models.fields.CharField', [], {'max_length': '120'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
-        'dd.patient': {
-            'Meta': {'ordering': "['family_name', 'given_names', 'date_of_birth']", 'object_name': 'Patient', '_ormbases': ['patients.Patient']},
-            'patient_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['patients.Patient']", 'unique': 'True', 'primary_key': 'True'}),
-            'place_of_birth': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'})
-        },
         'dd.treatment': {
             'Meta': {'object_name': 'Treatment'},
             'common_name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
@@ -445,8 +418,9 @@ class Migration(SchemaMigration):
         },
         'dd.treatmentcourse': {
             'Meta': {'object_name': 'TreatmentCourse'},
-            'dose': ('django.db.models.fields.TextField', [], {}),
-            'end_date': ('django.db.models.fields.DateField', [], {'blank': 'True'}),
+            'dose_other': ('django.db.models.fields.TextField', [], {}),
+            'dose_type': ('django.db.models.fields.CharField', [], {'max_length': '1', 'null': 'True', 'blank': 'True'}),
+            'end_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'notes': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'overview': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.TreatmentOverview']"}),
@@ -485,34 +459,48 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'relationship': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
+        'patients.parent': {
+            'Meta': {'object_name': 'Parent'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'parent_date_of_migration': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
+            'parent_family_name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'parent_given_names': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'parent_place_of_birth': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+        },
         'patients.patient': {
             'Meta': {'ordering': "['family_name', 'given_names', 'date_of_birth']", 'unique_together': "(('family_name', 'given_names', 'working_group'),)", 'object_name': 'Patient'},
             'active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'address': ('django.db.models.fields.TextField', [], {}),
             'consent': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'consent_form': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'date_of_birth': ('django.db.models.fields.DateField', [], {}),
+            'date_of_migration': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             'doctors': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['patients.Doctor']", 'through': "orm['patients.PatientDoctor']", 'symmetrical': 'False'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
             'family_name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'db_index': 'True'}),
             'given_names': ('django.db.models.fields.CharField', [], {'max_length': '100', 'db_index': 'True'}),
             'home_phone': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'inactive_reason': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'mobile_phone': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
-            'next_of_kin_address': ('django.db.models.fields.TextField', [], {}),
+            'next_of_kin_address': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'next_of_kin_email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
-            'next_of_kin_family_name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'next_of_kin_given_names': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'next_of_kin_family_name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'next_of_kin_given_names': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'next_of_kin_home_phone': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
             'next_of_kin_mobile_phone': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
-            'next_of_kin_postcode': ('django.db.models.fields.IntegerField', [], {}),
+            'next_of_kin_postcode': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'next_of_kin_relationship': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['patients.NextOfKinRelationship']", 'null': 'True', 'blank': 'True'}),
-            'next_of_kin_state': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'next_of_kin_set'", 'to': "orm['patients.State']"}),
-            'next_of_kin_suburb': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'next_of_kin_state': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'next_of_kin_set'", 'null': 'True', 'to': "orm['patients.State']"}),
+            'next_of_kin_suburb': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'next_of_kin_work_phone': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
+            'parents': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['patients.Parent']", 'through': "orm['patients.PatientParent']", 'symmetrical': 'False'}),
+            'place_of_birth': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'postcode': ('django.db.models.fields.IntegerField', [], {}),
             'sex': ('django.db.models.fields.CharField', [], {'max_length': '1'}),
             'state': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'patient_set'", 'to': "orm['patients.State']"}),
             'suburb': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'umrn': ('django.db.models.fields.CharField', [], {'db_index': 'True', 'max_length': '50', 'unique': 'True', 'null': 'True', 'blank': 'True'}),
             'work_phone': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
             'working_group': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['groups.WorkingGroup']"})
         },
@@ -522,6 +510,13 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'patient': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['patients.Patient']"}),
             'relationship': ('django.db.models.fields.CharField', [], {'max_length': '50'})
+        },
+        'patients.patientparent': {
+            'Meta': {'object_name': 'PatientParent'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'parent': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['patients.Parent']"}),
+            'patient': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['patients.Patient']"}),
+            'relationship': ('django.db.models.fields.CharField', [], {'max_length': '20'})
         },
         'patients.state': {
             'Meta': {'ordering': "['country__name', 'name']", 'object_name': 'State'},
