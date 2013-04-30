@@ -24,10 +24,18 @@ class PatientDoctorAdmin(admin.TabularInline):
     form = PatientDoctorForm
     model = PatientDoctor
 
+class ParentAdmin(admin.ModelAdmin):
+    model = Parent
+
+class PatientParentAdmin(admin.TabularInline):
+    fields = ["relationship", "parent"]
+    form = PatientParentForm
+    model = PatientParent
+    extra = 1
 
 class PatientAdmin(admin.ModelAdmin):
     form = PatientForm
-    inlines = [PatientDoctorAdmin]
+    inlines = [PatientParentAdmin, PatientDoctorAdmin]
     search_fields = ["family_name", "given_names"]
     list_display = ['__unicode__', 'progress_graph', 'moleculardata_entered', 'freshness', 'working_group', 'diagnosis_last_update']
 
@@ -35,16 +43,21 @@ class PatientAdmin(admin.ModelAdmin):
         """Function to dynamically create the fieldset, adding 'active' field if user is a superuser"""
 
         consent = ("Consent", {
-            "fields":
-            ("consent",
-             )})
+            "fields":(
+                "consent",
+                "consent_form"
+             )
+        })
 
         personal_details = ("Personal Details", {})
 
         personal_details_fields = ["working_group",
                                    "family_name",
                                    "given_names",
+                                   "umrn",
                                    "date_of_birth",
+                                   "place_of_birth",
+                                   "date_of_migration",
                                    "sex",
                                    "address",
                                    "suburb",
@@ -58,6 +71,7 @@ class PatientAdmin(admin.ModelAdmin):
 
         # fix for Trac #3, the field is now always displayed, but readonly for not superuser users, see get_readonly_fields below
         personal_details_fields.append("active")
+        personal_details_fields.append("inactive_reason")
         
         personal_details[1]["fields"] = tuple(personal_details_fields)
 
@@ -215,6 +229,5 @@ admin.site.register(Doctor, DoctorAdmin)
 admin.site.register(Patient, PatientAdmin)
 admin.site.register(State, StateAdmin)
 admin.site.register(NextOfKinRelationship, NextOfKinRelationshipAdmin)
-
-
+admin.site.register(Parent, ParentAdmin)
 admin.site.disable_action('delete_selected')

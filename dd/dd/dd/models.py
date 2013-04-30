@@ -1,18 +1,18 @@
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+
 import traceback
 import datetime
 from django.db import models
 from django.db.models.signals import post_save
 from django.core.exceptions import ObjectDoesNotExist
 #from registry.genetic.models import MolecularData
-from registry.patients.models import Patient as RegistryPatient
+from registry.patients.models import Patient
 
 import logging
 logger = logging.getLogger('registry_log')
 
-class Patient(RegistryPatient):
-    SEX_CHOICES = ( ("M", "Male"), ("F", "Female"), ("X", "Other/Intersex") )
-
-    place_of_birth = models.CharField(max_length=100, null=True, blank=True, verbose_name="Place Of Birth")
+file_system = FileSystemStorage(location=settings.MEDIA_ROOT, base_url=settings.MEDIA_URL)
 
 #Longitudinal sets will have many instances of longitudinal data
 #pointing at them through a foreign key relationship.
@@ -88,18 +88,17 @@ class LongitudinalData(models.Model):
 
 class MedicalHistoryDisease(models.Model):
     disease = models.CharField(max_length = 100)
-    chronic = models.BooleanField(default = False, verbose_name = "Chronic / incurable")
     
     def __unicode__(self):
-        return str(self.disease)
+        return '%s' % (self.disease,)
 
     class Meta:
         verbose_name = "Medical History Disease"
         verbose_name_plural = "Medical History Diseases"
+        ordering = ['disease']
 
 class MedicalHistory(LongitudinalSet):
-    patient = models.ForeignKey(RegistryPatient)
-    disease = models.ManyToManyField(MedicalHistoryDisease)
+    patient = models.ForeignKey(Patient)
     
     def __unicode__(self):
         return str(self.patient)
@@ -115,7 +114,7 @@ class MedicalHistoryRecord(LongitudinalData):
         return "%s (%s)" % (str(self.medical_history.patient), str(self.date) )
 
 class LabData(LongitudinalSet):
-    patient = models.ForeignKey(RegistryPatient)
+    patient = models.ForeignKey(Patient)
 
 
 class LabDataRecord(LongitudinalData):
@@ -124,7 +123,7 @@ class LabDataRecord(LongitudinalData):
         return "%s (%s)" % (str(self.labdata_history.patient), str(self.date) )
 
 class MRIData(LongitudinalSet):
-    patient = models.ForeignKey(RegistryPatient)
+    patient = models.ForeignKey(Patient)
 
     def __unicode__(self):
         return str(self.patient)
@@ -133,7 +132,7 @@ class MRIDataRecord(LongitudinalData):
     mri_history = models.ForeignKey(MRIData, related_name = 'logitudinal_series')
 
 class TreatmentOverview(models.Model):
-    patient = models.ForeignKey(RegistryPatient)
+    patient = models.ForeignKey(Patient)
 
     def __unicode__(self):
         return str(self.patient)
@@ -153,12 +152,13 @@ class TreatmentCourse(models.Model):
     treatment = models.ForeignKey(Treatment)
     overview = models.ForeignKey(TreatmentOverview)
     start_date = models.DateField()
-    end_date = models.DateField(blank = True)
-    dose = models.TextField()
-    notes = models.TextField(blank = True)
+    end_date = models.DateField(blank = True, null = True)
+    dose_type = models.CharField(max_length=1, blank=True, null=True)
+    dose_other = models.TextField(verbose_name='Dose notes')
+    notes = models.TextField(blank = True, verbose_name="Notes / Adverse Events")
 
 
-class DDDiagnosis(models.Model):
+class Diagnosis(models.Model):
 
     DD_AFFECTED_STATUS_CHOICES = (
         ('FamilyHistory', 'Not yet diagnosed/Family history only'),
@@ -189,11 +189,16 @@ class DDDiagnosis(models.Model):
     affected_status = models.CharField(max_length=30, choices=DD_AFFECTED_STATUS_CHOICES, verbose_name = "Affected Status", default = '')
 
     first_suspected_by = models.CharField(max_length=50, choices = DD_FIRST_SUSPECTED_CHOICES, null=True, blank=True)
+    date_of_first_symptom = models.DateField(null=True, blank=True)
+    date_of_diagnosis = models.DateField(null=True, blank=True)
 
     age_at_clinical_diagnosis = models.IntegerField('age in years at clinical diagnosis', null=True, blank=True)
     age_at_molecular_diagnosis = models.IntegerField('age in years at molecular diagnosis', null=True, blank=True)
 
     orphanet = models.ForeignKey(OrphanetChoices, null=True, blank = True)
+    
+    family_history = models.TextField(null=True, blank=True)
+    family_consent = models.BooleanField(default=False)
     
     created = models.DateTimeField(editable=False)
     updated = models.DateTimeField(editable=False)
@@ -210,7 +215,7 @@ class DDDiagnosis(models.Model):
         if not self.created:
             self.created = datetime.datetime.now()
         self.updated = datetime.datetime.now()
-        super(DDDiagnosis, self).save(*args, **kwargs)
+        super(Diagnosis, self).save(*args, **kwargs)
 
     def percentage_complete(self):
         score = 0.0
@@ -247,30 +252,47 @@ class DDDiagnosis(models.Model):
         return graph_html
 
 class DDMedicalHistoryRecord(MedicalHistoryRecord):
-    diagnosis                    = models.ForeignKey(DDDiagnosis, null=True, blank=True)
-    diabetes                     = models.BooleanField(default = False, verbose_name="Diabetes")
-    diabetes_insulin             = models.BooleanField(default = False, verbose_name="If yes, do you use insulin?")
-    diabetes_onset_age           = models.IntegerField(default = 1,     verbose_name = "Age of onset")
-    rheumatoid_arthritis         = models.BooleanField(default = False, verbose_name = "Rheumatoid Arthritis")
-    crohns_disease               = models.BooleanField(default = False, verbose_name = "Crohn's Disease")
-    ulcerative_colitis           = models.BooleanField(default = False, verbose_name = "Ulcerative Colitis")
-    psoriasis                    = models.BooleanField(default = False, verbose_name = "Psoriasis")
-    myasthenia_gravis            = models.BooleanField(default = False, verbose_name = "Myasthenia Gravis")
-    vitiligo                     = models.BooleanField(default = False, verbose_name = "Vitiligo")
-    thyroid_disease              = models.BooleanField(default = False, verbose_name = "Thyroid Disease")
-    thyroid_hypothyroidism       = models.BooleanField(default = False, verbose_name = "Hypothyroidism")
-    thyroid_hashimotos           = models.BooleanField(default = False, verbose_name = "Hashimoto's Thyroiditis")
-    graves_disease               = models.BooleanField(default = False, verbose_name = "Graves' Disease")
-    sjogrens_syndrome            = models.BooleanField(default = False, verbose_name = "Sjorgens Syndrome")
-    pernicious_anemia            = models.BooleanField(default = False, verbose_name = "Pernicious Anemia")
-    systemic_lupus_erythematosus = models.BooleanField(default = False, verbose_name = "Systemic Lupus Erythematosus")
-    alopecia                     = models.BooleanField(default = False, verbose_name = "Alopecia")
-    family_history_of_ms         = models.BooleanField(default = False, verbose_name = "Family history of MS, NMO (or other autoimmune disease)")
-    other                        = models.TextField(verbose_name="Other", blank=True)
+    diagnosis = models.ForeignKey(Diagnosis, null=True, blank=True)
+    date = models.DateField()
+    disease = models.ForeignKey(MedicalHistoryDisease)
+    chronic = models.BooleanField(default = False, verbose_name = "Chronic / incurable")
+    medical_history_file = models.FileField(upload_to='medical_history', storage=file_system, verbose_name="Document")
+#    medical_history = models.ForeignKey(MedicalHistory)
+#    diabetes                     = models.BooleanField(default = False, verbose_name="Diabetes")
+#    diabetes_insulin             = models.BooleanField(default = False, verbose_name="If yes, do you use insulin?")
+#    diabetes_onset_age           = models.IntegerField(default = 1,     verbose_name = "Age of onset")
+#    rheumatoid_arthritis         = models.BooleanField(default = False, verbose_name = "Rheumatoid Arthritis")
+#    crohns_disease               = models.BooleanField(default = False, verbose_name = "Crohn's Disease")
+#    ulcerative_colitis           = models.BooleanField(default = False, verbose_name = "Ulcerative Colitis")
+#    psoriasis                    = models.BooleanField(default = False, verbose_name = "Psoriasis")
+#    myasthenia_gravis            = models.BooleanField(default = False, verbose_name = "Myasthenia Gravis")
+#    vitiligo                     = models.BooleanField(default = False, verbose_name = "Vitiligo")
+#    thyroid_disease              = models.BooleanField(default = False, verbose_name = "Thyroid Disease")
+#    thyroid_hypothyroidism       = models.BooleanField(default = False, verbose_name = "Hypothyroidism")
+#    thyroid_hashimotos           = models.BooleanField(default = False, verbose_name = "Hashimoto's Thyroiditis")
+#    graves_disease               = models.BooleanField(default = False, verbose_name = "Graves' Disease")
+#    sjogrens_syndrome            = models.BooleanField(default = False, verbose_name = "Sjorgens Syndrome")
+#    pernicious_anemia            = models.BooleanField(default = False, verbose_name = "Pernicious Anemia")
+#    systemic_lupus_erythematosus = models.BooleanField(default = False, verbose_name = "Systemic Lupus Erythematosus")
+#    alopecia                     = models.BooleanField(default = False, verbose_name = "Alopecia")
+#    family_history_of_ms         = models.BooleanField(default = False, verbose_name = "Family history of MS, NMO (or other autoimmune disease)")
+    other = models.TextField(verbose_name="Other", blank=True)
+    misdiagnosed = models.BooleanField(blank=True, default=False)
 
     class Meta:
         verbose_name = "Medical History Record"
         verbose_name_plural = "Medical History Records"
+
+class EdssRating(models.Model):
+    rating = models.FloatField()
+    name = models.CharField(max_length=300)
+    
+    class Meta:
+        verbose_name = "EDSS Rating"
+        ordering = ['rating',]
+    
+    def __unicode__(self):
+        return '(%s) %s' % (self.rating, self.name)
 
 class DDClinicalData(models.Model):
     ''' The full text of EDSS ratings. Possibly for use in a pop up widget - dropdown descriptions have been shortened for layout purposes.
@@ -318,10 +340,16 @@ class DDClinicalData(models.Model):
                           ('10.0', "Death due to MS")
                         )
 
-    diagnosis               = models.ForeignKey(DDDiagnosis)
+    EVALUATION_TYPE_CHOICES = (
+        (1, "Formal"),
+        (2, "From notes"),
+    )
+
+    diagnosis               = models.ForeignKey(Diagnosis)
     date                    = models.DateField(verbose_name = "Clinical Data date")
     date_first_symtoms      = models.DateField(verbose_name = "Date of first symptoms")
-    edss_rating             = models.CharField(max_length=4, choices=EDSSRatingChoices)
+    edss_rating             = models.ForeignKey(EdssRating)
+    edss_evaluation_type    = models.CharField(max_length = 50, choices = EVALUATION_TYPE_CHOICES, verbose_name = "Evaluation type")
     past_medical_history    = models.ForeignKey(DDMedicalHistoryRecord, null=True, blank = True)
     date_of_visits          = models.DateField(verbose_name = "Date of visits")
 
@@ -341,21 +369,20 @@ class DDLabDataRecord(LabDataRecord):
 
 
 class DDMRIDataRecord(MRIDataRecord):
-    cds_available = models.BooleanField(default = False, verbose_name = "CDs Available")
+    mri_data_location = models.TextField(verbose_name = "MRI Data Location", blank=True, null=True)
     brain = models.BooleanField(default = False, verbose_name = "Brain")
-    spinal_cord = models.BooleanField(default = False, verbose_name = "Spinal Cord")
     cervical = models.BooleanField(default = False, verbose_name = "Cervical")
     thoracic = models.BooleanField(default = False, verbose_name = "Thoracic")
-
+    report_file = models.FileField(upload_to='mri_reports', storage=file_system, verbose_name="Report")
 
 class DDMRIData(MRIData):
-    diagnosis = models.ForeignKey(DDDiagnosis, null=True, blank = True)
+    diagnosis = models.ForeignKey(Diagnosis, null=True, blank = True)
     class Meta:
         verbose_name = "MRI Data"
         verbose_name_plural = "MRI Data"
 
 class DDLabData(LabData):
-    diagnosis = models.ForeignKey(DDDiagnosis, null=True, blank = True)
+    diagnosis = models.ForeignKey(Diagnosis, null=True, blank = True)
 
     def __unicode__(self):
         return str(self.diagnosis)
@@ -365,7 +392,7 @@ class DDLabData(LabData):
         verbose_name_plural = "Lab Data"
 
 class DDTreatmentOverview(TreatmentOverview):
-    diagnosis = models.ForeignKey(DDDiagnosis, null=True, blank = True)
+    diagnosis = models.ForeignKey(Diagnosis, null=True, blank = True)
     treatments = models.ManyToManyField(Treatment, null=True, blank = True)
 
     def populate_initial_items(self):
@@ -411,7 +438,7 @@ def signal_patient_post_save(sender, **kwargs):
 
     try:
         patient = kwargs['instance']
-        diagnosis, created = DDDiagnosis.objects.get_or_create(patient=patient)
+        diagnosis, created = Diagnosis.objects.get_or_create(patient=patient)
         logger.debug("Diagnosis record %s" % ("created" if created else "already existed"))
     except Exception, e:
         logger.critical(e)
