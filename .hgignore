@@ -19,3 +19,4 @@ registry/registry/logs*
 .*\.rpm$
 ^dd/logs/*
 ^dd/media/*
+^dmd/logs/*
