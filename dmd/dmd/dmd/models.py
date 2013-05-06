@@ -17,8 +17,7 @@ class Diagnosis(models.Model):
         ("Car", "Non-Symptomatic Carrier"),
         ("Man", "Manifesting carrier"), # Trac #30
     )
-
-    patient = models.OneToOneField(Patient, primary_key=True, related_name='patient_diagnosis')
+    patient = models.OneToOneField(Patient, unique=True, related_name='patient_diagnosis')
     diagnosis = models.CharField(max_length=3, choices=DIAGNOSIS_CHOICES)
     muscle_biopsy = models.NullBooleanField(verbose_name="previous muscle biopsy")
     created = models.DateTimeField(editable=False)
@@ -80,8 +79,7 @@ class MotorFunction(models.Model):
         ("never", "Never"),
         ("unknown", "Unknown")
     )
-
-    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
+    diagnosis = models.OneToOneField(Diagnosis)
     walk = models.BooleanField(verbose_name="currently able to walk", help_text="Functional walking with or without help (orthoses or assistive device or human assistance), inside or outdoors")
     sit = models.BooleanField(verbose_name="currently able to sit without support", help_text="Able to maintain the sitting position on a chair or a wheelchair without support of upper limbs or leaning against the back of the chair")
     wheelchair_use = models.CharField(verbose_name="wheel chair use (over 3 years of age)", max_length=12, choices=WHEELCHAIR_USE_CHOICES, help_text="Yes (permanent): patient is not able to walk and needs a wheelchair to move<br/>Yes (intermittent): patient is still able to walk")
@@ -95,7 +93,7 @@ class MotorFunction(models.Model):
 
 
 class Steroids(models.Model):
-    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
+    diagnosis = models.OneToOneField(Diagnosis)
     current = models.NullBooleanField(verbose_name="current steroid therapy")
     previous = models.IntegerField(verbose_name="previous steroid therapy (years)", default=0, help_text="Enter 0 to indicate that no previous steroid therapy has occurred")
 
@@ -107,7 +105,7 @@ class Steroids(models.Model):
 
 
 class Surgery(models.Model):
-    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
+    diagnosis = models.OneToOneField(Diagnosis)
     surgery = models.NullBooleanField(verbose_name="scoliosis surgery", help_text="Scoliosis: lateral curvature of the spine in the coronal plane with a Cobb angle measuring more than 10°; surgery: any type of surgical procedure")
 
     class Meta:
@@ -118,7 +116,7 @@ class Surgery(models.Model):
 
 
 class Heart(models.Model):
-    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
+    diagnosis = models.OneToOneField(Diagnosis)
     current = models.NullBooleanField(verbose_name="current cardiac medication")
     failure = models.NullBooleanField(verbose_name="heart failure/ cardiomyopathy")
     lvef = models.IntegerField(null=True, blank=True, verbose_name="LVEF score", help_text="Left Ventricular Ejection Fraction (LVEF) determined by ultrasound examination of the heart; expressed in % [%=(End disatolic volume - End systolic volume) ÷ End diastolic volume] to specify last LVEF(%) and date of examination")
@@ -154,8 +152,7 @@ class Respiratory(models.Model):
         ("PT", "Yes (part-time)"),
         ("N", "No"),
     )
-
-    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
+    diagnosis = models.OneToOneField(Diagnosis)
     non_invasive_ventilation = models.CharField(max_length=2, choices=VENTILATION_CHOICES, help_text="Mechanical ventilation with nasal or bucal mask. Part-time means usually at night")
     invasive_ventilation = models.CharField(max_length=2, choices=VENTILATION_CHOICES, help_text="Mechanical ventilation with tracheostomy. Part-time means usually at night")
     fvc = models.IntegerField(null=True, blank=True, verbose_name="FVC score", help_text="Pulmonary function test with spirometry; Forced Vital Capacity (FVC) expressed as % predicted for height (not in mL) and date of last examination")
@@ -209,7 +206,7 @@ class FamilyMember(models.Model):
 
 
 class Notes(models.Model):
-    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
+    diagnosis = models.OneToOneField(Diagnosis)
     notes = models.TextField(blank=True)
 
     class Meta:
