@@ -10,6 +10,7 @@ urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)),
     (r'^$', include("sma.sma.urls")),
     (r'', include('registry.urls', namespace="registry")),
+    (r'^qbe/', include('django_qbe.urls')),
 )
 
 handler404 = cviews.handler404

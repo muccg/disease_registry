@@ -55,6 +55,7 @@ setup(name='django-smaregistry',
         'ccg-extras==0.1.5',
         'MySQL-python==1.2.3',
         'django-userlog==0.2.1',
+        'django_qbe',
         'django_nose'        
     ],
     dependency_links = [
