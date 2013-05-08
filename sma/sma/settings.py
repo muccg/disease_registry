@@ -29,9 +29,9 @@ SECRET_KEY = '5d0ac501312a26afbc0d857af99ea556'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'USER': 'sma',
+        'USER': 'registryapp',
         'NAME': 'sma',
-        'PASSWORD': 'sma',
+        'PASSWORD': 'registryapp',
         'HOST': '',
         'PORT': '',
     }

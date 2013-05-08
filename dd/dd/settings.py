@@ -30,9 +30,9 @@ TEMPLATE_LOADERS = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'USER': 'dd',
+        'USER': 'registryapp',
         'NAME': 'dd',
-        'PASSWORD': 'dd',
+        'PASSWORD': 'registryapp',
         'HOST': '',
         'PORT': '',
     }
