@@ -25,9 +25,9 @@ USE_I18N = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'USER': 'dmd',
+        'USER': 'registryapp',
         'NAME': 'dmd',
-        'PASSWORD': 'dmd',
+        'PASSWORD': 'registryapp',
         'HOST': '',
         'PORT': '',
     }
