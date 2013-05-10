@@ -174,8 +174,7 @@ def getqueryresults(daterange, working_group):
     # q1 has all the diagnoses for patients with their birth date wihton the date range
     q1 = q_wg.filter(patient__date_of_birth__lte=daterange[1])
 
-    print "patients: %s" % str([d.patient.family_name for d in q1])
-    total = q1.count()
+    total = q1.filter(motorfunction__walk=True).filter(steroids__current=True).count()
     results['total'] = str(total)
 
     ambulant = q1.filter(motorfunction__walk=True).count()
