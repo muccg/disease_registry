@@ -1,6 +1,6 @@
 %define name dm1
-%define version 1.0.6
-%define unmangled_version 1.0.6
+%define version 1.0.7
+%define unmangled_version 1.0.7
 %define release 1
 %define webapps /usr/local/webapps
 %define installdir %{webapps}/%{name}

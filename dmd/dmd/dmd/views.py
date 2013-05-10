@@ -54,7 +54,11 @@ def nmd_report(request, working_group):
         items['last_fvc'] = str(d.respiratory.fvc) if d.respiratory is not None else ''
         
         molecular_data = MolecularData.objects.filter(patient_id=d.patient.id)
-        variation = Variation.objects.filter(molecular_data_id = molecular_data[0].patient_id)
+        
+        if molecular_data:
+            variation = Variation.objects.filter(molecular_data_id = molecular_data[0].patient_id)
+        else:
+            variation = None
     
         if variation:
             items['deletion'] = str(variation[0].deletion_all_exons_tested)
