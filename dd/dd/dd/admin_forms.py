@@ -5,16 +5,16 @@ from registry.forms.date import DateWidget
 
 from django.forms import Select
 from django.forms.models import modelformset_factory, inlineformset_factory
-from django.forms.widgets import RadioSelect
+from registry.forms.widgets import NoDotsRadioSelect
 
 class ClinicalDataForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ClinicalDataForm, self).__init__(*args, **kwargs)
-    
+
     class Meta:
         model = DDClinicalData
         widgets = {
-            'edss_evaluation_type': forms.RadioSelect()
+            'edss_evaluation_type': NoDotsRadioSelect()
         }
 
 class DDMedicalHistoryForm(forms.ModelForm):
@@ -30,7 +30,7 @@ class DDMedicalHistoryForm(forms.ModelForm):
 class DDDiagnosisForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(DDDiagnosisForm, self).__init__(*args, **kwargs)
-        
+
         if "instance" in kwargs:
             self.fields["patient"] = forms.ModelChoiceField(Patient.objects.all(), widget=StaticWidget(text=unicode(kwargs["instance"])))
         else:
@@ -71,5 +71,5 @@ class TreatmentCourseForm(forms.ModelForm):
         widgets = {
             'dose_other': forms.Textarea(attrs={"cols": 35, "rows": 5}),
             'notes': forms.Textarea(attrs={"cols": 35, "rows": 5}),
-            'dose_type': forms.RadioSelect(choices=CHOICES)
+            'dose_type': NoDotsRadioSelect(choices=CHOICES)
         }
