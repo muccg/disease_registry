@@ -4,8 +4,6 @@ from admin_forms import *
 from registry.utils import get_static_url
 from registry import groups
 
-#from registry.patients.admin import PatientAdmin
-
 class ClinicalDataAdmin(admin.ModelAdmin):
     model = DDClinicalData
     form = ClinicalDataForm
@@ -18,15 +16,12 @@ class DDMedicalHistoryAdminInline(admin.TabularInline):
 class MedicalHistoryAdmin(admin.ModelAdmin):
     inlines = [DDMedicalHistoryAdminInline]
 
-class DDLabDataRecordInline(admin.TabularInline):
-    model = DDLabDataRecord
-
-class DDLabDataInline(admin.TabularInline):
-    model = DDLabData
+class LabDataInline(admin.TabularInline):
+    model = LabData
     excludes = ('patient',)
 
-class DDLabDataAdmin(admin.ModelAdmin):
-    inlines = [DDLabDataRecordInline]
+class LabDataAdmin(admin.ModelAdmin):
+    model = LabData
 
 class TreatmentCourseInline(admin.TabularInline):
     model = TreatmentCourse
@@ -48,27 +43,36 @@ class DDTreatmentOverviewInline(admin.StackedInline):
 class DDClinicalDataInline(admin.TabularInline):
     model = DDClinicalData
 
-class DDMRIDataInline(admin.TabularInline):
-    model = DDMRIData
+class MRIFileInline(admin.TabularInline):
+    model = MRIFile
+    extra = 0
 
-class DDMRIDataRecordInline(admin.TabularInline):
-    model = DDMRIDataRecord
+class MRIDataInline(admin.StackedInline):
+    model = MRIData
+    inlines = [MRIFileInline]
+    fields = ("diagnosis", "date", "location",
+              ("brain", "cervical", "thoracic"),
+              "report_file", "image_file")
+    form = MRIDataForm
+    extra = 1
 
-class DDMRIDataAdmin(admin.ModelAdmin):
-    inlines = [DDMRIDataRecordInline]
+class MRIDataAdmin(admin.ModelAdmin):
+    inlines = [MRIFileInline]
+
+    fields = ("diagnosis", "date", "location",
+              ("brain", "cervical", "thoracic"),
+              "report_file")
 
 class DDDiagnosisAdmin(admin.ModelAdmin):
     form = DDDiagnosisForm
-    
+
     inlines = [
                DDMedicalHistoryAdminInline,
                DDClinicalDataInline,
-               DDLabDataInline,
+               LabDataInline,
                DDTreatmentOverviewInline,
-               DDMRIDataInline,
-               #DDMRIDataRecordInline,
+               MRIDataInline,
               ]
-
 
     search_fields = ["patient__family_name", "patient__given_names"]
     list_display = ['patient_name', 'patient_working_group', 'progress_graph']
@@ -116,18 +120,12 @@ class DDDiagnosisAdmin(admin.ModelAdmin):
 class MedicalHistoryDiseaseAdmin(admin.ModelAdmin):
     list_display = ['disease',]
 
-#admin.site.register(MedicalHistoryItem)
-#admin.site.register(MedicalHistoryGrouping)
 admin.site.register(MedicalHistory, MedicalHistoryAdmin)
-#admin.site.register(DDMedicalHistoryRecord)
-admin.site.register(DDLabData, DDLabDataAdmin)
+admin.site.register(LabData, LabDataAdmin)
 admin.site.register(Treatment, TreatmentAdmin)
 admin.site.register(DDTreatmentOverview, DDTreatmentOverviewAdmin)
 admin.site.register(Diagnosis, DDDiagnosisAdmin)
 admin.site.register(DDClinicalData, ClinicalDataAdmin)
-admin.site.register(DDMRIData, DDMRIDataAdmin)
-#admin.site.register(RegistryPatient, PatientAdmin)
+admin.site.register(MRIData, MRIDataAdmin)
 admin.site.register(MedicalHistoryDisease, MedicalHistoryDiseaseAdmin)
-#admin.site.register(DDLabDataRecord)
 admin.site.register(EdssRating)
-

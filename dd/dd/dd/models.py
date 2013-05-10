@@ -12,58 +12,9 @@ from registry.patients.models import Patient
 import logging
 logger = logging.getLogger('registry_log')
 
-file_system = FileSystemStorage(location=settings.MEDIA_ROOT, base_url=settings.MEDIA_URL)
-
-#Longitudinal sets will have many instances of longitudinal data
-#pointing at them through a foreign key relationship.
-#These instances should have a date field (part of the longitudinal data class)
-#These instances should have the fk relation have a related name of 'longitudinal_series'
-#For example:
-#
-#
-#class ExampleRecord(LongitudinalData):
-#    record_history = models.ForeignKey(LongitudinalSet, related_name='longitudinal_series')
-#
-class LongitudinalSet(models.Model):
-    def currentRecord(self):
-        pass
-
-    def previousRecord(self, recordid):
-        retval = None
-        records = self.dataset()
-        ids = [record.id for record in records]
-        if recordid in ids:
-            precordindex = ids.index(recordid)-1
-            if precordindex >= 0:
-                retval = records[precordindex]
-        return retval
-
-    def nextRecord(self, recordid):
-        retval = None
-        records = self.dataset()
-        ids = [record.id for record in records]
-        if recordid in ids:
-            precordindex = ids.index(recordid)+1
-            if precordindex > len(records):
-                retval = records[precordindex]
-        return retval
-
-    def dataset(self):
-        try:
-            return self.longitudinal_series.order_by('date')
-        except:
-            return []
-
-    def __unicode__(self):
-        ret = "Empty"
-        records = self.dataset()
-        if len(records):
-            if len(records) > 1:
-                ret = "%s-%s" % (records[0].date, records[-1].date)
-            else:
-                #only one record
-                ret = "%s-" % (records[0].date)
-        return "(%s)" % (ret)
+file_system = FileSystemStorage(location=settings.MEDIA_ROOT,
+                                base_url=settings.MEDIA_URL)
+mri_store = file_system
 
 class OrphanetChoices(models.Model):
     code = models.CharField(max_length=6)
@@ -76,19 +27,9 @@ class OrphanetChoices(models.Model):
     def __unicode__(self):
         return "%s - %s" % (self.code, self.description) # used in the select options
 
-
-
-#inherit from this to create longitudinal data
-#your inheriting class should have a foreignkey field to a
-#descendant of LongitudinalSet, and name the reverse relation 'longitudinal_series'
-class LongitudinalData(models.Model):
-    date = models.DateField()
-    #longitudinal_set = models.ForeignKey(LongitudinalSet)
-
-
 class MedicalHistoryDisease(models.Model):
     disease = models.CharField(max_length = 100)
-    
+
     def __unicode__(self):
         return '%s' % (self.disease,)
 
@@ -97,39 +38,15 @@ class MedicalHistoryDisease(models.Model):
         verbose_name_plural = "Medical History Diseases"
         ordering = ['disease']
 
-class MedicalHistory(LongitudinalSet):
+class MedicalHistory(models.Model):
     patient = models.ForeignKey(Patient)
-    
+
     def __unicode__(self):
         return str(self.patient)
 
     class Meta:
         verbose_name = "Medical History"
         verbose_name_plural = "Medical Histories"
-    
-class MedicalHistoryRecord(LongitudinalData):
-    medical_history = models.ForeignKey(MedicalHistory, related_name='longitudinal_series')
-
-    def __unicode__(self):
-        return "%s (%s)" % (str(self.medical_history.patient), str(self.date) )
-
-class LabData(LongitudinalSet):
-    patient = models.ForeignKey(Patient)
-
-
-class LabDataRecord(LongitudinalData):
-    labdata_history = models.ForeignKey(LabData, related_name='longitudinal_series')
-    def __unicode__(self):
-        return "%s (%s)" % (str(self.labdata_history.patient), str(self.date) )
-
-class MRIData(LongitudinalSet):
-    patient = models.ForeignKey(Patient)
-
-    def __unicode__(self):
-        return str(self.patient)
-
-class MRIDataRecord(LongitudinalData):
-    mri_history = models.ForeignKey(MRIData, related_name = 'logitudinal_series')
 
 class TreatmentOverview(models.Model):
     patient = models.ForeignKey(Patient)
@@ -171,7 +88,7 @@ class Diagnosis(models.Model):
         ("DD1", "Demyelinating Disease 1"),
         ("DD2", "Demyelinating Disease 2"),
     )
-    
+
     DD_FIRST_SUSPECTED_CHOICES = (
         ("NA", "Not Applicable"), # Trac 16 #61
         ("Self", "Self"),
@@ -196,10 +113,10 @@ class Diagnosis(models.Model):
     age_at_molecular_diagnosis = models.IntegerField('age in years at molecular diagnosis', null=True, blank=True)
 
     orphanet = models.ForeignKey(OrphanetChoices, null=True, blank = True)
-    
+
     family_history = models.TextField(null=True, blank=True)
     family_consent = models.BooleanField(default=False)
-    
+
     created = models.DateTimeField(editable=False)
     updated = models.DateTimeField(editable=False)
 
@@ -251,9 +168,11 @@ class Diagnosis(models.Model):
         graph_html += '?chf=bg,s,FFFFFF00&chs=200x15&cht=bhs&chco=4D89F9,C6D9FD&chd=t:%d|100&chbh=5"/>' % self.percentage_complete()
         return graph_html
 
-class DDMedicalHistoryRecord(MedicalHistoryRecord):
+class DDMedicalHistoryRecord(models.Model):
     diagnosis = models.ForeignKey(Diagnosis, null=True, blank=True)
+    history = models.ForeignKey(MedicalHistory, related_name='records')
     date = models.DateField()
+
     disease = models.ForeignKey(MedicalHistoryDisease)
     chronic = models.BooleanField(default = False, verbose_name = "Chronic / incurable")
     medical_history_file = models.FileField(upload_to='medical_history', storage=file_system, verbose_name="Document")
@@ -286,11 +205,11 @@ class DDMedicalHistoryRecord(MedicalHistoryRecord):
 class EdssRating(models.Model):
     rating = models.FloatField()
     name = models.CharField(max_length=300)
-    
+
     class Meta:
         verbose_name = "EDSS Rating"
         ordering = ['rating',]
-    
+
     def __unicode__(self):
         return '(%s) %s' % (self.rating, self.name)
 
@@ -317,7 +236,7 @@ class DDClinicalData(models.Model):
     (9.5, "Unable to communicate effectively or eat/swallow"),
     (10.0, "Death due to MS")
     '''
-    
+
     EDSSRatingChoices = ( ('0.0', "Normal Neurological Exam"),
                           ('1.0', "No disability, minimal signs on 1 FS"),
                           ('1.5', "No disability, minimal signs on 2 of 7 FS"),
@@ -360,43 +279,50 @@ class DDClinicalData(models.Model):
         verbose_name = "Clinical Data"
         verbose_name_plural = "Clinical Data"
 
-class DDLabDataRecord(LabDataRecord):
+class LabData(models.Model):
+    diagnosis =         models.ForeignKey(Diagnosis)
+    date =              models.DateField()
     protein =           models.FloatField(default = 0.0, verbose_name = "Protein (g/L)")
     leucocytes =        models.FloatField(default = 0.0, verbose_name = "Leucocytes (/ul)")
     erythrocytes =      models.FloatField(default = 0.0, verbose_name = "Erythrocytes (/ul)")
     oligoclonal_bands = models.FloatField(default = 0.0, verbose_name = "Oligoclonal Bands")
     igg_alb =           models.FloatField(default = 0.0, verbose_name = "IgG/Alb")
 
+    class Meta:
+        verbose_name = "Lab Data"
+        verbose_name_plural = "Lab Data"
 
-class DDMRIDataRecord(MRIDataRecord):
-    mri_data_location = models.TextField(verbose_name = "MRI Data Location", blank=True, null=True)
+    def __unicode__(self):
+        return "%s (%s)" % (str(self.diagnosis.patient), str(self.date) )
+
+class MRIData(models.Model):
+    diagnosis = models.ForeignKey(Diagnosis)
+    date = models.DateField()
+
+    location = models.TextField(verbose_name = "MRI Data Location", blank=True)
     brain = models.BooleanField(default = False, verbose_name = "Brain")
     cervical = models.BooleanField(default = False, verbose_name = "Cervical")
     thoracic = models.BooleanField(default = False, verbose_name = "Thoracic")
     report_file = models.FileField(upload_to='mri_reports', storage=file_system, verbose_name="Report")
 
-class DDMRIData(MRIData):
-    diagnosis = models.ForeignKey(Diagnosis, null=True, blank = True)
     class Meta:
         verbose_name = "MRI Data"
         verbose_name_plural = "MRI Data"
 
-class DDLabData(LabData):
-    diagnosis = models.ForeignKey(Diagnosis, null=True, blank = True)
-
     def __unicode__(self):
         return str(self.diagnosis)
 
-    class Meta:
-        verbose_name = "Lab Data"
-        verbose_name_plural = "Lab Data"
+class MRIFile(models.Model):
+    data = models.ForeignKey(MRIData, related_name="images")
+    image = models.FileField(upload_to='mri_images', storage=mri_store,
+                             verbose_name="MRI Image File")
 
 class DDTreatmentOverview(TreatmentOverview):
     diagnosis = models.ForeignKey(Diagnosis, null=True, blank = True)
     treatments = models.ManyToManyField(Treatment, null=True, blank = True)
 
     def populate_initial_items(self):
-        initial_items = [(u'1FN\u03b20 1a', "Avonex"), 
+        initial_items = [(u'1FN\u03b20 1a', "Avonex"),
                          (u'1FN\u03b2 1a', "Rebif"),
                          (u'1FN\u03b2 1b', "Betaferon"),
                          (u'Natalizumab', "Tysabri"),
@@ -448,7 +374,3 @@ def signal_patient_post_save(sender, **kwargs):
 
 # connect up django signals
 post_save.connect(signal_patient_post_save, sender=Patient)
-
-
-
-
