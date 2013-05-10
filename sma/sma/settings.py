@@ -28,10 +28,10 @@ SECRET_KEY = '5d0ac501312a26afbc0d857af99ea556'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'USER': 'root',
-        'NAME': 'smaregistry',
-        'PASSWORD': '',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': 'registryapp',
+        'NAME': 'sma',
+        'PASSWORD': 'registryapp',
         'HOST': '',
         'PORT': '',
     }
@@ -54,12 +54,10 @@ MIDDLEWARE_CLASSES = [
 
 # see: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = [
-    'sma.sma',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-    'django.contrib.admin',
     'django.contrib.staticfiles',
     'django.contrib.messages',
     'django_extensions',
@@ -72,6 +70,10 @@ INSTALLED_APPS.extend([
     'registry.patients',
     'registry.genetic',
     'registry.common',
+    'django_qbe',
+    'django_qbe.savedqueries',
+    'sma.sma',
+    'django.contrib.admin'
 ])
 
 # these determine which authentication method to use
@@ -213,6 +215,7 @@ LOGGING = {
 ################################################################################
 
 INSTALL_NAME = 'sma'
+QBE_ACCESS_FOR = lambda user: user.is_superuser
 
 try:
     print "Attempting to import default settings as appsettings.sma"

@@ -24,7 +24,7 @@ for package in ('common', 'patients', 'genetic', 'groups', 'humangenome'):
 os.chdir('../sma')
 
 setup(name='django-smaregistry',
-    version='1.0.4',
+    version='1.0.7',
     description='Django Disease Registry - SMA',
     long_description='Django Disease registry for SMA',
     author='Centre for Comparative Genomics',
@@ -55,6 +55,7 @@ setup(name='django-smaregistry',
         'ccg-extras==0.1.5',
         'MySQL-python==1.2.3',
         'django-userlog==0.2.1',
+        'django_qbe',
         'django_nose'        
     ],
     dependency_links = [

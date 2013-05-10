@@ -21,8 +21,7 @@ class Diagnosis(models.Model):
         ("Other", "Other"),
         ("Unknown", "Unknown"),
     )
-
-    patient = models.OneToOneField(Patient, primary_key=True, related_name='patient_diagnosis')
+    patient = models.OneToOneField(Patient, unique=True, related_name='patient_diagnosis')
     diagnosis = models.CharField(max_length=3, choices=DIAGNOSIS_CHOICES)
     classification = models.CharField(max_length=7, choices=SMA_CLASSIFICATION_CHOICES)
     created = models.DateTimeField(editable=False)
@@ -91,8 +90,7 @@ class MotorFunction(models.Model):
         ("never", "Never"),
         ("unknown", "Unknown")
     )
-
-    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
+    diagnosis = models.OneToOneField(Diagnosis)
     walk = models.BooleanField(verbose_name="currently able to walk", help_text="Functional walking with or without help (orthoses or assistive device or human assistance), inside or outdoors")
     sit = models.BooleanField(verbose_name="currently able to sit without support", help_text="Able to maintain the sitting position on a chair or a wheelchair without support of upper limbs or leaning against the back of the chair")
     best_function = models.CharField(max_length=7, choices=MOTOR_FUNCTION_CHOICES, help_text="Walking: functional walking with or without help (orthoses or assistive device or human assistance), inside or outdoors<br/>Sitting independently: able to maintain the sitting position on a chair or a wheelchair without support of upper limbs or leaning against the back of the chair")
@@ -109,7 +107,7 @@ class MotorFunction(models.Model):
 
 
 class Surgery(models.Model):
-    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
+    diagnosis = models.OneToOneField(Diagnosis)
     surgery = models.NullBooleanField(verbose_name="scoliosis surgery", help_text="Scoliosis: lateral curvature of the spine in the coronal plane with a Cobb angle measuring more than 10°; surgery: any type of surgical procedure")
 
     class Meta:
@@ -120,7 +118,7 @@ class Surgery(models.Model):
 
 
 class FeedingFunction(models.Model):
-    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
+    diagnosis = models.OneToOneField(Diagnosis)
     gastric_nasal_tube = models.NullBooleanField(verbose_name="gastric/nasal tube", help_text="Nutritional supplementation via nasogastric or nasojejunal tube or gastrostomy")
 
     class Meta:
@@ -136,8 +134,7 @@ class Respiratory(models.Model):
         ("PT", "Yes (part-time)"),
         ("N", "No"),
     )
-
-    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
+    diagnosis = models.OneToOneField(Diagnosis)
     non_invasive_ventilation = models.CharField(max_length=2, choices=VENTILATION_CHOICES, help_text="Mechanical ventilation with nasal or bucal mask. Part-time means usually at night")
     invasive_ventilation = models.CharField(max_length=2, choices=VENTILATION_CHOICES, help_text="Mechanical ventilation with tracheostomy. Part-time means usually at night")
     fvc = models.IntegerField(null=True, blank=True, verbose_name="FVC score", help_text="Pulmonary function test with spirometry; Forced Vital Capacity (FVC) expressed as % predicted for height (not in mL) and date of last examination")
@@ -191,7 +188,7 @@ class FamilyMember(models.Model):
 
 
 class Notes(models.Model):
-    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
+    diagnosis = models.OneToOneField(Diagnosis)
     notes = models.TextField(blank=True)
 
     class Meta:

@@ -24,10 +24,10 @@ USE_I18N = True
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'USER': 'root',
-        'NAME': 'dmdregistry',
-        'PASSWORD': '',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': 'registryapp',
+        'NAME': 'dmd',
+        'PASSWORD': 'registryapp',
         'HOST': '',
         'PORT': '',
     }
@@ -50,12 +50,10 @@ MIDDLEWARE_CLASSES = [
 
 # see: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = [
-    'dmd.dmd',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-    'django.contrib.admin',
     'django.contrib.staticfiles',
     'django.contrib.messages',
     'django_extensions',
@@ -69,7 +67,9 @@ INSTALLED_APPS.extend([
     'registry.genetic',
     'registry.common',
     'django_qbe',
-    'django_qbe.savedqueries'
+    'django_qbe.savedqueries',
+    'dmd.dmd',
+    'django.contrib.admin'
 ])
 
 # these determine which authentication method to use

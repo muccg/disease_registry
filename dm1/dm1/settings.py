@@ -25,10 +25,10 @@ SECRET_KEY = 'b530430065479793bbc5570cf21582ed'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'USER': 'root',
-        'NAME': 'dm1registry',
-        'PASSWORD': '',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': 'registryapp',
+        'NAME': 'dm1',
+        'PASSWORD': 'registryapp',
         'HOST': '',
         'PORT': '',
     }
@@ -51,13 +51,10 @@ MIDDLEWARE_CLASSES = [
 
 # see: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = [
-    'dm1.dm1',
-    'dm1.dm1_questionnaire',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-    'django.contrib.admin',
     'django.contrib.staticfiles',
     'django.contrib.messages',
     'django_extensions',
@@ -70,6 +67,9 @@ INSTALLED_APPS.extend([
     'registry.patients',
     'registry.genetic',
     'registry.common',
+    'dm1.dm1',
+    'dm1.dm1_questionnaire',
+    'django.contrib.admin',
 ])
 
 # these determine which authentication method to use
