@@ -41,22 +41,6 @@ class DDDiagnosisForm(forms.ModelForm):
             else:
                 self.fields["patient"] = forms.ModelChoiceField(Patient.objects.filter(working_group=user.working_group).filter(active=True))
 
-LabDataFormset = inlineformset_factory(LabData, LabDataRecord, extra=0, can_delete=False)
-class DDLabDataForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        print 'ddlabdataform inited'
-        super(DDLabDataForm, self).__init__(*args, **kwargs)
-        self.labdatarecord_formset = LabDataFormset(instance = self.instance, data = self.data or None, prefix = self.prefix)
-    def is_valid(self):
-        return (super(DDLabDataForm, self).is_valid() and self.labdatarecord_formset.is_valid() )
-
-    def save(self, commit = True):
-        assert commit == True
-        res = super(DDLabDataForm, self).save(commit=commit)
-        self.labdararecord_formset.save()
-        return res
-
-
 class TreatmentCourseForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(TreatmentCourseForm, self).__init__(*args, **kwargs)
@@ -73,3 +57,46 @@ class TreatmentCourseForm(forms.ModelForm):
             'notes': forms.Textarea(attrs={"cols": 35, "rows": 5}),
             'dose_type': NoDotsRadioSelect(choices=CHOICES)
         }
+
+class MRIDataForm(forms.ModelForm):
+    """
+    This form is for the inline MRIData admin. It allows uploading a
+    single image file through the image_file field. image_file is
+    mapped to a MRIFile object which refers to MRIData.
+    """
+    class Meta:
+        model = MRIData
+
+    def __init__(self, instance=None, *args, **kwargs):
+        kwargs["instance"] = instance
+        super(MRIDataForm, self).__init__(*args, **kwargs)
+
+        # Initialize image_field field with last object in the
+        # instance images set.
+        if instance:
+            images = instance.images.all()
+            if len(images) > 0:
+                image = images[len(images) - 1].image
+                self.fields["image_file"].initial = image
+
+    def save(self, commit=True):
+        instance = super(MRIDataForm, self).save(commit)
+        instance.save()
+
+        if "image_file" in self.cleaned_data:
+            image = self.cleaned_data["image_file"]
+            if image:
+                # If an image file is uploaded, add it on to the end
+                # of the images set.
+                mri = MRIFile(data=instance, image=image)
+                mri.save()
+            elif image is False:
+                # User selected "Clear" => delete the last object in
+                # the instance images set.
+                images = instance.images.all()
+                if len(images) > 0:
+                    images[len(images) - 1].delete()
+
+        return instance
+
+    image_file = forms.FileField(required=False)
