@@ -349,7 +349,7 @@ class DDClinicalData(models.Model):
     date                    = models.DateField(verbose_name = "Clinical Data date")
     date_first_symtoms      = models.DateField(verbose_name = "Date of first symptoms")
     edss_rating             = models.ForeignKey(EdssRating)
-    edss_evaluation_type    = models.CharField(max_length = 50, choices = EVALUATION_TYPE_CHOICES, verbose_name = "Evaluation type")
+    edss_evaluation_type    = models.PositiveSmallIntegerField(choices=EVALUATION_TYPE_CHOICES, verbose_name="Evaluation type")
     past_medical_history    = models.ForeignKey(DDMedicalHistoryRecord, null=True, blank = True)
     date_of_visits          = models.DateField(verbose_name = "Date of visits")
 
