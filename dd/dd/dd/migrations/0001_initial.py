@@ -8,12 +8,6 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'LongitudinalSet'
-        db.create_table('dd_longitudinalset', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        ))
-        db.send_create_signal('dd', ['LongitudinalSet'])
-
         # Adding model 'OrphanetChoices'
         db.create_table('dd_orphanetchoices', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -21,13 +15,6 @@ class Migration(SchemaMigration):
             ('description', self.gf('django.db.models.fields.CharField')(max_length=120)),
         ))
         db.send_create_signal('dd', ['OrphanetChoices'])
-
-        # Adding model 'LongitudinalData'
-        db.create_table('dd_longitudinaldata', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('date', self.gf('django.db.models.fields.DateField')()),
-        ))
-        db.send_create_signal('dd', ['LongitudinalData'])
 
         # Adding model 'MedicalHistoryDisease'
         db.create_table('dd_medicalhistorydisease', (
@@ -38,45 +25,10 @@ class Migration(SchemaMigration):
 
         # Adding model 'MedicalHistory'
         db.create_table('dd_medicalhistory', (
-            ('longitudinalset_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dd.LongitudinalSet'], unique=True, primary_key=True)),
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('patient', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['patients.Patient'])),
         ))
         db.send_create_signal('dd', ['MedicalHistory'])
-
-        # Adding model 'MedicalHistoryRecord'
-        db.create_table('dd_medicalhistoryrecord', (
-            ('longitudinaldata_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dd.LongitudinalData'], unique=True, primary_key=True)),
-            ('medical_history', self.gf('django.db.models.fields.related.ForeignKey')(related_name='longitudinal_series', to=orm['dd.MedicalHistory'])),
-        ))
-        db.send_create_signal('dd', ['MedicalHistoryRecord'])
-
-        # Adding model 'LabData'
-        db.create_table('dd_labdata', (
-            ('longitudinalset_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dd.LongitudinalSet'], unique=True, primary_key=True)),
-            ('patient', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['patients.Patient'])),
-        ))
-        db.send_create_signal('dd', ['LabData'])
-
-        # Adding model 'LabDataRecord'
-        db.create_table('dd_labdatarecord', (
-            ('longitudinaldata_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dd.LongitudinalData'], unique=True, primary_key=True)),
-            ('labdata_history', self.gf('django.db.models.fields.related.ForeignKey')(related_name='longitudinal_series', to=orm['dd.LabData'])),
-        ))
-        db.send_create_signal('dd', ['LabDataRecord'])
-
-        # Adding model 'MRIData'
-        db.create_table('dd_mridata', (
-            ('longitudinalset_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dd.LongitudinalSet'], unique=True, primary_key=True)),
-            ('patient', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['patients.Patient'])),
-        ))
-        db.send_create_signal('dd', ['MRIData'])
-
-        # Adding model 'MRIDataRecord'
-        db.create_table('dd_mridatarecord', (
-            ('longitudinaldata_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dd.LongitudinalData'], unique=True, primary_key=True)),
-            ('mri_history', self.gf('django.db.models.fields.related.ForeignKey')(related_name='logitudinal_series', to=orm['dd.MRIData'])),
-        ))
-        db.send_create_signal('dd', ['MRIDataRecord'])
 
         # Adding model 'TreatmentOverview'
         db.create_table('dd_treatmentoverview', (
@@ -126,8 +78,9 @@ class Migration(SchemaMigration):
 
         # Adding model 'DDMedicalHistoryRecord'
         db.create_table('dd_ddmedicalhistoryrecord', (
-            ('medicalhistoryrecord_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dd.MedicalHistoryRecord'], unique=True, primary_key=True)),
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.Diagnosis'], null=True, blank=True)),
+            ('history', self.gf('django.db.models.fields.related.ForeignKey')(related_name='records', to=orm['dd.MedicalHistory'])),
             ('date', self.gf('django.db.models.fields.DateField')()),
             ('disease', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.MedicalHistoryDisease'])),
             ('chronic', self.gf('django.db.models.fields.BooleanField')(default=False)),
@@ -152,47 +105,45 @@ class Migration(SchemaMigration):
             ('date', self.gf('django.db.models.fields.DateField')()),
             ('date_first_symtoms', self.gf('django.db.models.fields.DateField')()),
             ('edss_rating', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.EdssRating'])),
-            ('edss_evaluation_type', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('edss_evaluation_type', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
             ('past_medical_history', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.DDMedicalHistoryRecord'], null=True, blank=True)),
             ('date_of_visits', self.gf('django.db.models.fields.DateField')()),
         ))
         db.send_create_signal('dd', ['DDClinicalData'])
 
-        # Adding model 'DDLabDataRecord'
-        db.create_table('dd_ddlabdatarecord', (
-            ('labdatarecord_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dd.LabDataRecord'], unique=True, primary_key=True)),
+        # Adding model 'LabData'
+        db.create_table('dd_labdata', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.Diagnosis'])),
+            ('date', self.gf('django.db.models.fields.DateField')()),
             ('protein', self.gf('django.db.models.fields.FloatField')(default=0.0)),
             ('leucocytes', self.gf('django.db.models.fields.FloatField')(default=0.0)),
             ('erythrocytes', self.gf('django.db.models.fields.FloatField')(default=0.0)),
             ('oligoclonal_bands', self.gf('django.db.models.fields.FloatField')(default=0.0)),
             ('igg_alb', self.gf('django.db.models.fields.FloatField')(default=0.0)),
         ))
-        db.send_create_signal('dd', ['DDLabDataRecord'])
+        db.send_create_signal('dd', ['LabData'])
 
-        # Adding model 'DDMRIDataRecord'
-        db.create_table('dd_ddmridatarecord', (
-            ('mridatarecord_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dd.MRIDataRecord'], unique=True, primary_key=True)),
-            ('mri_data_location', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+        # Adding model 'MRIData'
+        db.create_table('dd_mridata', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.Diagnosis'])),
+            ('date', self.gf('django.db.models.fields.DateField')()),
+            ('location', self.gf('django.db.models.fields.TextField')(blank=True)),
             ('brain', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('cervical', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('thoracic', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('report_file', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
         ))
-        db.send_create_signal('dd', ['DDMRIDataRecord'])
+        db.send_create_signal('dd', ['MRIData'])
 
-        # Adding model 'DDMRIData'
-        db.create_table('dd_ddmridata', (
-            ('mridata_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dd.MRIData'], unique=True, primary_key=True)),
-            ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.Diagnosis'], null=True, blank=True)),
+        # Adding model 'MRIFile'
+        db.create_table('dd_mrifile', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('data', self.gf('django.db.models.fields.related.ForeignKey')(related_name='images', to=orm['dd.MRIData'])),
+            ('image', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
         ))
-        db.send_create_signal('dd', ['DDMRIData'])
-
-        # Adding model 'DDLabData'
-        db.create_table('dd_ddlabdata', (
-            ('labdata_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dd.LabData'], unique=True, primary_key=True)),
-            ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.Diagnosis'], null=True, blank=True)),
-        ))
-        db.send_create_signal('dd', ['DDLabData'])
+        db.send_create_signal('dd', ['MRIFile'])
 
         # Adding model 'DDTreatmentOverview'
         db.create_table('dd_ddtreatmentoverview', (
@@ -211,35 +162,14 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        # Deleting model 'LongitudinalSet'
-        db.delete_table('dd_longitudinalset')
-
         # Deleting model 'OrphanetChoices'
         db.delete_table('dd_orphanetchoices')
-
-        # Deleting model 'LongitudinalData'
-        db.delete_table('dd_longitudinaldata')
 
         # Deleting model 'MedicalHistoryDisease'
         db.delete_table('dd_medicalhistorydisease')
 
         # Deleting model 'MedicalHistory'
         db.delete_table('dd_medicalhistory')
-
-        # Deleting model 'MedicalHistoryRecord'
-        db.delete_table('dd_medicalhistoryrecord')
-
-        # Deleting model 'LabData'
-        db.delete_table('dd_labdata')
-
-        # Deleting model 'LabDataRecord'
-        db.delete_table('dd_labdatarecord')
-
-        # Deleting model 'MRIData'
-        db.delete_table('dd_mridata')
-
-        # Deleting model 'MRIDataRecord'
-        db.delete_table('dd_mridatarecord')
 
         # Deleting model 'TreatmentOverview'
         db.delete_table('dd_treatmentoverview')
@@ -262,17 +192,14 @@ class Migration(SchemaMigration):
         # Deleting model 'DDClinicalData'
         db.delete_table('dd_ddclinicaldata')
 
-        # Deleting model 'DDLabDataRecord'
-        db.delete_table('dd_ddlabdatarecord')
+        # Deleting model 'LabData'
+        db.delete_table('dd_labdata')
 
-        # Deleting model 'DDMRIDataRecord'
-        db.delete_table('dd_ddmridatarecord')
+        # Deleting model 'MRIData'
+        db.delete_table('dd_mridata')
 
-        # Deleting model 'DDMRIData'
-        db.delete_table('dd_ddmridata')
-
-        # Deleting model 'DDLabData'
-        db.delete_table('dd_ddlabdata')
+        # Deleting model 'MRIFile'
+        db.delete_table('dd_mrifile')
 
         # Deleting model 'DDTreatmentOverview'
         db.delete_table('dd_ddtreatmentoverview')
@@ -288,49 +215,22 @@ class Migration(SchemaMigration):
             'date_first_symtoms': ('django.db.models.fields.DateField', [], {}),
             'date_of_visits': ('django.db.models.fields.DateField', [], {}),
             'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.Diagnosis']"}),
-            'edss_evaluation_type': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'edss_evaluation_type': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
             'edss_rating': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.EdssRating']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'past_medical_history': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.DDMedicalHistoryRecord']", 'null': 'True', 'blank': 'True'})
         },
-        'dd.ddlabdata': {
-            'Meta': {'object_name': 'DDLabData', '_ormbases': ['dd.LabData']},
-            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.Diagnosis']", 'null': 'True', 'blank': 'True'}),
-            'labdata_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dd.LabData']", 'unique': 'True', 'primary_key': 'True'})
-        },
-        'dd.ddlabdatarecord': {
-            'Meta': {'object_name': 'DDLabDataRecord', '_ormbases': ['dd.LabDataRecord']},
-            'erythrocytes': ('django.db.models.fields.FloatField', [], {'default': '0.0'}),
-            'igg_alb': ('django.db.models.fields.FloatField', [], {'default': '0.0'}),
-            'labdatarecord_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dd.LabDataRecord']", 'unique': 'True', 'primary_key': 'True'}),
-            'leucocytes': ('django.db.models.fields.FloatField', [], {'default': '0.0'}),
-            'oligoclonal_bands': ('django.db.models.fields.FloatField', [], {'default': '0.0'}),
-            'protein': ('django.db.models.fields.FloatField', [], {'default': '0.0'})
-        },
         'dd.ddmedicalhistoryrecord': {
-            'Meta': {'object_name': 'DDMedicalHistoryRecord', '_ormbases': ['dd.MedicalHistoryRecord']},
+            'Meta': {'object_name': 'DDMedicalHistoryRecord'},
             'chronic': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'date': ('django.db.models.fields.DateField', [], {}),
             'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.Diagnosis']", 'null': 'True', 'blank': 'True'}),
             'disease': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.MedicalHistoryDisease']"}),
+            'history': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'records'", 'to': "orm['dd.MedicalHistory']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'medical_history_file': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
-            'medicalhistoryrecord_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dd.MedicalHistoryRecord']", 'unique': 'True', 'primary_key': 'True'}),
             'misdiagnosed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'other': ('django.db.models.fields.TextField', [], {'blank': 'True'})
-        },
-        'dd.ddmridata': {
-            'Meta': {'object_name': 'DDMRIData', '_ormbases': ['dd.MRIData']},
-            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.Diagnosis']", 'null': 'True', 'blank': 'True'}),
-            'mridata_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dd.MRIData']", 'unique': 'True', 'primary_key': 'True'})
-        },
-        'dd.ddmridatarecord': {
-            'Meta': {'object_name': 'DDMRIDataRecord', '_ormbases': ['dd.MRIDataRecord']},
-            'brain': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'cervical': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'mri_data_location': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
-            'mridatarecord_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dd.MRIDataRecord']", 'unique': 'True', 'primary_key': 'True'}),
-            'report_file': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
-            'thoracic': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         },
         'dd.ddtreatmentoverview': {
             'Meta': {'object_name': 'DDTreatmentOverview', '_ormbases': ['dd.TreatmentOverview']},
@@ -361,27 +261,19 @@ class Migration(SchemaMigration):
             'rating': ('django.db.models.fields.FloatField', [], {})
         },
         'dd.labdata': {
-            'Meta': {'object_name': 'LabData', '_ormbases': ['dd.LongitudinalSet']},
-            'longitudinalset_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dd.LongitudinalSet']", 'unique': 'True', 'primary_key': 'True'}),
-            'patient': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['patients.Patient']"})
-        },
-        'dd.labdatarecord': {
-            'Meta': {'object_name': 'LabDataRecord', '_ormbases': ['dd.LongitudinalData']},
-            'labdata_history': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'longitudinal_series'", 'to': "orm['dd.LabData']"}),
-            'longitudinaldata_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dd.LongitudinalData']", 'unique': 'True', 'primary_key': 'True'})
-        },
-        'dd.longitudinaldata': {
-            'Meta': {'object_name': 'LongitudinalData'},
+            'Meta': {'object_name': 'LabData'},
             'date': ('django.db.models.fields.DateField', [], {}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
-        },
-        'dd.longitudinalset': {
-            'Meta': {'object_name': 'LongitudinalSet'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.Diagnosis']"}),
+            'erythrocytes': ('django.db.models.fields.FloatField', [], {'default': '0.0'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'igg_alb': ('django.db.models.fields.FloatField', [], {'default': '0.0'}),
+            'leucocytes': ('django.db.models.fields.FloatField', [], {'default': '0.0'}),
+            'oligoclonal_bands': ('django.db.models.fields.FloatField', [], {'default': '0.0'}),
+            'protein': ('django.db.models.fields.FloatField', [], {'default': '0.0'})
         },
         'dd.medicalhistory': {
-            'Meta': {'object_name': 'MedicalHistory', '_ormbases': ['dd.LongitudinalSet']},
-            'longitudinalset_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dd.LongitudinalSet']", 'unique': 'True', 'primary_key': 'True'}),
+            'Meta': {'object_name': 'MedicalHistory'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'patient': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['patients.Patient']"})
         },
         'dd.medicalhistorydisease': {
@@ -389,20 +281,22 @@ class Migration(SchemaMigration):
             'disease': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
-        'dd.medicalhistoryrecord': {
-            'Meta': {'object_name': 'MedicalHistoryRecord', '_ormbases': ['dd.LongitudinalData']},
-            'longitudinaldata_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dd.LongitudinalData']", 'unique': 'True', 'primary_key': 'True'}),
-            'medical_history': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'longitudinal_series'", 'to': "orm['dd.MedicalHistory']"})
-        },
         'dd.mridata': {
-            'Meta': {'object_name': 'MRIData', '_ormbases': ['dd.LongitudinalSet']},
-            'longitudinalset_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dd.LongitudinalSet']", 'unique': 'True', 'primary_key': 'True'}),
-            'patient': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['patients.Patient']"})
+            'Meta': {'object_name': 'MRIData'},
+            'brain': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'cervical': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'date': ('django.db.models.fields.DateField', [], {}),
+            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.Diagnosis']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'location': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'report_file': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
+            'thoracic': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         },
-        'dd.mridatarecord': {
-            'Meta': {'object_name': 'MRIDataRecord', '_ormbases': ['dd.LongitudinalData']},
-            'longitudinaldata_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dd.LongitudinalData']", 'unique': 'True', 'primary_key': 'True'}),
-            'mri_history': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'logitudinal_series'", 'to': "orm['dd.MRIData']"})
+        'dd.mrifile': {
+            'Meta': {'object_name': 'MRIFile'},
+            'data': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'images'", 'to': "orm['dd.MRIData']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'image': ('django.db.models.fields.files.FileField', [], {'max_length': '100'})
         },
         'dd.orphanetchoices': {
             'Meta': {'ordering': "['code']", 'object_name': 'OrphanetChoices'},
