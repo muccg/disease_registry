@@ -8,21 +8,15 @@ from django.forms.models import modelformset_factory, inlineformset_factory
 from registry.forms.widgets import NoDotsRadioSelect
 
 class ClinicalDataForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(ClinicalDataForm, self).__init__(*args, **kwargs)
-
     class Meta:
         model = DDClinicalData
         widgets = {
             'edss_evaluation_type': NoDotsRadioSelect()
         }
 
-class DDMedicalHistoryForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(DDMedicalHistoryForm, self).__init__(*args, **kwargs)
-
+class MedicalHistoryForm(forms.ModelForm):
     class Meta:
-        model = DDMedicalHistoryRecord
+        model = MedicalHistory
         widgets = {
                 "other" : forms.Textarea(attrs={"cols":30, "rows":4}),
         }
@@ -42,20 +36,12 @@ class DDDiagnosisForm(forms.ModelForm):
                 self.fields["patient"] = forms.ModelChoiceField(Patient.objects.filter(working_group=user.working_group).filter(active=True))
 
 class TreatmentCourseForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(TreatmentCourseForm, self).__init__(*args, **kwargs)
-
     class Meta:
-        CHOICES = [
-            ('S','Standard'),
-            ('O','Other')
-        ]
-
         model = TreatmentCourse
         widgets = {
             'dose_other': forms.Textarea(attrs={"cols": 35, "rows": 5}),
             'notes': forms.Textarea(attrs={"cols": 35, "rows": 5}),
-            'dose_type': NoDotsRadioSelect(choices=CHOICES)
+            'dose_type': NoDotsRadioSelect()
         }
 
 class MRIDataForm(forms.ModelForm):
@@ -66,6 +52,9 @@ class MRIDataForm(forms.ModelForm):
     """
     class Meta:
         model = MRIData
+        widgets = {
+                "location" : forms.Textarea(attrs={"cols":30, "rows":3}),
+        }
 
     def __init__(self, instance=None, *args, **kwargs):
         kwargs["instance"] = instance
