@@ -5,7 +5,7 @@ from registry.forms.widgets import ComboWidget, LiveComboWidget, StaticWidget, F
 from registry.forms.date import DateWidget
 
 from django.forms import Select
-from django.forms.widgets import RadioSelect
+from registry.forms.widgets import NoDotsRadioSelect as RadioSelect
 
 class DiagnosisForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):

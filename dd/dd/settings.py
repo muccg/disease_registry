@@ -13,7 +13,7 @@ SITE_ID = 1
 APPEND_SLASH = True
 SSL_ENABLED = False
 
- 
+
 # Locale
 TIME_ZONE = 'Australia/Perth'
 LANGUAGE_CODE = 'en-us'
@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'registry.genetic',
     'registry.common',
     'dd.dd',
+    'progressbarupload',
     'django.contrib.admin',
 ]
 
@@ -116,6 +117,11 @@ SESSION_COOKIE_NAME = "registry_dd"
 SESSION_ENGINE = 'django.contrib.sessions.backends.file'
 SESSION_FILE_PATH = WRITABLE_DIRECTORY
 
+FILE_UPLOAD_HANDLERS = (
+    "progressbarupload.uploadhandler.ProgressBarUploadHandler",
+    "django.core.files.uploadhandler.MemoryFileUploadHandler",
+    "django.core.files.uploadhandler.TemporaryFileUploadHandler",
+)
 
 # APPLICATION SPECIFIC SETTINGS
 AUTH_PROFILE_MODULE = 'groups.User'
