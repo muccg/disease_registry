@@ -141,6 +141,80 @@ def squeryreportcsv(results, working_group):
     response['Content-Disposition'] = 'attachment; filename=report_' + working_group + '.csv'
     return response
 
+@login_required
+def dmd_report(request):
+    response = HttpResponse(mimetype="text/csv")
+    writer = csv.writer(response)
+    
+    writer.writerow(('Age', 'Genetic Information', 'Ambulant', 'Non-ambulant/unknown', 'On steroids', 'Not on steroids', 'Steroids unknown', 'Cardiomyopathy', 'No Cardiomyopathy', 'Cardiomyopathy unknown', 'LVEF > 50%', 'Total'))
+    
+    date_ranges= (
+        ('2013-08-01', '2020-12-31'),
+        ('1999-08-02', '2006-08-01')
+    )
+    
+    for genetic in (True, False):
+        results = [get_dmd_results(d, genetic) for d in date_ranges]
+        
+        genetic_message = 'Genetic confimration' if genetic else 'No genetic confirmation or unknown'
+    
+        for result in results:
+            writer.writerow((
+                result['age'],
+                genetic_message,
+                result['ambulant'],
+                result['non-ambulant'],
+                result['onsteroids'],
+                result['notonsteroids'],
+                result['steroidsunknown'],
+                result['cardiomyopathy_yes'],
+                result['cardiomyopathy_no'],
+                result['cardiomyopathy_unknown'],
+                result['lvef'],
+                result['total']
+                ))
+    
+    response['Content-Disposition'] = 'attachment; filename=dmd_report.csv'
+    return response
+
+def get_dmd_results(date_range, genetic):
+    
+    if genetic is True:
+        patients = Patient.objects.filter(sex='M').filter(
+            Q(moleculardata__variation__deletion_all_exons_tested=True) | 
+            Q(moleculardata__variation__duplication_all_exons_tested=True) |
+            Q(moleculardata__variation__exon_boundaries_known=True) | 
+            Q(moleculardata__variation__point_mutation_all_exons_sequenced=True) | 
+            Q(moleculardata__variation__all_exons_in_male_relative=True))
+    if genetic is False:
+        patients = Patient.objects.filter(sex='M').filter(
+            Q(moleculardata__variation__deletion_all_exons_tested=False) and 
+            Q(moleculardata__variation__duplication_all_exons_tested=False) and
+            Q(moleculardata__variation__exon_boundaries_known=False) and
+            Q(moleculardata__variation__point_mutation_all_exons_sequenced=False) and
+            Q(moleculardata__variation__all_exons_in_male_relative=False))
+    
+    diagnosis = Diagnosis.objects.filter(patient = patients).filter(patient__date_of_birth__gte=date_range[0]).filter(patient__date_of_birth__lte=date_range[1])
+    
+    results = { 'age': date_range[0] +' - ' + date_range[1]}
+
+    results['ambulant'] = diagnosis.filter(motorfunction__walk = True).count()
+    results['non-ambulant'] = diagnosis.filter(Q(motorfunction__walk = False) | Q(motorfunction__walk__isnull = True) ).count()
+    
+    results['onsteroids'] = diagnosis.filter(steroids__current=True).count()
+    results['notonsteroids'] = diagnosis.filter(steroids__current=False).count()
+    results['steroidsunknown'] = diagnosis.filter(steroids__current__isnull=True).count()
+    
+    results['cardiomyopathy_yes'] = diagnosis.filter(heart__failure=True).count()
+    results['cardiomyopathy_no'] = diagnosis.filter(heart__failure=False).count()
+    results['cardiomyopathy_unknown'] = diagnosis.filter(heart__failure__isnull=True).count()
+    
+    results['lvef'] = diagnosis.filter(heart__lvef__gt = 50).count()
+    
+    results['total'] = diagnosis.filter(motorfunction__walk=True).filter(steroids__current=True).filter(heart__failure=True).count()
+    
+    return results
+        
 def specialquery(working_group):
     dateranges = (
         ('2011-06-16', '2020-12-31'),
