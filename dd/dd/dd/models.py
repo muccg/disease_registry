@@ -42,7 +42,7 @@ class MedicalHistory(models.Model):
     patient = models.ForeignKey(Patient)
 
     def __unicode__(self):
-        return str(self.patient)
+        return unicode(self.patient)
 
     class Meta:
         verbose_name = "Medical History"
@@ -52,7 +52,7 @@ class TreatmentOverview(models.Model):
     patient = models.ForeignKey(Patient)
 
     def __unicode__(self):
-        return str(self.patient)
+        return unicode(self.patient)
 
 class Treatment(models.Model):
     #overview = models.ForeignKey(TreatmentOverview)
@@ -121,7 +121,7 @@ class Diagnosis(models.Model):
     updated = models.DateTimeField(editable=False)
 
     def __unicode__(self):
-        return str(self.patient)
+        return unicode(self.patient)
 
     class Meta:
         verbose_name = "Demyelinating Disease Diagnosis"
@@ -273,7 +273,7 @@ class DDClinicalData(models.Model):
     date_of_visits          = models.DateField(verbose_name = "Date of visits")
 
     def __unicode__(self):
-        return str(self.diagnosis)
+        return unicode(self.diagnosis)
 
     class Meta:
         verbose_name = "Clinical Data"
@@ -293,7 +293,7 @@ class LabData(models.Model):
         verbose_name_plural = "Lab Data"
 
     def __unicode__(self):
-        return "%s (%s)" % (str(self.diagnosis.patient), str(self.date) )
+        return u"%s (%s)" % (self.diagnosis.patient, unicode(self.date))
 
 class MRIData(models.Model):
     diagnosis = models.ForeignKey(Diagnosis)
@@ -310,7 +310,7 @@ class MRIData(models.Model):
         verbose_name_plural = "MRI Data"
 
     def __unicode__(self):
-        return str(self.diagnosis)
+        return unicode(self.diagnosis)
 
 class MRIFile(models.Model):
     data = models.ForeignKey(MRIData, related_name="images")
