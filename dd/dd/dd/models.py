@@ -38,26 +38,10 @@ class MedicalHistoryDisease(models.Model):
         verbose_name_plural = "Medical History Diseases"
         ordering = ['disease']
 
-class MedicalHistory(models.Model):
-    patient = models.ForeignKey(Patient)
-
-    def __unicode__(self):
-        return unicode(self.patient)
-
-    class Meta:
-        verbose_name = "Medical History"
-        verbose_name_plural = "Medical Histories"
-
-class TreatmentOverview(models.Model):
-    patient = models.ForeignKey(Patient)
-
-    def __unicode__(self):
-        return unicode(self.patient)
-
 class Treatment(models.Model):
-    #overview = models.ForeignKey(TreatmentOverview)
     name = models.CharField(max_length = 100)
-    common_name = models.CharField(max_length = 100)
+    common_name = models.CharField(max_length=100, blank=True,
+                                   help_text="Leave blank if same as <em>Name</em>")
 
     def __unicode__(self):
         if self.common_name:
@@ -66,14 +50,22 @@ class Treatment(models.Model):
             return "%s" % (self.name)
 
 class TreatmentCourse(models.Model):
+    DOSE_TYPE_CHOICES = [
+        ('S','Standard'),
+        ('O','Other')
+        ]
+
     treatment = models.ForeignKey(Treatment)
-    overview = models.ForeignKey(TreatmentOverview)
+    diagnosis = models.ForeignKey("Diagnosis")
     start_date = models.DateField()
     end_date = models.DateField(blank = True, null = True)
-    dose_type = models.CharField(max_length=1, blank=True, null=True)
+    dose_type = models.CharField(max_length=1, choices=DOSE_TYPE_CHOICES,
+                                 default='S')
     dose_other = models.TextField(verbose_name='Dose notes')
     notes = models.TextField(blank = True, verbose_name="Notes / Adverse Events")
 
+    def __unicode__(self):
+        return "%s/%s" % (unicode(self.diagnosis), unicode(self.treatment))
 
 class Diagnosis(models.Model):
 
@@ -116,6 +108,8 @@ class Diagnosis(models.Model):
 
     family_history = models.TextField(null=True, blank=True)
     family_consent = models.BooleanField(default=False)
+
+    treatments = models.ManyToManyField(Treatment, through=TreatmentCourse)
 
     created = models.DateTimeField(editable=False)
     updated = models.DateTimeField(editable=False)
@@ -168,9 +162,8 @@ class Diagnosis(models.Model):
         graph_html += '?chf=bg,s,FFFFFF00&chs=200x15&cht=bhs&chco=4D89F9,C6D9FD&chd=t:%d|100&chbh=5"/>' % self.percentage_complete()
         return graph_html
 
-class DDMedicalHistoryRecord(models.Model):
-    diagnosis = models.ForeignKey(Diagnosis, null=True, blank=True)
-    history = models.ForeignKey(MedicalHistory, related_name='records')
+class MedicalHistory(models.Model):
+    diagnosis = models.ForeignKey(Diagnosis, related_name="medical_history")
     date = models.DateField()
 
     disease = models.ForeignKey(MedicalHistoryDisease)
@@ -201,6 +194,9 @@ class DDMedicalHistoryRecord(models.Model):
     class Meta:
         verbose_name = "Medical History Record"
         verbose_name_plural = "Medical History Records"
+
+    def __unicode__(self):
+        return unicode(self.diagnosis)
 
 class EdssRating(models.Model):
     rating = models.FloatField()
@@ -269,7 +265,6 @@ class DDClinicalData(models.Model):
     date_first_symtoms      = models.DateField(verbose_name = "Date of first symptoms")
     edss_rating             = models.ForeignKey(EdssRating)
     edss_evaluation_type    = models.PositiveSmallIntegerField(choices=EVALUATION_TYPE_CHOICES, verbose_name="Evaluation type")
-    past_medical_history    = models.ForeignKey(DDMedicalHistoryRecord, null=True, blank = True)
     date_of_visits          = models.DateField(verbose_name = "Date of visits")
 
     def __unicode__(self):
@@ -299,7 +294,9 @@ class MRIData(models.Model):
     diagnosis = models.ForeignKey(Diagnosis)
     date = models.DateField()
 
-    location = models.TextField(verbose_name = "MRI Data Location", blank=True)
+    location = models.TextField(blank=True, verbose_name="MRI Data Location",
+                                help_text="Fill in this field if " +
+                                "MRI image file(s) can't be uploaded.")
     brain = models.BooleanField(default = False, verbose_name = "Brain")
     cervical = models.BooleanField(default = False, verbose_name = "Cervical")
     thoracic = models.BooleanField(default = False, verbose_name = "Thoracic")
@@ -316,48 +313,6 @@ class MRIFile(models.Model):
     data = models.ForeignKey(MRIData, related_name="images")
     image = models.FileField(upload_to='mri_images', storage=mri_store,
                              verbose_name="MRI Image File")
-
-class DDTreatmentOverview(TreatmentOverview):
-    diagnosis = models.ForeignKey(Diagnosis, null=True, blank = True)
-    treatments = models.ManyToManyField(Treatment, null=True, blank = True)
-
-    def populate_initial_items(self):
-        initial_items = [(u'1FN\u03b20 1a', "Avonex"),
-                         (u'1FN\u03b2 1a', "Rebif"),
-                         (u'1FN\u03b2 1b', "Betaferon"),
-                         (u'Natalizumab', "Tysabri"),
-                         (u'Glatiramer Acetate', "Copaxone"),
-                         (u'Fingolimod', "Gilenya"),
-                         (u'Mitoxantrone', None),
-                         (u'Cladribine', None),
-                         (u'Cyclophosphamide', None),
-                         (u'Oral Steroids', None),
-                         (u'Bone Marrow', None),
-                         (u'Transplants', None),
-                         (u'Rituximab', None),
-                         (u'Alemtuzumab', None),
-                         ]
-        for item in initial_items:
-            t, created = Treatment.objects.get_or_create(name = item[0])
-            if created and item[1]:
-                t.common_name = item[1]
-            #t.overview = self
-                t.save()
-
-            self.treatments.add(t)
-
-    def save(self, *args, **kwargs):
-        created = False
-        if not self.pk:
-            created = True
-        super(DDTreatmentOverview, self).save(*args, **kwargs)
-        if created:
-            self.populate_initial_items()
-
-    class Meta:
-        verbose_name = "Treatment Overview"
-        verbose_name_plural = "Treatment Overviews"
-
 
 def signal_patient_post_save(sender, **kwargs):
     logger.debug("patient post_save signal")
