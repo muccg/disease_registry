@@ -10,24 +10,24 @@ class ClinicalDataAdmin(admin.ModelAdmin):
 
 class MedicalHistoryAdminInline(admin.TabularInline):
     model = MedicalHistory
-    extra = 1
+    extra = 0
     form = MedicalHistoryForm
 
 class MedicalHistoryAdmin(admin.ModelAdmin):
     model = MedicalHistory
-    extra = 1
+    extra = 0
     form = MedicalHistoryForm
 
 class LabDataInline(admin.TabularInline):
     model = LabData
-    extra = 1
+    extra = 0
 
 class LabDataAdmin(admin.ModelAdmin):
     model = LabData
 
 class TreatmentCourseInline(admin.StackedInline):
     model = Diagnosis.treatments.through
-    extra = 1
+    extra = 0
     form = TreatmentCourseForm
 
     fields = ("diagnosis", "treatment",
@@ -46,7 +46,7 @@ class TreatmentAdmin(admin.ModelAdmin):
 
 class DDClinicalDataInline(admin.TabularInline):
     model = DDClinicalData
-    extra = 1
+    extra = 0
 
 class MRIFileInline(admin.TabularInline):
     model = MRIFile
@@ -59,9 +59,9 @@ class MRIDataInline(admin.StackedInline):
               ("brain", "cervical", "thoracic"),
               "report_file", "image_file")
     form = MRIDataForm
-    extra = 1
     change_form_template = "progressbarupload/change_form.html"
     add_form_template = "progressbarupload/change_form.html"
+    extra = 0
 
 class MRIDataAdmin(admin.ModelAdmin):
     inlines = [MRIFileInline]
