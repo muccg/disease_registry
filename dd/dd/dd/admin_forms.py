@@ -35,6 +35,9 @@ class DDDiagnosisForm(forms.ModelForm):
             else:
                 self.fields["patient"] = forms.ModelChoiceField(Patient.objects.filter(working_group=user.working_group).filter(active=True))
 
+    class Media:
+        js = ("js/min_extra.js",)
+
 class TreatmentCourseForm(forms.ModelForm):
     class Meta:
         model = TreatmentCourse
