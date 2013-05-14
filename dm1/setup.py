@@ -27,7 +27,7 @@ for package in ('common', 'patients', 'genetic', 'groups', 'humangenome'):
 os.chdir('../dm1')
 
 setup(name='django-dm1registry',
-    version='1.0.9',
+    version='1.0.10',
     description='Django Disease Registry - DM1',
     long_description='Django Disease registry for DM1',
     author='Centre for Comparative Genomics',
