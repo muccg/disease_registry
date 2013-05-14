@@ -142,19 +142,18 @@ def squeryreportcsv(results, working_group):
     return response
 
 @login_required
-def dmd_report(request):
+def dmd_report(request, working_group):
     response = HttpResponse(mimetype="text/csv")
     writer = csv.writer(response)
     
     writer.writerow(('Age', 'Genetic Information', 'Ambulant', 'Non-ambulant/unknown', 'On steroids', 'Not on steroids', 'Steroids unknown', 'Cardiomyopathy', 'No Cardiomyopathy', 'Cardiomyopathy unknown', 'LVEF > 50%', 'Total'))
     
     date_ranges= (
-        ('2013-08-01', '2020-12-31'),
-        ('1999-08-02', '2006-08-01')
+        ('1999-08-02', '2006-08-01'),
     )
     
     for genetic in (True, False):
-        results = [get_dmd_results(d, genetic) for d in date_ranges]
+        results = [get_dmd_results(d, genetic, working_group) for d in date_ranges]
         
         genetic_message = 'Genetic confimration' if genetic else 'No genetic confirmation or unknown'
     
@@ -174,20 +173,26 @@ def dmd_report(request):
                 result['total']
                 ))
     
-    response['Content-Disposition'] = 'attachment; filename=dmd_report.csv'
+    response['Content-Disposition'] = 'attachment; filename=dmd_report_%s.csv' % (working_group)
     return response
 
-def get_dmd_results(date_range, genetic):
+def get_dmd_results(date_range, genetic, working_group):
+    
+    if working_group == 'nz':
+        wg_q = Q(patient__working_group__name__iexact='NEW ZEALAND')
+    if working_group == 'au':
+        wg_q = ~Q(patient__working_group__name__iexact='NEW ZEALAND')
+    
     
     if genetic is True:
-        diagnosis = Diagnosis.objects.filter(patient__sex ='M').filter(
+        diagnosis = Diagnosis.objects.filter(patient__sex ='M').filter(wg_q).filter(
             Q(patient__moleculardata__variation__deletion_all_exons_tested=True) | 
             Q(patient__moleculardata__variation__duplication_all_exons_tested=True) |
             Q(patient__moleculardata__variation__exon_boundaries_known=True) | 
             Q(patient__moleculardata__variation__point_mutation_all_exons_sequenced=True) | 
             Q(patient__moleculardata__variation__all_exons_in_male_relative=True)).filter(patient__date_of_birth__range=(date_range[0], date_range[1]))
     if genetic is False:
-        diagnosis = Diagnosis.objects.filter(patient__sex ='M').filter(
+        diagnosis = Diagnosis.objects.filter(patient__sex ='M').filter(wg_q).filter(
             Q(patient__moleculardata__variation__deletion_all_exons_tested=False) and 
             Q(patient__moleculardata__variation__duplication_all_exons_tested=False) and
             Q(patient__moleculardata__variation__exon_boundaries_known=False) and

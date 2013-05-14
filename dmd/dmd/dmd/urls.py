@@ -26,4 +26,4 @@ urlpatterns += patterns('', (r'^squeryreport/(?P<working_group>\w{2})$', views.s
 urlpatterns += patterns('', (r'^squeryreportcsv/(?P<working_group>\w{2})$', views.squeryreportcsv))
 
 urlpatterns += patterns('', (r'^nmdreport/(?P<working_group>\w{2})$', views.nmd_report))
-urlpatterns += patterns('', (r'^dmdreport$', views.dmd_report))
+urlpatterns += patterns('', (r'^dmdreport/(?P<working_group>\w{2})$', views.dmd_report))
