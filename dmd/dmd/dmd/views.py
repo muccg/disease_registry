@@ -155,7 +155,7 @@ def dmd_report(request, working_group):
     for genetic in (True, False):
         results = [get_dmd_results(d, genetic, working_group) for d in date_ranges]
         
-        genetic_message = 'Genetic confimration' if genetic else 'No genetic confirmation or unknown'
+        genetic_message = 'Genetic confirmation' if genetic else 'No genetic confirmation or unknown'
     
         for result in results:
             writer.writerow((
@@ -183,21 +183,28 @@ def get_dmd_results(date_range, genetic, working_group):
     if working_group == 'au':
         wg_q = ~Q(patient__working_group__name__iexact='NEW ZEALAND')
     
+    diagnosis = Diagnosis.objects.filter(patient__sex ='M').filter(wg_q).filter(patient__date_of_birth__range=(date_range[0], date_range[1]))
+    
+    valid_ids = MolecularData.objects.filter(patient__patient_diagnosis__id__in=Diagnosis.objects.values_list('id'))
     
     if genetic is True:
-        diagnosis = Diagnosis.objects.filter(patient__sex ='M').filter(wg_q).filter(
+        diagnosis = diagnosis.filter(
+            ~Q(id__in=valid_ids) |
             Q(patient__moleculardata__variation__deletion_all_exons_tested=True) | 
             Q(patient__moleculardata__variation__duplication_all_exons_tested=True) |
             Q(patient__moleculardata__variation__exon_boundaries_known=True) | 
             Q(patient__moleculardata__variation__point_mutation_all_exons_sequenced=True) | 
-            Q(patient__moleculardata__variation__all_exons_in_male_relative=True)).filter(patient__date_of_birth__range=(date_range[0], date_range[1]))
+            Q(patient__moleculardata__variation__all_exons_in_male_relative=True)
+        )
     if genetic is False:
-        diagnosis = Diagnosis.objects.filter(patient__sex ='M').filter(wg_q).filter(
+        diagnosis = diagnosis.filter(
+            ~Q(id__in=valid_ids) | (
             Q(patient__moleculardata__variation__deletion_all_exons_tested=False) and 
             Q(patient__moleculardata__variation__duplication_all_exons_tested=False) and
             Q(patient__moleculardata__variation__exon_boundaries_known=False) and
             Q(patient__moleculardata__variation__point_mutation_all_exons_sequenced=False) and
-            Q(patient__moleculardata__variation__all_exons_in_male_relative=False)).filter(patient__date_of_birth__range=(date_range[0], date_range[1]))
+            Q(patient__moleculardata__variation__all_exons_in_male_relative=False))
+        )
     
     results = { 'age': date_range[0] +' - ' + date_range[1]}
 
