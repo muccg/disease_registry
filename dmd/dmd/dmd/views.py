@@ -180,21 +180,19 @@ def dmd_report(request):
 def get_dmd_results(date_range, genetic):
     
     if genetic is True:
-        patients = Patient.objects.filter(sex='M').filter(
-            Q(moleculardata__variation__deletion_all_exons_tested=True) | 
-            Q(moleculardata__variation__duplication_all_exons_tested=True) |
-            Q(moleculardata__variation__exon_boundaries_known=True) | 
-            Q(moleculardata__variation__point_mutation_all_exons_sequenced=True) | 
-            Q(moleculardata__variation__all_exons_in_male_relative=True))
+        diagnosis = Diagnosis.objects.filter(patient__sex ='M').filter(
+            Q(patient__moleculardata__variation__deletion_all_exons_tested=True) | 
+            Q(patient__moleculardata__variation__duplication_all_exons_tested=True) |
+            Q(patient__moleculardata__variation__exon_boundaries_known=True) | 
+            Q(patient__moleculardata__variation__point_mutation_all_exons_sequenced=True) | 
+            Q(patient__moleculardata__variation__all_exons_in_male_relative=True)).filter(patient__date_of_birth__range=(date_range[0], date_range[1]))
     if genetic is False:
-        patients = Patient.objects.filter(sex='M').filter(
-            Q(moleculardata__variation__deletion_all_exons_tested=False) and 
-            Q(moleculardata__variation__duplication_all_exons_tested=False) and
-            Q(moleculardata__variation__exon_boundaries_known=False) and
-            Q(moleculardata__variation__point_mutation_all_exons_sequenced=False) and
-            Q(moleculardata__variation__all_exons_in_male_relative=False))
-    
-    diagnosis = Diagnosis.objects.filter(patient = patients).filter(patient__date_of_birth__gte=date_range[0]).filter(patient__date_of_birth__lte=date_range[1])
+        diagnosis = Diagnosis.objects.filter(patient__sex ='M').filter(
+            Q(patient__moleculardata__variation__deletion_all_exons_tested=False) and 
+            Q(patient__moleculardata__variation__duplication_all_exons_tested=False) and
+            Q(patient__moleculardata__variation__exon_boundaries_known=False) and
+            Q(patient__moleculardata__variation__point_mutation_all_exons_sequenced=False) and
+            Q(patient__moleculardata__variation__all_exons_in_male_relative=False)).filter(patient__date_of_birth__range=(date_range[0], date_range[1]))
     
     results = { 'age': date_range[0] +' - ' + date_range[1]}
 
