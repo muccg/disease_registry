@@ -218,7 +218,12 @@ def get_dmd_results(date_range, genetic, working_group):
 
     results['lvef'] = diagnosis.filter(heart__lvef__gt = 50).count()
 
-    results['total'] = diagnosis.filter(motorfunction__walk=True).filter(steroids__current=True).filter(heart__failure=True).count()
+    qualifying = diagnosis
+    qualifying = qualifying.filter(motorfunction__walk=True)
+    qualifying = qualifying.filter(steroids__current=True)
+    qualifying = qualifying.filter(heart__failure=False)
+
+    results['total'] = qualifying.count()
 
     return results
 
