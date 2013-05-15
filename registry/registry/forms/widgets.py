@@ -3,6 +3,9 @@ from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from registry.utils import get_static_url
 
+from django.forms.widgets import RadioFieldRenderer
+from django.utils.encoding import force_unicode
+from django.forms.widgets import RadioSelect
 
 class ComboWidget(forms.TextInput):
     class Media:
@@ -125,3 +128,16 @@ class FVCPercentageWidget(forms.TextInput):
 
     def render(self, name, value, attrs=None):
         return super(FVCPercentageWidget, self).render(name, value, attrs) + "% (to 2 decimal places based on last spirometer reading)"
+
+class NoDotsRadioFieldRenderer(RadioFieldRenderer):
+    """
+    Produces a list of radio buttons without dots to the left of each
+    option.
+    """
+    def render(self):
+        """Outputs a <ul> for this set of radio fields."""
+        return mark_safe(u'<ul class="no-dots">\n%s\n</ul>' % u'\n'.join([u'<li>%s</li>'
+                % force_unicode(w) for w in self]))
+
+class NoDotsRadioSelect(RadioSelect):
+    renderer = NoDotsRadioFieldRenderer

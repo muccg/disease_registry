@@ -141,6 +141,92 @@ def squeryreportcsv(results, working_group):
     response['Content-Disposition'] = 'attachment; filename=report_' + working_group + '.csv'
     return response
 
+@login_required
+def dmd_report(request, working_group):
+    response = HttpResponse(mimetype="text/csv")
+    writer = csv.writer(response)
+    
+    writer.writerow(('Age', 'Genetic Information', 'Ambulant', 'Non-ambulant/unknown', 'On steroids', 'Not on steroids', 'Steroids unknown', 'Cardiomyopathy', 'No Cardiomyopathy', 'Cardiomyopathy unknown', 'LVEF > 50%', 'Total'))
+    
+    date_ranges= (
+        ('1999-08-02', '2006-08-01'),
+    )
+    
+    for genetic in (True, False):
+        results = [get_dmd_results(d, genetic, working_group) for d in date_ranges]
+        
+        genetic_message = 'Genetic confirmation' if genetic else 'No genetic confirmation or unknown'
+    
+        for result in results:
+            writer.writerow((
+                result['age'],
+                genetic_message,
+                result['ambulant'],
+                result['non-ambulant'],
+                result['onsteroids'],
+                result['notonsteroids'],
+                result['steroidsunknown'],
+                result['cardiomyopathy_yes'],
+                result['cardiomyopathy_no'],
+                result['cardiomyopathy_unknown'],
+                result['lvef'],
+                result['total']
+                ))
+    
+    response['Content-Disposition'] = 'attachment; filename=dmd_report_%s.csv' % (working_group)
+    return response
+
+def get_dmd_results(date_range, genetic, working_group):
+
+    wg_q = Q(patient__working_group__name__iexact='NEW ZEALAND')
+
+    if working_group == 'au':
+        wg_q = ~wg_q
+
+    diagnosis = Diagnosis.objects.filter(patient__sex ='M').filter(wg_q)
+    diagnosis = diagnosis.filter(patient__date_of_birth__range=(date_range[0], date_range[1]))
+
+    # Find the patients who have genetic data. That is, there exist
+    # Variation objects for these patients.
+    g_patient_ids = diagnosis.values_list("patient__id", flat=True)
+    variations = Variation.objects.filter(molecular_data__patient__id__in=g_patient_ids)
+    variations = variations.filter(Q(deletion_all_exons_tested=True) |
+                                   Q(duplication_all_exons_tested=True) |
+                                   Q(exon_boundaries_known=True) |
+                                   Q(point_mutation_all_exons_sequenced=True) |
+                                   Q(all_exons_in_male_relative=True))
+    g_patient_ids = variations.values_list("molecular_data__patient__id", flat=True)
+
+    if genetic:
+        diagnosis = diagnosis.filter(patient__id__in=g_patient_ids)
+    else:
+        diagnosis = diagnosis.exclude(patient_id__in=g_patient_ids)
+
+    results = { 'age': date_range[0] +' - ' + date_range[1]}
+
+    results['ambulant'] = diagnosis.filter(motorfunction__walk = True).count()
+    results['non-ambulant'] = diagnosis.filter(Q(motorfunction__walk__isnull=True) |
+                                               Q(motorfunction__walk=False)).count()
+
+    results['onsteroids'] = diagnosis.filter(steroids__current=True).count()
+    results['notonsteroids'] = diagnosis.filter(steroids__current=False).count()
+    results['steroidsunknown'] = diagnosis.filter(steroids__current__isnull=True).count()
+
+    results['cardiomyopathy_yes'] = diagnosis.filter(heart__failure=True).count()
+    results['cardiomyopathy_no'] = diagnosis.filter(heart__failure=False).count()
+    results['cardiomyopathy_unknown'] = diagnosis.filter(heart__failure__isnull=True).count()
+
+    results['lvef'] = diagnosis.filter(heart__lvef__gt = 50).count()
+
+    qualifying = diagnosis
+    qualifying = qualifying.filter(motorfunction__walk=True)
+    qualifying = qualifying.filter(steroids__current=True)
+    qualifying = qualifying.filter(heart__failure=False)
+
+    results['total'] = qualifying.count()
+
+    return results
+
 def specialquery(working_group):
     dateranges = (
         ('2011-06-16', '2020-12-31'),

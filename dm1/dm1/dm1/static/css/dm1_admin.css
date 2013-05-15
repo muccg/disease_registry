@@ -86,3 +86,7 @@ div#consent-group div.q1 label, div#consent-group div.q2 label, div#consent-grou
 div#consent-group div.q5 label, div#consent-group div.q6 label, div#consent-group div.q7 label {
     width: 40%;
 }
+
+ul.no-dots ul, ul.no-dots li {
+    list-style: none;
+}
