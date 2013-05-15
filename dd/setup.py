@@ -26,7 +26,7 @@ os.chdir('../dd')
 
 
 setup(name='django-ddregistry',
-    version='1.0.12',
+    version='1.0.13',
     description='Django Disease Registry - DD',
     long_description='Django Disease registry for DD',
     author='Centre for Comparative Genomics',
@@ -56,7 +56,7 @@ setup(name='django-ddregistry',
         'ccg-auth==0.3.2',
         'ccg-extras==0.1.5',
         'django-userlog==0.2.1',
-        'django_nose',
+        'django-nose',
         'django-progressbarupload',
     ],
     dependency_links = [
