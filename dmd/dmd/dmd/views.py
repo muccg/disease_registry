@@ -205,7 +205,7 @@ def get_dmd_results(date_range, genetic, working_group):
     results = { 'age': date_range[0] +' - ' + date_range[1]}
 
     results['ambulant'] = diagnosis.filter(motorfunction__walk = True).count()
-    results['non-ambulant'] = diagnosis.filter(Q(motorfunction__isnull=True) |
+    results['non-ambulant'] = diagnosis.filter(Q(motorfunction__walk__isnull=True) |
                                                Q(motorfunction__walk=False)).count()
 
     results['onsteroids'] = diagnosis.filter(steroids__current=True).count()
@@ -218,7 +218,6 @@ def get_dmd_results(date_range, genetic, working_group):
 
     results['lvef'] = diagnosis.filter(heart__lvef__gt = 50).count()
 
-    # fixme: check this
     results['total'] = diagnosis.filter(motorfunction__walk=True).filter(steroids__current=True).filter(heart__failure=True).count()
 
     return results
