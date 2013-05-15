@@ -1,6 +1,6 @@
 %define name sma
-%define version 1.0.11
-%define unmangled_version 1.0.11
+%define version 1.0.12
+%define unmangled_version 1.0.12
 %define release 1
 %define webapps /usr/local/webapps
 %define installdir %{webapps}/%{name}
