@@ -39,7 +39,7 @@ class Variation(sequence.Variation):
             return Deletion(input)
         elif "dup" in input:
             return Duplication(input)
-        
+
         # If the given value is just a position or range, that's fine too,
         # since it's presumably going to represented elsewhere as a
         # sequence-level variation.
@@ -68,7 +68,7 @@ class Position(sequence.Position):
 
     def __str__(self):
         output = str(self.position)
-        
+
         if self.neuron:
             output += "c"
 

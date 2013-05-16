@@ -8,7 +8,7 @@ for package in ['sma']:
     os.chdir(os.path.join('sma', package))
     for data_dir in ('templates', 'static', 'migrations', 'fixtures'):
 	    data_files['sma.' + package].extend(
-	        [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files]) 
+	        [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files])
     os.chdir('../..')
 
 # Include common disease registry modules from registry sibling directory
@@ -19,7 +19,7 @@ for package in ('common', 'patients', 'genetic', 'groups', 'humangenome'):
     os.chdir(os.path.join('registry', package))
     for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags'):
        data_files['registry.' + package].extend(
-           [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files]) 
+           [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files])
     os.chdir('../..')
 os.chdir('../sma')
 
@@ -55,7 +55,7 @@ setup(name='django-smaregistry',
         'ccg-extras==0.1.5',
         'django-userlog==0.2.1',
         'django_qbe',
-        'django-nose'        
+        'django_nose'
     ],
     dependency_links = [
         "http://repo.ccgapps.com.au",
