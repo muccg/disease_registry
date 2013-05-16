@@ -7,6 +7,11 @@ set -e
 PROJECT="$1"
 ACTION="$2"
 
+declare -A port
+port[dmd]='8001'
+port[sma]='8002'
+port[dm1]='8003'
+port[dd]='8004'
 
 function settings() {
     export DJANGO_SETTINGS_MODULE="${PROJECT}.settings"
@@ -91,6 +96,7 @@ function installapp() {
     popd
     #virt_${PROJECT}/bin/easy_install MySQL-python==1.2.3
     virt_${PROJECT}/bin/easy_install psycopg2==2.4.6
+    virt_${PROJECT}/bin/easy_install Werkzeug
 }
 
 
@@ -107,7 +113,7 @@ function syncmigrate() {
 
 # start runserver
 function startserver() {
-    virt_${PROJECT}/bin/django-admin.py runserver 8000
+    virt_${PROJECT}/bin/django-admin.py runserver_plus ${port[${PROJECT}]}
 }
 
 
