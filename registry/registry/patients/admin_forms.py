@@ -97,4 +97,5 @@ class PatientForm(forms.ModelForm):
                 exists = True
         if exists:
             raise forms.ValidationError('There is already a patient with the same family and given names in this working group: "%s %s %s".' % (familyname, givennames, workinggroup))
-        return cleaneddata
+
+        return super(PatientForm, self).clean()
