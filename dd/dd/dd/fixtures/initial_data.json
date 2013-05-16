@@ -50607,5 +50607,165 @@
             "rating": 10.0, 
             "name": "Death due to MS"
         }
+    },
+    {
+        "pk": 1,
+        "model": "dd.treatment",
+        "fields": {
+            "common_name": "Avonex",
+            "name": "1FN\u03b20 1a"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "dd.treatment",
+        "fields": {
+            "common_name": "Rebif",
+            "name": "1FN\u03b2 1a"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "dd.treatment",
+        "fields": {
+            "common_name": "Betaferon",
+            "name": "1FN\u03b2 1b"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "dd.treatment",
+        "fields": {
+            "common_name": "Tysabri",
+            "name": "Natalizumab"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "dd.treatment",
+        "fields": {
+            "common_name": "Copaxone",
+            "name": "Glatiramer Acetate"
+        }
+    },
+    {
+        "pk": 6,
+        "model": "dd.treatment",
+        "fields": {
+            "common_name": "Gilenya",
+            "name": "Fingolimod"
+        }
+    },
+    {
+        "pk": 8,
+        "model": "dd.treatment",
+        "fields": {
+            "common_name": "Avonex",
+            "name": "1FN\u03b20 1a"
+        }
+    },
+    {
+        "pk": 9,
+        "model": "dd.treatment",
+        "fields": {
+            "common_name": "Rebif",
+            "name": "1FN\u03b2 1a"
+        }
+    },
+    {
+        "pk": 10,
+        "model": "dd.treatment",
+        "fields": {
+            "common_name": "Betaferon",
+            "name": "1FN\u03b2 1b"
+        }
+    },
+    {
+        "pk": 11,
+        "model": "dd.treatment",
+        "fields": {
+            "common_name": "Tysabri",
+            "name": "Natalizumab"
+        }
+    },
+    {
+        "pk": 12,
+        "model": "dd.treatment",
+        "fields": {
+            "common_name": "Copaxone",
+            "name": "Glatiramer Acetate"
+        }
+    },
+    {
+        "pk": 13,
+        "model": "dd.treatment",
+        "fields": {
+            "common_name": "Gilenya",
+            "name": "Fingolimod"
+        }
+    },
+    {
+        "pk": 14,
+        "model": "dd.treatment",
+        "fields": {
+            "common_name": "",
+            "name": "Mitoxantrone"
+        }
+    },
+    {
+        "pk": 15,
+        "model": "dd.treatment",
+        "fields": {
+            "common_name": "",
+            "name": "Cladribine"
+        }
+    },
+    {
+        "pk": 16,
+        "model": "dd.treatment",
+        "fields": {
+            "common_name": "",
+            "name": "Cyclophosphamide"
+        }
+    },
+    {
+        "pk": 17,
+        "model": "dd.treatment",
+        "fields": {
+            "common_name": "",
+            "name": "Oral Steroids"
+        }
+    },
+    {
+        "pk": 18,
+        "model": "dd.treatment",
+        "fields": {
+            "common_name": "",
+            "name": "Bone Marrow"
+        }
+    },
+    {
+        "pk": 19,
+        "model": "dd.treatment",
+        "fields": {
+            "common_name": "",
+            "name": "Transplants"
+        }
+    },
+    {
+        "pk": 20,
+        "model": "dd.treatment",
+        "fields": {
+            "common_name": "",
+            "name": "Rituximab"
+        }
+    },
+    {
+        "pk": 21,
+        "model": "dd.treatment",
+        "fields": {
+            "common_name": "",
+            "name": "Alemtuzumab"
+        }
     }
 ]

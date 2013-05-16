@@ -1,5 +1,4 @@
 .*\.pyc$
-.ccgplatform
 ^virt_*/*
 ^registry/tmp/*
 ^registry/fab-tmp/*

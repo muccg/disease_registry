@@ -8,40 +8,45 @@ class ClinicalDataAdmin(admin.ModelAdmin):
     model = DDClinicalData
     form = ClinicalDataForm
 
-class DDMedicalHistoryAdminInline(admin.TabularInline):
-    model = DDMedicalHistoryRecord
-    extra = 1
-    form = DDMedicalHistoryForm
+class MedicalHistoryAdminInline(admin.TabularInline):
+    model = MedicalHistory
+    extra = 0
+    form = MedicalHistoryForm
 
 class MedicalHistoryAdmin(admin.ModelAdmin):
-    inlines = [DDMedicalHistoryAdminInline]
+    model = MedicalHistory
+    extra = 0
+    form = MedicalHistoryForm
 
 class LabDataInline(admin.TabularInline):
     model = LabData
-    excludes = ('patient',)
+    extra = 0
 
 class LabDataAdmin(admin.ModelAdmin):
     model = LabData
 
-class TreatmentCourseInline(admin.TabularInline):
-    model = TreatmentCourse
+class TreatmentCourseInline(admin.StackedInline):
+    model = Diagnosis.treatments.through
+    extra = 0
     form = TreatmentCourseForm
 
-class TreatmentInline(admin.TabularInline):
-    model = Treatment
+    fields = ("diagnosis", "treatment",
+              ("start_date", "end_date"),
+              "dose_type", "dose_other", "notes")
+
+class TreatmentCourseAdmin(admin.ModelAdmin):
+    model = TreatmentCourse
+    fields = ("diagnosis", "treatment",
+              ("start_date", "end_date"),
+              "dose_type", "dose_other", "notes")
+    list_display = ("diagnosis", "treatment", "start_date", "end_date")
 
 class TreatmentAdmin(admin.ModelAdmin):
     inlines = [TreatmentCourseInline]
 
-class DDTreatmentOverviewAdmin(admin.ModelAdmin):
-    model = DDTreatmentOverview
-    inlines = [TreatmentCourseInline]
-
-class DDTreatmentOverviewInline(admin.StackedInline):
-    model = DDTreatmentOverview
-
 class DDClinicalDataInline(admin.TabularInline):
     model = DDClinicalData
+    extra = 0
 
 class MRIFileInline(admin.TabularInline):
     model = MRIFile
@@ -54,9 +59,9 @@ class MRIDataInline(admin.StackedInline):
               ("brain", "cervical", "thoracic"),
               "report_file", "image_file")
     form = MRIDataForm
-    extra = 1
     change_form_template = "progressbarupload/change_form.html"
     add_form_template = "progressbarupload/change_form.html"
+    extra = 0
 
 class MRIDataAdmin(admin.ModelAdmin):
     inlines = [MRIFileInline]
@@ -70,10 +75,10 @@ class DDDiagnosisAdmin(admin.ModelAdmin):
     form = DDDiagnosisForm
 
     inlines = [
-               DDMedicalHistoryAdminInline,
+               MedicalHistoryAdminInline,
                DDClinicalDataInline,
                LabDataInline,
-               DDTreatmentOverviewInline,
+               TreatmentCourseInline,
                MRIDataInline,
               ]
 
@@ -126,7 +131,7 @@ class MedicalHistoryDiseaseAdmin(admin.ModelAdmin):
 admin.site.register(MedicalHistory, MedicalHistoryAdmin)
 admin.site.register(LabData, LabDataAdmin)
 admin.site.register(Treatment, TreatmentAdmin)
-admin.site.register(DDTreatmentOverview, DDTreatmentOverviewAdmin)
+admin.site.register(TreatmentCourse, TreatmentCourseAdmin)
 admin.site.register(Diagnosis, DDDiagnosisAdmin)
 admin.site.register(DDClinicalData, ClinicalDataAdmin)
 admin.site.register(MRIData, MRIDataAdmin)
