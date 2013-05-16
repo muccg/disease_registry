@@ -96,6 +96,7 @@ function installapp() {
     popd
     #virt_${PROJECT}/bin/easy_install MySQL-python==1.2.3
     virt_${PROJECT}/bin/easy_install psycopg2==2.4.6
+    virt_${PROJECT}/bin/easy_install Werkzeug
 }
 
 
@@ -112,7 +113,7 @@ function syncmigrate() {
 
 # start runserver
 function startserver() {
-    virt_${PROJECT}/bin/django-admin.py runserver ${port[${PROJECT}]}
+    virt_${PROJECT}/bin/django-admin.py runserver_plus ${port[${PROJECT}]}
 }
 
 
