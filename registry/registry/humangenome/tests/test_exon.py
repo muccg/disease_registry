@@ -17,7 +17,7 @@ class TestExonVariation(unittest.TestCase):
         self.assertRaises(Position.Malformed, lambda: Position("i"))
 
 
-    def test_fail_range(self):  
+    def test_fail_range(self):
         self.assertRaises(Range.Malformed, lambda: Range("42"))
         self.assertRaises(Position.Malformed, lambda: Range("42_"))
         self.assertRaises(Position.Malformed, lambda: Range("_42"))

@@ -9,7 +9,7 @@ for package in ('common', 'patients', 'genetic', 'groups', 'humangenome'):
     os.chdir(os.path.join('registry', package))
     for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags'):
 	   data_files['registry.' + package].extend(
-	       [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files]) 
+	       [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files])
     os.chdir(start_dir)
 
 # Include common disease registry modules from registry sibling directory
@@ -20,7 +20,7 @@ for package in ('common', 'patients', 'genetic', 'groups', 'humangenome'):
     os.chdir(os.path.join('registry', package))
     for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags'):
        data_files['registry.' + package].extend(
-           [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files]) 
+           [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files])
     os.chdir('../..')
 os.chdir('../sma')
 

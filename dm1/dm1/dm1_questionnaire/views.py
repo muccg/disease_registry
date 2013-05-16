@@ -208,8 +208,8 @@ def personal(request):
     #print "form: %s" % dir(form)
     #print "form.errors: %s" % dir(form.errors)
     #print "form errors: %s" % str(form.errors)
-    return render_to_response("dm1/questionnaire/personal.html", 
-            { "form": form, "label": "Personal Details" }, 
+    return render_to_response("dm1/questionnaire/personal.html",
+            { "form": form, "label": "Personal Details" },
             context_instance=RequestContext(request))
 
 def index(request):

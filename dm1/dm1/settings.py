@@ -13,7 +13,7 @@ SITE_ID = 1
 APPEND_SLASH = True
 SSL_ENABLED = False
 
- 
+
 # Locale
 TIME_ZONE = 'Australia/Perth'
 LANGUAGE_CODE = 'en-us'

@@ -7,7 +7,7 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        
+
         # Adding model 'Country'
         db.create_table('patients_country', (
             ('name', self.gf('django.db.models.fields.CharField')(max_length=50, primary_key=True)),
@@ -82,7 +82,7 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        
+
         # Removing unique constraint on 'Patient', fields ['family_name', 'given_names', 'working_group']
         db.delete_unique('patients_patient', ['family_name', 'given_names', 'working_group_id'])
 

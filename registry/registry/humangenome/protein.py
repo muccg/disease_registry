@@ -81,7 +81,7 @@ class Variation(sequence.Variation):
         # sense.
         exp = re.compile(r"(([A-Z])[a-z]{2})|[A-Z]")
         acids = []
-        
+
         while len(input) > 0:
             match = exp.match(input)
 
@@ -187,7 +187,7 @@ class Deletion(sequence.Deletion):
     @staticmethod
     def create_position_or_range(input):
         return Variation.create_position_or_range(input)
-    
+
     @staticmethod
     def valid_base(input):
         return Variation.valid_base(input)
@@ -201,7 +201,7 @@ class Duplication(sequence.Duplication):
     @staticmethod
     def create_position_or_range(input):
         return Variation.create_position_or_range(input)
-    
+
     @staticmethod
     def valid_base(input):
         return Variation.valid_base(input)
@@ -215,7 +215,7 @@ class Insertion(sequence.Insertion):
     @staticmethod
     def create_position_or_range(input):
         return Variation.create_position_or_range(input)
-    
+
     @staticmethod
     def valid_base(input):
         return Variation.valid_base(input)
