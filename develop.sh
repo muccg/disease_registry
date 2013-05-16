@@ -52,6 +52,12 @@ function ci_remote_destroy() {
 }
 
 
+# lint using flake8
+function lint() {
+    virt_${PROJECT}/bin/flake8 ${PROJECT} --ignore=E501 --count 
+}
+
+
 # lint js, assumes closure compiler
 function jslint() {
     JSFILES="${PROJECT}/${PROJECT}/${PROJECT}/static/js/*.js"
@@ -103,6 +109,7 @@ function installapp() {
     #virt_${PROJECT}/bin/easy_install MySQL-python==1.2.3
     virt_${PROJECT}/bin/easy_install psycopg2==2.4.6
     virt_${PROJECT}/bin/easy_install Werkzeug
+    virt_${PROJECT}/bin/easy_install flake8
 }
 
 
@@ -167,6 +174,9 @@ test)
     settings
     runtest
     ;;
+lint)
+    lint
+    ;;
 jslint)
     jslint
     ;;
@@ -207,5 +217,5 @@ purge)
     purge
     ;;
 *)
-    echo "Usage ./develop.sh (dd|dmd|dm1|sma) (test|jslint|start|install|clean|purge|pipfreeze|pipfreeze|pythonversion|dropdb|ci_remote_build|ci_remote_destroy|ci_rpm_publish)"
+    echo "Usage ./develop.sh (dd|dmd|dm1|sma) (test|lint|jslint|start|install|clean|purge|pipfreeze|pipfreeze|pythonversion|dropdb|ci_remote_build|ci_remote_destroy|ci_rpm_publish)"
 esac
