@@ -70,12 +70,18 @@ function dropdb() {
 }
 
 
-# run the nose tests
+# run the tests using nose
 function nosetests() {
     source virt_${PROJECT}/bin/activate
     virt_${PROJECT}/bin/nosetests --with-xunit --xunit-file=tests.xml -v -w ${PROJECT}
 }
 
+
+# run the tests using django-admin.py
+function djangotests() {
+    source virt_${PROJECT}/bin/activate
+    virt_${PROJECT}/bin/django-admin.py test ${PROJECT} --noinput
+}
 
 # nose collect, untested
 function nose_collect() {
@@ -145,7 +151,8 @@ function purge() {
 
 # tests
 function runtest() {
-    nosetests
+    #nosetests
+    djangotests
 }
 
 
