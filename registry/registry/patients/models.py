@@ -48,6 +48,9 @@ class Doctor(models.Model):
     phone = models.CharField(max_length=30, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
 
+    class Meta:
+        ordering = ['family_name']
+
     def __unicode__(self):
         return "%s %s" % (self.family_name.upper(), self.given_names)
 
