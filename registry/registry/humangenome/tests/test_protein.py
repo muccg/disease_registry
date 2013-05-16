@@ -39,7 +39,7 @@ class TestProteinVariation(unittest.TestCase):
 
         self.assertEqual(seq.type.type, "p", "Sequence variation type is not protein")
         self.assertEqual(len(seq.alleles), 1, "Sequence variation does not contain 1 allele")
-       
+
         allele = seq.alleles[0]
 
         self.assertEqual(len(allele.variations), 1, "Allele does not have 1 variation")
@@ -63,7 +63,7 @@ class TestProteinVariation(unittest.TestCase):
 
         self.assertEqual(seq.type.type, "p", "Sequence variation type is not protein")
         self.assertEqual(len(seq.alleles), 1, "Sequence variation does not contain 1 allele")
-       
+
         allele = seq.alleles[0]
 
         self.assertEqual(len(allele.variations), 1, "Allele does not have 1 variation")
@@ -87,7 +87,7 @@ class TestProteinVariation(unittest.TestCase):
 
         self.assertEqual(seq.type.type, "p", "Sequence variation type is not protein")
         self.assertEqual(len(seq.alleles), 1, "Sequence variation does not contain 1 allele")
-       
+
         allele = seq.alleles[0]
 
         self.assertEqual(len(allele.variations), 1, "Allele does not have 1 variation")
@@ -148,7 +148,7 @@ class TestProteinVariation(unittest.TestCase):
 
         self.assertEqual(seq.type.type, "p", "Sequence variation type is not protein")
         self.assertEqual(len(seq.alleles), 1, "Sequence variation does not contain 1 allele")
-       
+
         allele = seq.alleles[0]
 
         self.assertEqual(len(allele.variations), 1, "Allele does not have 1 variation")

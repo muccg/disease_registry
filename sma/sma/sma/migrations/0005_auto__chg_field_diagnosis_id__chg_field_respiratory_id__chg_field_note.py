@@ -17,13 +17,13 @@ class Migration(SchemaMigration):
         db.execute("CREATE SEQUENCE sma_respiratory_id_seq")
         db.execute("SELECT setval('sma_respiratory_id_seq', (SELECT MAX(id) FROM sma_respiratory))")
         db.execute("ALTER TABLE sma_respiratory ALTER COLUMN id SET DEFAULT nextval('sma_respiratory_id_seq'::regclass)")
-        
+
 
         db.execute("CREATE SEQUENCE sma_notes_id_seq")
         db.execute("SELECT setval('sma_notes_id_seq', (SELECT MAX(id) FROM sma_notes))")
         db.execute("ALTER TABLE sma_notes ALTER COLUMN id SET DEFAULT nextval('sma_notes_id_seq'::regclass)")
-        
-        
+
+
         db.execute("CREATE SEQUENCE sma_feedingfunction_id_seq")
         db.execute("SELECT setval('sma_feedingfunction_id_seq', (SELECT MAX(id) FROM sma_feedingfunction))")
         db.execute("ALTER TABLE sma_feedingfunction ALTER COLUMN id SET DEFAULT nextval('sma_feedingfunction_id_seq'::regclass)")

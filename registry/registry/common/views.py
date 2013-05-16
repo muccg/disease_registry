@@ -29,7 +29,7 @@ def handler404(request):
 
 def handler500(request):
     return render_to_response("500.html")
-    
+
 # These views are for test and validation purposes.
 # with debug = False, static data is not being served by django so the following views
 # are provided to render nice test error pages which are not available in debug mode.

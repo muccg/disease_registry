@@ -21,18 +21,18 @@ class PatientDoctorForm(forms.ModelForm):
 
 class PatientParentForm(forms.ModelForm):
     OPTIONS = [
-        "Mother", 
+        "Mother",
         "Father"
     ]
     relationship = forms.CharField(label="Relationship", widget=ComboWidget(options=OPTIONS))
-    
+
     class Meta:
         model = PatientParent
 
 class PatientForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(PatientForm, self).__init__(*args, **kwargs)
-    
+
     ADDRESS_ATTRS = {
         "rows": 3,
         "cols": 30,

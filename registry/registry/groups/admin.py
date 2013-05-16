@@ -125,7 +125,7 @@ class UserAdmin(admin.ModelAdmin):
     def change_view(self, request, object_id, extra_context=None):
         if not self.has_change_permission(request):
             raise PermissionDenied
-            
+
         user = get_object_or_404(self.model, pk=object_id)
 
         if request.method == "POST":

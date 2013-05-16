@@ -53,10 +53,10 @@ class Doctor(models.Model):
 
 class NextOfKinRelationship(models.Model):
     relationship = models.CharField(max_length=100, verbose_name="Relationship")
-    
+
     class Meta:
         verbose_name = 'Next of Kin Relationship'
-    
+
     def __unicode__(self):
         return self.relationship
 
@@ -65,7 +65,7 @@ class Parent(models.Model):
     parent_family_name = models.CharField(max_length=100, verbose_name="Family name")
     parent_place_of_birth = models.CharField(max_length=100, verbose_name="Place of birth")
     parent_date_of_migration = models.DateField(null=True, blank=True, verbose_name="Migration")
-    
+
     def __unicode__(self):
         return '%s %s of %s' % (self.parent_given_names, self.parent_family_name, self.parent_place_of_birth)
 
@@ -147,11 +147,11 @@ class Patient(models.Model):
 
 class PatientParent(models.Model):
     PARENT_TYPE = ( ("M", "Mother"), ("F", "Father") )
-    
+
     patient = models.ForeignKey(Patient)
     parent = models.ForeignKey(Parent)
     relationship = models.CharField(max_length=20, choices=PARENT_TYPE)
-    
+
     class Meta:
         verbose_name = "Parent"
         verbose_name_plural = "Parents"
