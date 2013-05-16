@@ -83,7 +83,7 @@ class Patient(models.Model):
     consent_form = models.FileField(upload_to='consents', storage=file_system, verbose_name="Consent form", blank=True, null=True)
     family_name = models.CharField(max_length=100, db_index=True)
     given_names = models.CharField(max_length=100, db_index=True)
-    umrn = models.CharField(max_length=50, unique=True, db_index=True, null=True, blank=True, verbose_name="UMRN")
+    umrn = models.CharField(max_length=50, unique=True, db_index=True, verbose_name="UMRN")
     date_of_birth = models.DateField()
     place_of_birth = models.CharField(max_length=100, null=True, blank=True, verbose_name="Place of Birth")
     date_of_migration = models.DateField(help_text="If migrated", blank=True, null=True)
