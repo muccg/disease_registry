@@ -96,15 +96,22 @@ class DMDReportTests(unittest.TestCase):
         Variation.objects.create(molecular_data=self.barney.moleculardata, gene=gene,
                                  deletion_all_exons_tested=True)
 
-        # Fred is on steroids
-        Steroids.objects.create(diagnosis=self.fred.patient_diagnosis, current=True)
+        # Fred is not on steroids
+        Steroids.objects.create(diagnosis=self.fred.patient_diagnosis, current=False)
 
+        # Barney is on steroids
+        Steroids.objects.create(diagnosis=self.barney.patient_diagnosis, current=True)
 
         # Barney is ambulant
         MotorFunction.objects.create(diagnosis=self.barney.patient_diagnosis, walk=True, sit=True,
                                      wheelchair_use="never")
         # fixme: is this field used?
         #self.barney.patient_diagnosis.walk = True
+
+        # Barney has a good heart
+        Heart.objects.create(diagnosis=self.barney.patient_diagnosis,
+                             current=False, failure=False, lvef=75,
+                             lvef_date=date.today())
 
         self.fred.patient_diagnosis.save()
         self.barney.patient_diagnosis.save()
@@ -130,16 +137,22 @@ class DMDReportTests(unittest.TestCase):
         print "results"
         pprint(results)
 
-        self.assertEquals(results[True]["total"], 0)   # fixme: check this weird
-        self.assertEquals(results[True]["onsteroids"], 0)
+        self.assertEquals(results[True]["total"], 1)
+        self.assertEquals(results[True]["onsteroids"], 1)
         self.assertEquals(results[True]["notonsteroids"], 0)
-        self.assertEquals(results[True]["steroidsunknown"], 1)
+        self.assertEquals(results[True]["steroidsunknown"], 0)
         self.assertEquals(results[True]["ambulant"], 1)
         self.assertEquals(results[True]["non-ambulant"], 0)
+        self.assertEquals(results[True]["cardiomyopathy_yes"], 0)
+        self.assertEquals(results[True]["cardiomyopathy_no"], 1)
+        self.assertEquals(results[True]["cardiomyopathy_unknown"], 0)
 
-        self.assertEquals(results[False]["total"], 0)   # fixme: check this weird
-        self.assertEquals(results[False]["onsteroids"], 1)
-        self.assertEquals(results[False]["notonsteroids"], 0)
+        self.assertEquals(results[False]["total"], 0)
+        self.assertEquals(results[False]["onsteroids"], 0)
+        self.assertEquals(results[False]["notonsteroids"], 1)
         self.assertEquals(results[False]["steroidsunknown"], 0)
         self.assertEquals(results[False]["ambulant"], 0)
         self.assertEquals(results[False]["non-ambulant"], 1)
+        self.assertEquals(results[False]["cardiomyopathy_yes"], 0)
+        self.assertEquals(results[False]["cardiomyopathy_no"], 0)
+        self.assertEquals(results[False]["cardiomyopathy_unknown"], 1)
