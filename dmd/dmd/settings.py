@@ -80,9 +80,9 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # email
-EMAIL_HOST = 'ccg.murdoch.edu.au'
-SERVER_EMAIL = "apache@ccg.murdoch.edu.au"  # from address
-RETURN_EMAIL = 'web@ccg.murdoch.edu.au'
+EMAIL_USE_TLS = False
+EMAIL_HOST = '127.0.0.1'
+EMAIL_PORT = 25
 
 # default emails
 ADMINS = [

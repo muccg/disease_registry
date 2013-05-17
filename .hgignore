@@ -19,3 +19,4 @@ registry/registry/logs*
 ^dd/logs/*
 ^dd/media/*
 ^dmd/logs/*
+.ccgplatform
