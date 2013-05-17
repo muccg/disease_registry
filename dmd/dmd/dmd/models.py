@@ -1,9 +1,13 @@
 # vim: set fileencoding=UTF-8:
 import traceback, datetime
+
 from django.db import models
 from django.db.models.signals import post_save
-from registry.patients.models import Patient
 from django.core.exceptions import ObjectDoesNotExist
+
+from registry.groups.models import User
+from registry.patients.models import Patient
+from registry.mail import sendNewPatientEmail
 
 import logging
 logger = logging.getLogger('dmd')
@@ -229,6 +233,18 @@ def signal_patient_post_save(sender, **kwargs):
         logger.critical(traceback.format_exc())
         raise
 
+def signal_diagnosis_post_save(sender, **kwargs):
+    diagnosis = kwargs['instance']
+    working_group_id = diagnosis.patient.working_group.id
+    regusers = User.objects.filter(working_group__id=working_group_id).filter(user__groups__id__in = [2,3]).distinct()
+    
+    email_to = []
+    
+    for reguser in regusers:
+        email_to.append(reguser.user.email)
+    
+    sendNewPatientEmail(email_to)
 
 # connect up django signals
 post_save.connect(signal_patient_post_save, sender=Patient)
+post_save.connect(signal_diagnosis_post_save, sender=Diagnosis)
