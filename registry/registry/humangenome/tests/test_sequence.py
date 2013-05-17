@@ -51,7 +51,7 @@ class TestSequenceVariation(unittest.TestCase):
 
         self.assertEqual(seq.type.type, "c", "Sequence variation type is not coding DNA")
         self.assertEqual(len(seq.alleles), 1, "Sequence variation does not contain 1 allele")
-       
+
         allele = seq.alleles[0]
 
         self.assertEqual(len(allele.variations), 1, "Allele does not have 1 variation")
@@ -75,7 +75,7 @@ class TestSequenceVariation(unittest.TestCase):
 
         self.assertEqual(seq.type.type, "c", "Sequence variation type is not coding DNA")
         self.assertEqual(len(seq.alleles), 1, "Sequence variation does not contain 1 allele")
-       
+
         allele = seq.alleles[0]
 
         self.assertEqual(len(allele.variations), 1, "Allele does not have 1 variation")
@@ -99,7 +99,7 @@ class TestSequenceVariation(unittest.TestCase):
 
         self.assertEqual(seq.type.type, "c", "Sequence variation type is not coding DNA")
         self.assertEqual(len(seq.alleles), 1, "Sequence variation does not contain 1 allele")
-       
+
         allele = seq.alleles[0]
 
         self.assertEqual(len(allele.variations), 1, "Allele does not have 1 variation")
@@ -123,7 +123,7 @@ class TestSequenceVariation(unittest.TestCase):
 
         self.assertEqual(seq.type.type, "c", "Sequence variation type is not coding DNA")
         self.assertEqual(len(seq.alleles), 1, "Sequence variation does not contain 1 allele")
-       
+
         allele = seq.alleles[0]
 
         self.assertEqual(len(allele.variations), 1, "Allele does not have 1 variation")
@@ -147,7 +147,7 @@ class TestSequenceVariation(unittest.TestCase):
 
         self.assertEqual(seq.type.type, "c", "Sequence variation type is not coding DNA")
         self.assertEqual(len(seq.alleles), 1, "Sequence variation does not contain 1 allele")
-       
+
         allele = seq.alleles[0]
 
         self.assertEqual(len(allele.variations), 1, "Allele does not have 1 variation")
@@ -171,7 +171,7 @@ class TestSequenceVariation(unittest.TestCase):
 
         self.assertEqual(seq.type.type, "c", "Sequence variation type is not coding DNA")
         self.assertEqual(len(seq.alleles), 1, "Sequence variation does not contain 1 allele")
-       
+
         allele = seq.alleles[0]
 
         self.assertEqual(len(allele.variations), 1, "Allele does not have 1 variation")
@@ -194,7 +194,7 @@ class TestSequenceVariation(unittest.TestCase):
 
         self.assertEqual(seq.type.type, "c", "Sequence variation type is not coding DNA")
         self.assertEqual(len(seq.alleles), 1, "Sequence variation does not contain 1 allele")
-       
+
         allele = seq.alleles[0]
 
         self.assertEqual(len(allele.variations), 1, "Allele does not have 1 variation")
@@ -262,7 +262,7 @@ class TestSequenceVariation(unittest.TestCase):
 
         self.assertEqual(seq.type.type, "c", "Sequence variation type is not coding DNA")
         self.assertEqual(len(seq.alleles), 1, "Sequence variation does not contain 1 allele")
-       
+
         allele = seq.alleles[0]
 
         self.assertEqual(len(allele.variations), 1, "Allele does not have 1 variation")
@@ -286,7 +286,7 @@ class TestSequenceVariation(unittest.TestCase):
 
         self.assertEqual(seq.type.type, "c", "Sequence variation type is not coding DNA")
         self.assertEqual(len(seq.alleles), 1, "Sequence variation does not contain 1 allele")
-       
+
         allele = seq.alleles[0]
 
         self.assertEqual(len(allele.variations), 2, "Allele does not have 1 variation")
@@ -312,7 +312,7 @@ class TestSequenceVariation(unittest.TestCase):
 
         self.assertEqual(seq.type.type, "c", "Sequence variation type is not coding DNA")
         self.assertEqual(len(seq.alleles), 1, "Sequence variation does not contain 1 allele")
-       
+
         allele = seq.alleles[0]
 
         self.assertEqual(len(allele.variations), 2, "Allele does not have 1 variation")

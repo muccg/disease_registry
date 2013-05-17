@@ -55,7 +55,7 @@ class DiagnosisAdmin(admin.ModelAdmin):
     ]
     search_fields = ["patient__family_name", "patient__given_names"]
     list_display = ['patient_name', 'patient_working_group', 'progress_graph']
-    
+
     class Media:
         css = {
             "screen": [get_static_url("css/diagnosis_admin.css")]

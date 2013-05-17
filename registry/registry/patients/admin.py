@@ -72,7 +72,7 @@ class PatientAdmin(admin.ModelAdmin):
         # fix for Trac #3, the field is now always displayed, but readonly for not superuser users, see get_readonly_fields below
         personal_details_fields.append("active")
         personal_details_fields.append("inactive_reason")
-        
+
         personal_details[1]["fields"] = tuple(personal_details_fields)
 
         next_of_kin = ("Next of Kin", {
@@ -83,7 +83,7 @@ class PatientAdmin(admin.ModelAdmin):
              "next_of_kin_address",
              "next_of_kin_suburb",
              "next_of_kin_state",
-             "next_of_kin_postcode",                
+             "next_of_kin_postcode",
              "next_of_kin_home_phone",
              "next_of_kin_mobile_phone",
              "next_of_kin_work_phone",
@@ -93,7 +93,7 @@ class PatientAdmin(admin.ModelAdmin):
         fieldset = (consent, personal_details, next_of_kin,)
         return fieldset
 
-    def get_fieldsets(self, request, obj=None): 
+    def get_fieldsets(self, request, obj=None):
         return self.create_fieldset(request.user.is_superuser)
 
     def get_readonly_fields(self, request, obj=None):
@@ -101,7 +101,7 @@ class PatientAdmin(admin.ModelAdmin):
             return []
         else:
             #return ['active'] # NB this seems to run into a mango bug that prevents Add Patient being used by non-superuser
-            return []        
+            return []
 
     def formfield_for_dbfield(self, dbfield, *args, **kwargs):
         from registry.groups.models import User, WorkingGroup
@@ -164,7 +164,7 @@ class PatientAdmin(admin.ModelAdmin):
         graph_html += obj.patient_diagnosis.progress_graph()
         graph_html += '</a>'
         return graph_html
-        
+
     progress_graph.allow_tags = True
     progress_graph.short_description = "Diagnosis Entry Progress"
 
@@ -197,7 +197,7 @@ class PatientAdmin(admin.ModelAdmin):
             imagefile = 'tick.png'
 
         return '<img src="%s"/>' % get_static_url("images/" + imagefile)
-        
+
     freshness.allow_tags = True
     freshness.short_description = "Currency (updated in the last 365 days)"
 

@@ -53,7 +53,7 @@ class Gene:
     def __str__(self):
         if self.accession:
             return "%s{%s}" % (self.gene, self.accession)
-        
+
         return self.gene
 
 
@@ -318,7 +318,7 @@ class Position:
 
         input = self.parse_position_intron(input)
 
- 
+
 class Range:
     class Malformed(SequenceVariation.Malformed):
         pass
@@ -558,4 +558,4 @@ class NoChange(Variation):
 
         if input != "=":
             raise Variation.Malformed("No change is not exactly =")
-        
+

@@ -23,25 +23,11 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('dd', ['MedicalHistoryDisease'])
 
-        # Adding model 'MedicalHistory'
-        db.create_table('dd_medicalhistory', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('patient', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['patients.Patient'])),
-        ))
-        db.send_create_signal('dd', ['MedicalHistory'])
-
-        # Adding model 'TreatmentOverview'
-        db.create_table('dd_treatmentoverview', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('patient', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['patients.Patient'])),
-        ))
-        db.send_create_signal('dd', ['TreatmentOverview'])
-
         # Adding model 'Treatment'
         db.create_table('dd_treatment', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
-            ('common_name', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('common_name', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
         ))
         db.send_create_signal('dd', ['Treatment'])
 
@@ -49,10 +35,10 @@ class Migration(SchemaMigration):
         db.create_table('dd_treatmentcourse', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('treatment', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.Treatment'])),
-            ('overview', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.TreatmentOverview'])),
+            ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.Diagnosis'])),
             ('start_date', self.gf('django.db.models.fields.DateField')()),
             ('end_date', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
-            ('dose_type', self.gf('django.db.models.fields.CharField')(max_length=1, null=True, blank=True)),
+            ('dose_type', self.gf('django.db.models.fields.CharField')(default='S', max_length=1)),
             ('dose_other', self.gf('django.db.models.fields.TextField')()),
             ('notes', self.gf('django.db.models.fields.TextField')(blank=True)),
         ))
@@ -76,11 +62,10 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('dd', ['Diagnosis'])
 
-        # Adding model 'DDMedicalHistoryRecord'
-        db.create_table('dd_ddmedicalhistoryrecord', (
+        # Adding model 'MedicalHistory'
+        db.create_table('dd_medicalhistory', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.Diagnosis'], null=True, blank=True)),
-            ('history', self.gf('django.db.models.fields.related.ForeignKey')(related_name='records', to=orm['dd.MedicalHistory'])),
+            ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(related_name='medical_history', to=orm['dd.Diagnosis'])),
             ('date', self.gf('django.db.models.fields.DateField')()),
             ('disease', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.MedicalHistoryDisease'])),
             ('chronic', self.gf('django.db.models.fields.BooleanField')(default=False)),
@@ -88,7 +73,7 @@ class Migration(SchemaMigration):
             ('other', self.gf('django.db.models.fields.TextField')(blank=True)),
             ('misdiagnosed', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
-        db.send_create_signal('dd', ['DDMedicalHistoryRecord'])
+        db.send_create_signal('dd', ['MedicalHistory'])
 
         # Adding model 'EdssRating'
         db.create_table('dd_edssrating', (
@@ -106,7 +91,6 @@ class Migration(SchemaMigration):
             ('date_first_symtoms', self.gf('django.db.models.fields.DateField')()),
             ('edss_rating', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.EdssRating'])),
             ('edss_evaluation_type', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
-            ('past_medical_history', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.DDMedicalHistoryRecord'], null=True, blank=True)),
             ('date_of_visits', self.gf('django.db.models.fields.DateField')()),
         ))
         db.send_create_signal('dd', ['DDClinicalData'])
@@ -145,21 +129,6 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('dd', ['MRIFile'])
 
-        # Adding model 'DDTreatmentOverview'
-        db.create_table('dd_ddtreatmentoverview', (
-            ('treatmentoverview_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['dd.TreatmentOverview'], unique=True, primary_key=True)),
-            ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.Diagnosis'], null=True, blank=True)),
-        ))
-        db.send_create_signal('dd', ['DDTreatmentOverview'])
-
-        # Adding M2M table for field treatments on 'DDTreatmentOverview'
-        db.create_table('dd_ddtreatmentoverview_treatments', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('ddtreatmentoverview', models.ForeignKey(orm['dd.ddtreatmentoverview'], null=False)),
-            ('treatment', models.ForeignKey(orm['dd.treatment'], null=False))
-        ))
-        db.create_unique('dd_ddtreatmentoverview_treatments', ['ddtreatmentoverview_id', 'treatment_id'])
-
 
     def backwards(self, orm):
         # Deleting model 'OrphanetChoices'
@@ -167,12 +136,6 @@ class Migration(SchemaMigration):
 
         # Deleting model 'MedicalHistoryDisease'
         db.delete_table('dd_medicalhistorydisease')
-
-        # Deleting model 'MedicalHistory'
-        db.delete_table('dd_medicalhistory')
-
-        # Deleting model 'TreatmentOverview'
-        db.delete_table('dd_treatmentoverview')
 
         # Deleting model 'Treatment'
         db.delete_table('dd_treatment')
@@ -183,8 +146,8 @@ class Migration(SchemaMigration):
         # Deleting model 'Diagnosis'
         db.delete_table('dd_diagnosis')
 
-        # Deleting model 'DDMedicalHistoryRecord'
-        db.delete_table('dd_ddmedicalhistoryrecord')
+        # Deleting model 'MedicalHistory'
+        db.delete_table('dd_medicalhistory')
 
         # Deleting model 'EdssRating'
         db.delete_table('dd_edssrating')
@@ -201,12 +164,6 @@ class Migration(SchemaMigration):
         # Deleting model 'MRIFile'
         db.delete_table('dd_mrifile')
 
-        # Deleting model 'DDTreatmentOverview'
-        db.delete_table('dd_ddtreatmentoverview')
-
-        # Removing M2M table for field treatments on 'DDTreatmentOverview'
-        db.delete_table('dd_ddtreatmentoverview_treatments')
-
 
     models = {
         'dd.ddclinicaldata': {
@@ -217,26 +174,7 @@ class Migration(SchemaMigration):
             'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.Diagnosis']"}),
             'edss_evaluation_type': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
             'edss_rating': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.EdssRating']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'past_medical_history': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.DDMedicalHistoryRecord']", 'null': 'True', 'blank': 'True'})
-        },
-        'dd.ddmedicalhistoryrecord': {
-            'Meta': {'object_name': 'DDMedicalHistoryRecord'},
-            'chronic': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'date': ('django.db.models.fields.DateField', [], {}),
-            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.Diagnosis']", 'null': 'True', 'blank': 'True'}),
-            'disease': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.MedicalHistoryDisease']"}),
-            'history': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'records'", 'to': "orm['dd.MedicalHistory']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'medical_history_file': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
-            'misdiagnosed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'other': ('django.db.models.fields.TextField', [], {'blank': 'True'})
-        },
-        'dd.ddtreatmentoverview': {
-            'Meta': {'object_name': 'DDTreatmentOverview', '_ormbases': ['dd.TreatmentOverview']},
-            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.Diagnosis']", 'null': 'True', 'blank': 'True'}),
-            'treatmentoverview_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['dd.TreatmentOverview']", 'unique': 'True', 'primary_key': 'True'}),
-            'treatments': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['dd.Treatment']", 'null': 'True', 'blank': 'True'})
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         'dd.diagnosis': {
             'Meta': {'object_name': 'Diagnosis'},
@@ -252,6 +190,7 @@ class Migration(SchemaMigration):
             'first_suspected_by': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'orphanet': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.OrphanetChoices']", 'null': 'True', 'blank': 'True'}),
             'patient': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'patient_diagnosis'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['patients.Patient']"}),
+            'treatments': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['dd.Treatment']", 'through': "orm['dd.TreatmentCourse']", 'symmetrical': 'False'}),
             'updated': ('django.db.models.fields.DateTimeField', [], {})
         },
         'dd.edssrating': {
@@ -273,8 +212,14 @@ class Migration(SchemaMigration):
         },
         'dd.medicalhistory': {
             'Meta': {'object_name': 'MedicalHistory'},
+            'chronic': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'date': ('django.db.models.fields.DateField', [], {}),
+            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'medical_history'", 'to': "orm['dd.Diagnosis']"}),
+            'disease': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.MedicalHistoryDisease']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'patient': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['patients.Patient']"})
+            'medical_history_file': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
+            'misdiagnosed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'other': ('django.db.models.fields.TextField', [], {'blank': 'True'})
         },
         'dd.medicalhistorydisease': {
             'Meta': {'ordering': "['disease']", 'object_name': 'MedicalHistoryDisease'},
@@ -306,25 +251,20 @@ class Migration(SchemaMigration):
         },
         'dd.treatment': {
             'Meta': {'object_name': 'Treatment'},
-            'common_name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'common_name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         'dd.treatmentcourse': {
             'Meta': {'object_name': 'TreatmentCourse'},
+            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.Diagnosis']"}),
             'dose_other': ('django.db.models.fields.TextField', [], {}),
-            'dose_type': ('django.db.models.fields.CharField', [], {'max_length': '1', 'null': 'True', 'blank': 'True'}),
+            'dose_type': ('django.db.models.fields.CharField', [], {'default': "'S'", 'max_length': '1'}),
             'end_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'notes': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'overview': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.TreatmentOverview']"}),
             'start_date': ('django.db.models.fields.DateField', [], {}),
             'treatment': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.Treatment']"})
-        },
-        'dd.treatmentoverview': {
-            'Meta': {'object_name': 'TreatmentOverview'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'patient': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['patients.Patient']"})
         },
         'groups.workinggroup': {
             'Meta': {'ordering': "['name']", 'object_name': 'WorkingGroup'},

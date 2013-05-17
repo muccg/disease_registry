@@ -31,7 +31,7 @@ class Migration(SchemaMigration):
         db.execute("CREATE SEQUENCE dmd_steroids_id_seq")
         db.execute("SELECT setval('dmd_steroids_id_seq', (SELECT MAX(id) FROM dmd_steroids))")
         db.execute("ALTER TABLE dmd_steroids ALTER COLUMN id SET DEFAULT nextval('dmd_steroids_id_seq'::regclass)")
-        
+
         db.execute("CREATE SEQUENCE dmd_surgery_id_seq")
         db.execute("SELECT setval('dmd_surgery_id_seq', (SELECT MAX(id) FROM dmd_surgery))")
         db.execute("ALTER TABLE dmd_surgery ALTER COLUMN id SET DEFAULT nextval('dmd_surgery_id_seq'::regclass)")
