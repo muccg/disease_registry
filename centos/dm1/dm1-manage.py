@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 import os
 import sys
+import pwd
+
+(uid, gid) = pwd.getpwnam('apache')[2:4]
+os.setegid(gid)
+os.seteuid(uid)
 
 if __name__ == "__main__":
 
@@ -18,7 +23,7 @@ if __name__ == "__main__":
     site.addsitedir(os.path.join(webapp_root, "lib"))
     site.addsitedir("/etc/ccgapps")
     site.addsitedir("/usr/local/etc/ccgapps")
-    
+
     sys.path.extend(oldpath)
 
     # setup the settings module for the WSGI app

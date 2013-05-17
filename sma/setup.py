@@ -8,7 +8,7 @@ for package in ['sma']:
     os.chdir(os.path.join('sma', package))
     for data_dir in ('templates', 'static', 'migrations', 'fixtures'):
 	    data_files['sma.' + package].extend(
-	        [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files]) 
+	        [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files])
     os.chdir('../..')
 
 # Include common disease registry modules from registry sibling directory
@@ -19,12 +19,12 @@ for package in ('common', 'patients', 'genetic', 'groups', 'humangenome'):
     os.chdir(os.path.join('registry', package))
     for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags'):
        data_files['registry.' + package].extend(
-           [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files]) 
+           [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files])
     os.chdir('../..')
 os.chdir('../sma')
 
 setup(name='django-smaregistry',
-    version='1.0.6',
+    version='1.0.14',
     description='Django Disease Registry - SMA',
     long_description='Django Disease registry for SMA',
     author='Centre for Comparative Genomics',
@@ -53,10 +53,9 @@ setup(name='django-smaregistry',
         'django-extensions>=0.7.1',
         'ccg-auth==0.3.2',
         'ccg-extras==0.1.5',
-        'MySQL-python==1.2.3',
         'django-userlog==0.2.1',
         'django_qbe',
-        'django_nose'        
+        'django_nose'
     ],
     dependency_links = [
         "http://repo.ccgapps.com.au",

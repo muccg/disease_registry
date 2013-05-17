@@ -22,10 +22,10 @@ class GeneChoiceField(forms.ModelChoiceField):
         #    pass
 
         return super(GeneChoiceField, self).prepare_value(value)
-        
+
 
     def validate(self, value):
-        print 'validating model: ', value, str(dir(value)) 
+        print 'validating model: ', value, str(dir(value))
         return super(GeneChoiceField, self).validate(value)
 
 
@@ -72,7 +72,7 @@ class MolecularDataForm(forms.ModelForm):
 
 
 class VariationForm(forms.ModelForm):
-    gene = GeneChoiceField(queryset=Gene.objects.all(), label="Gene", widget=LiveComboWidget(backend=reverse_lazy("admin:gene_search", args=("",))))    
+    gene = GeneChoiceField(queryset=Gene.objects.all(), label="Gene", widget=LiveComboWidget(backend=reverse_lazy("admin:gene_search", args=("",))))
     exon = forms.CharField(label="Exon", required=False, widget=VariationWidget(backend=reverse_lazy("admin:validate_exon"), attrs={"minchars": "0"}))
     protein_variation = forms.CharField(label="Protein variation", required=False, widget=VariationWidget(backend=reverse_lazy("admin:validate_protein")))
     dna_variation = forms.CharField(label="DNA variation", required=False, widget=VariationWidget(backend=reverse_lazy("admin:validate_sequence"), popup=get_script_prefix()+'genetic/variation/'))

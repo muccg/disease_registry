@@ -47,7 +47,7 @@ class Command(BaseCommand):
                     gene.save()
 
                 transaction.commit()
-                        
+
                 print "done."
             except hgnc.HeaderError, e:
                 print "ERROR: Malformed file."

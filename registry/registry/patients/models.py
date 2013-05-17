@@ -48,15 +48,18 @@ class Doctor(models.Model):
     phone = models.CharField(max_length=30, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
 
+    class Meta:
+        ordering = ['family_name']
+
     def __unicode__(self):
         return "%s %s" % (self.family_name.upper(), self.given_names)
 
 class NextOfKinRelationship(models.Model):
     relationship = models.CharField(max_length=100, verbose_name="Relationship")
-    
+
     class Meta:
         verbose_name = 'Next of Kin Relationship'
-    
+
     def __unicode__(self):
         return self.relationship
 
@@ -65,7 +68,7 @@ class Parent(models.Model):
     parent_family_name = models.CharField(max_length=100, verbose_name="Family name")
     parent_place_of_birth = models.CharField(max_length=100, verbose_name="Place of birth")
     parent_date_of_migration = models.DateField(null=True, blank=True, verbose_name="Migration")
-    
+
     def __unicode__(self):
         return '%s %s of %s' % (self.parent_given_names, self.parent_family_name, self.parent_place_of_birth)
 
@@ -80,7 +83,7 @@ class Patient(models.Model):
     consent_form = models.FileField(upload_to='consents', storage=file_system, verbose_name="Consent form", blank=True, null=True)
     family_name = models.CharField(max_length=100, db_index=True)
     given_names = models.CharField(max_length=100, db_index=True)
-    umrn = models.CharField(max_length=50, unique=True, db_index=True, null=True, blank=True, verbose_name="UMRN")
+    umrn = models.CharField(max_length=50, unique=True, db_index=True, verbose_name="UMRN")
     date_of_birth = models.DateField()
     place_of_birth = models.CharField(max_length=100, null=True, blank=True, verbose_name="Place of Birth")
     date_of_migration = models.DateField(help_text="If migrated", blank=True, null=True)
@@ -147,11 +150,11 @@ class Patient(models.Model):
 
 class PatientParent(models.Model):
     PARENT_TYPE = ( ("M", "Mother"), ("F", "Father") )
-    
+
     patient = models.ForeignKey(Patient)
     parent = models.ForeignKey(Parent)
     relationship = models.CharField(max_length=20, choices=PARENT_TYPE)
-    
+
     class Meta:
         verbose_name = "Parent"
         verbose_name_plural = "Parents"
