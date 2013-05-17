@@ -18,19 +18,19 @@ class Migration(DataMigration):
         for heart in orm['dmd.Heart'].objects.all():
             heart.id = heart.diagnosis_id
             heart.save()
-                
+
         for motorfunction in orm['dmd.Motorfunction'].objects.all():
             motorfunction.id = motorfunction.diagnosis_id
             motorfunction.save()
-                    
+
         for notes in orm['dmd.Notes'].objects.all():
             notes.id = notes.diagnosis_id
             notes.save()
-                        
+
         for steroids in orm['dmd.Steroids'].objects.all():
             steroids.id = steroids.diagnosis_id
             steroids.save()
-                            
+
         for surgery in orm['dmd.Surgery'].objects.all():
             surgery.id = surgery.diagnosis_id
             surgery.save()

@@ -72,7 +72,7 @@ class DateWidget(forms.Widget):
 
     def render(self, name, value, attrs=None):
         import re
-        
+
         # If value is a string, we need to parse it. For now, we'll just let
         # the exception bubble up if parsing fails.
         if type(value) is str:

@@ -18,7 +18,7 @@ class Migration(DataMigration):
         for notes in orm['sma.notes'].objects.all():
             notes.id = notes.diagnosis_id
             notes.save()
-            
+
         for feedingfunction in orm['sma.FeedingFunction'].objects.all():
             feedingfunction.id = feedingfunction.diagnosis_id
             feedingfunction.save()
