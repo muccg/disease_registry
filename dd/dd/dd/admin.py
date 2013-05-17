@@ -59,8 +59,6 @@ class MRIDataInline(admin.StackedInline):
               ("brain", "cervical", "thoracic"),
               "report_file", "image_file")
     form = MRIDataForm
-    change_form_template = "progressbarupload/change_form.html"
-    add_form_template = "progressbarupload/change_form.html"
     extra = 0
 
 class MRIDataAdmin(admin.ModelAdmin):
@@ -68,8 +66,6 @@ class MRIDataAdmin(admin.ModelAdmin):
     fields = ("diagnosis", "date", "location",
               ("brain", "cervical", "thoracic"),
               "report_file")
-    change_form_template = "progressbarupload/change_form.html"
-    add_form_template = "progressbarupload/change_form.html"
 
 class DDDiagnosisAdmin(admin.ModelAdmin):
     form = DDDiagnosisForm
