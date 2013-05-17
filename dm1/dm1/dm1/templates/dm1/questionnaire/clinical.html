@@ -1,0 +1,38 @@
+{% extends "dm1/questionnaire/base.html" %}
+
+{% block content %}
+
+    <h2>Myotonic Dystrophy Questionnaire</h2>
+
+	{% if family_name %}
+    	<div class='patient'>Questionnaire for <span class='familyname'>{{ family_name }}</span>, <span class='givennames'>{{ given_names }}</span></div>
+	{% endif %}
+
+    <div class='requirednote'>
+        <span>Note:</span> All fields in <span>BOLD</span> are required
+    </div>
+
+    <form method="POST">{% csrf_token %}
+		{% for label, form, save in forms %}
+        <div class='subform'>
+            <div class='label'>{{ label }}</div>
+            <div class='content'>
+				<table>
+	   			{% for field in form %}
+				<tr>
+					{% if field.field.required %}
+	            		<td><b>{{field.label_tag}}</b></td>
+					{% else %}
+						<td>{{field.label_tag}}</td>
+					{% endif %}
+					<td>{{field}}</td><td><font style='color: red;'><i>{{field.errors}}</i></font></td>
+	            </tr>
+				{% endfor %}
+				</table>
+			</div>
+        </div>
+		{% endfor %}
+        <!-- FJ MD Questionnaire item 7 -->
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}
