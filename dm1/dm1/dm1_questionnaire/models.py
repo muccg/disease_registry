@@ -68,10 +68,10 @@ class Patient(ApproveMixin, models.Model):
     state = models.ForeignKey(State, verbose_name="State/Province/Territory", related_name="dm1_questionnaire_patient_set")
     country = models.ForeignKey(Country, related_name="dm1_questionnaire_patient_set")
     postcode = models.IntegerField()
-    home_phone = models.CharField(max_length=30, blank=True, null=True)
-    mobile_phone = models.CharField(max_length=30, blank=True, null=True)
-    work_phone = models.CharField(max_length=30, blank=True, null=True)
-    email = models.EmailField(blank=True, null=True)
+    home_phone = models.CharField(max_length=30, blank=True)
+    mobile_phone = models.CharField(max_length=30, blank=True)
+    work_phone = models.CharField(max_length=30, blank=True)
+    email = models.EmailField(blank=True)
 
     class Meta:
         ordering = ["family_name", "given_names", "date_of_birth"]

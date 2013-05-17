@@ -97,7 +97,7 @@ class Diagnosis(models.Model):
     diagnosis = models.CharField(max_length=3, choices = DD_DIAGNOSIS_CHOICES, verbose_name = "Condition", default = 'UNK')
     affected_status = models.CharField(max_length=30, choices=DD_AFFECTED_STATUS_CHOICES, verbose_name = "Affected Status", default = '')
 
-    first_suspected_by = models.CharField(max_length=50, choices = DD_FIRST_SUSPECTED_CHOICES, null=True, blank=True)
+    first_suspected_by = models.CharField(max_length=50, choices = DD_FIRST_SUSPECTED_CHOICES, blank=True)
     date_of_first_symptom = models.DateField(null=True, blank=True)
     date_of_diagnosis = models.DateField(null=True, blank=True)
 
@@ -106,7 +106,7 @@ class Diagnosis(models.Model):
 
     orphanet = models.ForeignKey(OrphanetChoices, null=True, blank = True)
 
-    family_history = models.TextField(null=True, blank=True)
+    family_history = models.TextField(blank=True)
     family_consent = models.BooleanField(default=False)
 
     treatments = models.ManyToManyField(Treatment, through=TreatmentCourse)

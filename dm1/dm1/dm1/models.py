@@ -156,12 +156,12 @@ class Muscle(base.Muscle):
     neck_flexion = models.DecimalField(max_digits=2, decimal_places=1, choices=MRC_CHOICES, help_text=MRC_HELP_TEXT, null=True, blank=True)
     iliopsoas = models.DecimalField(max_digits=2, decimal_places=1, choices=MRC_CHOICES, help_text=MRC_HELP_TEXT, null=True, blank=True)
     #face = models.NullBooleanField(verbose_name="facial muscle weakness", null=True, blank=True)
-    face = models.CharField(max_length=1, choices=UYN_CHOICES, null=True, blank=True)
+    face = models.CharField(max_length=1, choices=UYN_CHOICES, blank=True)
 
     #early_weakness = models.NullBooleanField(verbose_name="Was there any evidence of hypotonia or weakness within the first four weeks", null=True, blank=True)
-    early_weakness = models.CharField(verbose_name="Was there any evidence of hypotonia or weakness within the first four weeks",max_length=1, choices=UYN_CHOICES, null=True, blank=True)
+    early_weakness = models.CharField(verbose_name="Was there any evidence of hypotonia or weakness within the first four weeks",max_length=1, choices=UYN_CHOICES, blank=True)
     # Trac 16 #53 Removed
-    #grip_percussion_myotonia = models.CharField(max_length=4, choices=GRIP_PERCUSSION_MYOTONIA_CHOICES, verbose_name="grip or percussion myotonia", null=True, blank=True)
+    #grip_percussion_myotonia = models.CharField(max_length=4, choices=GRIP_PERCUSSION_MYOTONIA_CHOICES, verbose_name="grip or percussion myotonia", blank=True)
 
     class Meta:
         verbose_name_plural = "muscle"
