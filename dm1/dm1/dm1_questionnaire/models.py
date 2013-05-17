@@ -81,7 +81,7 @@ class Patient(ApproveMixin, models.Model):
         return "%s %s" % (self.family_name.upper(), self.given_names)
 
     def approve(self):
-        o = super(Patient, self).approve(patients.models.Patient, keys=True)
+        o = super(Patient, self).approve(registry.patients.models.Patient, keys=True)
 
         # Handle next of kin fields by copying the patient details for now.
         fields = (

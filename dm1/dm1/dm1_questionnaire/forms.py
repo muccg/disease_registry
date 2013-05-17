@@ -12,7 +12,7 @@ from models import Patient as Dm1Patient
 
 class ConsentForm(forms.ModelForm):
     CHOICES = (('N', 'NO'), ('Y', 'YES'))
-    DATE_FORMATS = settings.DATE_INPUT_FORMATS # was('%d-%m-%Y', '%d/%m/%Y', '%d/%m/%y')
+    DATE_FORMATS = ('%d-%m-%Y', '%d/%m/%Y', '%d/%m/%y')
 
     # the default should be None, so none of the 2 radio buttons are selected, forcing the user to select one
     q1 = forms.ChoiceField(widget=RadioSelect, choices=CHOICES, required=True)
