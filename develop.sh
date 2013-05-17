@@ -31,8 +31,8 @@ function ci_remote_build() {
     EXCLUDES="('bootstrap'\, '.hg*'\, 'virt*'\, '*.log'\, '*.rpm')"
     time ccg rpmbuild-centos6-aws puppet
     ccg rpmbuild-centos6-aws dsudo:"chown ec2-user:ec2-user /usr/local/src"
-    time ccg rpmbuild-centos6-aws rsync_project:local_dir=./,remote_dir=/usr/local/src/,ssh_opts="-o StrictHostKeyChecking\=no",extra_opts="-l",exclude="${EXCLUDES}",delete=True
-    time ccg rpmbuild-centos6-aws build_rpm:centos/${PROJECT}/${PROJECT}.spec
+    time ccg rpmbuild-centos6-aws rsync_project:local_dir=./,remote_dir=/usr/local/src/disease_registry/,ssh_opts="-o StrictHostKeyChecking\=no",extra_opts="-l",exclude="${EXCLUDES}",delete=True
+    time ccg rpmbuild-centos6-aws build_rpm:centos/${PROJECT}/${PROJECT}.spec,src=/usr/local/src/disease_registry
 
     rm -rf build/${PROJECT}*
     mkdir -p build
