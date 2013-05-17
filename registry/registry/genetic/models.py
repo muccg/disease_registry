@@ -57,7 +57,7 @@ class Variation(models.Model):
         "rna": "rna_variation_validation_override",
         "protein": "protein_variation_validation_override",
     }
-    
+
     class Meta:
         permissions = (
             ("can_override_validation", "Can override variation validation"),
