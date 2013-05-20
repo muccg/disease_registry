@@ -93,7 +93,7 @@ class DiagnosisAdmin(admin.ModelAdmin):
     ]
     search_fields = ["patient__family_name", "patient__given_names"]
     # FJ start Trac 16 Item 10, reordering fields, patient first
-    fields = ('patient', 'first_symptom', 'first_suspected_by', 'age_at_clinical_diagnosis', 'age_at_molecular_diagnosis')
+    fields = ('patient', 'age_at_clinical_diagnosis', 'age_at_molecular_diagnosis')
     # FJ end
 
     class Media:

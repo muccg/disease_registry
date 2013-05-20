@@ -25,9 +25,6 @@ class DiagnosisForm(forms.ModelForm):
 
     class Meta:
         model = Diagnosis
-        widgets = { 'diagnosis': RadioSelect(choices = Diagnosis.DIAGNOSIS_CHOICES),
-                    'affectedstatus': RadioSelect(choices=Diagnosis.AFFECTED_STATUS_CHOICES)
-                }
 
 class FamilyMemberForm(forms.ModelForm):
     OPTIONS = [
