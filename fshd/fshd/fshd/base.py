@@ -20,7 +20,7 @@ class Diagnosis(models.Model):
         ("8", "Bilateral cataracts"),
         ("9", "Cardiac symptoms"),
         ("10", "Anaesthetic problems"),
-        ("11", "Patient is the mother of a child with congenital myotonic dystrophy"),
+        ("11", "Patient is the mother of a child with congenital facioscapulohumeral muscular dystrophy"),
         ("12", "Patient asymptomatic"),
         ("13", "Diagnosis of a family member with Myotonic dystrophy"),
         ("14", "Other"))
@@ -41,9 +41,9 @@ class Diagnosis(models.Model):
     AFFECTED_STATUS_CHOICES = (
         ('FamilyHistory','Not yet diagnosed/Family history only'),
         ('AsymptomaticCarrier','Asymptomatic Carrier'),
-        ('Congenital','Congenital Myotonic Dystrophy'),
-        ('Juvenile','Juvenile Myotonic Dystrophy'),
-        ('Adult','Adult Myotonic Dystrophy'),
+        ('Congenital','Congenital Facioscapulohumeral Muscular Dystrophy'),
+        ('Juvenile','Juvenile Facioscapulohumeral Muscular Dystrophy'),
+        ('Adult','Adult Facioscapulohumeral Muscular Dystrophy'),
     )
 
     DIAGNOSIS_CHOICES = (
@@ -58,7 +58,7 @@ class Diagnosis(models.Model):
 
     #affectedstatus = models.CharField(max_length=30, choices=AFFECTED_STATUS_CHOICES, verbose_name='Affected Status') # required
     affectedstatus = models.CharField(max_length=30, choices=AFFECTED_STATUS_CHOICES, verbose_name='Affected Status', default='') # required, default to remove the '---' in the options
-    first_symptom = models.CharField('What was the first symptom that prompted the diagnosis of Myotonic Dystrophy', max_length=50, choices=FIRST_SYMPTOM_CHOICES, null=True, blank=True)
+    first_symptom = models.CharField('What was the first symptom that prompted the diagnosis of Facioscapulohumeral Muscular Dystrophy', max_length=50, choices=FIRST_SYMPTOM_CHOICES, null=True, blank=True)
     first_suspected_by = models.CharField(max_length=50, choices=FIRST_SUSPECTED_CHOICES, null=True, blank=True)
 
     age_at_clinical_diagnosis = models.IntegerField('age in years at clinical diagnosis', null=True, blank=True)
@@ -544,8 +544,8 @@ class ClinicalTrials(models.Model):
 class Consent(models.Model):
     YES_NO_CHOICES = (('N', 'No'), ('Y', 'Yes'))
 
-    q1 = models.CharField(max_length=1, choices=YES_NO_CHOICES, null=True, blank=True, default='', verbose_name='Do we have your permission to store your personal & clinical data in the Australasian National Myotonic Dystrophy Registry and to transfer it (in a form identifiable only by a code) to the global TREAT-NMD registry in which it may be used for research and for the planning of clinical trials?')
-    q2 = models.CharField(max_length=1, choices=YES_NO_CHOICES, null=True, blank=True, default='', verbose_name='Do we have your permission to obtain your Myotonic Dystrophy genetic test result from the relevant testing laboratory to store this information with your clinical and personal information in the Australasian National Myotonic  Dystrophy Registry and to transfer it (in a form identifiable only by a code) to the global TREAT-NMD registry where it may be used for research and for the planning of clinical trials?')
+    q1 = models.CharField(max_length=1, choices=YES_NO_CHOICES, null=True, blank=True, default='', verbose_name='Do we have your permission to store your personal & clinical data in the Australasian National Facioscapulohumeral Muscular Dystrophy Registry and to transfer it (in a form identifiable only by a code) to the global TREAT-NMD registry in which it may be used for research and for the planning of clinical trials?')
+    q2 = models.CharField(max_length=1, choices=YES_NO_CHOICES, null=True, blank=True, default='', verbose_name='Do we have your permission to obtain your Facioscapulohumeral Muscular Dystrophy genetic test result from the relevant testing laboratory to store this information with your clinical and personal information in the Australasian National Myotonic  Dystrophy Registry and to transfer it (in a form identifiable only by a code) to the global TREAT-NMD registry where it may be used for research and for the planning of clinical trials?')
     q3 = models.CharField(max_length=1, choices=YES_NO_CHOICES, null=True, blank=True, default='', verbose_name='If we receive information on TREAT-NMD projects or other information related to your disease which might be relevant to you, would you like to be informed about this?')
     q4 = models.CharField(max_length=1, choices=YES_NO_CHOICES, null=True, blank=True, default='', verbose_name='If your doctor receives information about a clinical trial which you might be eligible for, would you like to be informed about this?')
     q5 = models.CharField(max_length=1, choices=YES_NO_CHOICES, null=True, blank=True, default='', verbose_name='So that we can keep the registry up to date, we will need to update your records once a year. Do you agree to receive follow-up forms once a year which you will be asked to complete in order to register any changes in your medical condition or contact details?')
