@@ -7,6 +7,7 @@ from django.contrib import admin
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
+import json
 
 from admin_forms import *
 from models import *
@@ -162,12 +163,42 @@ class MolecularDataAdmin(admin.ModelAdmin):
     moleculardata_entered.allow_tags = True
     moleculardata_entered.short_description = "Genetic Data"
 
+class LaboratoryAdmin(admin.ModelAdmin):
+    list_display = ("name", "address", "contact_name",
+                    "contact_email", "contact_phone")
+    fieldsets = ((None, { "fields": ("name", "address") }),
+                 ("Contact", { "fields": ("contact_name",
+                                          "contact_email",
+                                          "contact_phone") }))
+
+    def get_urls(self):
+        urls = super(LaboratoryAdmin, self).get_urls()
+        local_urls = patterns("",
+            url(r"search/(.*)$", self.admin_site.admin_view(self.search), name="laboratory_search")
+        )
+        return local_urls + urls
+
+    def queryset(self, request):
+        return Laboratory.objects.all()
+
+    def search(self, request, term):
+        queryset = self.queryset(request)
+
+        queryset = queryset.filter(Q(name__icontains=term) |
+                                   Q(address__icontains=term) |
+                                   Q(contact_name__icontains=term))
+        queryset = queryset.order_by("name")
+        response = [[unicode(lab)] for lab in queryset]
+
+        return HttpResponse(json.dumps(response), mimetype="application/json")
+
 if settings.INSTALL_NAME == "dm1":
     # TODO remove this from the core registry
     #from registry.dm1.admin import DiagnosticCategoryInline
-    from dm1.dm1.admin import DiagnosticCategoryInline
-    MolecularDataAdmin.inlines = [DiagnosticCategoryInline] + MolecularDataAdmin.inlines
-
+    from dm1.dm1.admin import DiagnosticCategoryInline, DMTestingInline
+    MolecularDataAdmin.inlines = [DiagnosticCategoryInline, DMTestingInline] + \
+        MolecularDataAdmin.inlines
 
 admin.site.register(MolecularData, MolecularDataAdmin)
 admin.site.register(Gene, GeneAdmin)
+admin.site.register(Laboratory, LaboratoryAdmin)

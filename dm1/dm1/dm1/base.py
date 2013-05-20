@@ -50,11 +50,13 @@ class Diagnosis(models.Model):
         ("DM1", "DM1"),
         ("DM2", "DM2"),
         ("O", "Other"),
+        ("N", "Not yet diagnosed"),
+        ("U", "Unknown"),
     )
     # moved up to base.py since the question is now in registry & questionnaire
     # Need the "default='DM1'" to remove the '----' option, see Django admin
     # /home/username/registry/virt_registry/lib/python2.6/site-packages/Mango_py-1.2.3-py2.6.egg/django/db/models/fields/__init__.py
-    diagnosis = models.CharField(max_length=3, choices=DIAGNOSIS_CHOICES, verbose_name='Condition', default='DM1') # required
+    diagnosis = models.CharField(max_length=3, choices=DIAGNOSIS_CHOICES, verbose_name='Condition', default="U") # required
 
     #affectedstatus = models.CharField(max_length=30, choices=AFFECTED_STATUS_CHOICES, verbose_name='Affected Status') # required
     affectedstatus = models.CharField(max_length=30, choices=AFFECTED_STATUS_CHOICES, verbose_name='Affected Status', default='') # required, default to remove the '---' in the options
@@ -500,7 +502,8 @@ class GeneticTestDetails(models.Model):
     #test_date = models.DateField(null=True, blank=True, verbose_name="Genetic Test Date")
     test_date = models.DateField(verbose_name="Genetic Test Date", null=True, blank=True) # required, but need to check Yes to previous question
     # not used in questionnaire, should we keep it in the registry?
-    laboratory = models.CharField(max_length=256, null=True, blank=True)
+    laboratory = models.CharField(max_length=256, null=True, blank=True,
+                                  verbose_name="Laboratory site issuing report")
 
     # added for the questionnaire 2012-02-20
     counselling = models.CharField(max_length=1, choices=UYN_CHOICES, null=True, blank=True, verbose_name="Has the patient received genetic counselling")

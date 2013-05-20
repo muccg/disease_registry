@@ -122,6 +122,10 @@ class GeneticTestDetailsForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(GeneticTestDetailsForm, self).__init__(*args, **kwargs)
+
+        widget = LiveComboWidget(attrs={"minchars": 0, "size": 60},
+                                 backend=reverse_lazy("admin:laboratory_search", args=("",)))
+        self.fields["laboratory"].widget = widget
         self.fields["test_date"].widget=DateWidget(popup=True, today=True, years=-5, required=self.fields["test_date"].required)
 
     # the following code doesn't display the wodget properly, hence the code above
@@ -139,6 +143,14 @@ class GeneticTestDetailsForm(forms.ModelForm):
             self._errors["test_date"] = self.error_class(["Please enter the Genetic Test Date"])
             self.fields["test_date"].required=True
         return cleaneddata
+
+class DMTestDetailsForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(DMTestDetailsForm, self).__init__(*args, **kwargs)
+        self.fields["repeat_sequence"].widget = forms.TextInput(attrs={"size": 20})
+        self.fields["repeat_number"].widget = forms.TextInput(attrs={"size": 30})
+        self.fields["region_targeted"].widget = forms.TextInput(attrs={"size": 20})
+        self.fields["typing_method"].widget = forms.Textarea(attrs={"cols": 40, "rows": 3})
 
 class MotorFunctionForm(forms.ModelForm):
     walk = forms.CharField(label="Currently able to walk", widget=RadioSelect(choices=base.MotorFunction.YN_CHOICES))
@@ -234,7 +246,7 @@ class MuscleForm(forms.ModelForm):
     tibialis_anterior = forms.CharField(label="Tibialis anterior", widget=RadioSelect(choices=Muscle.MRC_CHOICES), required=False)
     neck_flexion = forms.CharField(label="Neck flexion", widget=RadioSelect(choices=Muscle.MRC_CHOICES), required=False)
     iliopsoas = forms.CharField(label="iliopsoas", widget=RadioSelect(choices=Muscle.MRC_CHOICES), required=False)
-    face = forms.CharField(label="Face", widget=RadioSelect(choices=Muscle.UYN_CHOICES), required=False)
+    face = forms.CharField(label="Facial weakness", widget=RadioSelect(choices=Muscle.UYN_CHOICES), required=False)
     early_weakness = forms.CharField(label="Was there any evidence of hypotonia or weakness within the first four weeks", widget=RadioSelect(choices=Muscle.UYN_CHOICES), required=False)
 
     class Meta:

@@ -170,6 +170,10 @@ class DiagnosticCategoryInline(admin.StackedInline):
     class Media:
         js = [get_static_url("dm1/diagnostic-category.js")]
 
+class DMTestingInline(admin.TabularInline):
+    max_num = 1
+    model = DMTestDetails
+    form = DMTestDetailsForm
 
 admin.site.register(Diagnosis, DiagnosisAdmin)
 
@@ -186,4 +190,3 @@ class CancerTypeChoicesAdmin(admin.ModelAdmin):
     search_fields = ["description"]
 
 admin.site.register(CancerTypeChoices, CancerTypeChoicesAdmin)
-
