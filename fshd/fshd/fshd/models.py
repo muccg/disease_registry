@@ -30,8 +30,8 @@ class Diagnosis(base.Diagnosis):
 
     class Meta:
         ordering = ["patient"]
-        verbose_name = "Facioscapulohumeral Muscular Dystrophy Registry entry"   #"clinical diagnosis"
-        verbose_name_plural = "Facioscapulohumeral Muscular Dystrophy Registry" # "clinical diagnoses"
+        verbose_name = "FSHD Registry entry"   #"clinical diagnosis"
+        verbose_name_plural = "FSHD Registry" # "clinical diagnoses"
 
     def __unicode__(self):
         return str(self.patient)
