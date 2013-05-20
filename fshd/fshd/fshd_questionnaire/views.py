@@ -34,7 +34,7 @@ def clinical(request):
     # get daunting for a simple questionnaire.
     form_definitions = (
         ("Diagnosis", DiagnosisForm, lambda form, diagnosis: None),
-        ("Motor Function", MotorFunctionForm, save_default),
+        ("Clinical Features", ClinicalFeaturesForm, save_default),
         ("Surgery", SurgeryForm, save_default),
         ("Heart Function", HeartForm, save_default),
         #("Heart Medication", HeartMedicationForm, save_default),

@@ -8,6 +8,8 @@ from fshd.fshd import base
 from registry.genetic.models import MolecularData
 #from patients.models import Patient as BasePatient
 from registry.patients.models import Patient
+from registry.groups.models import User
+from registry.mail import sendNewPatientEmail
 
 import logging
 logger = logging.getLogger('fshd')

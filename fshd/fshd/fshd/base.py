@@ -8,59 +8,6 @@ from registry.patients.models import Patient
 # questionnaire.
 
 class Diagnosis(models.Model):
-    # Trac 16 #12 Now assigning numbers instead of lengthy strings. The database is not really in production yet, so we can change that
-    FIRST_SYMPTOM_CHOICES = (
-        ("1", "Prenatal - polyhydramnios and reduced fetal movements"),
-        ("2", "Feeding difficulties requiring tube at or near term"),
-        ("3", "Hypotonia"),
-        ("4", "Learning difficulties"),
-        ("5", "Delayed development"),
-        ("6", "Myotonia"),
-        ("7", "Muscle weakness"),
-        ("8", "Bilateral cataracts"),
-        ("9", "Cardiac symptoms"),
-        ("10", "Anaesthetic problems"),
-        ("11", "Patient is the mother of a child with congenital facioscapulohumeral muscular dystrophy"),
-        ("12", "Patient asymptomatic"),
-        ("13", "Diagnosis of a family member with Myotonic dystrophy"),
-        ("14", "Other"))
-
-    FIRST_SUSPECTED_CHOICES = (
-        ("NA", "Not Applicable"), # Trac 16 #61
-        ("Self", "Self"),
-        ("Family", "Family"),
-        ("GP", "GP"),
-        ("Paediatrician", "Paediatrician"),
-        ("Neurologist", "Neurologist"),
-        ("Cardiologist", "Cardiologist"),
-        ("Ophthalmologist", "Ophthalmologist"),
-        ("Geneticist", "Geneticist"),
-        ("Other", "Other"),
-    )
-
-    AFFECTED_STATUS_CHOICES = (
-        ('FamilyHistory','Not yet diagnosed/Family history only'),
-        ('AsymptomaticCarrier','Asymptomatic Carrier'),
-        ('Congenital','Congenital Facioscapulohumeral Muscular Dystrophy'),
-        ('Juvenile','Juvenile Facioscapulohumeral Muscular Dystrophy'),
-        ('Adult','Adult Facioscapulohumeral Muscular Dystrophy'),
-    )
-
-    DIAGNOSIS_CHOICES = (
-        ("FSHD", "FSHD"),
-        ("DM2", "DM2"),
-        ("O", "Other"),
-    )
-    # moved up to base.py since the question is now in registry & questionnaire
-    # Need the "default='FSHD'" to remove the '----' option, see Django admin
-    # /home/username/registry/virt_registry/lib/python2.6/site-packages/Mango_py-1.2.3-py2.6.egg/django/db/models/fields/__init__.py
-    diagnosis = models.CharField(max_length=5, choices=DIAGNOSIS_CHOICES, verbose_name='Condition', default='FSHD') # required
-
-    #affectedstatus = models.CharField(max_length=30, choices=AFFECTED_STATUS_CHOICES, verbose_name='Affected Status') # required
-    affectedstatus = models.CharField(max_length=70, choices=AFFECTED_STATUS_CHOICES, verbose_name='Affected Status', default='') # required, default to remove the '---' in the options
-    first_symptom = models.CharField(max_length=70, verbose_name='What was the first symptom that prompted the diagnosis of Facioscapulohumeral Muscular Dystrophy', choices=FIRST_SYMPTOM_CHOICES, null=True, blank=True)
-    first_suspected_by = models.CharField(max_length=70, choices=FIRST_SUSPECTED_CHOICES, null=True, blank=True)
-
     age_at_clinical_diagnosis = models.IntegerField('age in years at clinical diagnosis', null=True, blank=True)
     age_at_molecular_diagnosis = models.IntegerField('age in years at molecular diagnosis', null=True, blank=True)
 

@@ -88,41 +88,6 @@ class ConsentForm(forms.ModelForm):
         model = models.Consent
 
 class DiagnosisForm(forms.ModelForm):
-    # keep that in sync with base.py and add the null option
-    DIAGNOSIS_CHOICES = (
-        ('', "--------"),
-        ("FSHD", "FSHD"),
-        ("DM2", "DM2"),
-        ("O", "Not yet diagnosed"), # the text is different from registry, but the value is the same as 'Other' in the registry in base.py
-    )
-
-    # keep the values in sync with base.py base.Diagnosis.FIRST_SYMPTOM_CHOICES
-    FIRST_SYMPTOM_CHOICES_FORM = (('', "--------"),
-        ("1", "Concerns prior to/or around the time of birth eg decreased movements in the womb"),  #"Prenatal - polyhydramnios and reduced fetal movements"),
-        ("2", "Feeding difficulties requiring a feeding tube shortly after birth"),  #"Feeding difficulties requiring tube at or near term"),
-        #("3", ""),  #"Hypotonia"),
-        ("4", "Learning difficulties"),  #"Learning difficulties"),
-        ("5", "Delayed development"),  #"Delayed development"),
-        ("6", "Muscles difficult to relax or stiff (myotonia)"),  #"Myotonia"),
-        ("7", "Muscle weakness"),  #"Muscle weakness"),
-        ("8", "Cataracts"),  #"Bilateral cataracts"),
-        ("9", "Heart problems"),  #"Cardiac symptoms"),
-        ("10", "Problems with anaesthetics"), #"Anaesthetic problems"),
-        #("11", ""), #"Patient is the mother of a child with congenital facioscapulohumeral muscular dystrophy"),
-        ("12", "Asymptomatic"), #"Patient asymptomatic"),
-        ("13", "Diagnosis of a family member with Myotonic dystrophy"), #"Diagnosis of a family member with Myotonic dystrophy"),
-        #("14", "")) #"Other")
-        )
-
-    FIRST_SUSPECTED_CHOICES_FORM = (('', "--------"),) + base.Diagnosis.FIRST_SUSPECTED_CHOICES
-    DIAGNOSED_CHOICES = (('', "---"), ('False', 'No'), ('True', 'Yes'))
-
-    diagnosis = forms.CharField(label='What type of Myotonic dystrophy have you been diagnosed with?', widget=Select(choices=DIAGNOSIS_CHOICES), required=False)
-
-    #first_symptom = forms.CharField('What was the first symptom that prompted your diagnosis', widget=Select(choices=base.Diagnosis.FIRST_SYMPTOM_CHOICES))
-    first_symptom = forms.CharField(label='What was the first symptom that prompted your diagnosis?', widget=Select(choices=FIRST_SYMPTOM_CHOICES_FORM), required=False)
-    first_suspected_by = forms.CharField(label='Who first suspected you to have Facioscapulohumeral Muscular Dystrophy?', widget=Select(choices=FIRST_SUSPECTED_CHOICES_FORM), required=False)
-
     age_at_clinical_diagnosis = forms.IntegerField(label='What was your age when you were clinically diagnosed?', required=False, max_value=120, min_value=0, help_text="Age in years")
 
     class Meta:
@@ -130,7 +95,7 @@ class DiagnosisForm(forms.ModelForm):
         model = models.Diagnosis
 
 
-class MotorFunctionForm(forms.ModelForm):
+class ClinicalFeaturesForm(forms.ModelForm):
     WALK_CHOICES = (('', "---"),) + base.MotorFunction.YN_CHOICES
     WALK_ASSISTED_CHOICES = (('', "-------"),) + base.MotorFunction.WALK_ASSISTED_CHOICES
     # caution: keep in sync with base.MotorFunction.MOTOR_FUNCTION_CHOICES

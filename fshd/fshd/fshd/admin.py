@@ -115,7 +115,7 @@ class DiagnosisAdmin(admin.ModelAdmin):
         ConsentInline, # do not display the consent form in the Registry, but needs to be validated and saved
     ]
     search_fields = ["patient__family_name", "patient__given_names"]
-    fields = ('patient', 'diagnosis', 'affectedstatus', 'first_symptom', 'first_suspected_by', 'age_at_clinical_diagnosis', 'age_at_molecular_diagnosis')
+    fields = ('patient', 'age_at_clinical_diagnosis', 'age_at_molecular_diagnosis')
     list_display = ['patient_name', 'patient_working_group', 'progress_graph']
     save_on_top = True
 
