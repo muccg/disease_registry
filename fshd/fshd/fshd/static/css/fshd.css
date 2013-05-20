@@ -1,6 +1,6 @@
 #header-container {
     position: absolute;
-    background: #7F3704;
+    background: rgb(139, 82, 158);
     color: white;
     height: 4em;
     top: 0;
@@ -10,7 +10,7 @@
 
 #footer-container {
     clear: both;
-    background: #7F3704;
+    background: rgb(139, 82, 158);
     color: #eee;
     left: 0;
     right: 0;
@@ -20,11 +20,11 @@
 }
 
 a {
-    color: #7F3704;
+    color: rgb(139, 82, 158);
 }
 
 #stakeholders a:hover {
-    background: #7F3704;
+    background: rgb(139, 82, 158);
     color: white;
 }
 

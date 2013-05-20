@@ -22,13 +22,13 @@ h1 {
     font-size: 11px;
     text-align: left;
     font-weight: bold;
-    background: #7F3704;
+    background: rgb(139, 82, 158);
     color: white;
 }
 
 
 #header {
-    background: #7F3704;
+    background: rgb(139, 82, 158);
     color: #eee;
     overflow: hidden;
 }
