@@ -8,6 +8,7 @@ from dm1.dm1 import base
 from registry.genetic.models import MolecularData
 #from patients.models import Patient as BasePatient
 from registry.patients.models import Patient
+from registry.mail import sendNewPatientEmail
 
 import logging
 logger = logging.getLogger('dm1')
@@ -341,13 +342,11 @@ def signal_patient_post_save(sender, **kwargs):
 
 def signal_diagnosis_post_save(sender, **kwargs):
     diagnosis = kwargs['instance']
-    working_group_id = diagnosis.patient.working_group.id
-    regusers = User.objects.filter(working_group__id=working_group_id).filter(user__groups__id__in = [2,3]).distinct()
+    working_group = diagnosis.patient.working_group
+    magic = [2,3]  # fixme: use less magic
+    regusers = working_group.user_set.filter(user__groups__id__in=magic).distinct()
 
-    email_to = []
-
-    for reguser in regusers:
-        email_to.append(reguser.user.email)
+    email_to = regusers.values_list("user__email", flat=True)
 
     sendNewPatientEmail(email_to)
 
