@@ -108,7 +108,7 @@ class DiagnosisForm(forms.ModelForm):
         ("8", "Cataracts"),  #"Bilateral cataracts"),
         ("9", "Heart problems"),  #"Cardiac symptoms"),
         ("10", "Problems with anaesthetics"), #"Anaesthetic problems"),
-        #("11", ""), #"Patient is the mother of a child with congenital myotonic dystrophy"),
+        #("11", ""), #"Patient is the mother of a child with congenital facioscapulohumeral muscular dystrophy"),
         ("12", "Asymptomatic"), #"Patient asymptomatic"),
         ("13", "Diagnosis of a family member with Myotonic dystrophy"), #"Diagnosis of a family member with Myotonic dystrophy"),
         #("14", "")) #"Other")
@@ -121,7 +121,7 @@ class DiagnosisForm(forms.ModelForm):
 
     #first_symptom = forms.CharField('What was the first symptom that prompted your diagnosis', widget=Select(choices=base.Diagnosis.FIRST_SYMPTOM_CHOICES))
     first_symptom = forms.CharField(label='What was the first symptom that prompted your diagnosis?', widget=Select(choices=FIRST_SYMPTOM_CHOICES_FORM), required=False)
-    first_suspected_by = forms.CharField(label='Who first suspected you to have Myotonic Dystrophy?', widget=Select(choices=FIRST_SUSPECTED_CHOICES_FORM), required=False)
+    first_suspected_by = forms.CharField(label='Who first suspected you to have Facioscapulohumeral Muscular Dystrophy?', widget=Select(choices=FIRST_SUSPECTED_CHOICES_FORM), required=False)
 
     age_at_clinical_diagnosis = forms.IntegerField(label='What was your age when you were clinically diagnosed?', required=False, max_value=120, min_value=0, help_text="Age in years")
 
@@ -299,7 +299,7 @@ class SocioeconomicFactorsForm(forms.ModelForm):
     occupation = forms.CharField(label="What is your occupation", required=False, widget=Select(choices=OCCUPATION_CHOICES))
 
     EFFECT_CHOICES = (('', "-------"),) + base.SocioeconomicFactors.EFFECT_CHOICES
-    employment_effect = forms.CharField(label="Has myotonic dystrophy affected your employment", required=False, widget=Select(choices=EFFECT_CHOICES))
+    employment_effect = forms.CharField(label="Has facioscapulohumeral muscular dystrophy affected your employment", required=False, widget=Select(choices=EFFECT_CHOICES))
 
     class Meta:
         exclude = ("diagnosis",'comments')
@@ -341,7 +341,7 @@ class GeneralMedicalFactorsForm(forms.ModelForm):
 class GeneticTestDetailsForm(forms.ModelForm):
     YESNO_CHOICES = (('', "---"), ('Y', 'Yes'), ('N', 'No'))
 
-    details = forms.CharField(label="Have you had a genetic test for myotonic dystrophy", required=False, widget=Select(choices=YESNO_CHOICES))
+    details = forms.CharField(label="Have you had a genetic test for facioscapulohumeral muscular dystrophy", required=False, widget=Select(choices=YESNO_CHOICES))
     counselling = forms.CharField(label="Have you received genetic counselling", required=False, widget=Select(choices=YESNO_CHOICES))
     familycounselling = forms.CharField(label="Has any of your family members received genetic counselling", required=False, widget=Select(choices=YESNO_CHOICES))
 
