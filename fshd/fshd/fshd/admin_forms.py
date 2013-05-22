@@ -26,6 +26,33 @@ class DiagnosisForm(forms.ModelForm):
     class Meta:
         model = Diagnosis
 
+class MotorFunctionForm(forms.ModelForm):
+    walk = forms.CharField(label="Currently able to walk", widget=RadioSelect(choices=base.MotorFunction.YN_CHOICES))
+    best_function = forms.CharField(widget=RadioSelect(choices=base.MotorFunction.MOTOR_FUNCTION_CHOICES), required=False, label="What is the best motor function level the patient has achieved",
+                        help_text="<b>Walking:</b> walking with or without help (orthoses or assistive device or human assistance), inside or outdoors<br/><b>Sitting independently</b>: able to maintain a sitting position on a chair or a wheelchair without support of upper limbs or leaning against the back of the chair")
+    dysarthria = forms.IntegerField(widget=RadioSelect(choices=base.MotorFunction.DYSARTHRIA_CHOICES), required=False)
+
+    class Meta:
+        model = MotorFunction
+        widgets = { 'walk_assisted': RadioSelect(choices = MotorFunction.WALK_ASSISTED_CHOICES),
+                    'wheelchair_use': RadioSelect(choices = MotorFunction.WHEELCHAIR_USE_CHOICES),
+                    'dysarthria': RadioSelect(choices = MotorFunction.DYSARTHRIA_CHOICES),
+                }
+
+    def clean(self):
+        cleaneddata = self.cleaned_data
+
+        wheelchair_use = cleaneddata.get('wheelchair_use', None)
+        wheelchair_usage_age = cleaneddata.get('wheelchair_usage_age', None)
+        print "MotorFunctionForm clean: wheelchair_use '%s' wheelchair_usage_age '%s'" % (wheelchair_use, wheelchair_usage_age)
+
+        if (wheelchair_use == "intermittent" or wheelchair_use == "permanent") and not wheelchair_usage_age:
+            # see https://docs.djangoproject.com/en/1.2/ref/forms/validation/#cleaning-and-validating-fields-that-depend-on-each-other
+            self._errors["wheelchair_usage_age"] = self.error_class(["Please specify the age at start of wheelchair use"])
+            self.fields["wheelchair_usage_age"].required=True
+
+        return cleaneddata
+
 class FamilyMemberForm(forms.ModelForm):
     OPTIONS = [
         "Parent",

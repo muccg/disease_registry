@@ -35,23 +35,16 @@ def clinical(request):
     form_definitions = (
         ("Diagnosis", DiagnosisForm, lambda form, diagnosis: None),
         ("Clinical Features", ClinicalFeaturesForm, save_default),
-        #("Surgery", SurgeryForm, save_default),
-        ("Heart Function", HeartForm, save_default),
-        #("Heart Medication", HeartMedicationForm, save_default),
-        ("Respiratory Function", RespiratoryForm, save_default),
-        #("Muscle Function", MuscleForm, save_default),
-        #("Muscle Medication", MuscleMedicationForm, save_default),
-        #("Difficulties Eating", FeedingFunctionForm, save_default), # 2012-01-19 Trac 16 FSHD Questionnaire #44
-        #("Fatigue", FatigueForm, save_default),
-        #("Fatigue Medication", FatigueMedicationForm, save_default),
-        #("Socio-Economic Factors", SocioeconomicFactorsForm, save_default),
-        #("General Medical Factors", GeneralMedicalFactorsForm, save_default),
         ("Genetic Test Details", GeneticTestDetailsForm, save_default),
-        ("Ethnic Origin", EthnicOriginForm, save_default),
+        ("Motor Function", MotorFunctionForm, save_default),
+        #("Current best motor function", MotorFunctionForm, save_default),
+        #("Wheelchair of mobility scooter use", WheelchairForm, save_default),
+        ("Heart Condition", HeartForm, save_default),
+        ("Respiratory Function", RespiratoryForm, save_default),
         ("Family Member", FamilyMemberForm, save_default),
-        #("Clinical Trials", ClinicalTrialsForm, save_default),
+        ("Ethnic Origin", EthnicOriginForm, save_default),
+        ("Pregnancy", PregnancyForm, save_default),
         ("Other Registries", OtherRegistriesForm, save_default),
-        #("Consent Form", ConsentForm, save_default), # validated separately
     )
 
     def instantiate_form(definition, *args, **kwargs):

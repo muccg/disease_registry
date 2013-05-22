@@ -174,6 +174,24 @@ class ClinicalFeatures(ApproveMixin, base.ClinicalFeatures):
     def approve(self, diagnosis):
         return super(ClinicalFeatures, self).approve(fshdmodels.ClinicalFeatures, diagnosis=diagnosis, commit=True, delete=True)
 
+class MotorFunction(ApproveMixin, base.MotorFunction):
+    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
+
+    def __unicode__(self):
+        return unicode(self.diagnosis)
+
+    def approve(self, diagnosis):
+        return super(MotorFunction, self).approve(dm1models.MotorFunction, diagnosis=diagnosis, commit=True, delete=True)
+
+class Pregnancy(ApproveMixin, base.Pregnancy):
+    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
+
+    def __unicode__(self):
+        return unicode(self.diagnosis)
+
+    def approve(self, diagnosis):
+        return super(Pregnancy, self).approve(fshdmodels.Pregnancy, diagnosis=diagnosis, commit=True, delete=True)
+
 class Heart(ApproveMixin, base.Heart):
     diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
 
@@ -192,9 +210,6 @@ class Respiratory(ApproveMixin, base.Respiratory):
 
     def approve(self, diagnosis):
         return super(Respiratory, self).approve(fshdmodels.Respiratory, diagnosis=diagnosis, commit=True, delete=True)
-
-
-
 
 
 class GeneticTestDetails(ApproveMixin, base.GeneticTestDetails):
