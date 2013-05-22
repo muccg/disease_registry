@@ -10,50 +10,16 @@ from models import *
 from registry.groups.models import User as RegistryUser
 
 
-class MotorFunctionInline(admin.StackedInline):
-    model = MotorFunction
-
-class SurgeryInline(admin.StackedInline):
-    model = Surgery
+class ClinicalFeaturesInline(admin.StackedInline):
+    model = ClinicalFeatures
 
 class RespiratoryInline(admin.StackedInline):
     form = RespiratoryForm
     model = Respiratory
 
-class FeedingFunctionInline(admin.StackedInline):
-    model = FeedingFunction
-
-class ClinicalTrialsInline(admin.TabularInline):
-    model = ClinicalTrials
-    extra = 3
-
-class HeartMedicationInline(admin.TabularInline):
-    model = HeartMedication
-    extra = 3
-
 class HeartInline(admin.StackedInline):
     form = HeartForm
     model = Heart
-
-class MuscleMedicationInline(admin.TabularInline):
-    model = MuscleMedication
-    extra = 3
-
-class MuscleInline(admin.StackedInline):
-    model = Muscle
-
-class FatigueInline(admin.StackedInline):
-    model = Fatigue
-
-class FatigueMedicationInline(admin.TabularInline):
-    model = FatigueMedication
-    extra = 3
-
-class SocioeconomicFactorsInline(admin.StackedInline):
-    model = SocioeconomicFactors
-
-class GeneralMedicalFactorsInline(admin.StackedInline):
-    model = GeneralMedicalFactors
 
 class GeneticTestDetailsInline(admin.StackedInline):
     form = GeneticTestDetailsForm
@@ -73,21 +39,11 @@ class DiagnosisAdmin(admin.ModelAdmin):
     actions = None
     form = DiagnosisForm
     inlines = [
-        MotorFunctionInline,
-        MuscleInline,
-        MuscleMedicationInline,
-        SurgeryInline,
+        ClinicalFeaturesInline,
         HeartInline,
-        HeartMedicationInline,
         RespiratoryInline,
-        FeedingFunctionInline,
-        FatigueInline,
-        FatigueMedicationInline,
-        SocioeconomicFactorsInline,
-        GeneralMedicalFactorsInline,
         GeneticTestDetailsInline,
         EthnicOriginInline,
-        ClinicalTrialsInline,
         FamilyMemberInline,
         ConsentInline,
     ]

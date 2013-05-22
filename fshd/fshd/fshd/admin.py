@@ -1,69 +1,17 @@
 from django.contrib import admin
 from admin_forms import *
 from models import *
-from base import CancerTypeChoices
 from registry.utils import get_static_url
 from registry import groups
 
 
-class MotorFunctionInline(admin.StackedInline):
-    model = MotorFunction
-    form = MotorFunctionForm
-
-class SurgeryInline(admin.StackedInline):
-    model = Surgery
-    form = SurgeryForm
+class ClinicalFeaturesInline(admin.StackedInline):
+    model = ClinicalFeatures
+    form = ClinicalFeaturesForm
 
 class RespiratoryInline(admin.StackedInline):
     form = RespiratoryForm
     model = Respiratory
-
-class FeedingFunctionInline(admin.StackedInline):
-    form = FeedingFunctionForm
-    model = FeedingFunction
-
-class ClinicalTrialsInline(admin.TabularInline):
-    model = ClinicalTrials
-    extra = 3
-
-class HeartMedicationInline(admin.TabularInline):
-    model = HeartMedication
-    extra = 3
-
-class HeartInline(admin.StackedInline):
-    form = HeartForm
-    model = Heart
-
-class MuscleMedicationInline(admin.TabularInline):
-    model = MuscleMedication
-    extra = 3
-
-class MuscleInline(admin.StackedInline):
-    form = MuscleForm
-    model = Muscle
-
-class FatigueInline(admin.StackedInline):
-    form = FatigueForm
-    model = Fatigue
-
-class FatigueMedicationInline(admin.TabularInline):
-    form = FatigueMedicationForm
-    model = FatigueMedication
-    extra = 3
-
-class SocioeconomicFactorsInline(admin.StackedInline):
-    form = SocioeconomicFactorsForm
-    model = SocioeconomicFactors
-
-class GeneralMedicalFactorsInline(admin.StackedInline):
-    form = GeneralMedicalFactorsForm   # can't get it to work, choices ignored
-    model = GeneralMedicalFactors
-    # TRAC #35, cancertype is displayed at the end of the form if 'fields' not specified, bummer
-    fields = ('diabetes', 'diabetesage', 'pneumonia', 'pneumoniaage', 'pneumoniainfections', 'cancer', 'cancertype',
-              'cancerothers', 'cancerorgan', 'liver', 'miscarriage', 'gor', 'gall_bladder', 'infection', 'sexual_dysfunction',
-              'constipation', 'cholesterol', 'cognitive_impairment', 'psychological', 'anxiety', 'depression', 'apathy',
-              'weight', 'height', 'endocrine', 'obgyn', 'medicalert', 'physiotherapy', 'psychologicalcounseling', 'speechtherapy',
-              'occupationaltherapy', 'vocationaltraining')
 
 class GeneticTestDetailsInline(admin.StackedInline):
     form = GeneticTestDetailsForm
@@ -95,21 +43,10 @@ class DiagnosisAdmin(admin.ModelAdmin):
     form = DiagnosisForm
     inlines = [
         GeneticTestDetailsInline,
-        MotorFunctionInline,
-        MuscleInline,
-        MuscleMedicationInline,
-        SurgeryInline,
-        HeartInline,
-        HeartMedicationInline,
+        ClinicalFeaturesInline,
         RespiratoryInline,
-        FeedingFunctionInline,
-        FatigueInline,
-        FatigueMedicationInline,
-        SocioeconomicFactorsInline,
-        GeneralMedicalFactorsInline,
         FamilyMemberInline,
         EthnicOriginInline,
-        ClinicalTrialsInline,
         OtherRegistriesInline,
         NotesInline,
         ConsentInline, # do not display the consent form in the Registry, but needs to be validated and saved
@@ -173,17 +110,4 @@ class DiagnosticCategoryInline(admin.StackedInline):
 
 admin.site.register(Diagnosis, DiagnosisAdmin)
 
-# Trac 16 item 9, change in the FSHD Registry Admin
-# FJ added to limit the sex choices to Male/Female and remove Intersex
-# Could not do it in fshd/Patient, some relationships point directly to the patients/models.Patient
-#class PatientAdmin(admin.ModelAdmin):
-#    form = PatientForm
-
-#admin.site.register(Patient, PatientAdmin)
-
-#Trac #35
-class CancerTypeChoicesAdmin(admin.ModelAdmin):
-    search_fields = ["description"]
-
-admin.site.register(CancerTypeChoices, CancerTypeChoicesAdmin)
 

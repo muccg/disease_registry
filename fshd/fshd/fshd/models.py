@@ -11,6 +11,7 @@ from registry.patients.models import Patient
 from registry.groups.models import User
 from registry.mail import sendNewPatientEmail
 
+
 import logging
 logger = logging.getLogger('fshd')
 
@@ -80,27 +81,12 @@ class Diagnosis(base.Diagnosis):
         graph_html += '?chf=bg,s,FFFFFF00&chs=200x15&cht=bhs&chco=4D89F9,C6D9FD&chd=t:%d|100&chbh=5"/>' % self.percentage_complete()
         return graph_html
 
-
-class MotorFunction(base.MotorFunction):
+class ClinicalFeatures(base.ClinicalFeatures):
     diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
-
-    class Meta:
-        verbose_name_plural = "motor function"
-
     def __unicode__(self):
         return str(self.diagnosis)
-
-
-
-class Surgery(base.Surgery):
-    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
-
     class Meta:
-        verbose_name_plural = "surgeries"
-
-    def __unicode__(self):
-        return str(self.diagnosis)
-
+        verbose_name_plural = "clinical features"
 
 class Heart(base.Heart):
     diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
@@ -112,74 +98,6 @@ class Heart(base.Heart):
         return str(self.diagnosis)
 
 
-class HeartMedication(base.HeartMedication):
-    diagnosis = models.ForeignKey(Diagnosis)
-
-    class Meta:
-        verbose_name_plural = "heart medication"
-
-    def __unicode__(self):
-        return str(self.diagnosis.patient)
-
-
-class Muscle(base.Muscle):
-    # Trac 16 #53 Removed
-    '''
-    GRIP_PERCUSSION_MYOTONIA_CHOICES = (
-        ("Good", "Good"),
-        ("OK", "OK"),
-        ("Poor", "Poor"),
-        ("OT", "Receiving occupational therapy"),
-    )
-    '''
-    MRC_CHOICES = (
-        (5, "5"),
-        (4.5, "4+"),
-        (4, "4"),
-        (3, "3"),
-        (2, "2"),
-        (1, "1"),
-    )
-
-    UYN_CHOICES = (
-        ('U', 'Unknown'),
-        ('Y', 'Yes'),
-        ('N', 'No'),
-    )
-
-    MRC_HELP_TEXT = "MRC scale of muscle grading: 5=normal to 1=extreme weakness"
-
-    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
-
-## ADAM - these fields don't seem to be in the frontend now and were causing db errors so have made them nullable
-    ## they are shown in the Registry but not in the Questionnaire
-    flexor_digitorum_profundis = models.DecimalField(max_digits=2, decimal_places=1, choices=MRC_CHOICES, help_text=MRC_HELP_TEXT, null=True, blank=True)
-    tibialis_anterior = models.DecimalField(max_digits=2, decimal_places=1, choices=MRC_CHOICES, help_text=MRC_HELP_TEXT, null=True, blank=True)
-    neck_flexion = models.DecimalField(max_digits=2, decimal_places=1, choices=MRC_CHOICES, help_text=MRC_HELP_TEXT, null=True, blank=True)
-    iliopsoas = models.DecimalField(max_digits=2, decimal_places=1, choices=MRC_CHOICES, help_text=MRC_HELP_TEXT, null=True, blank=True)
-    #face = models.NullBooleanField(verbose_name="facial muscle weakness", null=True, blank=True)
-    face = models.CharField(max_length=1, choices=UYN_CHOICES, null=True, blank=True)
-
-    #early_weakness = models.NullBooleanField(verbose_name="Was there any evidence of hypotonia or weakness within the first four weeks", null=True, blank=True)
-    early_weakness = models.CharField(verbose_name="Was there any evidence of hypotonia or weakness within the first four weeks",max_length=1, choices=UYN_CHOICES, null=True, blank=True)
-    # Trac 16 #53 Removed
-    #grip_percussion_myotonia = models.CharField(max_length=4, choices=GRIP_PERCUSSION_MYOTONIA_CHOICES, verbose_name="grip or percussion myotonia", null=True, blank=True)
-
-    class Meta:
-        verbose_name_plural = "muscle"
-
-    def __unicode__(self):
-        return str(self.diagnosis)
-
-
-class MuscleMedication(base.MuscleMedication):
-    diagnosis = models.ForeignKey(Diagnosis)
-
-    class Meta:
-        verbose_name_plural = "muscle medication"
-
-    def __unicode__(self):
-        return str(self.diagnosis.patient)
 
 
 class Respiratory(base.Respiratory):
@@ -192,57 +110,6 @@ class Respiratory(base.Respiratory):
         return str(self.diagnosis)
 
 
-class FeedingFunction(base.FeedingFunction):
-    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
-
-    class Meta:
-        verbose_name_plural = "feeding function"
-
-    def __unicode__(self):
-        return str(self.diagnosis)
-
-
-class Fatigue(base.Fatigue):
-    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
-
-    class Meta:
-        verbose_name_plural = "fatigue"
-
-    def __unicode__(self):
-        return str(self.diagnosis)
-
-
-class FatigueMedication(base.FatigueMedication):
-    diagnosis = models.ForeignKey(Diagnosis)
-
-    class Meta:
-        verbose_name_plural = "fatigue medication"
-
-    def __unicode__(self):
-        return str(self.diagnosis)
-
-
-class SocioeconomicFactors(base.SocioeconomicFactors):
-    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
-
-    class Meta:
-        verbose_name_plural = "socioeconomic factors"
-
-    def __unicode__(self):
-        return str(self.diagnosis)
-
-
-class GeneralMedicalFactors(base.GeneralMedicalFactors):
-    diagnosis = models.OneToOneField(Diagnosis, primary_key=True, related_name='fshd.diagnosis')
-
-    # Trac #35: moved here from base.py, was creating a relation issue
-    cancertype = models.ManyToManyField(base.CancerTypeChoices, related_name='fshdcancertypechoices', blank=True, null=True)
-
-    class Meta:
-        verbose_name_plural = "general medical factors"
-
-    def __unicode__(self):
-        return str(self.diagnosis)
 
 
 class GeneticTestDetails(base.GeneticTestDetails):
