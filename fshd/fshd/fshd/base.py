@@ -14,85 +14,149 @@ class Diagnosis(models.Model):
     class Meta:
         abstract = True
 
-
-class MotorFunction(models.Model):
-    DYSARTHRIA_CHOICES = (
-        (0, "No dysarthria"),
-        (1, "Slightly slurred speech"),
-        (2, "Some problems being understood"),
-        (3, "Significant speech problems"),
+class ClinicalFeatures(models.Model):
+    facial_weakness_choices = (
+        ("no weakness",)*2,
+        ("eyes dry and irritated occasionally/always",)*2,
+        ("difficulty speaking",)*2,
+        ("difficulty swallowing",)*2,
+        ("trouble whistling/drinking through a straw",)*2,
+    )
+    periscapular_shoulder_weakness_choices = (
+        ("no weakness",)*2,
+        ("able to raise arms sideways over head",)*2,
+        ("able to raise arms sideways to shoulder height",)*2,
+        ("unable to raise arms sideways",)*2,
+    )
+    foot_dorsiflexor_weakness_choices = (
+        ("yes",)*2,
+        ("no",)*2,
+    )
+    hip_girdle_weakness_choices = (
+        ("no weakness - can rise from chair without raising arms",)*2,
+        ("use arms to push up from chair",)*2,
+        ("only with assistance from person or device",)*2,
+        ("sit up without using arms",)*2,
+        ("sit up only be using arms",)*2,
+        ("sit up only by turning sideways and using arms",)*2,
+        ("sit up only with someones's assistance",)*2,
+        ("transfer from bed to chair with assistive device",)*2,
+    )
+    distal_upper_limb_weakness_choices = (
+        ("yes",)*2,
+        ("no",)*2,
+    )
+    abdominal_muscle_weakness_choices = (
+        ("yes",)*2,
+        ("no",)*2,
+    )
+    leg_function_choices = (
+        ("unable to walk",)*2,
+        ("walk and run",)*2,
+        ("walk and not run",)*2,
+        ("walk and climb stairs",)*2,
+        ("walk and climb stairs with railing",)*2,
+        ("walk with cane/walker and unable to use stairs",)*2,
+    )
+    retinal_vascular_disease_choices = (
+        ("yes (start date month/year",)*2,
+        ("no",)*2,
+        ("unknown",)*2,
+    )
+    hearing_loss_choices = (
+        ("yes (start date month/year",)*2,
+        ("no",)*2,
+        ("unknown",)*2,
+    )
+    scapular_fixation_choices = (
+        ("yes, bilateral (surgery dates month/year",)*2,
+        ("yes - unilateral (surgery dates month/year",)*2,
+        ("no",)*2,
+    )
+    pain_choices = (
+        ("neck",)*2,
+        ("shoulders",)*2,
+        ("lower back",)*2,
+        ("knees and thighs",)*2,
+        ("head",)*2,
+        ("shoulders",)*2,
+        ("knees",)*2,
+        ("toes",)*2,
+        ("eyes and ears and mouth and nose",)*2,
     )
 
-    MOTOR_FUNCTION_CHOICES = (
-        ("walking", "Walking independently"),
-        ("assisted", "Walking assisted"),
-        ("nonamb", "Non-ambulatory"), # added v3
-        #("sitting", "Sitting independently"), # removed v3
-        #("none", "Never able to walk or sit independently") # removed v3
+    facial_weakness = models.CharField(
+            default=facial_weakness_choices[0],
+            choices=facial_weakness_choices,
+            max_length=len(max(facial_weakness_choices))
     )
 
-    YN_CHOICES = (('N', 'No'), ('Y', 'Yes'))
-
-    WALK_ASSISTED_CHOICES = (
-        ("No device", "No device required"), # Trac 16 #49
-        ("Ankle support", "Ankle support"),
-        ("Stick", "Stick"),
-        ("Walker", "Walker"),
+    periscapular_shoulder_weakness = models.CharField(
+            default=periscapular_shoulder_weakness_choices[0],
+            choices=periscapular_shoulder_weakness_choices,
+            max_length=len(max(periscapular_shoulder_weakness_choices))
     )
 
-    WHEELCHAIR_USE_CHOICES = (
-        ("never", "Never"),
-        ("intermittent", "Yes (Intermittent)"),
-        ("permanent", "Yes (Permanent)"),
-        ("unknown", "Unknown")
+    foot_dorsiflexor_weakness = models.CharField(
+            default=foot_dorsiflexor_weakness_choices[0],
+            choices=foot_dorsiflexor_weakness_choices,
+            max_length=len(max(foot_dorsiflexor_weakness_choices))
     )
 
-    # could not make the BooleanField required
-    #walk = models.BooleanField(verbose_name="currently able to walk", null=False, blank=False) # Trac 16 Item 48, removed help text #required
-    walk = models.CharField(max_length=1, choices=YN_CHOICES, verbose_name="currently able to walk", default='') #required
-    walk_assisted = models.CharField(max_length=50, choices=WALK_ASSISTED_CHOICES, verbose_name="current use of devices to assist with walking", default='') #required
-    walk_assisted_age = models.IntegerField(verbose_name="at what age did the patient commence using devices to assist with walking", null=True, blank=True, help_text="age in years")
-    # removed v3
-    #sit = models.BooleanField(verbose_name="currently able to sit without support", help_text="Able to maintain a sitting position on a chair or a wheelchair without support of upper limbs or leaning against the back of the chair")
-    # Trac #33
-    best_function = models.CharField(choices=MOTOR_FUNCTION_CHOICES, default='', null=True, blank=True, max_length=8, verbose_name="What is the best motor function level the patient has achieved", help_text="[Motor functions are listed in order with higher functions at the top, please choose one]<br/>Walking: walking with or without help (orthoses or assistive device or human assistance), inside or outdoors")
-    #removed v3
-    #acquisition_age = models.IntegerField(verbose_name="At what age did the patient start walking", null=True, blank=True, help_text="Indicate age in years when the patient started walking")
-    wheelchair_use = models.CharField(verbose_name="wheel chair use", default='', max_length=12, choices=WHEELCHAIR_USE_CHOICES, help_text="<b>Yes (permanent):</b> patient is not able to walk and needs a wheelchair to move<br/><b>Yes (intermittent):</b> patient is still able to walk") #required
-    wheelchair_usage_age = models.IntegerField(null=True, blank=True, help_text="If using wheelchair specify age at start of wheelchair use") # required but need to check Yes previous question
-    dysarthria = models.IntegerField(choices=DYSARTHRIA_CHOICES,null=True, blank=True, default=0)
+    hip_girdle_weakness = models.CharField(
+            default=hip_girdle_weakness_choices[0],
+            choices=hip_girdle_weakness_choices,
+            max_length=len(max(hip_girdle_weakness_choices))
+    )
+
+    distal_upper_limb_weakness = models.CharField(
+            default=distal_upper_limb_weakness_choices[0],
+            choices=distal_upper_limb_weakness_choices,
+            max_length=len(max(distal_upper_limb_weakness_choices))
+    )
+
+    abdominal_muscle_weakness = models.CharField(
+            default=abdominal_muscle_weakness_choices[0],
+            choices=abdominal_muscle_weakness_choices,
+            max_length=len(max(abdominal_muscle_weakness_choices))
+    )
+
+    leg_function = models.CharField(
+            default=leg_function_choices[0],
+            choices=leg_function_choices,
+            max_length=len(max(leg_function_choices))
+    )
+
+    retinal_vascular_disease = models.CharField(
+            default=retinal_vascular_disease_choices[0],
+            choices=retinal_vascular_disease_choices,
+            max_length=len(max(retinal_vascular_disease_choices))
+    )
+
+    hearing_loss = models.CharField(
+            default=hearing_loss_choices[0],
+            choices=hearing_loss_choices,
+            max_length=len(max(hearing_loss_choices))
+    )
+
+    scapular_fixation = models.CharField(
+            default=scapular_fixation_choices[0],
+            choices=scapular_fixation_choices,
+            max_length=len(max(scapular_fixation_choices))
+    )
+
+    pain = models.CharField(
+            default=pain_choices[0],
+            choices=pain_choices,
+            max_length=len(max(pain_choices))
+    )
 
     class Meta:
         abstract = True
 
 
-class Surgery(models.Model):
-    CARDIAC_IMPLANT_CHOICES = (
-        ("no", "No"),
-        ("pacemaker", "Pacemaker"),
-        ("icd", "Implantable cardioverter defibrillator"),
-        ("yes", "Yes, not specified further"),
-    )
 
-    UYN_CHOICES = (
-        ('U', 'Unknown'),
-        ('Y', 'Yes'),
-        ('N', 'No'),
-    )
 
-    #cardiac_implant = models.NullBooleanField(verbose_name="cardiac implant", help_text="Have you had an operation to implant a device to control/normalise your heart rhythm?")
-    # Trac #34
-    cardiac_implant = models.CharField(verbose_name="Cardiac implant", blank=True, null=True, max_length=30, choices=CARDIAC_IMPLANT_CHOICES, help_text="Have you had an operation to implant a device to control/normalise your heart rhythm?")
-    cardiac_implant_age = models.IntegerField(verbose_name="age cardiac implant received", null=True, blank=True, help_text="Age at which cardiac implant received")
-    cataract_diagnosis = models.BooleanField()
-    #cataract = models.NullBooleanField(verbose_name="cataract surgery")
-    # Trac #34
-    cataract = models.CharField(max_length=1, choices=UYN_CHOICES, verbose_name="Cataract surgery", null=True, blank=True)
-
-    cataract_age = models.IntegerField(verbose_name="age at cataract surgery", null=True, blank=True, help_text="Age at which cataract surgery was performed")
-
-    class Meta:
-        abstract = True
 
 
 class Heart(models.Model):
@@ -190,230 +254,7 @@ class Respiratory(models.Model):
         abstract = True
 
 
-class Muscle(models.Model):
-    MYOTONIA_CHOICES = (('S', 'Yes, severely'), ('M', 'Yes, mildly'), ('N', 'No'))
-    YN_CHOICES = (('N', 'No'), ('Y', 'Yes'))
 
-    myotonia = models.CharField(max_length=6, blank=True, null=True, choices=MYOTONIA_CHOICES, verbose_name="Does myotonia currently have a negative effect on the patient’s daily activities")
-
-    class Meta:
-        abstract = True
-
-
-class MuscleMedication(models.Model):
-    STATUS_CHOICES = (
-        ("Current", "Current prescription"),
-        ("Previous", "Previous prescription"),
-    )
-
-    drug = models.CharField(max_length=100, help_text="Specify each drug with its International Nonproprietary Name (INN)")
-    status = models.CharField(max_length=8, choices=STATUS_CHOICES)
-
-    class Meta:
-        abstract = True
-
-
-class FeedingFunction(models.Model):
-    UYN_CHOICES = (
-        ('U', 'Unknown'),
-        ('Y', 'Yes'),
-        ('N', 'No'),
-    )
-
-    #dysphagia = models.NullBooleanField(help_text="Does the patient have difficulty swallowing?")
-    dysphagia = models.CharField(max_length=1, choices=UYN_CHOICES, null=True, blank=True, help_text="Does the patient have difficulty swallowing?")
-
-    #gastric_nasal_tube = models.NullBooleanField(verbose_name="gastric/nasal tube", help_text="Does the patient need nutritional supplementation via nasogastric or nasojejunal tube, or gastrostomy?")
-    gastric_nasal_tube = models.CharField(max_length=1, choices=UYN_CHOICES, null=True, blank=True, help_text="Does the patient need nutritional supplementation via nasogastric or nasojejunal tube, or gastrostomy?")
-
-    class Meta:
-        abstract = True
-
-
-class Fatigue(models.Model):
-    # need to be integers, since there is a calculation done in the form: 'score'
-    DOZING_CHOICES = (
-        (0, "Would never doze"),
-        (1, "Slight chance of dozing"),
-        (2, "Moderate chance of dozing"),
-        (3, "High chance of dozing"),
-    )
-
-    YN_CHOICES = (('N', 'No'), ('Y', 'Yes'))
-
-    FATIGUE_CHOICES = (('S', 'Yes, severely'), ('M', 'Yes, mildly'), ('N', 'No'))
-
-    fatigue = models.CharField(null=True, blank=True, choices=FATIGUE_CHOICES, max_length=1, help_text="Does fatigue or daytime sleepiness currently have a negative effect on the patient’s normal daily activities?")
-
-    # Trac 16 FSHD Questionnaire #46
-    # We just want the label text, not the field as a general caption for the fields that follow
-    #hereonlyforcaption = forms.CharField(label="Do you start to fall asleep in the following situations")
-    #hereonlyforcaption = models.CharField(max_length=1, null=True, blank=True, help_text="Does the patient start to fall asleep in the following situations")
-
-    #def _get_hereonlyforcaption(self):
-    #    return "Y"
-    #hereonlyforcaption = property(_get_hereonlyforcaption)
-
-    sitting_reading = models.IntegerField(verbose_name="sitting and reading", choices=DOZING_CHOICES, null=True, blank=True)
-    watching_tv = models.IntegerField(verbose_name="watching TV", choices=DOZING_CHOICES, null=True, blank=True)
-    sitting_inactive_public = models.IntegerField(verbose_name="sitting, inactive, in a public place", choices=DOZING_CHOICES, help_text="For example, at a theatre or in a meeting", null=True, blank=True)
-    passenger_car = models.IntegerField(verbose_name="as a passenger in a car for an hour without a break", choices=DOZING_CHOICES, null=True, blank=True)
-    lying_down_afternoon = models.IntegerField(verbose_name="lying down to rest in the afternoon when circumstances permit", choices=DOZING_CHOICES, null=True, blank=True)
-    sitting_talking = models.IntegerField(verbose_name="sitting and talking to someone", choices=DOZING_CHOICES, null=True, blank=True)
-    sitting_quietly_lunch = models.IntegerField(verbose_name="sitting quietly after lunch without alcohol", choices=DOZING_CHOICES, null=True, blank=True)
-    in_car = models.IntegerField(verbose_name="in a car, while stopped for a few minutes in traffic", choices=DOZING_CHOICES, null=True, blank=True)
-
-    class Meta:
-        abstract = True
-
-    def score(self):
-        return self.sitting_reading + self.watching_tv + self.sitting_inactive_public + self.passenger_car + self.lying_down_afternoon + self.sitting_talking + self.sitting_quietly_lunch + self.in_car
-
-
-class FatigueMedication(models.Model):
-    STATUS_CHOICES = (
-        ("Current", "Current prescription"),
-        ("Previous", "Previous prescription"),
-    )
-
-    drug = models.CharField(max_length=100, help_text="Specify each drug with its International Nonproprietary Name (INN)")
-    status = models.CharField(max_length=8, choices=STATUS_CHOICES)
-
-    class Meta:
-        abstract = True
-
-
-class SocioeconomicFactors(models.Model):
-    EDUCATION_CHOICES = (
-        ("Special", "Special education"),
-        ("NoSecondary", "Not completed secondary school"),
-        ("Secondary", "Completed secondary school"),
-        ("HSC", "High School Certificate or equivalent"),
-        ("Trade", "Trade or college of advanced vocational education (including TAFE)"),
-        ("Tertiary", "Tertiary education (including university)"),
-        ("Postgrad", "Post-graduate qualifications"),
-    )
-
-    EFFECT_CHOICES = (
-        ("Yes", "Yes, has resulted in unemployment"),
-        ("Limited", "Yes, has limited employment choices"),
-        ("No", "No"),
-        ("Uncertain", "Uncertain"),
-    )
-
-    OCCUPATION_CHOICES = (
-        ("Employed", "Employed"),
-        ("Homemaker", "Homemaker"),
-        ("Student", "Student"),
-        ("Retired", "Retired"),
-        ("Disabled", "Disabled"),
-        ("Unemployed", "Unemployed — not due to disablement"),
-    )
-
-    education = models.CharField(max_length=30, choices=EDUCATION_CHOICES, null=True, blank=True)
-    occupation = models.CharField(max_length=30, choices=OCCUPATION_CHOICES, null=True, blank=True)
-    employment_effect = models.CharField(max_length=30, choices=EFFECT_CHOICES, verbose_name="has Myotonic dystrophy affected the patient's employment", null=True, blank=True)
-    comments = models.CharField(max_length=200, null=True, blank=True)
-
-    class Meta:
-        abstract = True
-
-# Trac #35
-# replaces the CANCER_TYPE_CHOICES tuples, now in the DB
-class CancerTypeChoices(models.Model):
-    description = models.CharField(max_length=50, verbose_name='Cancer Type Choice')
-
-    class Meta:
-        ordering = ['description']
-        verbose_name_plural = "Cancer Types"
-
-    def __unicode__(self):
-        return "%s" % self.description
-
-class GeneralMedicalFactors(models.Model):
-    YESNO_CHOICES = ( ('N', 'No'), ('Y','Yes') ) # need to keep the values in sync with UYN_CHOICES
-    UYN_CHOICES = ( ('U', 'Unknown'), ('N', 'No'), ('Y','Yes') )
-    YESNOUNSURE_CHOICES = ( ('0','No'), ('1','Yes'), ('2', 'Unsure') )
-
-    COGNITIVE_CHOICES = (
-        ("No", "No"),
-        ("Minor", "Minor"),
-        ("Marked", "Marked"),
-    )
-
-    DIABETES_CHOICES = (
-        ('No', 'Not diagnosed'),
-        ('SugarIntolerance', 'Has sugar intolerance but not diabetes'),
-        ('Type1', 'Yes, Type 1 Diabetes'),
-        ('Type2', 'Yes, Type 2 Diabetes'),
-    )
-
-    # Trac #35
-    # Now in the db with CancerType Choices
-    # reverted to choices, until South migration is fixed
-    CANCER_TYPE_CHOICES = (
-        ('Basal', 'Basal cell carcinomas'),
-        ('Insulinomas', 'Insulinomas'),
-        ('Parathyroid', 'Parathyroid tumours'),
-        ('Pilomatricomas', 'Pilomatricomas'),
-        ('Saliverygland', 'Salivery gland tumours'),
-        ('Thymomas', 'Thymomas'),
-        ('Thyroid', 'Thyroid tumours'),
-    )
-
-    #diabetes = models.IntegerField(null=True, blank=True, help_text="Age at onset (leave blank if you do not suffer from diabetes)")
-    diabetes = models.CharField(max_length=30, choices=DIABETES_CHOICES, null=True, blank=True)
-    diabetesage = models.IntegerField(null=True, blank=True, help_text="Leave blank if you do not suffer from diabetes", verbose_name='Age at diagnosis')
-
-    pneumonia = models.CharField(max_length=3, choices=YESNO_CHOICES, verbose_name="pneumonia", null=True, blank=True)
-    pneumoniaage = models.IntegerField(null=True, blank=True, verbose_name="pneumonia age", help_text="Age of first episode (leave blank if you have never suffered from pneumonia)")
-    pneumoniainfections = models.CharField(max_length=3, null=True, blank=True, verbose_name="Number of Chest infections in the last 12 months")
-
-    # TODO: make sure all this fields about cancer are not required, since they are not in Questionnaire
-    cancer = models.CharField(max_length=3, choices=YESNO_CHOICES, null=True, blank=True, verbose_name="Has the patient been diagnosed with cancer or a tumour", help_text='Please tick the check box if the patient has been diagnosed with or identifies as having any of the following')
-
-    # reverted to previous version until South Migration is fixed
-    # Trac #35
-    #cancertype = models.CharField(max_length=30, null=True, blank=True, choices=CANCER_TYPE_CHOICES, verbose_name="if yes, please choose from the following options in it")
-    # moved to fshd/models.py and fshd_questionnaire/models.py to avoid relation clash and provide 2 different names
-    #cancertype = models.ManyToManyField(CancerTypeChoices, related_name='cancertypechoices_cancertype', blank=True, null=True,)
-
-    cancerothers = models.CharField(max_length=30, null=True, blank=True, verbose_name="Others")
-    cancerorgan = models.CharField(max_length=30, null=True, blank=True, verbose_name="If the patient was diagnosed with cancer please indicate the body organ it was diagnosed in")
-    liver = models.BooleanField(verbose_name="Has the patient been diagnosed with: liver disease")
-    miscarriage = models.BooleanField()
-    gor = models.BooleanField(verbose_name="gastro-oesophageal reflux")
-    gall_bladder = models.BooleanField(verbose_name="gall bladder disease")
-    infection = models.BooleanField(verbose_name="chronic infection")
-    sexual_dysfunction = models.BooleanField()
-    constipation = models.BooleanField()
-    cholesterol = models.BooleanField()
-    cognitive_impairment = models.CharField(max_length=6, choices=COGNITIVE_CHOICES, null=True, blank=True)
-    psychological = models.BooleanField(verbose_name="psychological problems")
-
-    anxiety = models.BooleanField()
-    depression = models.BooleanField()
-    apathy = models.BooleanField()
-    weight = models.IntegerField(verbose_name="body weight", help_text="Body weight in kilograms", null=True, blank=True)
-    height = models.IntegerField(verbose_name="height", help_text="Height in centimetres", null=True, blank=True)
-    endocrine = models.BooleanField(verbose_name="endocrine disorders")
-    obgyn = models.BooleanField(verbose_name="OB/GYN issues")
-
-    # added according to questionnaire
-    medicalert = models.CharField(verbose_name="Does the patient wear a Medicalert bracelet", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
-
-    physiotherapy = models.CharField(verbose_name="Has the patient received any of the following: Physiotherapy", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
-    # Trac #36
-    psychologicalcounseling = models.CharField(verbose_name="Emotional & psychological counselling", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
-    speechtherapy = models.CharField(verbose_name="Speech therapy", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
-    occupationaltherapy = models.CharField(verbose_name="Occupational therapy", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
-    vocationaltraining = models.CharField(verbose_name="Vocational rehabilitation", choices=UYN_CHOICES, max_length=1, null=True, blank=True, default='')
-
-    class Meta:
-        abstract = True
-
-    def bmi(self):
-        return self.weight / (self.height * self.height)
 
 
 class GeneticTestDetails(models.Model):

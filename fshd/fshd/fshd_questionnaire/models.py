@@ -137,7 +137,7 @@ class Diagnosis(ApproveMixin, base.Diagnosis):
         # Loop through the models that have a one-to-one relationship with
         # this one and approve them. This is ugly, but effective.
         models = (
-            MotorFunction,
+            ClinicalFeatures,
             Surgery,
             Heart,
             HeartMedication,
@@ -165,26 +165,14 @@ class Diagnosis(ApproveMixin, base.Diagnosis):
 
         return diagnosis
 
-
-class MotorFunction(ApproveMixin, base.MotorFunction):
+class ClinicalFeatures(ApproveMixin, base.ClinicalFeatures):
     diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
 
     def __unicode__(self):
         return unicode(self.diagnosis)
 
     def approve(self, diagnosis):
-        return super(MotorFunction, self).approve(fshdmodels.MotorFunction, diagnosis=diagnosis, commit=True, delete=True)
-
-
-class Surgery(ApproveMixin, base.Surgery):
-    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
-
-    def __unicode__(self):
-        return unicode(self.diagnosis)
-
-    def approve(self, diagnosis):
-        return super(Surgery, self).approve(fshdmodels.Surgery, diagnosis=diagnosis, commit=True, delete=True)
-
+        return super(ClinicalFeatures, self).approve(fshdmodels.ClinicalFeatures, diagnosis=diagnosis, commit=True, delete=True)
 
 class Heart(ApproveMixin, base.Heart):
     diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
@@ -194,16 +182,6 @@ class Heart(ApproveMixin, base.Heart):
 
     def approve(self, diagnosis):
         return super(Heart, self).approve(fshdmodels.Heart, diagnosis=diagnosis, commit=True, delete=True)
-
-
-class HeartMedication(ApproveMixin, base.HeartMedication):
-    diagnosis = models.ForeignKey(Diagnosis, primary_key=True)
-
-    def __unicode__(self):
-        return unicode(self.diagnosis)
-
-    def approve(self, diagnosis):
-        return super(HeartMedication, self).approve(fshdmodels.HeartMedication, diagnosis=diagnosis, commit=True, delete=True)
 
 
 class Respiratory(ApproveMixin, base.Respiratory):
@@ -216,77 +194,7 @@ class Respiratory(ApproveMixin, base.Respiratory):
         return super(Respiratory, self).approve(fshdmodels.Respiratory, diagnosis=diagnosis, commit=True, delete=True)
 
 
-class Muscle(ApproveMixin, base.Muscle):
-    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
 
-    def __unicode__(self):
-        return unicode(self.diagnosis)
-
-    def approve(self, diagnosis):
-        return super(Muscle, self).approve(fshdmodels.Muscle, diagnosis=diagnosis, commit=True, delete=True)
-
-
-class MuscleMedication(ApproveMixin, base.MuscleMedication):
-    diagnosis = models.ForeignKey(Diagnosis, primary_key=True)
-
-    def __unicode__(self):
-        return unicode(self.diagnosis)
-
-    def approve(self, diagnosis):
-        return super(MuscleMedication, self).approve(fshdmodels.MuscleMedication, diagnosis=diagnosis, commit=True, delete=True)
-
-
-class FeedingFunction(ApproveMixin, base.FeedingFunction):
-    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
-
-    def __unicode__(self):
-        return unicode(self.diagnosis)
-
-    def approve(self, diagnosis):
-        return super(FeedingFunction, self).approve(fshdmodels.FeedingFunction, diagnosis=diagnosis, commit=True, delete=True)
-
-
-class Fatigue(ApproveMixin, base.Fatigue):
-    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
-
-    def __unicode__(self):
-        return unicode(self.diagnosis)
-
-    def approve(self, diagnosis):
-        return super(Fatigue, self).approve(fshdmodels.Fatigue, diagnosis=diagnosis, commit=True, delete=True)
-
-
-class FatigueMedication(ApproveMixin, base.FatigueMedication):
-    diagnosis = models.ForeignKey(Diagnosis, primary_key=True)
-
-    def __unicode__(self):
-        return unicode(self.diagnosis)
-
-    def approve(self, diagnosis):
-        return super(FatigueMedication, self).approve(fshdmodels.FatigueMedication, diagnosis=diagnosis, commit=True, delete=True)
-
-
-class SocioeconomicFactors(ApproveMixin, base.SocioeconomicFactors):
-    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
-
-    def __unicode__(self):
-        return unicode(self.diagnosis)
-
-    def approve(self, diagnosis):
-        return super(SocioeconomicFactors, self).approve(fshdmodels.SocioeconomicFactors, diagnosis=diagnosis, commit=True, delete=True)
-
-
-class GeneralMedicalFactors(ApproveMixin, base.GeneralMedicalFactors):
-    diagnosis = models.OneToOneField(Diagnosis, primary_key=True, related_name='fshd_quest.diagnosis')
-
-    # Trac #35: moved here from base.py, was creating a relation issue
-    cancertype = models.ManyToManyField(base.CancerTypeChoices, related_name='fshdquestcancertypechoices', blank=True, null=True)
-
-    def __unicode__(self):
-        return unicode(self.diagnosis)
-
-    def approve(self, diagnosis):
-        return super(GeneralMedicalFactors, self).approve(fshdmodels.GeneralMedicalFactors, diagnosis=diagnosis, commit=True, delete=True)
 
 
 class GeneticTestDetails(ApproveMixin, base.GeneticTestDetails):
@@ -307,15 +215,6 @@ class EthnicOrigin(ApproveMixin, base.EthnicOrigin):
     def approve(self, diagnosis):
         return super(EthnicOrigin, self).approve(fshdmodels.EthnicOrigin, diagnosis=diagnosis, commit=True, delete=True)
 
-
-class ClinicalTrials(ApproveMixin, base.ClinicalTrials):
-    diagnosis = models.ForeignKey(Diagnosis, primary_key=True)
-
-    def __unicode__(self):
-        return unicode(self.diagnosis)
-
-    def approve(self, diagnosis):
-        return super(ClinicalTrials, self).approve(fshdmodels.ClinicalTrials, diagnosis=diagnosis, commit=True, delete=True)
 
 class Consent(ApproveMixin, base.Consent):
     diagnosis = models.ForeignKey(Diagnosis, primary_key=True)
