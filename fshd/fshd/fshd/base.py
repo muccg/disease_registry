@@ -78,11 +78,6 @@ class ClinicalFeatures(models.Model):
         ("shoulders",)*2,
         ("lower back",)*2,
         ("knees and thighs",)*2,
-        ("head",)*2,
-        ("shoulders",)*2,
-        ("knees",)*2,
-        ("toes",)*2,
-        ("eyes and ears and mouth and nose",)*2,
     )
 
     facial_weakness = models.CharField(
@@ -155,56 +150,33 @@ class ClinicalFeatures(models.Model):
         abstract = True
 
 class Pregnancy(models.Model):
+
+    pregnancies = models.IntegerField(verbose_name="Number of pregnancies")
+    childbirths = models.IntegerField(verbose_name="Number of child births")
+
     class Meta:
         abstract = True
 
 
 class MotorFunction(models.Model):
-    DYSARTHRIA_CHOICES = (
-        (0, "No dysarthria"),
-        (1, "Slightly slurred speech"),
-        (2, "Some problems being understood"),
-        (3, "Significant speech problems"),
-    )
 
     MOTOR_FUNCTION_CHOICES = (
-        ("walking", "Walking independently"),
-        ("assisted", "Walking assisted"),
-        ("nonamb", "Non-ambulatory"), # added v3
-        #("sitting", "Sitting independently"), # removed v3
-        #("none", "Never able to walk or sit independently") # removed v3
-    )
-
-    YN_CHOICES = (('N', 'No'), ('Y', 'Yes'))
-
-    WALK_ASSISTED_CHOICES = (
-        ("No device", "No device required"), # Trac 16 #49
-        ("Ankle support", "Ankle support"),
-        ("Stick", "Stick"),
-        ("Walker", "Walker"),
+        ('Ambulatory (unassisted)',)*2,
+        ('Ambulatory assisted - walker',)*2,
+        ('Ambulatory assisted - brace/splint/orthoses',)*2,
+        ('Ambulatory assisted - walking stick',)*2,
+        ('Non-ambulatory',)*2
     )
 
     WHEELCHAIR_USE_CHOICES = (
-        ("never", "Never"),
-        ("intermittent", "Yes (Intermittent)"),
-        ("permanent", "Yes (Permanent)"),
-        ("unknown", "Unknown")
+        ("no", "No"),
+        ("parttime", "Part-time"),
+        ("fulltime", "Full-time")
     )
 
-    # could not make the BooleanField required
-    #walk = models.BooleanField(verbose_name="currently able to walk", null=False, blank=False) # Trac 16 Item 48, removed help text #required
-    walk = models.CharField(max_length=1, choices=YN_CHOICES, verbose_name="currently able to walk", default='') #required
-    walk_assisted = models.CharField(max_length=50, choices=WALK_ASSISTED_CHOICES, verbose_name="current use of devices to assist with walking", default='') #required
-    walk_assisted_age = models.IntegerField(verbose_name="at what age did the patient commence using devices to assist with walking", null=True, blank=True, help_text="age in years")
-    # removed v3
-    #sit = models.BooleanField(verbose_name="currently able to sit without support", help_text="Able to maintain a sitting position on a chair or a wheelchair without support of upper limbs or leaning against the back of the chair")
-    # Trac #33
     best_function = models.CharField(choices=MOTOR_FUNCTION_CHOICES, default='', null=True, blank=True, max_length=8, verbose_name="What is the best motor function level the patient has achieved", help_text="[Motor functions are listed in order with higher functions at the top, please choose one]<br/>Walking: walking with or without help (orthoses or assistive device or human assistance), inside or outdoors")
-    #removed v3
-    #acquisition_age = models.IntegerField(verbose_name="At what age did the patient start walking", null=True, blank=True, help_text="Indicate age in years when the patient started walking")
     wheelchair_use = models.CharField(verbose_name="wheel chair use", default='', max_length=12, choices=WHEELCHAIR_USE_CHOICES, help_text="<b>Yes (permanent):</b> patient is not able to walk and needs a wheelchair to move<br/><b>Yes (intermittent):</b> patient is still able to walk") #required
     wheelchair_usage_age = models.IntegerField(null=True, blank=True, help_text="If using wheelchair specify age at start of wheelchair use") # required but need to check Yes previous question
-    dysarthria = models.IntegerField(choices=DYSARTHRIA_CHOICES,null=True, blank=True, default=0)
 
     class Meta:
         abstract = True
@@ -218,51 +190,9 @@ class Heart(models.Model):
         ("unknown", "Unknown")
     )
 
-    UYN_CHOICES = (
-        ('U', 'Unknown'),
-        ('Y', 'Yes'),
-        ('N', 'No'),
-    )
-
-    YN_CHOICES = (('N', 'No'), ('Y', 'Yes'))
 
     condition = models.CharField(verbose_name="heart condition", max_length=14, choices=HEART_CHOICES, null=True, blank=True)
-    age_at_diagnosis = models.IntegerField(verbose_name="At what age was the patient diagnosed with a heart condition", null=True, blank=True)
-
-    # added according to the questionnaire
-    racing = models.CharField(verbose_name="Does the patient experience: heart racing or beating irregularly", choices=UYN_CHOICES, max_length=1, null=True, blank=True)
-    palpitations = models.CharField(verbose_name="heart palpitations", choices=UYN_CHOICES, max_length=1, null=True, blank=True)
-    fainting = models.CharField(verbose_name="black-outs or fainting", choices=UYN_CHOICES, max_length=1, null=True, blank=True)
-
-    # ecg
-    #ecg = models.NullBooleanField(verbose_name="ECG")
-    ecg = models.CharField(max_length=1, choices=UYN_CHOICES, verbose_name="ECG", null=True, blank=True)
-    #ecg_sinus_rhythm = models.NullBooleanField(verbose_name="ECG Sinus Rhythm", null=True, blank=True)
-    ecg_sinus_rhythm = models.CharField(max_length=1, choices=UYN_CHOICES, verbose_name="ECG Sinus Rhythm", null=True, blank=True)
-    ecg_pr_interval = models.IntegerField(verbose_name="ECG PR interval", null=True, blank=True, help_text="PR Interval measured in milliseconds")
-    ecg_qrs_duration = models.IntegerField(verbose_name="ECG QRS duration", null=True, blank=True, help_text="QRS Duration measured in milliseconds")
-    ecg_examination_date = models.DateField(null=True, blank=True, verbose_name="ECG Examination Date")
-
-    # echocardiogram
-    #echocardiogram = models.NullBooleanField()
-    echocardiogram = models.CharField(max_length=1, choices=UYN_CHOICES, null=True, blank=True)
-
-    echocardiogram_lvef = models.IntegerField(null=True, blank=True, verbose_name="LVEF score", help_text="Left Ventricular Ejection Fraction (LVEF) determined by ultrasound examination of the heart; expressed in % [%=(End disatolic volume - End systolic volume) ÷ End diastolic volume] to specify last LVEF(%) and date of examination")
-    echocardiogram_lvef_date = models.DateField(null=True, blank=True, verbose_name="LVEF date")
-
-    class Meta:
-        abstract = True
-
-
-class HeartMedication(models.Model):
-    STATUS_CHOICES = (
-        ("Current", "Current prescription"),
-        ("Previous", "Previous prescription"),
-    )
-
-    drug = models.CharField(max_length=100, help_text="Specify each drug with its International Nonproprietary Name (INN)")
-    status = models.CharField(max_length=8, choices=STATUS_CHOICES)
-
+    
     class Meta:
         abstract = True
 
@@ -274,75 +204,40 @@ class Respiratory(models.Model):
         ("Y", "Yes (day and night)"),
     )
 
-    VENTILATION_TYPE_CHOICES = (
-        ("CPAP", "Continuous Positive Airway Pressure (CPAP)"),
-        ("BIPAP", "Bi-level Positive Airway Pressure (BIPAP)"),
-    )
-
     non_invasive_ventilation = models.CharField(max_length=2, null=True, blank=True, choices=VENTILATION_CHOICES, help_text="Mechanical ventilation with nasal or bucal mask")
     age_non_invasive_ventilation = models.IntegerField(null=True, blank=True, verbose_name="age ventilation device use commenced", help_text="Age at which non invasive ventilation device use started (leave blank if no ventilation device is in use)")
-    non_invasive_ventilation_type = models.CharField(max_length=5, null=True, blank=True, choices=VENTILATION_TYPE_CHOICES)
     invasive_ventilation = models.CharField(max_length=2, null=True, blank=True, choices=VENTILATION_CHOICES, help_text="Mechanical ventilation with tracheostomy")
-    fvc = models.DecimalField(null=True,max_digits=5, decimal_places=2, blank=True, verbose_name="Measured FVC", help_text="Using spirometer measures of total volume of air exhaled from a full lung (total lung capacity) to an empty lung (residual volume).")
-    fvc_date = models.DateField(null=True, blank=True, verbose_name="Date of last spirometer reading of FVC")
-    calculatedfvc = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, verbose_name="Calculated FVC")
-
-    # adding this field, cannot figure out how to have a calculated field on the form without storing it in the DB
-    # if editable=flase, the field is not made readonly, it is NOT displayed in the admin UI AT ALL
-    #predictedfvc = models.DecimalField(verbose_name='Predicted FVC', help_text='forced vital capacity (FVC, expressed as % of normal, predicted by height, age and sex according to NHANES III formulae for Caucasians).', max_digits=5, decimal_places=2, null=True, blank=True) #, editable=False)
-
-    '''
-    # could not get that to display in the forms
-    @property
-    def predictedfvc(self):
-        print "predictedfvc property"
-        fvc = 92.3 # test
-        return fvc
-    '''
 
     class Meta:
         abstract = True
 
 
-
-
-
 class GeneticTestDetails(models.Model):
     METHOD_CHOICES = (
-        ("southern", "Southern"),
-        ("pcr", "PCR"),
-        ("rppcr", "RP-PCR"),
+        ("EcoR1/AvrII", "EcoR1/AvrII"),
+        ("EcoR1/Blnl", "EcoR1/Blnl"),
         ("other", "Other"),
     )
 
-    UYN_CHOICES = (
-        ('U', 'Unknown'),
-        ('Y', 'Yes'),
-        ('N', 'No'),
+    result_choices = (
+        ("Confirmed FSHD 2 (contraction independent D4Z4 hypomethylation on the 4qA161 subtelomere).",)*2,
+        ("Result pending",)*2,
+        ("Genetic test is negative for FSHD1. However clinician identifies FSDH as best known diagnosis",)*2,
+        ("Not tested",)*2,
+        ("I have not been tested.  However clinician identifies FSDH as best known diagnosis",)*2,
+        ("Other result positive for FSHD",)*2,
+        ("FSHD1 confirmed: 1-9 D4Z4 repeats",)*2,
+        ("FSHD1 borderline: 10-11 D4Z4 repeats",)*2,
+        ("FSHD1 excluded: 12-100 D4Z4 repeats",)*2,
+        ("FSHD1 borderline: 10-11 D4Z4 repeats ",)*2,
     )
 
-    YES_NO_CHOICES = (
-        ('Y', 'Yes'),
-        ('N', 'No'),
+    result = models.CharField(
+        default=result_choices[0],
+        choices=result_choices,
+        max_length=len(max(result_choices))
     )
-
-    #details = models.NullBooleanField(verbose_name="details", help_text="Are details of genetic testing available?")
-    details = models.CharField(max_length=1, choices=UYN_CHOICES, verbose_name="Are details of genetic testing available") # required
-
-    # TODO: add the "null=True, blank=True" attributes when the DDL change for the table column is ready, otherwise exception when saving with a blank date
-    # ALTER TABLE dev_fshd_registry.public.fshd_genetictestdetails ALTER COLUMN test_date DROP NOT NULL;
-    # this works in PGAdmin III when using the "registryapp" username & pass:
-    # ALTER TABLE "dev_fshd_registry"."public"."fshd_genetictestdetails" ALTER COLUMN test_date DROP NOT NULL;
-    # ALTER TABLE dev_fshd_registry.public.fshd_genetictestdetails ALTER COLUMN test_date DROP NOT NULL;
-
-    #test_date = models.DateField(null=True, blank=True, verbose_name="Genetic Test Date")
-    test_date = models.DateField(verbose_name="Genetic Test Date", null=True, blank=True) # required, but need to check Yes to previous question
-    # not used in questionnaire, should we keep it in the registry?
-    laboratory = models.CharField(max_length=256, null=True, blank=True)
-
-    # added for the questionnaire 2012-02-20
-    counselling = models.CharField(max_length=1, choices=UYN_CHOICES, null=True, blank=True, verbose_name="Has the patient received genetic counselling")
-    familycounselling = models.CharField(max_length=1, choices=UYN_CHOICES, null=True, blank=True, verbose_name="Has any of the patient's family members received genetic counselling")
+    comments = models.TextField()
 
     class Meta:
         abstract = True
@@ -455,15 +350,18 @@ class Consent(models.Model):
 # moved from fshd/models.py to base to add to the questionnaire
 class FamilyMember(models.Model):
     # Trac #37
-    DIAGNOSIS_CHOICES = (
-        ("FSHD", "Myotonic dystrophy Type 1 (FSHD)"),
-        ("DM2", "Myotonic dystrophy Type 2 (DM2)"),
-        ("Unknown", "Unknown"),
+    RELATIONSHIP_CHOICES = (
+        ("affected mother",)*2,
+        ("affected mother",)*2,
+        ("affected sibling(s)",)*2,
+        ("affected child/children",)*2,
+        ("other affected relative",)*2,
+        ("no",)*2,
+        ("unknown",)*2,
+
     )
 
-    sex = models.CharField(max_length=1, choices=Patient.SEX_CHOICES, null=True, blank=True)
-    relationship = models.CharField(max_length=50, null=True, blank=True)
-    family_member_diagnosis = models.CharField(max_length=30, choices=DIAGNOSIS_CHOICES, verbose_name="diagnosis", null=True, blank=True)
+    relationship = models.CharField(max_length=len(max(RELATIONSHIP_CHOICES)), choices=RELATIONSHIP_CHOICES, verbose_name="relationship", null=True, blank=True)
 
     class Meta:
         abstract = True

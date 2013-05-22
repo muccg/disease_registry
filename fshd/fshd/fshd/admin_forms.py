@@ -27,17 +27,12 @@ class DiagnosisForm(forms.ModelForm):
         model = Diagnosis
 
 class MotorFunctionForm(forms.ModelForm):
-    walk = forms.CharField(label="Currently able to walk", widget=RadioSelect(choices=base.MotorFunction.YN_CHOICES))
     best_function = forms.CharField(widget=RadioSelect(choices=base.MotorFunction.MOTOR_FUNCTION_CHOICES), required=False, label="What is the best motor function level the patient has achieved",
                         help_text="<b>Walking:</b> walking with or without help (orthoses or assistive device or human assistance), inside or outdoors<br/><b>Sitting independently</b>: able to maintain a sitting position on a chair or a wheelchair without support of upper limbs or leaning against the back of the chair")
-    dysarthria = forms.IntegerField(widget=RadioSelect(choices=base.MotorFunction.DYSARTHRIA_CHOICES), required=False)
 
     class Meta:
         model = MotorFunction
-        widgets = { 'walk_assisted': RadioSelect(choices = MotorFunction.WALK_ASSISTED_CHOICES),
-                    'wheelchair_use': RadioSelect(choices = MotorFunction.WHEELCHAIR_USE_CHOICES),
-                    'dysarthria': RadioSelect(choices = MotorFunction.DYSARTHRIA_CHOICES),
-                }
+        widgets = { 'wheelchair_use': RadioSelect(choices = MotorFunction.WHEELCHAIR_USE_CHOICES),}
 
     def clean(self):
         cleaneddata = self.cleaned_data
@@ -54,18 +49,8 @@ class MotorFunctionForm(forms.ModelForm):
         return cleaneddata
 
 class FamilyMemberForm(forms.ModelForm):
-    OPTIONS = [
-        "Parent",
-        "Sibling",
-        "Grandparent",
-        "Uncle/Aunt",
-        "Cousin",
-        "Child",
-    ]
-    registry_patient = forms.ModelChoiceField(queryset=Patient.objects.all(), label="Patient record within the registry (optional)", required=False, widget=LiveComboWidget(attrs={"minchars": 1}, backend=reverse_lazy("admin:patient_search", args=("",))))
-    relationship = forms.CharField(label="Relationship", widget=ComboWidget(options=OPTIONS))
-    sex = forms.CharField(label="Sex", widget=RadioSelect(choices=Patient.SEX_CHOICES), required=False)
-    family_member_diagnosis = forms.CharField(label="Diagnosis", widget=RadioSelect(choices=FamilyMember.DIAGNOSIS_CHOICES), required=False)
+    
+    relationship = forms.CharField(label="Relationship", widget=ComboWidget(options=base.FamilyMember.RELATIONSHIP_CHOICES))
 
     class Meta:
         model = FamilyMember
@@ -73,54 +58,16 @@ class FamilyMemberForm(forms.ModelForm):
 
 class RespiratoryForm(forms.ModelForm):
     non_invasive_ventilation = forms.CharField(label="Non invasive ventilation", widget=RadioSelect(choices=Respiratory.VENTILATION_CHOICES), required=False, help_text="Mechanical ventilation with nasal or bucal mask")
-    non_invasive_ventilation_type = forms.CharField(label="Non invasive ventilation type", widget=RadioSelect(choices=Respiratory.VENTILATION_TYPE_CHOICES), required=False)
     invasive_ventilation = forms.CharField(label="Invasive ventilation", widget=RadioSelect(choices=Respiratory.VENTILATION_CHOICES), required=False, help_text="Mechanical ventilation with tracheostomy")
 
     def __init__(self, *args, **kwargs):
         super(RespiratoryForm, self).__init__(*args, **kwargs)
 
-        # This is ugly, but required to avoid clobbering the help text and
-        # custom verbose name, which is what happens if you just override the
-        # field by setting a property on the class the way the Django
-        # documentation suggests.
-        #self.fields["fvc"].widget = FVCPercentageWidget()
-        self.fields["fvc_date"].widget=DateWidget(popup=True, today=True, years=-5)
-        self.fields["calculatedfvc"].widget = PercentageWidget() # just to display the "%" symbol after the input field
-
-        """
-        # removed v3
-        # Set the form fields based on the model object
-        if kwargs.has_key('instance'):
-            instance = kwargs['instance'] # fshd.models.Respiratory
-            if not instance: return
-            diagnosis = instance.diagnosis
-            if not diagnosis: return
-            patient = diagnosis.patient
-            if not patient: return
-            generalmedicalfactors = diagnosis.generalmedicalfactors
-            if not generalmedicalfactors: return
-            height = generalmedicalfactors.height
-            if not height: return
-            weight = generalmedicalfactors.weight
-            if not weight: return
-            dateofbirth = patient.date_of_birth
-            if not dateofbirth: return
-            sex = patient.sex
-            if not sex: return
-
-            fvc, ci = calculatefvcci(dateofbirth, height, weight, sex)
-            self.initial['predictedfvc'] = "%.2f" % fvc
-            self.initial['ci'] = "%.2f" % ci
-        """
-
     class Meta:
         model = Respiratory
 
 class GeneticTestDetailsForm(forms.ModelForm):
-    details = forms.CharField(label="Are details of genetic testing available", widget=RadioSelect(choices=GeneticTestDetails.UYN_CHOICES))
-    counselling = forms.CharField(label="Has the patient received genetic counselling", widget=RadioSelect(choices=GeneticTestDetails.UYN_CHOICES), required=False)
-    familycounselling = forms.CharField(label="Has any of the patient's family members received genetic counselling", widget=RadioSelect(choices=GeneticTestDetails.UYN_CHOICES), required=False)
-
+    
     def __init__(self, *args, **kwargs):
         super(GeneticTestDetailsForm, self).__init__(*args, **kwargs)
         self.fields["test_date"].widget=DateWidget(popup=True, today=True, years=-5, required=self.fields["test_date"].required)

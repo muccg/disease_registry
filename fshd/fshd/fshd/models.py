@@ -177,7 +177,6 @@ class Notes(models.Model):
 
 class FamilyMember(base.FamilyMember):
     diagnosis = models.ForeignKey(Diagnosis)
-    registry_patient = models.OneToOneField(Patient, blank=True, null=True, verbose_name="Family members with Myotonic dystrophy", related_name="%(app_label)s_%(class)s_related")
 
     def __unicode__(self):
         return str(self.diagnosis)
