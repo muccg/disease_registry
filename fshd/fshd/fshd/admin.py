@@ -30,7 +30,6 @@ class OtherRegistriesInline(admin.TabularInline):
 class FamilyMemberInline(admin.TabularInline):
     form = FamilyMemberForm
     model = FamilyMember
-    raw_id_fields = ("registry_patient",)
     extra = 3
 
 class NotesInline(admin.TabularInline):
