@@ -94,12 +94,62 @@ class DiagnosisForm(forms.ModelForm):
         exclude = ("patient", "affectedstatus", "age_at_molecular_diagnosis")
         model = models.Diagnosis
 
+class MotorFunctionForm(forms.ModelForm):
+    WALK_CHOICES = (('', "---"),) + base.MotorFunction.YN_CHOICES
+    WALK_ASSISTED_CHOICES = (('', "-------"),) + base.MotorFunction.WALK_ASSISTED_CHOICES
+    # caution: keep in sync with base.MotorFunction.MOTOR_FUNCTION_CHOICES
+    MOTOR_FUNCTION_CHOICES = (
+        ('', "-------"),
+        ("walking", "Walking independently"),
+        ("assisted", "Walking assisted"),
+        ("nonamb", "I cannot walk"), # added v3
+    )
 
-class ClinicalFeaturesForm(forms.ModelForm):
-  
+    # Keep in sync with base.py!!!!
+    WHEELCHAIR_USE_CHOICES = (
+        ('', "-------"),
+        ("never", "Never"),
+        ("intermittent", "Yes (Intermittent): still able to walk"),
+        ("permanent", "Yes (Permanent): not able to walk and need a wheelchair to move"),
+        ("unknown", "Unknown"))
+
+    DYSARTHRIA_CHOICES = (
+        ('', "-------"),
+        (0, "No"),
+        (1, "Slightly slurred speech"),
+        (2, "Some problems being understood"),
+        (3, "Significant speech problems"),
+    )
+
+    walk = forms.CharField(label='Are you currently able to walk', required=False, widget=Select(choices=WALK_CHOICES), help_text="Walking without help or assisted walking (orthoses or assistive device or human assistance), indoors or outdoors")
+    walk_assisted = forms.CharField(label='Do you currently use devices to assist with walking', required=False, widget=Select(choices=WALK_ASSISTED_CHOICES), help_text="Walking without help or assisted walking (orthoses or assistive device or human assistance), indoors or outdoors")
+    walk_assisted_age = forms.IntegerField(label='At what age did you commence using devices to assist with walking', required=False, max_value=120, min_value=0, help_text="Age in years")
+    # removed v3
+    #sit = forms.BooleanField(label="Are you currently able to sit without support", widget=Select(choices=WALK_CHOICES), help_text="Able to maintain a sitting position on a chair or a wheelchair without support of upper limbs or leaning against the back of the chair")
+    # removed v3
+    #acquisition_age = forms.IntegerField(label='At what age did you start walking', required=False, max_value=120, min_value=0, help_text="Indicate the age in years when you started walking")
+    best_function = forms.CharField(label="Which of the following options describes the best motor function you are currently able to achieve", required=False, widget=Select(choices=MOTOR_FUNCTION_CHOICES))
+
+    wheelchair_use = forms.CharField(label='Do you use a wheelchair', required=False, widget=Select(choices=WHEELCHAIR_USE_CHOICES))
+    wheelchair_usage_age = forms.IntegerField(label='At what age did you start using a wheelchair', required=False, max_value=120, min_value=0, help_text="If using a wheelchair, specify age when wheelchair use started")
+
+    dysarthria = forms.IntegerField(label='Do you have problems with your speech', required=False, widget=Select(choices=DYSARTHRIA_CHOICES))
+
     class Meta:
         exclude = ("diagnosis", "best_function")
+        model = models.MotorFunction
+        #FJ Trac 16 item 15, change checkbox to drop down with Yes, No
+        #widgets = { 'walk': Select( choices = ((None, '---'), ('0', 'No'), ('1','Yes')) ) }
+
+class ClinicalFeaturesForm(forms.ModelForm): 
+    class Meta:
+        exclude = ("diagnosis")
         model = models.ClinicalFeatures
+
+class PregnancyForm(forms.ModelForm): 
+    class Meta:
+        exclude = ("diagnosis",)
+        model = models.Pregnancy
 
 
 class HeartForm(forms.ModelForm):

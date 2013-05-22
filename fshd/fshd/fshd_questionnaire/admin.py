@@ -10,6 +10,9 @@ from models import *
 from registry.groups.models import User as RegistryUser
 
 
+class MotorFunctionInline(admin.StackedInline):
+    model = MotorFunction
+
 class ClinicalFeaturesInline(admin.StackedInline):
     model = ClinicalFeatures
 

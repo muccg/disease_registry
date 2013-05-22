@@ -4,6 +4,9 @@ from models import *
 from registry.utils import get_static_url
 from registry import groups
 
+class MotorFunctionInline(admin.StackedInline):
+    model = MotorFunction
+    form = MotorFunctionForm
 
 class ClinicalFeaturesInline(admin.StackedInline):
     model = ClinicalFeatures
@@ -44,6 +47,7 @@ class DiagnosisAdmin(admin.ModelAdmin):
     inlines = [
         GeneticTestDetailsInline,
         ClinicalFeaturesInline,
+        MotorFunctionInline,
         RespiratoryInline,
         FamilyMemberInline,
         EthnicOriginInline,

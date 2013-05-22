@@ -88,6 +88,23 @@ class ClinicalFeatures(base.ClinicalFeatures):
     class Meta:
         verbose_name_plural = "clinical features"
 
+class MotorFunction(base.MotorFunction):
+    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
+
+    class Meta:
+        verbose_name_plural = "motor function"
+
+    def __unicode__(self):
+        return str(self.diagnosis)
+
+class Pregnancy(base.Pregnancy):
+    diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
+    def __unicode__(self):
+        return str(self.diagnosis)
+    class Meta:
+        verbose_name_plural = "pregnancy"
+
+
 class Heart(base.Heart):
     diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
 
