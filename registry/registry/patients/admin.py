@@ -129,7 +129,7 @@ class PatientAdmin(admin.ModelAdmin):
             return Patient.objects.all()
 
         user = registry.groups.models.User.objects.get(user=request.user)
-        return Patient.objects.filter(working_group=get_working_groups(user)).filter(active=True)
+        return Patient.objects.filter(working_group__in=get_working_groups(user)).filter(active=True)
 
     def search(self, request, term):
         # We have to do this against the result of self.queryset() to avoid
