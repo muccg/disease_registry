@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'registry.patients',
     'registry.genetic',
     'registry.common',
+    'registry.configuration',
     'dd.dd',
     'django.contrib.admin',
 ]

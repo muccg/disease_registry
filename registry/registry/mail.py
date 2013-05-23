@@ -1,5 +1,9 @@
 from django.core.mail import send_mail
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
+
+from configuration.models import EmailTemplate
+
 import os.path
 
 
@@ -11,9 +15,14 @@ def sendNewPatientEmail(to_email, from_email=None):
         from_email = default_return_email()
 
     subject = '%s: new patient registered' % settings.INSTALL_NAME.upper()
-    body = 'New pateint has been registerd\r\n\r\n'
-    body += 'Thank you'
+    
+    template = getEmailTemplate(settings.INSTALL_NAME.upper())
+    
+    body = template.body
     try:
         send_mail(subject, body, from_email, to_email,fail_silently = False)
     except Exception, e:
         print 'Error sending mail to user: ',to_email , ':', str(e)
+
+def getEmailTemplate(module_code):
+    return EmailTemplate.objects.all().filter(module=module_code).get()
