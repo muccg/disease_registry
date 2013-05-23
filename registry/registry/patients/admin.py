@@ -6,7 +6,7 @@ from django.core import urlresolvers
 from django.conf import settings
 import json, datetime
 
-from registry.utils import get_static_url
+from registry.utils import get_static_url, get_working_groups
 from admin_forms import *
 from models import *
 
@@ -111,8 +111,7 @@ class PatientAdmin(admin.ModelAdmin):
         # Restrict normal users to their own working group.
         if dbfield.name == "working_group" and not user.is_superuser:
             user = User.objects.get(user=user) # get the user's associated objects
-            workinggroupid = user.working_group.id
-            kwargs["queryset"] = WorkingGroup.objects.filter(id = workinggroupid)
+            kwargs["queryset"] = WorkingGroup.objects.filter(id__in = get_working_groups(user))
 
         return super(PatientAdmin, self).formfield_for_dbfield(dbfield, *args, **kwargs)
 
@@ -130,7 +129,7 @@ class PatientAdmin(admin.ModelAdmin):
             return Patient.objects.all()
 
         user = registry.groups.models.User.objects.get(user=request.user)
-        return Patient.objects.filter(working_group=user.working_group).filter(active=True)
+        return Patient.objects.filter(working_group=get_working_groups(user)).filter(active=True)
 
     def search(self, request, term):
         # We have to do this against the result of self.queryset() to avoid
