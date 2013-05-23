@@ -70,7 +70,6 @@ class GeneticTestDetailsForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
         super(GeneticTestDetailsForm, self).__init__(*args, **kwargs)
-        self.fields["test_date"].widget=DateWidget(popup=True, today=True, years=-5, required=self.fields["test_date"].required)
 
     # the following code doesn't display the wodget properly, hence the code above
     class Meta:

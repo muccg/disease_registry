@@ -13,6 +13,9 @@ from registry.groups.models import User as RegistryUser
 class MotorFunctionInline(admin.StackedInline):
     model = MotorFunction
 
+class PregnancyInline(admin.StackedInline):
+    model = Pregnancy
+
 class ClinicalFeaturesInline(admin.StackedInline):
     model = ClinicalFeatures
 
@@ -49,6 +52,7 @@ class DiagnosisAdmin(admin.ModelAdmin):
         EthnicOriginInline,
         FamilyMemberInline,
         ConsentInline,
+        PregnancyInline,
     ]
     search_fields = ["patient__family_name", "patient__given_names"]
     # FJ start Trac 16 Item 10, reordering fields, patient first

@@ -83,67 +83,67 @@ class ClinicalFeatures(models.Model):
     facial_weakness = models.CharField(
             default=facial_weakness_choices[0],
             choices=facial_weakness_choices,
-            max_length=len(max(facial_weakness_choices))
+            max_length=len(max(facial_weakness_choices,key=len)[0])
     )
 
     periscapular_shoulder_weakness = models.CharField(
             default=periscapular_shoulder_weakness_choices[0],
             choices=periscapular_shoulder_weakness_choices,
-            max_length=len(max(periscapular_shoulder_weakness_choices))
+            max_length=len(max(periscapular_shoulder_weakness_choices,key=len)[0])
     )
 
     foot_dorsiflexor_weakness = models.CharField(
             default=foot_dorsiflexor_weakness_choices[0],
             choices=foot_dorsiflexor_weakness_choices,
-            max_length=len(max(foot_dorsiflexor_weakness_choices))
+            max_length=len(max(foot_dorsiflexor_weakness_choices,key=len)[0])
     )
 
     hip_girdle_weakness = models.CharField(
             default=hip_girdle_weakness_choices[0],
             choices=hip_girdle_weakness_choices,
-            max_length=len(max(hip_girdle_weakness_choices))
+            max_length=len(max(hip_girdle_weakness_choices,key=len)[0])
     )
 
     distal_upper_limb_weakness = models.CharField(
             default=distal_upper_limb_weakness_choices[0],
             choices=distal_upper_limb_weakness_choices,
-            max_length=len(max(distal_upper_limb_weakness_choices))
+            max_length=len(max(distal_upper_limb_weakness_choices,key=len)[0])
     )
 
     abdominal_muscle_weakness = models.CharField(
             default=abdominal_muscle_weakness_choices[0],
             choices=abdominal_muscle_weakness_choices,
-            max_length=len(max(abdominal_muscle_weakness_choices))
+            max_length=len(max(abdominal_muscle_weakness_choices,key=len)[0])
     )
 
     leg_function = models.CharField(
             default=leg_function_choices[0],
             choices=leg_function_choices,
-            max_length=len(max(leg_function_choices))
+            max_length=len(max(leg_function_choices,key=len)[0])
     )
 
     retinal_vascular_disease = models.CharField(
             default=retinal_vascular_disease_choices[0],
             choices=retinal_vascular_disease_choices,
-            max_length=len(max(retinal_vascular_disease_choices))
+            max_length=len(max(retinal_vascular_disease_choices,key=len)[0])
     )
 
     hearing_loss = models.CharField(
             default=hearing_loss_choices[0],
             choices=hearing_loss_choices,
-            max_length=len(max(hearing_loss_choices))
+            max_length=len(max(hearing_loss_choices,key=len)[0])
     )
 
     scapular_fixation = models.CharField(
             default=scapular_fixation_choices[0],
             choices=scapular_fixation_choices,
-            max_length=len(max(scapular_fixation_choices))
+            max_length=len(max(scapular_fixation_choices,key=len)[0])
     )
 
     pain = models.CharField(
             default=pain_choices[0],
             choices=pain_choices,
-            max_length=len(max(pain_choices))
+            max_length=len(max(pain_choices,key=len)[0])
     )
 
     class Meta:
@@ -151,8 +151,8 @@ class ClinicalFeatures(models.Model):
 
 class Pregnancy(models.Model):
 
-    pregnancies = models.IntegerField(verbose_name="Number of pregnancies")
-    childbirths = models.IntegerField(verbose_name="Number of child births")
+    pregnancies = models.IntegerField(default=0,verbose_name="Number of pregnancies")
+    childbirths = models.IntegerField(default=0,verbose_name="Number of child births")
 
     class Meta:
         abstract = True
@@ -235,9 +235,9 @@ class GeneticTestDetails(models.Model):
     result = models.CharField(
         default=result_choices[0],
         choices=result_choices,
-        max_length=len(max(result_choices))
+        max_length=len(max(result_choices,key=len)[0])
     )
-    comments = models.TextField()
+    comments = models.TextField(blank=True)
 
     class Meta:
         abstract = True
