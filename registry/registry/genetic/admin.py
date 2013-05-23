@@ -11,7 +11,7 @@ import json
 
 from admin_forms import *
 from models import *
-from registry.utils import get_static_url
+from registry.utils import get_static_url, get_working_groups
 
 class GeneAdmin(admin.ModelAdmin):
     list_display = ["symbol", "name", "status", "chromosome"]
@@ -116,7 +116,7 @@ class MolecularDataAdmin(admin.ModelAdmin):
         user = registry.groups.models.User.objects.get(user=request.user)
 
         if self.has_change_permission(request):
-            return MolecularData.objects.filter(patient__working_group=user.working_group).filter(patient__active=True)
+            return MolecularData.objects.filter(patient__working_group__in=get_working_groups(user)).filter(patient__active=True)
         else:
             return MolecularData.objects.none()
 
