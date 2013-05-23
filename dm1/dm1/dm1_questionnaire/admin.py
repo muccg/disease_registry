@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.conf.urls.defaults import patterns
 from django.db import transaction
 from django.http import HttpResponseRedirect
-from registry.utils import get_static_url
+from registry.utils import get_static_url, get_working_groups
 from admin_forms import *
 from models import *
 
@@ -110,7 +110,7 @@ class DiagnosisAdmin(admin.ModelAdmin):
         user = RegistryUser.objects.get(user=request.user)
 
         if self.has_change_permission(request):
-            return Diagnosis.objects.filter(patient__working_group=user.working_group)   #.filter(patient__active=True)   QUICK ISSUE FIX
+            return Diagnosis.objects.filter(patient__working_group__in=get_working_groups(user))   #.filter(patient__active=True)   QUICK ISSUE FIX
         else:
             return Diagnosis.objects.none()
 
