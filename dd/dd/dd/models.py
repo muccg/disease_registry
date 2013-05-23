@@ -8,6 +8,9 @@ from django.db.models.signals import post_save
 from django.core.exceptions import ObjectDoesNotExist
 #from registry.genetic.models import MolecularData
 from registry.patients.models import Patient
+from registry.groups.models import User
+
+from registry.mail import sendNewPatientEmail
 
 import logging
 logger = logging.getLogger('registry_log')
