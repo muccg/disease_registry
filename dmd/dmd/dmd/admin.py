@@ -1,9 +1,11 @@
 from django.contrib import admin
+
 from admin_forms import *
 from models import *
+
 from registry.groups.models import User as RegistryUser
 from registry import groups
-from registry.utils import get_static_url
+from registry.utils import get_static_url, get_working_groups
 
 class MotorFunctionInline(admin.StackedInline):
     model = MotorFunction
@@ -56,7 +58,7 @@ class FamilyMemberInline(admin.TabularInline):
             user = RegistryUser.objects.get(user=request.user)
 
             if db_field.name == "registry_patient":
-                kwargs["queryset"] = Patient.objects.filter(working_group=user.working_group)
+                kwargs["queryset"] = Patient.objects.filter(working_group__in=get_working_groups(user))
 
         return super(FamilyMemberInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
@@ -107,7 +109,7 @@ class DiagnosisAdmin(admin.ModelAdmin):
         user = groups.models.User.objects.get(user=request.user)
 
         if self.has_change_permission(request):
-            return Diagnosis.objects.filter(patient__working_group=user.working_group).filter(patient__active=True)
+            return Diagnosis.objects.filter(patient__working_group__in=get_working_groups(user)).filter(patient__active=True)
         else:
             return Diagnosis.objects.none()
 
