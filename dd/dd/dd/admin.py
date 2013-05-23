@@ -3,6 +3,7 @@ from dd.dd.models import *
 from admin_forms import *
 from registry.utils import get_static_url,get_working_groups
 from registry import groups
+from registry import configuration
 
 class ClinicalDataAdmin(admin.ModelAdmin):
     model = DDClinicalData
