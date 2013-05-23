@@ -2,7 +2,7 @@ from django.contrib import admin
 from admin_forms import *
 from models import *
 from base import CancerTypeChoices
-from registry.utils import get_static_url
+from registry.utils import get_static_url, get_working_groups
 from registry import groups
 
 
@@ -140,7 +140,7 @@ class DiagnosisAdmin(admin.ModelAdmin):
         user = groups.models.User.objects.get(user=request.user)
 
         if self.has_change_permission(request):
-            return Diagnosis.objects.filter(patient__working_group=user.working_group).filter(patient__active=True)
+            return Diagnosis.objects.filter(patient__working_group__in=get_working_groups(user)).filter(patient__active=True)
         else:
             return Diagnosis.objects.none()
 
