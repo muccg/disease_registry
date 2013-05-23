@@ -16,7 +16,7 @@ class WorkingGroup(models.Model):
 class User(models.Model):
     user = models.OneToOneField(User, primary_key=True)
     title = models.CharField(max_length=50, verbose_name="position")
-    working_group = models.ForeignKey(WorkingGroup, null=True)
+    working_group = models.ManyToManyField(WorkingGroup, null=True)
 
     class Meta:
         ordering = ["user__username"]

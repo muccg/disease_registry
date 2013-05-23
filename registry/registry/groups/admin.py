@@ -24,7 +24,7 @@ list_last_name.short_description = "Last name"
 
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = [list_username, list_first_name, list_last_name, "title", "working_group"]
+    list_display = [list_username, list_first_name, list_last_name, "title"]
     list_filter = ["title"]
     search_fields = ["user__username", "user__first_name", "user__last_name"]
 
@@ -155,7 +155,7 @@ class UserAdmin(admin.ModelAdmin):
                 "email_address": user.user.email,
                 "groups": [group.id for group in user.user.groups.all()],
                 "title": user.title,
-                "working_group": user.working_group.id if user.working_group else None,
+                "working_group": [working_group.id for working_group in user.working_group.all()],
             })
 
         media = self.media + form.media
