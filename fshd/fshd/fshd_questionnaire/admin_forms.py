@@ -26,14 +26,6 @@ class RespiratoryForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(RespiratoryForm, self).__init__(*args, **kwargs)
 
-        # This is ugly, but required to avoid clobbering the help text and
-        # custom verbose name, which is what happens if you just override the
-        # field by setting a property on the class the way the Django
-        # documentation suggests.
-        #self.fields["fvc"].widget = PercentageWidget()
-        self.fields["fvc_date"].widget=DateWidget(popup=True, today=True, years=-5)
-        #self.fields["calculatedfvc"].widget = PercentageWidget()
-
     class Meta:
         model = Respiratory
 
@@ -42,20 +34,12 @@ class HeartForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(HeartForm, self).__init__(*args, **kwargs)
 
-        # This is ugly, but required to avoid clobbering the help text and
-        # custom verbose name, which is what happens if you just override the
-        # field by setting a property on the class the way the Django
-        # documentation suggests.
-        self.fields["echocardiogram_lvef"].widget = PercentageWidget()
-        self.fields["ecg_examination_date"].widget=DateWidget(popup=True, today=True, years=-20)
-        self.fields["echocardiogram_lvef_date"].widget=DateWidget(popup=True, today=True, years=-5)
-
     class Meta:
         model = Heart
 
 
 class GeneticTestDetailsForm(forms.ModelForm):
-    test_date = forms.DateField(label="Test Date", widget=DateWidget(popup=True, today=True, years=-20))
+    pass
 
 # FJ added for uniqueness check family_name, given_names, working_group
 class PatientForm(forms.ModelForm):
