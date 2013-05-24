@@ -1,6 +1,6 @@
 from django import forms
 from django.conf import settings
-from django.forms.widgets import Select, RadioSelect
+from django.forms.widgets import Select, RadioSelect, CheckboxSelectMultiple
 from registry.forms.date import DateWidget
 from registry.patients.models import Patient as RegistryPatient
 from registry.utils import stripspaces
@@ -9,6 +9,15 @@ import models
 from fshd.fshd import base
 from models import Patient as FshdPatient
 
+# Easily change the label to sound like a question without override
+# automatic field types
+class ModelQuestionnaireForm(forms.ModelForm):
+    questions = {}
+    def __init__(self, *args, **kwargs):
+        super(ModelQuestionnaireForm, self).__init__(*args, **kwargs)
+        for field in self.questions:
+            if field in self.fields:
+                self.fields[field].label = self.questions[field]
 
 class ConsentForm(forms.ModelForm):
     CHOICES = (('N', 'NO'), ('Y', 'YES'))
@@ -94,34 +103,61 @@ class DiagnosisForm(forms.ModelForm):
         exclude = ("patient", "affectedstatus", "age_at_molecular_diagnosis")
         model = models.Diagnosis
 
-class MotorFunctionForm(forms.ModelForm):
+class MotorFunctionForm(ModelQuestionnaireForm):
 
-    best_function = forms.CharField(label="Which of the following options describes the best motor function you are currently able to achieve", required=False, widget=Select(choices=models.MotorFunction.MOTOR_FUNCTION_CHOICES))
+    questions = {
+        'best_function': 'Which of the following options describes the best motor function you are currently able to achieve?',
+        'wheelchair_use': "Do you use a wheelchair or mobility scooter?",
+        'wheelchair_usage_age': "At what age did you begin using a wheelchair or mobility scooter?"
+    }
 
-    wheelchair_use = forms.CharField(label='Do you use a wheelchair', required=False, widget=Select(choices=models.MotorFunction.WHEELCHAIR_USE_CHOICES))
-    wheelchair_usage_age = forms.IntegerField(label='At what age did you start using a wheelchair', required=False, max_value=120, min_value=0, help_text="If using a wheelchair, specify age when wheelchair use started")
+    #best_function = forms.CharField(label="Which of the following options describes the best motor function you are currently able to achieve", required=False, widget=Select(choices=models.MotorFunction.MOTOR_FUNCTION_CHOICES))
+
+    #wheelchair_use = forms.CharField(label='Do you use a wheelchair', required=False, widget=Select(choices=models.MotorFunction.WHEELCHAIR_USE_CHOICES))
+   #wheelchair_usage_age = forms.IntegerField(label='At what age did you start using a wheelchair', required=False, max_value=120, min_value=0, help_text="If using a wheelchair, specify age when wheelchair use started")
 
     class Meta:
-        exclude = ("diagnosis", "best_function")
+        exclude = ("diagnosis")
         model = models.MotorFunction
 
-class ClinicalFeaturesForm(forms.ModelForm): 
+
+class ClinicalFeaturesForm(ModelQuestionnaireForm):
+    questions = {
+        'eyes_dry': 'My eyes are dry and irritated occasionally/always',
+        'difficulty_speaking': 'I have difficulty speaking',
+        'difficulty_swallowing': 'I have difficulty swallowing',
+        'trouble_whistling': 'I have trouble whistling/drinking through a straw',
+        'periscapular_shoulder_weakness': 'Shoulder weakness (weakness of the muscles around the shoulder blades causing e.g. inability to raise your arms sideways above the level of your shoulder).',
+        'foot_dorsiflexor_weakness': 'Foot weakness (weakness of the muscles that help you lift your feet up, causing e.g. foot drop (where the foot tends to hang with the toes pointing down), steppage gait (lifting the feet high when walking) or frequent tripping).',
+        'hip_girld_weakness': 'Hip girdle weakness (weakness of the muscles of the pelvis and top of the legs, causing e.g. difficulties in going up stairs or ladders, rising from a chair or getting up from the floor).',
+        'distal_upper_limb_weakness': 'Elbow or wrist weakness (weakness of your muscles which help you to lift or hold a pen)',
+        'abdominal_muscle_weakness': 'Abdominal muscles weakness (do you have difficulty in the abdominal muscles which help you to sit up)',
+        'retinal_vascular_disease': 'Have you been diagnosed with retinal vascular disease (problems with the retina of your eye causing e.g. loss of vision) that your doctors think may be related to your FSHD?',
+        'retinal_vascular_disease_age': 'At what age were you diagnosed with retinal vascular disease?',
+        'hearing_loss': 'Do you have hearing loss?',
+        'hearing_loss_age': 'At what age did you first experience hearing loss?',
+        'scapular_fixation': 'Have you had scapular fixation (an operation to fix your shoulder blade to your ribcage)?',
+        'scapular_fixation_age': 'At what age did you have scapular fixation surgery?',
+        'pain': 'Do you have pain? (indicate where the pain occurs)'
+    }
     class Meta:
         exclude = ("diagnosis")
         model = models.ClinicalFeatures
 
-class PregnancyForm(forms.ModelForm): 
+class PregnancyForm(ModelQuestionnaireForm):
+    questions = {
+        'pregnancies': 'How many times have you been pregnant?',
+        'childbirths': 'How many children do you have?'
+    }
     class Meta:
         exclude = ("diagnosis",)
         model = models.Pregnancy
 
 
-class HeartForm(forms.ModelForm):
-    HEART_CHOICES = (('', "-------"),) + base.Heart.HEART_CHOICES
-
-    condition = forms.CharField(label="Do you have a heart condition", required=False, widget=Select(choices=HEART_CHOICES))
-
-
+class HeartForm(ModelQuestionnaireForm):
+    questions = {
+        'condition': 'Do you have a heart condition?',
+    }
     class Meta:
         exclude = ('diagnosis')
         model = models.Heart
@@ -138,8 +174,12 @@ class RespiratoryForm(forms.ModelForm):
         model = models.Respiratory
 
 
-class GeneticTestDetailsForm(forms.ModelForm):
-    
+class GeneticTestDetailsForm(ModelQuestionnaireForm):
+
+    questions = {
+        'result': 'What is your genetic test result?',
+    }
+
     class Meta:
         exclude = ("diagnosis", "laboratory")
         model = models.GeneticTestDetails
@@ -148,70 +188,30 @@ class GeneticTestDetailsForm(forms.ModelForm):
         }
 
 
-class EthnicOriginForm(forms.ModelForm):
-    ORIGIN_CHOICES = (('', "-------"),) + base.EthnicOrigin.ORIGIN_CHOICES
+class EthnicOriginForm(ModelQuestionnaireForm):
 
-    ethnic_origin = forms.CharField(label="How would you describe your ethnic origin", required=False, widget=Select(choices=ORIGIN_CHOICES))
+    questions = {
+        'ethnic_origin': 'How would you describe your ethnic origin?'
+    }
 
     class Meta:
         exclude = ("diagnosis",)
         model = models.EthnicOrigin
 
 
-class PatientForm(forms.ModelForm):
-    email = forms.EmailField(required=False)
-    SEX_CHOICES = (('', "-------"),) + models.Patient.SEX_CHOICES
-    sex = forms.CharField(required=False, widget=Select(choices=SEX_CHOICES))
+class FamilyMemberForm(ModelQuestionnaireForm):
+    questions = {
+        'relationship': 'Has anybody else in your family been diagnosed with FSHD (tick all that apply)?',
+    }
 
-    class Meta:
-        model = models.Patient
-        #model = FshdPatient  # The one for Fshd registry and questionnaire with a Male/Female choice, without the Intersex option
-
-        widgets = {
-            "date_of_birth": DateWidget(years=-100),
-            "address": forms.Textarea(attrs={"cols": 60, "rows": 3}),
-        }
-
-    # add check on uniqueness in the fshd_questionnaire.patients table and registry.patients as well
-    def clean(self):
-        '''
-        Prevents saving a patient if there is an existing one with the same family name, given names in the same working group
-        in both the FSHD questionnaire patient table and the Registry patient table
-        '''
-        cleaneddata = self.cleaned_data
-        #print "PatientForm self %s" % dir(self)
-        #print "cleaneddata: %s" % cleaneddata
-        #print "instance %s" % self.instance.pk
-
-        familyname = cleaneddata.get('family_name')
-        if familyname:
-            familyname = stripspaces(familyname).upper()
-
-        givennames = cleaneddata.get('given_names')
-        if givennames:
-            givennames = stripspaces(givennames)
-
-        workinggroup = cleaneddata.get('working_group')
-
-        #print "familyname: %s givennames %s workinggroup %s" % (familyname, givennames, workinggroup)
-
-        fshdpatients = FshdPatient.objects.filter(family_name__iexact=familyname, given_names__iexact=givennames, working_group=workinggroup)
-        #print "fshdpatients: %s" % fshdpatients
-
-        registrypatients = RegistryPatient.objects.filter(family_name__iexact=familyname, given_names__iexact=givennames, working_group=workinggroup)
-        #print "registrypatients: %s" % registrypatients
-
-        if len(fshdpatients) > 0 or len(registrypatients) > 0:
-            #print "raise forms.ValidationError"
-            raise forms.ValidationError('There is already a patient with the same family and given names in this working group: "%s %s %s".' % (familyname, givennames, workinggroup))
-        return cleaneddata
-
-class FamilyMemberForm(forms.ModelForm):
     class Meta:
         exclude = ("diagnosis",)
         model = models.FamilyMember
 
-class OtherRegistriesForm(forms.ModelForm):
+class OtherRegistriesForm(ModelQuestionnaireForm):
+    questions = {
+        'registry': 'Have you signed up for any other FSHD registry?',
+    }
     class Meta:
         exclude = ("diagnosis",)
         model = models.OtherRegistries

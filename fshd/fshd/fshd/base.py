@@ -15,13 +15,7 @@ class Diagnosis(models.Model):
         abstract = True
 
 class ClinicalFeatures(models.Model):
-    facial_weakness_choices = (
-        ("no weakness",)*2,
-        ("eyes dry and irritated occasionally/always",)*2,
-        ("difficulty speaking",)*2,
-        ("difficulty swallowing",)*2,
-        ("trouble whistling/drinking through a straw",)*2,
-    )
+
     periscapular_shoulder_weakness_choices = (
         ("no weakness",)*2,
         ("able to raise arms sideways over head",)*2,
@@ -80,11 +74,10 @@ class ClinicalFeatures(models.Model):
         ("knees and thighs",)*2,
     )
 
-    facial_weakness = models.CharField(
-            default=facial_weakness_choices[0],
-            choices=facial_weakness_choices,
-            max_length=len(max(facial_weakness_choices,key=len)[0])
-    )
+    eyes_dry = models.BooleanField(default=False, verbose_name='eyes dry and irritated occasionally/always')
+    difficulty_speaking = models.BooleanField(default=False, verbose_name='difficulty speaking')
+    difficulty_swallowing = models.BooleanField(default=False, verbose_name='difficulty swallowing')
+    trouble_whistling = models.BooleanField(default=False, verbose_name='trouble whistling/drinking through a straw')
 
     periscapular_shoulder_weakness = models.CharField(
             default=periscapular_shoulder_weakness_choices[0],
@@ -117,30 +110,41 @@ class ClinicalFeatures(models.Model):
     )
 
     leg_function = models.CharField(
-            default=leg_function_choices[0],
+            blank=True,
+            default='',
             choices=leg_function_choices,
             max_length=len(max(leg_function_choices,key=len)[0])
     )
 
     retinal_vascular_disease = models.CharField(
+            blank=True,
             default=retinal_vascular_disease_choices[0],
             choices=retinal_vascular_disease_choices,
             max_length=len(max(retinal_vascular_disease_choices,key=len)[0])
     )
 
+    retinal_vascular_disease_age = models.IntegerField(blank=True)
+
     hearing_loss = models.CharField(
+            blank=True,
             default=hearing_loss_choices[0],
             choices=hearing_loss_choices,
             max_length=len(max(hearing_loss_choices,key=len)[0])
     )
 
+    hearing_loss_age = models.IntegerField(blank=True)
+
     scapular_fixation = models.CharField(
+            blank=True,
             default=scapular_fixation_choices[0],
             choices=scapular_fixation_choices,
             max_length=len(max(scapular_fixation_choices,key=len)[0])
     )
 
+    scapular_fixation_age = models.IntegerField(blank=True)
+
     pain = models.CharField(
+            blank=True,
             default=pain_choices[0],
             choices=pain_choices,
             max_length=len(max(pain_choices,key=len)[0])
@@ -151,8 +155,8 @@ class ClinicalFeatures(models.Model):
 
 class Pregnancy(models.Model):
 
-    pregnancies = models.IntegerField(default=0,verbose_name="Number of pregnancies")
-    childbirths = models.IntegerField(default=0,verbose_name="Number of child births")
+    pregnancies = models.IntegerField(default=0,blank=True,verbose_name="Number of pregnancies")
+    childbirths = models.IntegerField(default=0,blank=True,verbose_name="Number of child births")
 
     class Meta:
         abstract = True
@@ -174,7 +178,7 @@ class MotorFunction(models.Model):
         ("fulltime", "Full-time")
     )
 
-    best_function = models.CharField(choices=MOTOR_FUNCTION_CHOICES, default='', null=True, blank=True, max_length=8, verbose_name="What is the best motor function level the patient has achieved", help_text="[Motor functions are listed in order with higher functions at the top, please choose one]<br/>Walking: walking with or without help (orthoses or assistive device or human assistance), inside or outdoors")
+    best_function = models.CharField(choices=MOTOR_FUNCTION_CHOICES, default='', max_length=8, verbose_name="What is the best motor function level the patient has achieved", help_text="[Motor functions are listed in order with higher functions at the top, please choose one]<br/>Walking: walking with or without help (orthoses or assistive device or human assistance), inside or outdoors")
     wheelchair_use = models.CharField(verbose_name="wheel chair use", default='', max_length=12, choices=WHEELCHAIR_USE_CHOICES, help_text="<b>Yes (permanent):</b> patient is not able to walk and needs a wheelchair to move<br/><b>Yes (intermittent):</b> patient is still able to walk") #required
     wheelchair_usage_age = models.IntegerField(null=True, blank=True, help_text="If using wheelchair specify age at start of wheelchair use") # required but need to check Yes previous question
 
