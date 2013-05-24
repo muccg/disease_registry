@@ -25,4 +25,4 @@ def sendNewPatientEmail(to_email, from_email=None):
         print 'Error sending mail to user: ',to_email , ':', str(e)
 
 def getEmailTemplate(module_code):
-    return EmailTemplate.objects.all().filter(module=module_code).get()
+    return EmailTemplate.objects.filter(target=1).get()
