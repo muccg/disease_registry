@@ -123,10 +123,10 @@ class MotorFunctionForm(ModelQuestionnaireForm):
 
 class ClinicalFeaturesForm(ModelQuestionnaireForm):
     questions = {
-        'eyes_dry': 'My eyes are dry and irritated occasionally/always',
-        'difficulty_speaking': 'I have difficulty speaking',
-        'difficulty_swallowing': 'I have difficulty swallowing',
-        'trouble_whistling': 'I have trouble whistling/drinking through a straw',
+        'eyes_dry': 'Are your eyes dry and irritated occasionally/always?',
+        'difficulty_speaking': 'Do you have difficulty speaking?',
+        'difficulty_swallowing': 'Do you have difficulty swallowing?',
+        'trouble_whistling': 'Do you have trouble whistling/drinking through a straw?',
         'periscapular_shoulder_weakness': 'Shoulder weakness (weakness of the muscles around the shoulder blades causing e.g. inability to raise your arms sideways above the level of your shoulder).',
         'foot_dorsiflexor_weakness': 'Foot weakness (weakness of the muscles that help you lift your feet up, causing e.g. foot drop (where the foot tends to hang with the toes pointing down), steppage gait (lifting the feet high when walking) or frequent tripping).',
         'hip_girld_weakness': 'Hip girdle weakness (weakness of the muscles of the pelvis and top of the legs, causing e.g. difficulties in going up stairs or ladders, rising from a chair or getting up from the floor).',
@@ -198,6 +198,53 @@ class EthnicOriginForm(ModelQuestionnaireForm):
         exclude = ("diagnosis",)
         model = models.EthnicOrigin
 
+class PatientForm(forms.ModelForm):
+    email = forms.EmailField(required=False)
+    SEX_CHOICES = (('', "-------"),) + models.Patient.SEX_CHOICES
+    sex = forms.CharField(required=False, widget=Select(choices=SEX_CHOICES))
+
+    class Meta:
+        model = models.Patient
+        #model = FshdPatient  # The one for Fshd registry and questionnaire with a Male/Female choice, without the Intersex option
+
+        widgets = {
+            "date_of_birth": DateWidget(years=-100),
+            "address": forms.Textarea(attrs={"cols": 60, "rows": 3}),
+        }
+
+    # add check on uniqueness in the fshd_questionnaire.patients table and registry.patients as well
+    def clean(self):
+        '''
+        Prevents saving a patient if there is an existing one with the same family name, given names in the same working group
+        in both the FSHD questionnaire patient table and the Registry patient table
+        '''
+        cleaneddata = self.cleaned_data
+        #print "PatientForm self %s" % dir(self)
+        #print "cleaneddata: %s" % cleaneddata
+        #print "instance %s" % self.instance.pk
+
+        familyname = cleaneddata.get('family_name')
+        if familyname:
+            familyname = stripspaces(familyname).upper()
+
+        givennames = cleaneddata.get('given_names')
+        if givennames:
+            givennames = stripspaces(givennames)
+
+        workinggroup = cleaneddata.get('working_group')
+
+        #print "familyname: %s givennames %s workinggroup %s" % (familyname, givennames, workinggroup)
+
+        fshdpatients = FshdPatient.objects.filter(family_name__iexact=familyname, given_names__iexact=givennames, working_group=workinggroup)
+        #print "fshdpatients: %s" % fshdpatients
+
+        registrypatients = RegistryPatient.objects.filter(family_name__iexact=familyname, given_names__iexact=givennames, working_group=workinggroup)
+        #print "registrypatients: %s" % registrypatients
+
+        if len(fshdpatients) > 0 or len(registrypatients) > 0:
+            #print "raise forms.ValidationError"
+            raise forms.ValidationError('There is already a patient with the same family and given names in this working group: "%s %s %s".' % (familyname, givennames, workinggroup))
+        return cleaneddata
 
 class FamilyMemberForm(ModelQuestionnaireForm):
     questions = {
