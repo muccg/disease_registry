@@ -20,6 +20,7 @@ class Migration(SchemaMigration):
         db.create_table('configuration_emailtemplate', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('target', self.gf('django.db.models.fields.IntegerField')()),
             ('description', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
             ('body', self.gf('django.db.models.fields.TextField')()),
         ))
@@ -40,7 +41,8 @@ class Migration(SchemaMigration):
             'body': ('django.db.models.fields.TextField', [], {}),
             'description': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'target': ('django.db.models.fields.IntegerField', [], {})
         },
         'configuration.module': {
             'Meta': {'object_name': 'Module'},
