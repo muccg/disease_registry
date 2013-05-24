@@ -2,7 +2,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 
-from configuration.models import EmailTemplate
+from registry.configuration.models import EmailTemplate
 
 import os.path
 

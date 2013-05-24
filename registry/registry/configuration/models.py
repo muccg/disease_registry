@@ -10,9 +10,8 @@ class Module(models.Model):
 
 class EmailTemplate(models.Model):
     name = models.CharField(max_length=50)
-    module = models.CharField(max_length=10, default=settings.INSTALL_NAME.upper(), editable=False)
-    description = models.CharField(max_length=100)
+    description = models.CharField(max_length=100, null=True, blank=True)
     body = models.TextField()
     
     def __unicode__(self):
-        return '%s (%s module)' % (self.name, self.module)
+        return '%s' % (self.name)

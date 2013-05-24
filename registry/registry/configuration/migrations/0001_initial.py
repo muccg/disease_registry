@@ -20,8 +20,7 @@ class Migration(SchemaMigration):
         db.create_table('configuration_emailtemplate', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
-            ('module', self.gf('django.db.models.fields.CharField')(default='DD', max_length=10)),
-            ('description', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('description', self.gf('django.db.models.fields.CharField')(max_length=100, null=True, blank=True)),
             ('body', self.gf('django.db.models.fields.TextField')()),
         ))
         db.send_create_signal('configuration', ['EmailTemplate'])
@@ -39,9 +38,8 @@ class Migration(SchemaMigration):
         'configuration.emailtemplate': {
             'Meta': {'object_name': 'EmailTemplate'},
             'body': ('django.db.models.fields.TextField', [], {}),
-            'description': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
+            'description': ('django.db.models.fields.CharField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'module': ('django.db.models.fields.CharField', [], {'default': "'DD'", 'max_length': '10'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         },
         'configuration.module': {
