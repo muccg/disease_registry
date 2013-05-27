@@ -362,13 +362,8 @@ def signal_patient_post_save(sender, **kwargs):
 
 def signal_diagnosis_post_save(sender, **kwargs):
     diagnosis = kwargs['instance']
-    working_group = diagnosis.patient.working_group
-    magic = [2,3]  # fixme: use less magic
-    regusers = working_group.user_set.filter(user__groups__id__in=magic).distinct()
-
-    email_to = regusers.values_list("user__email", flat=True)
-
-    sendNewPatientEmail(email_to)
+    recipients = diagnosis.patient.working_group.user_set
+    sendNewPatientEmail(recipients)
 
 # connect up django signals
 post_save.connect(signal_patient_post_save, sender=Patient)
