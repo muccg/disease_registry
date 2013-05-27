@@ -1,0 +1,520 @@
+Registry [CRITICAL:2013-05-27 12:09:44,423:models.py:359:signal_patient_post_save] relation "configuration_emailtemplate" does not exist
+LINE 1: ...ption", "configuration_emailtemplate"."body" FROM "configura...
+                                                             ^
+
+Registry [CRITICAL:2013-05-27 12:09:44,444:models.py:360:signal_patient_post_save] Traceback (most recent call last):
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 356, in signal_patient_post_save
+    diagnosis, created = Diagnosis.objects.get_or_create(patient=patient)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/manager.py", line 134, in get_or_create
+    return self.get_query_set().get_or_create(**kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 452, in get_or_create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 45, in save
+    super(Diagnosis, self).save(*args, **kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 565, in save_base
+    created=(not record_exists), raw=raw, using=using)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/dispatch/dispatcher.py", line 172, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 371, in signal_diagnosis_post_save
+    sendNewPatientEmail(email_to)
+  File "/usr/local/src/dm1/registry/mail.py", line 19, in sendNewPatientEmail
+    template = getEmailTemplate(settings.INSTALL_NAME.upper())
+  File "/usr/local/src/dm1/registry/mail.py", line 28, in getEmailTemplate
+    return EmailTemplate.objects.filter(target=1).get()
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 361, in get
+    num = len(clone)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 85, in __len__
+    self._result_cache = list(self.iterator())
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 291, in iterator
+    for row in compiler.results_iter():
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/sql/compiler.py", line 763, in results_iter
+    for rows in self.execute_sql(MULTI):
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/sql/compiler.py", line 818, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/backends/util.py", line 40, in execute
+    return self.cursor.execute(sql, params)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/backends/postgresql_psycopg2/base.py", line 52, in execute
+    return self.cursor.execute(query, args)
+DatabaseError: relation "configuration_emailtemplate" does not exist
+LINE 1: ...ption", "configuration_emailtemplate"."body" FROM "configura...
+                                                             ^
+
+
+Registry [CRITICAL:2013-05-27 12:10:14,282:models.py:359:signal_patient_post_save] relation "configuration_emailtemplate" does not exist
+LINE 1: ...ption", "configuration_emailtemplate"."body" FROM "configura...
+                                                             ^
+
+Registry [CRITICAL:2013-05-27 12:10:14,287:models.py:360:signal_patient_post_save] Traceback (most recent call last):
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 356, in signal_patient_post_save
+    diagnosis, created = Diagnosis.objects.get_or_create(patient=patient)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/manager.py", line 134, in get_or_create
+    return self.get_query_set().get_or_create(**kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 452, in get_or_create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 45, in save
+    super(Diagnosis, self).save(*args, **kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 565, in save_base
+    created=(not record_exists), raw=raw, using=using)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/dispatch/dispatcher.py", line 172, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 371, in signal_diagnosis_post_save
+    sendNewPatientEmail(email_to)
+  File "/usr/local/src/dm1/registry/mail.py", line 19, in sendNewPatientEmail
+    template = getEmailTemplate(settings.INSTALL_NAME.upper())
+  File "/usr/local/src/dm1/registry/mail.py", line 28, in getEmailTemplate
+    return EmailTemplate.objects.filter(target=1).get()
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 361, in get
+    num = len(clone)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 85, in __len__
+    self._result_cache = list(self.iterator())
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 291, in iterator
+    for row in compiler.results_iter():
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/sql/compiler.py", line 763, in results_iter
+    for rows in self.execute_sql(MULTI):
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/sql/compiler.py", line 818, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/backends/util.py", line 40, in execute
+    return self.cursor.execute(sql, params)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/backends/postgresql_psycopg2/base.py", line 52, in execute
+    return self.cursor.execute(query, args)
+DatabaseError: relation "configuration_emailtemplate" does not exist
+LINE 1: ...ption", "configuration_emailtemplate"."body" FROM "configura...
+                                                             ^
+
+
+Registry [CRITICAL:2013-05-27 12:11:08,927:models.py:359:signal_patient_post_save] relation "configuration_emailtemplate" does not exist
+LINE 1: ...ption", "configuration_emailtemplate"."body" FROM "configura...
+                                                             ^
+
+Registry [CRITICAL:2013-05-27 12:11:08,932:models.py:360:signal_patient_post_save] Traceback (most recent call last):
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 356, in signal_patient_post_save
+    diagnosis, created = Diagnosis.objects.get_or_create(patient=patient)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/manager.py", line 134, in get_or_create
+    return self.get_query_set().get_or_create(**kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 452, in get_or_create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 45, in save
+    super(Diagnosis, self).save(*args, **kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 565, in save_base
+    created=(not record_exists), raw=raw, using=using)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/dispatch/dispatcher.py", line 172, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 371, in signal_diagnosis_post_save
+    sendNewPatientEmail(email_to)
+  File "/usr/local/src/dm1/registry/mail.py", line 19, in sendNewPatientEmail
+    template = getEmailTemplate(settings.INSTALL_NAME.upper())
+  File "/usr/local/src/dm1/registry/mail.py", line 28, in getEmailTemplate
+    return EmailTemplate.objects.filter(target=1).get()
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 361, in get
+    num = len(clone)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 85, in __len__
+    self._result_cache = list(self.iterator())
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 291, in iterator
+    for row in compiler.results_iter():
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/sql/compiler.py", line 763, in results_iter
+    for rows in self.execute_sql(MULTI):
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/sql/compiler.py", line 818, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/backends/util.py", line 40, in execute
+    return self.cursor.execute(sql, params)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/backends/postgresql_psycopg2/base.py", line 52, in execute
+    return self.cursor.execute(query, args)
+DatabaseError: relation "configuration_emailtemplate" does not exist
+LINE 1: ...ption", "configuration_emailtemplate"."body" FROM "configura...
+                                                             ^
+
+
+Registry [CRITICAL:2013-05-27 16:01:33,807:models.py:360:signal_patient_post_save] getNewPatientEmailTemplate() takes exactly 1 argument (0 given)
+Registry [CRITICAL:2013-05-27 16:01:33,813:models.py:361:signal_patient_post_save] Traceback (most recent call last):
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 357, in signal_patient_post_save
+    diagnosis, created = Diagnosis.objects.get_or_create(patient=patient)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/manager.py", line 134, in get_or_create
+    return self.get_query_set().get_or_create(**kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 452, in get_or_create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 46, in save
+    super(Diagnosis, self).save(*args, **kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 565, in save_base
+    created=(not record_exists), raw=raw, using=using)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/dispatch/dispatcher.py", line 172, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 367, in signal_diagnosis_post_save
+    sendNewPatientEmail(recipients)
+  File "/usr/local/src/dm1/registry/mail.py", line 17, in sendNewPatientEmail
+    template = getNewPatientEmailTemplate()
+TypeError: getNewPatientEmailTemplate() takes exactly 1 argument (0 given)
+
+Registry [CRITICAL:2013-05-27 16:01:54,032:models.py:360:signal_patient_post_save] Manager isn't accessible via EmailTemplate instances
+Registry [CRITICAL:2013-05-27 16:01:54,036:models.py:361:signal_patient_post_save] Traceback (most recent call last):
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 357, in signal_patient_post_save
+    diagnosis, created = Diagnosis.objects.get_or_create(patient=patient)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/manager.py", line 134, in get_or_create
+    return self.get_query_set().get_or_create(**kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 452, in get_or_create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 46, in save
+    super(Diagnosis, self).save(*args, **kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 565, in save_base
+    created=(not record_exists), raw=raw, using=using)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/dispatch/dispatcher.py", line 172, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 367, in signal_diagnosis_post_save
+    sendNewPatientEmail(recipients)
+  File "/usr/local/src/dm1/registry/mail.py", line 18, in sendNewPatientEmail
+    groups = template.objects.get(target=1).groups.distinct()
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/manager.py", line 219, in __get__
+    raise AttributeError("Manager isn't accessible via %s instances" % type.__name__)
+AttributeError: Manager isn't accessible via EmailTemplate instances
+
+Registry [CRITICAL:2013-05-27 16:02:33,879:models.py:360:signal_patient_post_save] Cannot resolve keyword 'groups' into field. Choices are: title, user, working_group
+Registry [CRITICAL:2013-05-27 16:02:33,887:models.py:361:signal_patient_post_save] Traceback (most recent call last):
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 357, in signal_patient_post_save
+    diagnosis, created = Diagnosis.objects.get_or_create(patient=patient)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/manager.py", line 134, in get_or_create
+    return self.get_query_set().get_or_create(**kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 452, in get_or_create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 46, in save
+    super(Diagnosis, self).save(*args, **kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 565, in save_base
+    created=(not record_exists), raw=raw, using=using)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/dispatch/dispatcher.py", line 172, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 367, in signal_diagnosis_post_save
+    sendNewPatientEmail(recipients)
+  File "/usr/local/src/dm1/registry/mail.py", line 19, in sendNewPatientEmail
+    email_to = recipients.filter(groups__in=groups).values_list("user__email", flat=True)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/manager.py", line 143, in filter
+    return self.get_query_set().filter(*args, **kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 624, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 642, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/sql/query.py", line 1250, in add_q
+    can_reuse=used_aliases, force_having=force_having)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/sql/query.py", line 1122, in add_filter
+    process_extras=process_extras)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/sql/query.py", line 1316, in setup_joins
+    "Choices are: %s" % (name, ", ".join(names)))
+FieldError: Cannot resolve keyword 'groups' into field. Choices are: title, user, working_group
+
+Registry [CRITICAL:2013-05-27 16:02:54,386:models.py:360:signal_patient_post_save] 'EmailTemplate' object has no attribute 'working_group'
+Registry [CRITICAL:2013-05-27 16:02:54,389:models.py:361:signal_patient_post_save] Traceback (most recent call last):
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 357, in signal_patient_post_save
+    diagnosis, created = Diagnosis.objects.get_or_create(patient=patient)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/manager.py", line 134, in get_or_create
+    return self.get_query_set().get_or_create(**kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 452, in get_or_create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 46, in save
+    super(Diagnosis, self).save(*args, **kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 565, in save_base
+    created=(not record_exists), raw=raw, using=using)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/dispatch/dispatcher.py", line 172, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 367, in signal_diagnosis_post_save
+    sendNewPatientEmail(recipients)
+  File "/usr/local/src/dm1/registry/mail.py", line 18, in sendNewPatientEmail
+    groups = template.working_group.distinct()
+AttributeError: 'EmailTemplate' object has no attribute 'working_group'
+
+Registry [CRITICAL:2013-05-27 16:03:17,696:models.py:360:signal_patient_post_save] 
+Registry [CRITICAL:2013-05-27 16:03:17,700:models.py:361:signal_patient_post_save] Traceback (most recent call last):
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 357, in signal_patient_post_save
+    diagnosis, created = Diagnosis.objects.get_or_create(patient=patient)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/manager.py", line 134, in get_or_create
+    return self.get_query_set().get_or_create(**kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 452, in get_or_create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 46, in save
+    super(Diagnosis, self).save(*args, **kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 565, in save_base
+    created=(not record_exists), raw=raw, using=using)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/dispatch/dispatcher.py", line 172, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 367, in signal_diagnosis_post_save
+    sendNewPatientEmail(recipients)
+  File "/usr/local/src/dm1/registry/mail.py", line 18, in sendNewPatientEmail
+    assert(False)
+AssertionError
+
+Registry [CRITICAL:2013-05-27 16:04:07,794:models.py:360:signal_patient_post_save] Cannot resolve keyword 'groups' into field. Choices are: title, user, working_group
+Registry [CRITICAL:2013-05-27 16:04:07,798:models.py:361:signal_patient_post_save] Traceback (most recent call last):
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 357, in signal_patient_post_save
+    diagnosis, created = Diagnosis.objects.get_or_create(patient=patient)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/manager.py", line 134, in get_or_create
+    return self.get_query_set().get_or_create(**kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 452, in get_or_create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 46, in save
+    super(Diagnosis, self).save(*args, **kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 565, in save_base
+    created=(not record_exists), raw=raw, using=using)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/dispatch/dispatcher.py", line 172, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 367, in signal_diagnosis_post_save
+    sendNewPatientEmail(recipients)
+  File "/usr/local/src/dm1/registry/mail.py", line 19, in sendNewPatientEmail
+    email_to = recipients.filter(groups__in=groups).values_list("user__email", flat=True)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/manager.py", line 143, in filter
+    return self.get_query_set().filter(*args, **kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 624, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 642, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/sql/query.py", line 1250, in add_q
+    can_reuse=used_aliases, force_having=force_having)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/sql/query.py", line 1122, in add_filter
+    process_extras=process_extras)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/sql/query.py", line 1316, in setup_joins
+    "Choices are: %s" % (name, ", ".join(names)))
+FieldError: Cannot resolve keyword 'groups' into field. Choices are: title, user, working_group
+
+Registry [CRITICAL:2013-05-27 16:04:35,469:models.py:360:signal_patient_post_save] global name 'to_email' is not defined
+Registry [CRITICAL:2013-05-27 16:04:35,473:models.py:361:signal_patient_post_save] Traceback (most recent call last):
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 357, in signal_patient_post_save
+    diagnosis, created = Diagnosis.objects.get_or_create(patient=patient)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/manager.py", line 134, in get_or_create
+    return self.get_query_set().get_or_create(**kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 452, in get_or_create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 46, in save
+    super(Diagnosis, self).save(*args, **kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 565, in save_base
+    created=(not record_exists), raw=raw, using=using)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/dispatch/dispatcher.py", line 172, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 367, in signal_diagnosis_post_save
+    sendNewPatientEmail(recipients)
+  File "/usr/local/src/dm1/registry/mail.py", line 27, in sendNewPatientEmail
+    print 'Error sending mail to user: ',to_email , ':', str(e)
+NameError: global name 'to_email' is not defined
+
+Registry [CRITICAL:2013-05-27 16:05:01,698:models.py:360:signal_patient_post_save] 
+Registry [CRITICAL:2013-05-27 16:05:01,702:models.py:361:signal_patient_post_save] Traceback (most recent call last):
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 357, in signal_patient_post_save
+    diagnosis, created = Diagnosis.objects.get_or_create(patient=patient)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/manager.py", line 134, in get_or_create
+    return self.get_query_set().get_or_create(**kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 452, in get_or_create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 46, in save
+    super(Diagnosis, self).save(*args, **kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 565, in save_base
+    created=(not record_exists), raw=raw, using=using)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/dispatch/dispatcher.py", line 172, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 367, in signal_diagnosis_post_save
+    sendNewPatientEmail(recipients)
+  File "/usr/local/src/dm1/registry/mail.py", line 23, in sendNewPatientEmail
+    assert(False)
+AssertionError
+
+Registry [CRITICAL:2013-05-27 16:07:24,611:models.py:360:signal_patient_post_save] 
+Registry [CRITICAL:2013-05-27 16:07:24,614:models.py:361:signal_patient_post_save] Traceback (most recent call last):
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 357, in signal_patient_post_save
+    diagnosis, created = Diagnosis.objects.get_or_create(patient=patient)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/manager.py", line 134, in get_or_create
+    return self.get_query_set().get_or_create(**kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 452, in get_or_create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 46, in save
+    super(Diagnosis, self).save(*args, **kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 565, in save_base
+    created=(not record_exists), raw=raw, using=using)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/dispatch/dispatcher.py", line 172, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 367, in signal_diagnosis_post_save
+    assert(False)
+AssertionError
+
+Registry [CRITICAL:2013-05-27 16:08:27,380:models.py:360:signal_patient_post_save] 
+Registry [CRITICAL:2013-05-27 16:08:27,383:models.py:361:signal_patient_post_save] Traceback (most recent call last):
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 357, in signal_patient_post_save
+    diagnosis, created = Diagnosis.objects.get_or_create(patient=patient)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/manager.py", line 134, in get_or_create
+    return self.get_query_set().get_or_create(**kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 452, in get_or_create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 46, in save
+    super(Diagnosis, self).save(*args, **kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 565, in save_base
+    created=(not record_exists), raw=raw, using=using)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/dispatch/dispatcher.py", line 172, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 367, in signal_diagnosis_post_save
+    sendNewPatientEmail(recipients)
+  File "/usr/local/src/dm1/registry/mail.py", line 23, in sendNewPatientEmail
+    assert(False)
+AssertionError
+
+Registry [CRITICAL:2013-05-27 16:11:18,771:models.py:360:signal_patient_post_save] 
+Registry [CRITICAL:2013-05-27 16:11:18,775:models.py:361:signal_patient_post_save] Traceback (most recent call last):
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 357, in signal_patient_post_save
+    diagnosis, created = Diagnosis.objects.get_or_create(patient=patient)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/manager.py", line 134, in get_or_create
+    return self.get_query_set().get_or_create(**kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 452, in get_or_create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 46, in save
+    super(Diagnosis, self).save(*args, **kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 565, in save_base
+    created=(not record_exists), raw=raw, using=using)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/dispatch/dispatcher.py", line 172, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 367, in signal_diagnosis_post_save
+    sendNewPatientEmail(recipients)
+  File "/usr/local/src/dm1/registry/mail.py", line 23, in sendNewPatientEmail
+    assert(False)
+AssertionError
+
+Registry [CRITICAL:2013-05-27 16:11:59,313:models.py:360:signal_patient_post_save] 
+Registry [CRITICAL:2013-05-27 16:11:59,316:models.py:361:signal_patient_post_save] Traceback (most recent call last):
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 357, in signal_patient_post_save
+    diagnosis, created = Diagnosis.objects.get_or_create(patient=patient)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/manager.py", line 134, in get_or_create
+    return self.get_query_set().get_or_create(**kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 452, in get_or_create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 46, in save
+    super(Diagnosis, self).save(*args, **kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 565, in save_base
+    created=(not record_exists), raw=raw, using=using)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/dispatch/dispatcher.py", line 172, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 367, in signal_diagnosis_post_save
+    sendNewPatientEmail(recipients)
+  File "/usr/local/src/dm1/registry/mail.py", line 23, in sendNewPatientEmail
+    assert(False)
+AssertionError
+
+Registry [CRITICAL:2013-05-27 16:12:28,375:models.py:360:signal_patient_post_save] 
+Registry [CRITICAL:2013-05-27 16:12:28,378:models.py:361:signal_patient_post_save] Traceback (most recent call last):
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 357, in signal_patient_post_save
+    diagnosis, created = Diagnosis.objects.get_or_create(patient=patient)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/manager.py", line 134, in get_or_create
+    return self.get_query_set().get_or_create(**kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 452, in get_or_create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 46, in save
+    super(Diagnosis, self).save(*args, **kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 565, in save_base
+    created=(not record_exists), raw=raw, using=using)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/dispatch/dispatcher.py", line 172, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 367, in signal_diagnosis_post_save
+    sendNewPatientEmail(recipients)
+  File "/usr/local/src/dm1/registry/mail.py", line 23, in sendNewPatientEmail
+    assert(False)
+AssertionError
+
+Registry [CRITICAL:2013-05-27 16:13:40,941:models.py:360:signal_patient_post_save] Cannot resolve keyword 'working_group' into field. Choices are: date_joined, email, first_name, groups, id, is_active, is_staff, is_superuser, last_login, last_name, logentry, password, user, user_permissions, username
+Registry [CRITICAL:2013-05-27 16:13:40,945:models.py:361:signal_patient_post_save] Traceback (most recent call last):
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 357, in signal_patient_post_save
+    diagnosis, created = Diagnosis.objects.get_or_create(patient=patient)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/manager.py", line 134, in get_or_create
+    return self.get_query_set().get_or_create(**kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 452, in get_or_create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 46, in save
+    super(Diagnosis, self).save(*args, **kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 565, in save_base
+    created=(not record_exists), raw=raw, using=using)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/dispatch/dispatcher.py", line 172, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 367, in signal_diagnosis_post_save
+    sendNewPatientEmail(recipients)
+  File "/usr/local/src/dm1/registry/mail.py", line 19, in sendNewPatientEmail
+    to_email = recipients.filter(user__working_group__in=groups)#.values_list("user__email", flat=True)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/manager.py", line 143, in filter
+    return self.get_query_set().filter(*args, **kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 624, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 642, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/sql/query.py", line 1250, in add_q
+    can_reuse=used_aliases, force_having=force_having)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/sql/query.py", line 1122, in add_filter
+    process_extras=process_extras)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/sql/query.py", line 1316, in setup_joins
+    "Choices are: %s" % (name, ", ".join(names)))
+FieldError: Cannot resolve keyword 'working_group' into field. Choices are: date_joined, email, first_name, groups, id, is_active, is_staff, is_superuser, last_login, last_name, logentry, password, user, user_permissions, username
+
+Registry [CRITICAL:2013-05-27 16:14:12,293:models.py:360:signal_patient_post_save] 
+Registry [CRITICAL:2013-05-27 16:14:12,296:models.py:361:signal_patient_post_save] Traceback (most recent call last):
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 357, in signal_patient_post_save
+    diagnosis, created = Diagnosis.objects.get_or_create(patient=patient)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/manager.py", line 134, in get_or_create
+    return self.get_query_set().get_or_create(**kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 452, in get_or_create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 46, in save
+    super(Diagnosis, self).save(*args, **kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 565, in save_base
+    created=(not record_exists), raw=raw, using=using)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/dispatch/dispatcher.py", line 172, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 367, in signal_diagnosis_post_save
+    sendNewPatientEmail(recipients)
+  File "/usr/local/src/dm1/registry/mail.py", line 23, in sendNewPatientEmail
+    assert(False)
+AssertionError
+
+Registry [CRITICAL:2013-05-27 16:15:13,848:models.py:360:signal_patient_post_save] 
+Registry [CRITICAL:2013-05-27 16:15:13,852:models.py:361:signal_patient_post_save] Traceback (most recent call last):
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 357, in signal_patient_post_save
+    diagnosis, created = Diagnosis.objects.get_or_create(patient=patient)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/manager.py", line 134, in get_or_create
+    return self.get_query_set().get_or_create(**kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/query.py", line 452, in get_or_create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 46, in save
+    super(Diagnosis, self).save(*args, **kwargs)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 463, in save
+    self.save_base(using=using, force_insert=force_insert, force_update=force_update)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/db/models/base.py", line 565, in save_base
+    created=(not record_exists), raw=raw, using=using)
+  File "/usr/local/src/virt_dm1/lib/python2.6/site-packages/Django-1.4.5-py2.6.egg/django/dispatch/dispatcher.py", line 172, in send
+    response = receiver(signal=self, sender=sender, **named)
+  File "/usr/local/src/dm1/dm1/dm1/models.py", line 367, in signal_diagnosis_post_save
+    sendNewPatientEmail(recipients)
+  File "/usr/local/src/dm1/registry/mail.py", line 23, in sendNewPatientEmail
+    assert(False)
+AssertionError
+

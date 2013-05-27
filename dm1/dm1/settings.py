@@ -67,6 +67,7 @@ INSTALLED_APPS.extend([
     'registry.patients',
     'registry.genetic',
     'registry.common',
+    'registry.configuration',
     'dm1.dm1',
     'dm1.dm1_questionnaire',
     'django.contrib.admin',
