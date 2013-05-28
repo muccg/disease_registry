@@ -30,7 +30,7 @@ def nmd_report(request, working_group):
 
         items['patient_id'] = str(d.patient.id)
         items['age'] = str(d.patient.date_of_birth)
-        items['diagnosis'] = str(d.diagnosis)
+        items['diagnosis'] = str(diagnosis_name(d.diagnosis))
         items['localisation'] = str(d.patient.postcode)
 
         items['last_follow_up'] = str(d.updated) if d.updated is not None else str(d.created)
@@ -65,11 +65,13 @@ def nmd_report(request, working_group):
             items['duplication'] = str(variation[0].duplication_all_exons_tested)
             items['deletion_duplication'] = str(variation[0].exon_boundaries_known)
             items['point_mutation'] = str(variation[0].point_mutation_all_exons_sequenced)
+            items['all_exons_in_male_relative'] = str(variation[0].all_exons_in_male_relative)
         else:
             items['deletion'] = 'Unknown'
             items['duplication'] = 'Unknown'
             items['deletion_duplication'] = 'Unknown'
             items['point_mutation'] = 'Unknown'
+            items['all_exons_in_male_relative'] = 'Unknown'
 
         trials = ClinicalTrials.objects.filter(diagnosis_id=d.id)
         items['trials'] = yes_no_str(trials)
@@ -111,13 +113,17 @@ def nmd_report(request, working_group):
         'Family History'))
     for r in results:
         writer.writerow((r['patient_id'], '', r['deletion'], r['duplication'], r['deletion_duplication'],
-                        r['point_mutation'], '', r['diagnosis'], r['able_to_walk'],
+                        r['point_mutation'], r['all_exons_in_male_relative'], r['diagnosis'], r['able_to_walk'],
                         r['wheelchair_use'], r['current_steroid_theraphy'], r['scoliosis_surgery'],
                         r['heart'], r['trials'], r['age'], r['last_follow_up'], r['localisation'], r['able_to_sit'], r['heart_failure'], r['last_lvef'],
                         r['non_invasive_ventilation'], r['invasive_ventilation'], r['last_fvc'], r['muscle_biopsy'], r['other_registries'], r['family_history']))
 
     response['Content-Disposition'] = 'attachment; filename=nmdreport_' + working_group + '.csv'
     return response
+
+def diagnosis_name(code):
+    name = [(key,value) for key,value in Diagnosis.DIAGNOSIS_CHOICES if key==code]
+    return name[0][1] if name else 'Unknown'
 
 def yes_no_str(value):
     return str('Yes') if value else str('No')
