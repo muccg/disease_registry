@@ -49,8 +49,8 @@ def nmd_report(request, working_group):
         items['heart_failure'] = yes_no_str(d.heart.failure) if d.heart is not None else 'Unknown'
         items['last_lvef'] = yes_no_str(d.heart.lvef) if d.heart is not None else 'Unknown'
 
-        items['non_invasive_ventilation'] = yes_no_str(d.respiratory.non_invasive_ventilation) if d.respiratory is not None else 'Unknown'
-        items['invasive_ventilation'] = yes_no_str(d.respiratory.invasive_ventilation) if d.respiratory is not None else 'Unknown'
+        items['non_invasive_ventilation'] = yes_no_pt_str(d.respiratory.non_invasive_ventilation) if d.respiratory is not None else 'Unknown'
+        items['invasive_ventilation'] = yes_no_pt_str(d.respiratory.invasive_ventilation) if d.respiratory is not None else 'Unknown'
         items['last_fvc'] = yes_no_str(d.respiratory.fvc) if d.respiratory is not None else 'Unknown'
 
         molecular_data = MolecularData.objects.filter(patient_id=d.patient.id)
@@ -127,6 +127,17 @@ def diagnosis_name(code):
 
 def yes_no_str(value):
     return str('Yes') if value else str('No')
+
+def yes_no_pt_str(value):
+    to_return = 'Unknown'
+    if value:
+        if value == 'Y':
+            to_return = 'Yes'
+        if value == 'PT':
+            to_return = 'Yes (PT)'
+        if value == 'N':
+            to_return = 'No'
+    return to_return
 
 # special query for Hugh
 @login_required
