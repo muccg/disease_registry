@@ -14,7 +14,7 @@ class PatientDoctorForm(forms.ModelForm):
         "Geneticist",
         "Specialist - Other",
     ]
-    relationship = forms.CharField(label="Relationship", widget=ComboWidget(options=OPTIONS))
+    relationship = forms.CharField(label="Type of Medical Professional", widget=ComboWidget(options=OPTIONS))
 
     class Meta:
         model = PatientDoctor

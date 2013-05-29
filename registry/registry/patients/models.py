@@ -107,6 +107,7 @@ class Patient(models.Model):
     next_of_kin_mobile_phone = models.CharField(max_length=30, blank=True, null=True, verbose_name="mobile phone")
     next_of_kin_work_phone = models.CharField(max_length=30, blank=True, null=True, verbose_name="work phone")
     next_of_kin_email = models.EmailField(blank=True, null=True, verbose_name="email")
+    next_of_kin_parent_place_of_birth = models.CharField(max_length=100, verbose_name="Place of birth of parents", blank=True, null=True)
     doctors = models.ManyToManyField(Doctor, through="PatientDoctor")
     active = models.BooleanField(default=True, help_text="Ticked if active in the registry, ie not a deleted record, or deceased patient.")
     inactive_reason = models.TextField(blank=True, null=True, verbose_name="Reason", help_text="Please provide reason for deactivating the patient")
