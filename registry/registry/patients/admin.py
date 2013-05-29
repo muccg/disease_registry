@@ -80,6 +80,7 @@ class PatientAdmin(admin.ModelAdmin):
             ("next_of_kin_family_name",
              "next_of_kin_given_names",
              "next_of_kin_relationship",
+             "next_of_kin_parent_place_of_birth",
              "next_of_kin_address",
              "next_of_kin_suburb",
              "next_of_kin_state",

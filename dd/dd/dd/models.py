@@ -105,7 +105,6 @@ class Diagnosis(models.Model):
     date_of_diagnosis = models.DateField(null=True, blank=True)
 
     age_at_clinical_diagnosis = models.IntegerField('age in years at clinical diagnosis', null=True, blank=True)
-    age_at_molecular_diagnosis = models.IntegerField('age in years at molecular diagnosis', null=True, blank=True)
 
     orphanet = models.ForeignKey(OrphanetChoices, null=True, blank = True)
 
@@ -268,6 +267,7 @@ class DDClinicalData(models.Model):
     date_first_symtoms      = models.DateField(verbose_name = "Date of first symptoms")
     edss_rating             = models.ForeignKey(EdssRating)
     edss_evaluation_type    = models.PositiveSmallIntegerField(choices=EVALUATION_TYPE_CHOICES, verbose_name="Evaluation type")
+    edss_form               = models.FileField(upload_to='edss_form', storage=file_system, verbose_name="EDSS Form")
     date_of_visits          = models.DateField(verbose_name = "Date of visits")
 
     def __unicode__(self):
@@ -278,13 +278,18 @@ class DDClinicalData(models.Model):
         verbose_name_plural = "Clinical Data"
 
 class LabData(models.Model):
+    PLUS_MINUS_CHOICES = (
+        ('+', '+'),
+        ('-', '-')
+    )
+    
     diagnosis =         models.ForeignKey(Diagnosis)
     date =              models.DateField()
-    protein =           models.FloatField(default = 0.0, verbose_name = "Protein (g/L)")
-    leucocytes =        models.FloatField(default = 0.0, verbose_name = "Leucocytes (/ul)")
-    erythrocytes =      models.FloatField(default = 0.0, verbose_name = "Erythrocytes (/ul)")
-    oligoclonal_bands = models.FloatField(default = 0.0, verbose_name = "Oligoclonal Bands")
-    igg_alb =           models.FloatField(default = 0.0, verbose_name = "IgG/Alb")
+    protein =           models.CharField(max_length=1, choices=PLUS_MINUS_CHOICES, verbose_name = "Protein (g/L)")
+    leucocytes =        models.CharField(max_length=1, choices=PLUS_MINUS_CHOICES, verbose_name = "Leucocytes (/ul)")
+    erythrocytes =      models.CharField(max_length=1, choices=PLUS_MINUS_CHOICES, verbose_name = "Erythrocytes (/ul)")
+    oligoclonal_bands = models.CharField(max_length=1, choices=PLUS_MINUS_CHOICES, verbose_name = "Oligoclonal Bands")
+    igg_alb =           models.CharField(max_length=1, choices=PLUS_MINUS_CHOICES, verbose_name = "IgG/Alb")
 
     class Meta:
         verbose_name = "Lab Data"
