@@ -1,3 +1,11 @@
+$(document).ready(function() {
+    if( $('#id_active').is(':checked') ) {
+        $('.field-inactive_reason').hide();
+    }
+    $('#id_active').click(function(){
+        $('.field-inactive_reason').toggle('fast');      
+    });
+});
 (function () {
     var init = function () {
         /* This is pretty ugly, and pretty specific to how Django Admin builds
