@@ -70,6 +70,7 @@ INSTALLED_APPS.extend([
     'registry.patients',
     'registry.genetic',
     'registry.common',
+    'registry.configuration',
     'django_qbe',
     'django_qbe.savedqueries',
     'sma.sma',

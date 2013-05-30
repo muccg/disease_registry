@@ -4,6 +4,8 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.core.exceptions import ObjectDoesNotExist
 from registry.patients.models import Patient
+from registry.configuration.models import EmailTemplate
+from registry.mail import sendNewPatientEmail
 
 import logging
 logger = logging.getLogger('sma')
