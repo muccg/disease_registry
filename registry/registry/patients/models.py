@@ -80,7 +80,6 @@ class Patient(models.Model):
 
     working_group = models.ForeignKey(registry.groups.models.WorkingGroup, null=False, blank=False)
     consent = models.BooleanField(null=False, blank=False, help_text="Consent must be given for the patient to be entered on the registry", verbose_name="consent given")
-    consent_form = models.FileField(upload_to='consents', storage=file_system, verbose_name="Consent form", blank=True, null=True)
     family_name = models.CharField(max_length=100, db_index=True)
     given_names = models.CharField(max_length=100, db_index=True)
     umrn = models.CharField(max_length=50, unique=True, db_index=True, verbose_name="UMRN")
@@ -148,6 +147,10 @@ class Patient(models.Model):
         else:
             logger.debug("Deleting patient record.")
             super(Patient, self).delete(*args, **kwargs)
+
+class PatientConsent(models.Model):
+    patient = models.ForeignKey(Patient)
+    form = models.FileField(upload_to='consents', storage=file_system, verbose_name="Consent form", blank=True, null=True)
 
 class PatientParent(models.Model):
     PARENT_TYPE = ( ("M", "Mother"), ("F", "Father") )
