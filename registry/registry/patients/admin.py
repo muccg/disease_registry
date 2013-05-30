@@ -33,13 +33,9 @@ class PatientParentAdmin(admin.TabularInline):
     model = PatientParent
     extra = 1
 
-class PatientConsentAdmin(admin.TabularInline):
-    model = PatientConsent
-    extra = 1
-
 class PatientAdmin(admin.ModelAdmin):
     form = PatientForm
-    inlines = [PatientConsentAdmin, PatientParentAdmin, PatientDoctorAdmin]
+    inlines = [PatientParentAdmin, PatientDoctorAdmin]
     search_fields = ["family_name", "given_names"]
     list_display = ['__unicode__', 'progress_graph', 'moleculardata_entered', 'freshness', 'working_group', 'diagnosis_last_update']
 
@@ -49,6 +45,7 @@ class PatientAdmin(admin.ModelAdmin):
         consent = ("Consent", {
             "fields":(
                 "consent",
+                "consent_form"
              )
         })
 
@@ -83,7 +80,6 @@ class PatientAdmin(admin.ModelAdmin):
             ("next_of_kin_family_name",
              "next_of_kin_given_names",
              "next_of_kin_relationship",
-             "next_of_kin_parent_place_of_birth",
              "next_of_kin_address",
              "next_of_kin_suburb",
              "next_of_kin_state",
