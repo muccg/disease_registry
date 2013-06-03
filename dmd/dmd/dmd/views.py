@@ -61,12 +61,18 @@ def nmd_report(request, working_group):
             variation = None
 
         if variation:
+            items['gene'] = str(get_gene_name(variation[0].gene_id))
+            items['exon'] = str(variation[0].exon)
+            items['dna_variation'] = str(variation[0].dna_variation)
             items['deletion'] = str(variation[0].deletion_all_exons_tested)
             items['duplication'] = str(variation[0].duplication_all_exons_tested)
             items['deletion_duplication'] = str(variation[0].exon_boundaries_known)
             items['point_mutation'] = str(variation[0].point_mutation_all_exons_sequenced)
             items['all_exons_in_male_relative'] = str(variation[0].all_exons_in_male_relative)
         else:
+            items['gene'] = 'Unknown'
+            items['exon'] = 'Unknown'
+            items['dna_variation'] = 'Unknown'
             items['deletion'] = 'Unknown'
             items['duplication'] = 'Unknown'
             items['deletion_duplication'] = 'Unknown'
@@ -86,7 +92,9 @@ def nmd_report(request, working_group):
 
     writer.writerow((
         'Patient ID', 
-        'Mutation Name', 
+        'Gene',
+        'Exon',
+        'DNA Variation', 
         'All Exons Tested (Deletion)', 
         'All Exons Tested (Duplications)', 
         'Exon Boundaries Known', 
@@ -112,7 +120,7 @@ def nmd_report(request, working_group):
         'Other Registries', 
         'Family History'))
     for r in results:
-        writer.writerow((r['patient_id'], '', r['deletion'], r['duplication'], r['deletion_duplication'],
+        writer.writerow((r['patient_id'], r['gene'], r['exon'], r['dna_variation'], r['deletion'], r['duplication'], r['deletion_duplication'],
                         r['point_mutation'], r['all_exons_in_male_relative'], r['diagnosis'], r['able_to_walk'],
                         r['wheelchair_use'], r['current_steroid_theraphy'], r['scoliosis_surgery'],
                         r['heart'], r['trials'], r['age'], r['last_follow_up'], r['localisation'], r['able_to_sit'], r['heart_failure'], r['last_lvef'],
@@ -120,6 +128,9 @@ def nmd_report(request, working_group):
 
     response['Content-Disposition'] = 'attachment; filename=nmdreport_' + working_group + '.csv'
     return response
+
+def get_gene_name(gene_id):
+    return Gene.objects.get(id=gene_id).name
 
 def diagnosis_name(code):
     name = [(key,value) for key,value in Diagnosis.DIAGNOSIS_CHOICES if key==code]
