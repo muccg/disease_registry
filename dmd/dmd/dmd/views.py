@@ -47,7 +47,7 @@ def nmd_report(request, working_group):
 
         items['heart'] = yes_no_str(d.heart.current) if d.heart is not None else 'Unknown'
         items['heart_failure'] = yes_no_str(d.heart.failure) if d.heart is not None else 'Unknown'
-        items['last_lvef'] = yes_no_str(d.heart.lvef) if d.heart is not None else 'Unknown'
+        items['last_lvef'] = '%s, %s' % (d.heart.lvef, d.heart.lvef_date) if d.heart is not None else 'Unknown'
 
         items['non_invasive_ventilation'] = yes_no_pt_str(d.respiratory.non_invasive_ventilation) if d.respiratory is not None else 'Unknown'
         items['invasive_ventilation'] = yes_no_pt_str(d.respiratory.invasive_ventilation) if d.respiratory is not None else 'Unknown'
