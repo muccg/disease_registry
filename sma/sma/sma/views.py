@@ -19,7 +19,7 @@ def nmd_report(request, working_group):
         country_filter = ~Q(patient__working_group__name='NEW ZEALAND')
 
     diagnosis = Diagnosis.objects.all().filter(country_filter).select_related(
-        'motorfunction', 'steroids', 'surgery', 'heart', 'heartmedication', 'respiratory')
+        'motorfunction', 'steroids', 'surgery', 'heart', 'heartmedication', 'respiratory', 'feedingfunction')
 
     results = []
 
@@ -38,6 +38,8 @@ def nmd_report(request, working_group):
         items['able_to_sit'] = yes_no_str(d.motorfunction.sit) if d.motorfunction is not None else 'Unknown'
 
         items['scoliosis_surgery'] = yes_no_str(d.surgery.surgery) if d.surgery is not None else 'Unknown'
+        
+        items['feeding_function'] = d.feedingfunction.gastric_nasal_tube if d.feedingfunction is not None else 'Unknown'
 
         items['non_invasive_ventilation'] = yes_no_pt_str(d.respiratory.non_invasive_ventilation) if d.respiratory is not None else 'Unknown'
         items['invasive_ventilation'] = yes_no_pt_str(d.respiratory.invasive_ventilation) if d.respiratory is not None else 'Unknown'
@@ -96,6 +98,7 @@ def nmd_report(request, working_group):
         'Currently Able To Walk', 
         'Wheelchair Use', 
         'Scoliosis Surgery',
+        'Feeding function',
         'Clinical Trials', 
         'Date of birth', 
         'Last updated', 
@@ -110,7 +113,7 @@ def nmd_report(request, working_group):
     for r in results:
         writer.writerow((r['patient_id'], r['gene'], r['exon'], r['dna_variation'], r['deletion'], r['duplication'], r['deletion_duplication'],
                         r['point_mutation'], r['all_exons_in_male_relative'], r['diagnosis'], r['able_to_walk'],
-                        r['wheelchair_use'], r['scoliosis_surgery'],
+                        r['wheelchair_use'], r['scoliosis_surgery'], r['feeding_function'],
                         r['trials'], r['age'], r['last_follow_up'], r['localisation'], r['able_to_sit'], 
                         r['non_invasive_ventilation'], r['invasive_ventilation'], r['last_fvc'], r['other_registries'], r['family_history'], r['sma_classification']))
 
