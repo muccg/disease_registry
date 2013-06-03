@@ -126,7 +126,7 @@ def nmd_report(request, working_group):
                         r['heart'], r['trials'], r['age'], r['last_follow_up'], r['localisation'], r['able_to_sit'], r['heart_failure'], r['last_lvef'],
                         r['non_invasive_ventilation'], r['invasive_ventilation'], r['last_fvc'], r['muscle_biopsy'], r['other_registries'], r['family_history']))
 
-    response['Content-Disposition'] = 'attachment; filename=nmdreport_' + working_group + '.csv'
+    response['Content-Disposition'] = 'attachment; filename=dmd_nmdreport_' + working_group + '.csv'
     return response
 
 def get_gene_name(gene_id):
