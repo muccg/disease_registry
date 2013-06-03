@@ -78,6 +78,8 @@ def nmd_report(request, working_group):
         family_history = FamilyMember.objects.filter(diagnosis_id=d.id)
         items['family_history'] = yes_no_str(family_history)
 
+        items['sma_classification'] = str(get_classification(d.classification))
+        
         results.append(items)
 
     writer.writerow((
@@ -103,19 +105,24 @@ def nmd_report(request, working_group):
         'Invasive Ventilation', 
         'FVC score and date', 
         'Other Registries', 
-        'Family History'))
+        'Family History',
+        'SMA Classification'))
     for r in results:
         writer.writerow((r['patient_id'], r['gene'], r['exon'], r['dna_variation'], r['deletion'], r['duplication'], r['deletion_duplication'],
                         r['point_mutation'], r['all_exons_in_male_relative'], r['diagnosis'], r['able_to_walk'],
                         r['wheelchair_use'], r['scoliosis_surgery'],
                         r['trials'], r['age'], r['last_follow_up'], r['localisation'], r['able_to_sit'], 
-                        r['non_invasive_ventilation'], r['invasive_ventilation'], r['last_fvc'], r['other_registries'], r['family_history']))
+                        r['non_invasive_ventilation'], r['invasive_ventilation'], r['last_fvc'], r['other_registries'], r['family_history'], r['sma_classification']))
 
     response['Content-Disposition'] = 'attachment; filename=sma_nmdreport_' + working_group + '.csv'
     return response
 
 def get_gene_name(gene_id):
     return Gene.objects.get(id=gene_id).name
+
+def get_classification(code):
+    name = [(key,value) for key, value in Diagnosis.SMA_CLASSIFICATION_CHOICES if key==code]
+    return name[0][1] if name else 'Unknown'
 
 def diagnosis_name(code):
     name = [(key,value) for key,value in Diagnosis.DIAGNOSIS_CHOICES if key==code]
