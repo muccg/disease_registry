@@ -33,19 +33,11 @@ def nmd_report(request, working_group):
 
         items['last_follow_up'] = str(d.updated) if d.updated is not None else str(d.created)
 
-#        items['muscle_biopsy'] = yes_no_str(d.muscle_biopsy) if d.muscle_biopsy is not None else 'Unknown'
-
         items['able_to_walk'] = yes_no_str(d.motorfunction.walk) if d.motorfunction is not None else 'Unknown'
         items['wheelchair_use'] = yes_no_str(d.motorfunction.wheelchair_use) if d.motorfunction is not None else 'Unknown'
         items['able_to_sit'] = yes_no_str(d.motorfunction.sit) if d.motorfunction is not None else 'Unknown'
 
-#        items['current_steroid_theraphy'] = yes_no_str(d.steroids.current) if d.steroids is not None else 'Unknown'
-
         items['scoliosis_surgery'] = yes_no_str(d.surgery.surgery) if d.surgery is not None else 'Unknown'
-
-#        items['heart'] = yes_no_str(d.heart.current) if d.heart is not None else 'Unknown'
-#        items['heart_failure'] = yes_no_str(d.heart.failure) if d.heart is not None else 'Unknown'
-#        items['last_lvef'] = yes_no_str(d.heart.lvef) if d.heart is not None else 'Unknown'
 
         items['non_invasive_ventilation'] = yes_no_pt_str(d.respiratory.non_invasive_ventilation) if d.respiratory is not None else 'Unknown'
         items['invasive_ventilation'] = yes_no_pt_str(d.respiratory.invasive_ventilation) if d.respiratory is not None else 'Unknown'
@@ -59,12 +51,18 @@ def nmd_report(request, working_group):
             variation = None
 
         if variation:
+            items['gene'] = str(get_gene_name(variation[0].gene_id))
+            items['exon'] = str(variation[0].exon)
+            items['dna_variation'] = str(variation[0].dna_variation)
             items['deletion'] = str(variation[0].deletion_all_exons_tested)
             items['duplication'] = str(variation[0].duplication_all_exons_tested)
             items['deletion_duplication'] = str(variation[0].exon_boundaries_known)
             items['point_mutation'] = str(variation[0].point_mutation_all_exons_sequenced)
             items['all_exons_in_male_relative'] = str(variation[0].all_exons_in_male_relative)
         else:
+            items['gene'] = 'Unknown'
+            items['exon'] = 'Unknown'
+            items['dna_variation'] = 'Unknown'
             items['deletion'] = 'Unknown'
             items['duplication'] = 'Unknown'
             items['deletion_duplication'] = 'Unknown'
@@ -84,7 +82,9 @@ def nmd_report(request, working_group):
 
     writer.writerow((
         'Patient ID', 
-        'Mutation Name', 
+        'Gene',
+        'Exon',
+        'DNA Variation',
         'All Exons Tested (Deletion)', 
         'All Exons Tested (Duplications)', 
         'Exon Boundaries Known', 
@@ -105,14 +105,17 @@ def nmd_report(request, working_group):
         'Other Registries', 
         'Family History'))
     for r in results:
-        writer.writerow((r['patient_id'], '', r['deletion'], r['duplication'], r['deletion_duplication'],
+        writer.writerow((r['patient_id'], r['gene'], r['exon'], r['dna_variation'], r['deletion'], r['duplication'], r['deletion_duplication'],
                         r['point_mutation'], r['all_exons_in_male_relative'], r['diagnosis'], r['able_to_walk'],
                         r['wheelchair_use'], r['scoliosis_surgery'],
                         r['trials'], r['age'], r['last_follow_up'], r['localisation'], r['able_to_sit'], 
                         r['non_invasive_ventilation'], r['invasive_ventilation'], r['last_fvc'], r['other_registries'], r['family_history']))
 
-    response['Content-Disposition'] = 'attachment; filename=nmdreport_' + working_group + '.csv'
+    response['Content-Disposition'] = 'attachment; filename=sma_nmdreport_' + working_group + '.csv'
     return response
+
+def get_gene_name(gene_id):
+    return Gene.objects.get(id=gene_id).name
 
 def diagnosis_name(code):
     name = [(key,value) for key,value in Diagnosis.DIAGNOSIS_CHOICES if key==code]
