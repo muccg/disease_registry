@@ -51,7 +51,7 @@ def nmd_report(request, working_group):
 
         items['non_invasive_ventilation'] = yes_no_pt_str(d.respiratory.non_invasive_ventilation) if d.respiratory is not None else 'Unknown'
         items['invasive_ventilation'] = yes_no_pt_str(d.respiratory.invasive_ventilation) if d.respiratory is not None else 'Unknown'
-        items['last_fvc'] = yes_no_str(d.respiratory.fvc) if d.respiratory is not None else 'Unknown'
+        items['last_fvc'] = '%s, %s' % (d.respiratory.fvc, d.respiratory.fvc_date) if d.respiratory is not None else 'Unknown'
 
         molecular_data = MolecularData.objects.filter(patient_id=d.patient.id)
 
