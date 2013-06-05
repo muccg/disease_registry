@@ -155,7 +155,7 @@ class UserAdmin(admin.ModelAdmin):
                 "email_address": user.user.email,
                 "groups": [group.id for group in user.user.groups.all()],
                 "title": user.title,
-                "working_group": [working_group.id for working_group in user.working_group.all()],
+                "working_group": [working_group.id for working_group in user.working_groups.all()],
             })
 
         media = self.media + form.media

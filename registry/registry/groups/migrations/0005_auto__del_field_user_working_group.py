@@ -8,31 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Deleting model 'IPRange'
-        #db.delete_table('groups_iprange')
-
-        # Adding M2M table for field working_groups on 'User'
-        m2m_table_name = db.shorten_name('groups_user_working_groups')
-        db.create_table(m2m_table_name, (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('user', models.ForeignKey(orm['groups.user'], null=False)),
-            ('workinggroup', models.ForeignKey(orm['groups.workinggroup'], null=False))
-        ))
-        db.create_unique(m2m_table_name, ['user_id', 'workinggroup_id'])
+        # Deleting field 'User.working_group'
+        db.delete_column('groups_user', 'working_group_id')
 
 
     def backwards(self, orm):
-        # Adding model 'IPRange'
-        db.create_table('groups_iprange', (
-            ('working_group', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['groups.WorkingGroup'])),
-            ('netmask', self.gf('django.db.models.fields.IPAddressField')(max_length=15)),
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('address', self.gf('django.db.models.fields.IPAddressField')(max_length=15)),
-        ))
-        db.send_create_signal('groups', ['IPRange'])
-
-        # Removing M2M table for field working_groups on 'User'
-        db.delete_table(db.shorten_name('groups_user_working_groups'))
+        # Adding field 'User.working_group'
+        db.add_column('groups_user', 'working_group',
+                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['groups.WorkingGroup'], null=True),
+                      keep_default=False)
 
 
     models = {
@@ -76,7 +60,6 @@ class Migration(SchemaMigration):
             'Meta': {'ordering': "['user__username']", 'object_name': 'User'},
             'title': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'user': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True', 'primary_key': 'True'}),
-            'working_group': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['groups.WorkingGroup']", 'null': 'True'}),
             'working_groups': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'working_group'", 'null': 'True', 'to': "orm['groups.WorkingGroup']"})
         },
         'groups.workinggroup': {
