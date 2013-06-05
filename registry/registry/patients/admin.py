@@ -114,7 +114,8 @@ class PatientAdmin(admin.ModelAdmin):
         # Restrict normal users to their own working group.
         if dbfield.name == "working_group" and not user.is_superuser:
             user = User.objects.get(user=user) # get the user's associated objects
-            kwargs["queryset"] = WorkingGroup.objects.filter(id__in = get_working_groups(user))
+            #kwargs["queryset"] = WorkingGroup.objects.filter(id__in = get_working_groups(user))
+            kwargs["queryset"] = WorkingGroup.objects
 
         return super(PatientAdmin, self).formfield_for_dbfield(dbfield, *args, **kwargs)
 
