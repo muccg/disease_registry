@@ -1,39 +1,18 @@
 # -*- coding: utf-8 -*-
 import datetime
 from south.db import db
-from south.v2 import SchemaMigration
+from south.v2 import DataMigration
 from django.db import models
 
-
-class Migration(SchemaMigration):
+class Migration(DataMigration):
 
     def forwards(self, orm):
-        # Deleting model 'IPRange'
-        #db.delete_table('groups_iprange')
-
-        # Adding M2M table for field working_groups on 'User'
-        m2m_table_name = db.shorten_name('groups_user_working_groups')
-        db.create_table(m2m_table_name, (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('user', models.ForeignKey(orm['groups.user'], null=False)),
-            ('workinggroup', models.ForeignKey(orm['groups.workinggroup'], null=False))
-        ))
-        db.create_unique(m2m_table_name, ['user_id', 'workinggroup_id'])
-
+        for user in orm['groups.User'].objects.all():
+            user.working_groups.add(user.working_group)
+            user.save()
 
     def backwards(self, orm):
-        # Adding model 'IPRange'
-        db.create_table('groups_iprange', (
-            ('working_group', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['groups.WorkingGroup'])),
-            ('netmask', self.gf('django.db.models.fields.IPAddressField')(max_length=15)),
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('address', self.gf('django.db.models.fields.IPAddressField')(max_length=15)),
-        ))
-        db.send_create_signal('groups', ['IPRange'])
-
-        # Removing M2M table for field working_groups on 'User'
-        db.delete_table(db.shorten_name('groups_user_working_groups'))
-
+        "Write your backwards methods here."
 
     models = {
         'auth.group': {
@@ -87,3 +66,4 @@ class Migration(SchemaMigration):
     }
 
     complete_apps = ['groups']
+    symmetrical = True
