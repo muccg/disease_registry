@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import Group
 from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+
+file_system = FileSystemStorage(location=settings.MEDIA_ROOT, base_url=settings.MEDIA_URL)
 
 class Module(models.Model):
     code = models.CharField(max_length=10)
@@ -21,3 +24,11 @@ class EmailTemplate(models.Model):
     
     def __unicode__(self):
         return '%s' % (self.name)
+
+class ConsentForm(models.Model):
+    COUNTRIES = (
+        ('AU', 'Australia'),
+        ('NZ', 'New Zealand')
+    )
+    country = models.CharField(max_length=2, choices=COUNTRIES)
+    form = models.FileField(upload_to='consents', storage=file_system, verbose_name="Consent form", blank=True, null=True)    
