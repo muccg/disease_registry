@@ -5,6 +5,28 @@ $(document).ready(function() {
     $('#id_active').click(function(){
         $('.field-inactive_reason').toggle('fast');      
     });
+
+    $("#id_working_group").change(function() {
+        var message_options = {
+            escapeHTML: false,
+            closeLink: '.close',
+            transientMessage: '.message', // Selector for transient messages
+            transientDelay: 500,          // Transient message callback delay (ms)
+            transientCallback:            // Fn called after transientDelay
+                function (el) {
+                    el.fadeOut(200, function () { el.remove(); });
+                },
+
+            closeCallback:
+                function(el) {
+                    el.remove();
+
+                }
+        }
+
+        $("#messages").messages('add',{message:"<p class='errornote'><b>Warning: Working Group changed!</b></p>",tags: 'info'},message_options);
+
+    });
 });
 (function () {
     var init = function () {

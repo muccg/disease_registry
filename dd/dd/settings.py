@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.messages',
     'django_extensions',
+    'messages_ui',
     'south',
     'userlog',
     'registry.groups',

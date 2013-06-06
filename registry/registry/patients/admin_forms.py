@@ -46,7 +46,11 @@ class PatientForm(forms.ModelForm):
     class Media:
         js = (
             "https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js",
-            "js/patient.js"
+            'js/handlebars.runtime.js',
+            'js/jquery.ba-dotimeout.min.js',
+            'messages_ui/jquery.messages-ui.js',
+            'messages_ui/message.js',
+            "js/patient.js",
         )
 
     class Meta:

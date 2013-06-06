@@ -46,6 +46,7 @@ setup(name='django-diseaseregistry',
     zip_safe=False,
     install_requires=[
         'South>=0.7.3',
+        'django-messages-ui>=0.1.0'
     ],
 )
 
