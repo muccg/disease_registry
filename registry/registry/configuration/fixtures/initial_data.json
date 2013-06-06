@@ -1,0 +1,33 @@
+[
+    {
+        "pk": 1, 
+        "model": "configuration.emailtemplate", 
+        "fields": {
+            "body": "To whom it may concern,\r\n\r\nNew patient has been registered in the database.\r\n\r\nThank you.\r\nRegards\r\nRDR Team\r\n\r\n", 
+            "description": "", 
+            "name": "New patient registered", 
+            "groups": [
+                3, 
+                2, 
+                1
+            ], 
+            "target": 1
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "configuration.consentform", 
+        "fields": {
+            "country": "AU", 
+            "form": ""
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "configuration.consentform", 
+        "fields": {
+            "country": "NZ", 
+            "form": ""
+        }
+    }
+]

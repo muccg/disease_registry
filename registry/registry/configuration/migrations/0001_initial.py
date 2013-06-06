@@ -35,6 +35,14 @@ class Migration(SchemaMigration):
         ))
         db.create_unique(m2m_table_name, ['emailtemplate_id', 'group_id'])
 
+        # Adding model 'ConsentForm'
+        db.create_table('configuration_consentform', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('country', self.gf('django.db.models.fields.CharField')(max_length=2)),
+            ('form', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
+        ))
+        db.send_create_signal('configuration', ['ConsentForm'])
+
 
     def backwards(self, orm):
         # Deleting model 'Module'
@@ -45,6 +53,9 @@ class Migration(SchemaMigration):
 
         # Removing M2M table for field groups on 'EmailTemplate'
         db.delete_table(db.shorten_name('configuration_emailtemplate_groups'))
+
+        # Deleting model 'ConsentForm'
+        db.delete_table('configuration_consentform')
 
 
     models = {
@@ -60,6 +71,12 @@ class Migration(SchemaMigration):
             'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
+        },
+        'configuration.consentform': {
+            'Meta': {'object_name': 'ConsentForm'},
+            'country': ('django.db.models.fields.CharField', [], {'max_length': '2'}),
+            'form': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         'configuration.emailtemplate': {
             'Meta': {'object_name': 'EmailTemplate'},

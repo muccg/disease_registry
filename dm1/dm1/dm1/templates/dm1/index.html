@@ -112,6 +112,25 @@
                     <li><a href="http://www.health.vic.gov.au/">Department of Health (Victoria)</a></li>
                     <li><a href="http://www.health.wa.gov.au/">Department of Health (WA)</a></li>
                 </ul>
+                
+                <h3>Consent Forms</h3>
+                
+                <ul>
+                    <li>
+                        {% if consent_form_au %}
+                            <a href="{{media_url}}{{ consent_form_au }}">Australia</a>
+                        {% else %}
+                            <a href="">Australia - NOT AVAILABLE</a>
+                        {% endif %}
+                    </li>
+                    <li>
+                        {% if consent_form_nz %}
+                            <a href="{{media_url}}{{ consent_form_nz }}">New Zealand</a>
+                        {% else %}
+                            <a href="">New Zealand - NOT AVAILABLE</a>
+                        {% endif %}
+                    </li>
+                </ul>
             </div>
 
             <div style="clear: both"></div>
