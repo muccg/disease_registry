@@ -6,7 +6,7 @@
 %define installdir %{webapps}/%{name}
 %define buildinstalldir %{buildroot}/%{installdir}
 %define settingsdir %{buildinstalldir}/defaultsettings
-%define logsdir %{buildroot}/var/logs/%{name}
+%define logsdir %{buildroot}/var/log/%{name}
 %define scratchdir %{buildroot}/var/lib/%{name}/scratch
 %define mediadir %{buildroot}/var/lib/%{name}/media
 %define staticdir %{buildinstalldir}/static
@@ -64,7 +64,7 @@ touch %{settingsdir}/__init__.py
 ln -fs ..`find %{buildinstalldir} -path "*/$NAME/settings.py" | sed s:^%{buildinstalldir}::` %{settingsdir}/%{name}.py
 
 # Create symlinks under install directory to real persistent data directories
-ln -fs /var/logs/%{name} %{buildinstalldir}/logs
+ln -fs /var/log/%{name} %{buildinstalldir}/log
 ln -fs /var/lib/%{name}/scratch %{buildinstalldir}/scratch
 ln -fs /var/lib/%{name}/media %{buildinstalldir}/media
 
@@ -81,7 +81,7 @@ find %{buildinstalldir} -name '*.py' -type f | xargs sed -i 's:^#!/usr/local/pyt
 %post
 %{name} collectstatic --noinput > /dev/null
 # Remove root-owned logged files just created by collectstatic
-rm -rf /var/logs/%{name}/*
+rm -rf /var/log/%{name}/*
 # Touch the wsgi file to get the app reloaded by mod_wsgi
 touch ${installdir}/django.wsgi
 
@@ -93,5 +93,5 @@ rm -rf %{buildroot}
 /etc/httpd/conf.d/*
 %{_bindir}/%{name}
 %attr(-,apache,,apache) %{webapps}/%{name}
-%attr(-,apache,,apache) /var/logs/%{name}
+%attr(-,apache,,apache) /var/log/%{name}
 %attr(-,apache,,apache) /var/lib/%{name}
