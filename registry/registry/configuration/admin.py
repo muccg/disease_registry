@@ -8,7 +8,11 @@ class EmailTemplateAdmin(admin.ModelAdmin):
 
 class ConsentFormAdmin(admin.ModelAdmin):
     model = ConsentForm
-    list_display = ['country']
+    list_display = ['country', 'module']
+
+class ModuleAdmin(admin.ModelAdmin):
+    model = Module
 
 admin.site.register(EmailTemplate, EmailTemplateAdmin)
 admin.site.register(ConsentForm, ConsentFormAdmin)
+admin.site.register(Module, ModuleAdmin)
