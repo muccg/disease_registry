@@ -26,7 +26,7 @@ os.chdir('../sma')
 
 
 setup(name='django-diseaseregistry',
-    version='1.0.12',
+    version='1.1.0',
     description='Django Disease Registry',
     long_description='Collection of Django applications implementing various aspects for disease registries',
     author='Centre for Comparative Genomics',

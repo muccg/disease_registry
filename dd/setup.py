@@ -26,7 +26,7 @@ os.chdir('../dd')
 
 
 setup(name='django-ddregistry',
-    version='1.0.14',
+    version='1.1.0',
     description='Django Disease Registry - DD',
     long_description='Django Disease registry for DD',
     author='Centre for Comparative Genomics',
