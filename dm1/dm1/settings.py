@@ -129,7 +129,7 @@ EMAIL_APP_NAME = "Registry "
 # #
 # # LOGGING
 # #
-LOG_DIRECTORY = os.path.join(WEBAPP_ROOT, "logs")
+LOG_DIRECTORY = os.path.join(WEBAPP_ROOT, "log")
 try:
     if not os.path.exists(LOG_DIRECTORY):
         os.mkdir(LOG_DIRECTORY)
