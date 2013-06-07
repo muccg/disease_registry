@@ -1,32 +1,43 @@
+Attempting to import local settings as appsettings.dm1
+Failed to import appsettings.dm1
 [
+    {
+        "pk": 1, 
+        "model": "configuration.module", 
+        "fields": {
+            "code": "DM1", 
+            "name": "Myotonic Dystrophy"
+        }
+    }, 
     {
         "pk": 1, 
         "model": "configuration.emailtemplate", 
         "fields": {
-            "body": "To whom it may concern,\r\n\r\nNew patient has been registered in the database.\r\n\r\nThank you.\r\nRegards\r\nRDR Team\r\n\r\n", 
+            "body": "!!!TEST MESSAGE!!!\r\nPlease change me", 
             "description": "", 
-            "name": "New patient registered", 
+            "name": "Test Template", 
             "groups": [
                 3, 
-                2, 
-                1
+                2
             ], 
             "target": 1
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "configuration.consentform", 
+        "fields": {
+            "country": "AU", 
+            "module": 1, 
+            "form": ""
         }
     }, 
     {
         "pk": 2, 
         "model": "configuration.consentform", 
         "fields": {
-            "country": "AU", 
-            "form": ""
-        }
-    }, 
-    {
-        "pk": 1, 
-        "model": "configuration.consentform", 
-        "fields": {
             "country": "NZ", 
+            "module": 1, 
             "form": ""
         }
     }

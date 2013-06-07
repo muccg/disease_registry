@@ -39,7 +39,8 @@ class Migration(SchemaMigration):
         db.create_table('configuration_consentform', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('country', self.gf('django.db.models.fields.CharField')(max_length=2)),
-            ('form', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
+            ('form', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
+            ('module', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['configuration.Module'])),
         ))
         db.send_create_signal('configuration', ['ConsentForm'])
 
@@ -75,8 +76,9 @@ class Migration(SchemaMigration):
         'configuration.consentform': {
             'Meta': {'object_name': 'ConsentForm'},
             'country': ('django.db.models.fields.CharField', [], {'max_length': '2'}),
-            'form': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
+            'form': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'module': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['configuration.Module']"})
         },
         'configuration.emailtemplate': {
             'Meta': {'object_name': 'EmailTemplate'},
