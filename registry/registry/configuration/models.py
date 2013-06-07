@@ -30,5 +30,6 @@ class ConsentForm(models.Model):
         ('AU', 'Australia'),
         ('NZ', 'New Zealand')
     )
-    country = models.CharField(max_length=2, choices=COUNTRIES)
-    form = models.FileField(upload_to='consents', storage=file_system, verbose_name="Consent form", blank=True, null=True)    
+    country = models.CharField(max_length=2, choices=COUNTRIES, blank=False, null=False)
+    form = models.FileField(upload_to='consents', storage=file_system, verbose_name="Consent form", blank=True, null=True)
+    module = models.ForeignKey(Module, blank=False, null=False)
