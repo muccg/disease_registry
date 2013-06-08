@@ -57,6 +57,7 @@ setup(name='django-ddregistry',
         'ccg-auth==0.3.2',
         'ccg-extras==0.1.5',
         'django-userlog==0.2.1',
+        'django-messages-ui==0.2.6',
         'django-nose',
     ],
     dependency_links = [
