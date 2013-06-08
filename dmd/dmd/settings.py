@@ -134,7 +134,7 @@ try:
         os.mkdir(LOG_DIRECTORY)
 except:
     pass
-os.path.exists(LOG_DIRECTORY), "No logs directory, please create one: %s" % LOG_DIRECTORY
+os.path.exists(LOG_DIRECTORY), "No log directory, please create one: %s" % LOG_DIRECTORY
 
 LOGGING = {
     'version': 1,
