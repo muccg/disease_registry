@@ -61,7 +61,7 @@ class GeneralMedicalFactorsInline(admin.StackedInline):
     model = GeneralMedicalFactors
     form = GeneralMedicalFactorsInlineForm
     #  excludes for RDR-104
-    exclude = ('cancer', 'cancerothers', 'cancerorgan', 'cognitive_impairment', 'psychological', 'endocrine', 'obgyn', )
+    exclude = ('cancer', 'cancerothers', 'cancerorgan', 'cancertype', 'cognitive_impairment', 'psychological', 'endocrine', 'obgyn', )
 
 class GeneticTestDetailsInline(admin.StackedInline):
     form = GeneticTestDetailsForm
