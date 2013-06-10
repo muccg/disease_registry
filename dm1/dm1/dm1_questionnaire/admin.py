@@ -4,6 +4,7 @@ from django.conf.urls.defaults import patterns
 from django.db import transaction
 from django.http import HttpResponseRedirect
 from registry.utils import get_static_url, get_working_groups
+from admin_forms import GeneralMedicalFactorsInlineForm
 from admin_forms import *
 from models import *
 
@@ -58,8 +59,9 @@ class SocioeconomicFactorsInline(admin.StackedInline):
 
 class GeneralMedicalFactorsInline(admin.StackedInline):
     model = GeneralMedicalFactors
+    #form = GeneralMedicalFactorsInlineForm
     #  excludes for RDR-104
-    exclude = ('cancer', 'cancerothers', 'cancerorgan', 'cognitive_impairment', 'psychological', 'endocrine', 'obgyn', )
+    exclude = ('cancer', 'cancerothers', 'cancerorgan', 'cancertype', 'cognitive_impairment', 'psychological', 'endocrine', 'obgyn', )
 
 class GeneticTestDetailsInline(admin.StackedInline):
     form = GeneticTestDetailsForm
