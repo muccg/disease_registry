@@ -19,6 +19,7 @@ class SurgeryInline(admin.StackedInline):
 class RespiratoryInline(admin.StackedInline):
     form = RespiratoryForm
     model = Respiratory
+    exclude = ('fvc', 'fvc_date')
 
 class FeedingFunctionInline(admin.StackedInline):
     model = FeedingFunction
@@ -34,6 +35,8 @@ class HeartMedicationInline(admin.TabularInline):
 class HeartInline(admin.StackedInline):
     form = HeartForm
     model = Heart
+    exclude = ('ecg', 'ecg_sinus_rhythm', 'ecg_pr_interval', 'ecg_qrs_duration', 'ecg_examination_date', 'echocardiogram',
+               'echocardiogram_lvef', 'echocardiogram_lvef_date')
 
 class MuscleMedicationInline(admin.TabularInline):
     model = MuscleMedication
@@ -50,10 +53,13 @@ class FatigueMedicationInline(admin.TabularInline):
     extra = 3
 
 class SocioeconomicFactorsInline(admin.StackedInline):
+    exclude = ('comments',)
     model = SocioeconomicFactors
 
 class GeneralMedicalFactorsInline(admin.StackedInline):
     model = GeneralMedicalFactors
+    #  excludes for RDR-104
+    exclude = ('cancer', 'cancerothers', 'cancerorgan', 'cognitive_impairment', 'psychological', 'endocrine', 'obgyn', )
 
 class GeneticTestDetailsInline(admin.StackedInline):
     form = GeneticTestDetailsForm
@@ -78,7 +84,7 @@ class DiagnosisAdmin(admin.ModelAdmin):
         MuscleMedicationInline,
         SurgeryInline,
         HeartInline,
-        HeartMedicationInline,
+
         RespiratoryInline,
         FeedingFunctionInline,
         FatigueInline,
