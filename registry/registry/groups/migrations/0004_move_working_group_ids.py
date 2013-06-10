@@ -11,7 +11,8 @@ class Migration(DataMigration):
             if user.working_group is not None:
                 user.working_groups.add(user.working_group)
             else:
-                user.working_groups.add(orm['groups.WorkingGroup'].objects.get_or_create(name='Unallocated'))
+                obj, flag = orm['groups.WorkingGroup'].objects.get_or_create(name='Unallocated')
+                user.working_groups.add(obj)
             user.save()
 
     def backwards(self, orm):
