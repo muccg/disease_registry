@@ -11,9 +11,7 @@ class Migration(DataMigration):
             if user.working_group is not None:
                 user.working_groups.add(user.working_group)
             else:
-                #allocated to 'Unallocated' group id=3 from fixture
-                #shoudl be chnaged to remove the hard-coded value
-                user.working_groups.add(orm['working_group'].objects.find(id=3))
+                user.working_groups.add(orm['groups.WorkingGroup'].objects.get_or_create(name='Unallocated'))
             user.save()
 
     def backwards(self, orm):
