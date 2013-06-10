@@ -8,7 +8,10 @@ class Migration(DataMigration):
 
     def forwards(self, orm):
         for user in orm['groups.User'].objects.all():
-            user.working_groups.add(user.working_group)
+            if user.working_group is not None:
+                user.working_groups.add(user.working_group)
+            else:
+                user.working_groups.add(orm['groups.WorkingGroup'].objects.get_or_create(name='Unallocated'))
             user.save()
 
     def backwards(self, orm):
