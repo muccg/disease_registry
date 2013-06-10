@@ -111,3 +111,11 @@ class PatientForm(forms.ModelForm):
         if exists:
             raise forms.ValidationError('There is already a patient with the same family and given names in this working group: "%s %s %s".' % (familyname, givennames, workinggroup))
         return cleaneddata
+
+
+class GeneralMedicalFactorsInlineForm(forms.ModelForm):
+    weight = forms.IntegerField(label="What is your weight", help_text="Body weight in kilograms", required=False)
+    height = forms.IntegerField(label="What is your height", help_text="Height in centimetres", required=False)
+
+    class Meta:
+        model = GeneralMedicalFactors
