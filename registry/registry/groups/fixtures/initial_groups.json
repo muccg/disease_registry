@@ -5,5 +5,19 @@
         "fields": {
             "name": "Western Australia"
         }
+    },
+    {
+        "pk": 2, 
+        "model": "groups.workinggroup", 
+        "fields": {
+            "name": "New Zealand"
+        }
+    },
+    {
+        "pk": 3, 
+        "model": "groups.workinggroup", 
+        "fields": {
+            "name": "Unallocated"
+        }
     }
 ]
