@@ -144,7 +144,11 @@ class UserAdmin(admin.ModelAdmin):
 
                 # Now update the internal user record.
                 user.title = form.cleaned_data["title"]
-                user.working_group = form.cleaned_data["working_group"]
+                
+                user.working_groups.clear()
+                for working_group in form.cleaned_data["working_group"]:
+                    user.working_groups.add(working_group)
+
                 user.save()
 
                 return HttpResponseRedirect("../")
