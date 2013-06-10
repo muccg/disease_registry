@@ -54,16 +54,6 @@ class RespiratoryForm(forms.ModelForm):
     invasive_ventilation = forms.CharField(label="Invasive ventilation", widget=RadioSelect(choices=Respiratory.VENTILATION_CHOICES), required=False, help_text="Mechanical ventilation with tracheostomy")
 
     def __init__(self, *args, **kwargs):
-        super(RespiratoryForm, self).__init__(*args, **kwargs)
-
-        # This is ugly, but required to avoid clobbering the help text and
-        # custom verbose name, which is what happens if you just override the
-        # field by setting a property on the class the way the Django
-        # documentation suggests.
-        #self.fields["fvc"].widget = FVCPercentageWidget()
-        self.fields["fvc_date"].widget=DateWidget(popup=True, today=True, years=-5)
-        self.fields["calculatedfvc"].widget = PercentageWidget() # just to display the "%" symbol after the input field
-
         """
         # removed v3
         # Set the form fields based on the model object
@@ -89,6 +79,16 @@ class RespiratoryForm(forms.ModelForm):
             self.initial['predictedfvc'] = "%.2f" % fvc
             self.initial['ci'] = "%.2f" % ci
         """
+        super(RespiratoryForm, self).__init__(*args, **kwargs)
+
+        # This is ugly, but required to avoid clobbering the help text and
+        # custom verbose name, which is what happens if you just override the
+        # field by setting a property on the class the way the Django
+        # documentation suggests.
+        #self.fields["fvc"].widget = FVCPercentageWidget()
+        self.fields["fvc_date"].widget=DateWidget(popup=True, today=True, years=-5)
+        self.fields["calculatedfvc"].widget = PercentageWidget() # just to display the "%" symbol after the input field
+
 
     class Meta:
         model = Respiratory
