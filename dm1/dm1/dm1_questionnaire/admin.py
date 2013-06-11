@@ -59,7 +59,7 @@ class SocioeconomicFactorsInline(admin.StackedInline):
 
 class GeneralMedicalFactorsInline(admin.StackedInline):
     model = GeneralMedicalFactors
-    #form = GeneralMedicalFactorsInlineForm
+    form = GeneralMedicalFactorsInlineForm
     #  excludes for RDR-104
     exclude = ('cancer', 'cancerothers', 'cancerorgan', 'cancertype', 'cognitive_impairment', 'psychological', 'endocrine', 'obgyn', )
 
