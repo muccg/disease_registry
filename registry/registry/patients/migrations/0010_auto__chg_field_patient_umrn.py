@@ -12,6 +12,7 @@ class Migration(SchemaMigration):
         for patient in orm['patients.Patient'].objects.all():
             if patient.umrn is None:
                 patient.umrn = 'GENERATED-%s' % str(randint(0, 9999))
+                patient.save()
 
         # Changing field 'Patient.umrn'
         # Since it's a unique field, there should only be one or zero null values.
