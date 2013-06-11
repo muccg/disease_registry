@@ -327,7 +327,7 @@ class Consent(ApproveMixin, base.Consent):
         return super(Consent, self).approve(dm1models.Consent, diagnosis=diagnosis, commit=True, delete=True)
 
 class FamilyMember(ApproveMixin, base.FamilyMember):
-    diagnosis = models.ForeignKey(Diagnosis, primary_key=True)
+    diagnosis = models.ForeignKey(Diagnosis)
 
     def __unicode__(self):
         return unicode(self.diagnosis)
