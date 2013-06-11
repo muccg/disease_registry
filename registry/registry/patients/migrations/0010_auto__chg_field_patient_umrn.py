@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import datetime
+import random
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
@@ -12,7 +12,7 @@ class Migration(SchemaMigration):
         # Changing field 'Patient.umrn'
         # Since it's a unique field, there should only be one or zero null values.
         # So set the null value to something unique.
-        db.alter_column('patients_patient', 'umrn', self.gf('django.db.models.fields.CharField')(default="UNKNOWN-%s" % str(datetime.date.today()), unique=True, max_length=50))
+        db.alter_column('patients_patient', 'umrn', self.gf('django.db.models.fields.CharField')(default="UNKNOWN-%s" % str(random.randint(0,9999)), unique=True, max_length=50))
 
     def backwards(self, orm):
 
