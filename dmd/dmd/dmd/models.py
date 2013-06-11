@@ -235,7 +235,8 @@ def signal_patient_post_save(sender, **kwargs):
 
 def signal_diagnosis_post_save(sender, **kwargs):
     diagnosis = kwargs['instance']
-    recipients = diagnosis.patient.working_group.user_set
+    wg = diagnosis.patient.working_group
+    recipients = User.objects.filter(working_groups=wg)
     sendNewPatientEmail(recipients)
 
 # connect up django signals
