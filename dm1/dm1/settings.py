@@ -62,6 +62,7 @@ INSTALLED_APPS = [
 
 INSTALLED_APPS.extend([
     'south',
+    'messages_ui',
     'userlog',
     'registry.groups',
     'registry.patients',
