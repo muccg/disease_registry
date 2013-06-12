@@ -8,15 +8,16 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
+        db.start_transaction()
         for patient in orm['patients.Patient'].objects.all():
             if patient.umrn is None:
                 patient.umrn = 'GENERATED-%s' % str(patient.id)
                 patient.save()
+        db.commit_transaction()
 
-        # Changing field 'Patient.umrn'
-        # Since it's a unique field, there should only be one or zero null values.
-        # So set the null value to something unique.
+        db.start_transaction()
         db.alter_column('patients_patient', 'umrn', self.gf('django.db.models.fields.CharField')(unique=True, max_length=50))
+        db.commit_transaction()
 
     def backwards(self, orm):
 
