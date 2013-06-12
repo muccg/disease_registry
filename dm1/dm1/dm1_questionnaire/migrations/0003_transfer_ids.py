@@ -12,7 +12,7 @@ class Migration(DataMigration):
         # Use orm.ModelName to refer to models in this application,
         # and orm['appname.ModelName'] for models in other applications.
         for f in orm['dm1_questionnaire.FamilyMember'].objects.all():
-            f.id = f.patient_id
+            f.id = f.diagnosis_id
             f.save()
 
     def backwards(self, orm):
