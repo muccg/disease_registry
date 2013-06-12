@@ -309,7 +309,7 @@ class EthnicOrigin(ApproveMixin, base.EthnicOrigin):
 
 
 class ClinicalTrials(ApproveMixin, base.ClinicalTrials):
-    diagnosis = models.ForeignKey(Diagnosis, primary_key=True)
+    diagnosis = models.ForeignKey(Diagnosis)
 
     def __unicode__(self):
         return unicode(self.diagnosis)

@@ -27,7 +27,7 @@ class FeedingFunctionInline(admin.StackedInline):
 
 class ClinicalTrialsInline(admin.TabularInline):
     model = ClinicalTrials
-    extra = 3
+    extra = 1
 
 class HeartMedicationInline(admin.TabularInline):
     model = HeartMedication
