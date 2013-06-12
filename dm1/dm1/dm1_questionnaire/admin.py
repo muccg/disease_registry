@@ -72,7 +72,7 @@ class EthnicOriginInline(admin.StackedInline):
 
 class FamilyMemberInline(admin.TabularInline):
     model = FamilyMember
-    extra = 3
+    extra = 1
 
 class ConsentInline(admin.StackedInline):
     model = Consent
@@ -86,7 +86,6 @@ class DiagnosisAdmin(admin.ModelAdmin):
         MuscleMedicationInline,
         SurgeryInline,
         HeartInline,
-
         RespiratoryInline,
         FeedingFunctionInline,
         FatigueInline,
