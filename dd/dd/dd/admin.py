@@ -1,8 +1,9 @@
 from django.contrib import admin
 from dd.dd.models import *
 from admin_forms import *
-from registry.utils import get_static_url
+from registry.utils import get_static_url,get_working_groups
 from registry import groups
+from registry import configuration
 
 class ClinicalDataAdmin(admin.ModelAdmin):
     model = DDClinicalData
@@ -59,8 +60,6 @@ class MRIDataInline(admin.StackedInline):
               ("brain", "cervical", "thoracic"),
               "report_file", "image_file")
     form = MRIDataForm
-    change_form_template = "progressbarupload/change_form.html"
-    add_form_template = "progressbarupload/change_form.html"
     extra = 0
 
 class MRIDataAdmin(admin.ModelAdmin):
@@ -68,8 +67,6 @@ class MRIDataAdmin(admin.ModelAdmin):
     fields = ("diagnosis", "date", "location",
               ("brain", "cervical", "thoracic"),
               "report_file")
-    change_form_template = "progressbarupload/change_form.html"
-    add_form_template = "progressbarupload/change_form.html"
 
 class DDDiagnosisAdmin(admin.ModelAdmin):
     form = DDDiagnosisForm
@@ -106,7 +103,7 @@ class DDDiagnosisAdmin(admin.ModelAdmin):
         user = groups.models.User.objects.get(user=request.user)
 
         if self.has_change_permission(request):
-            return Diagnosis.objects.filter(patient__working_group=user.working_group).filter(patient__active=True)
+            return Diagnosis.objects.filter(patient__working_group__in=get_working_groups(user)).filter(patient__active=True)
         else:
             return Diagnosis.objects.none()
 

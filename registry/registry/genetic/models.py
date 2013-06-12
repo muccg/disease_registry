@@ -77,6 +77,28 @@ class Variation(models.Model):
     def set_validation_override(self, type):
         setattr(self, self.VALIDATION_FIELDS[type], True)
 
+class Laboratory(models.Model):
+    """
+    Laboratory is a model for preset values of "laboratory site"
+    fields.
+    """
+    name = models.CharField(max_length=256)
+    address = models.TextField(max_length=200, blank=True)
+    contact_name = models.CharField(max_length=200, blank=True)
+    contact_email = models.EmailField(blank=True)
+    contact_phone = models.CharField(max_length=50, blank=True)
+
+    class Meta:
+        verbose_name_plural = "laboratories"
+
+    def __unicode__(self):
+        val = self.name
+        contacts = filter(bool, [self.contact_name, self.contact_email, self.contact_phone])
+        if self.address:
+            val = "%s, %s" % (val, self.address)
+        if contacts:
+            val = "%s; Contact: %s" % (val, ", ".join(contacts))
+        return val
 
 def signal_patient_post_save(sender, **kwargs):
     logger.debug("patient post_save signal")

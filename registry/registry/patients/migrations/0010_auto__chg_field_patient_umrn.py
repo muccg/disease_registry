@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
@@ -8,11 +7,17 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        
+        db.start_transaction()
+        for patient in orm['patients.Patient'].objects.all():
+            if patient.umrn is None:
+                patient.umrn = 'GENERATED-%s' % str(patient.id)
+                patient.save()
+        db.commit_transaction()
 
-        # Changing field 'Patient.umrn'
-        # Since it's a unique field, there should only be one or zero null values.
-        # So set the null value to something unique.
-        db.alter_column('patients_patient', 'umrn', self.gf('django.db.models.fields.CharField')(default="UNKNOWN-%s" % str(datetime.date.today()), unique=True, max_length=50))
+        db.start_transaction()
+        db.alter_column('patients_patient', 'umrn', self.gf('django.db.models.fields.CharField')(unique=True, max_length=50))
+        db.commit_transaction()
 
     def backwards(self, orm):
 

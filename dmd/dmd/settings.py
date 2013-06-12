@@ -61,11 +61,13 @@ INSTALLED_APPS = [
 
 INSTALLED_APPS.extend([
     'south',
+    'messages_ui',
     'userlog',
     'registry.groups',
     'registry.patients',
     'registry.genetic',
     'registry.common',
+    'registry.configuration',
     'django_qbe',
     'django_qbe.savedqueries',
     'dmd.dmd',
@@ -80,9 +82,9 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # email
-EMAIL_HOST = 'ccg.murdoch.edu.au'
-SERVER_EMAIL = "apache@ccg.murdoch.edu.au"  # from address
-RETURN_EMAIL = 'web@ccg.murdoch.edu.au'
+EMAIL_USE_TLS = False
+EMAIL_HOST = '127.0.0.1'
+EMAIL_PORT = 25
 
 # default emails
 ADMINS = [
@@ -127,13 +129,13 @@ EMAIL_APP_NAME = "Registry "
 # #
 # # LOGGING
 # #
-LOG_DIRECTORY = os.path.join(WEBAPP_ROOT, "logs")
+LOG_DIRECTORY = os.path.join(WEBAPP_ROOT, "log")
 try:
     if not os.path.exists(LOG_DIRECTORY):
         os.mkdir(LOG_DIRECTORY)
 except:
     pass
-os.path.exists(LOG_DIRECTORY), "No logs directory, please create one: %s" % LOG_DIRECTORY
+os.path.exists(LOG_DIRECTORY), "No log directory, please create one: %s" % LOG_DIRECTORY
 
 LOGGING = {
     'version': 1,

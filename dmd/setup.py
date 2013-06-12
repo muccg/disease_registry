@@ -25,7 +25,7 @@ for package in ('common', 'patients', 'genetic', 'groups', 'humangenome'):
 os.chdir('../dmd')
 
 setup(name='django-dmdregistry',
-    version='1.0.13',
+    version='1.1.0',
     description='Django Disease Registry - DMD',
     long_description='Django Disease registry for Duchenne Muscular Dystrophy',
     author='Centre for Comparative Genomics',
@@ -39,7 +39,8 @@ setup(name='django-dmdregistry',
         'registry.genetic',
         'registry.groups',
         'registry.forms',
-        'registry.humangenome'
+        'registry.humangenome',
+        'registry.configuration'
     ],
     package_data=data_files,
     zip_safe=False,
@@ -52,6 +53,7 @@ setup(name='django-dmdregistry',
         'python-memcached==1.48',
         'South>=0.7.3',
         'django-extensions>=0.7.1',
+        'django-messages-ui==0.2.6',
         'ccg-auth==0.3.2',
         'ccg-extras==0.1.5',
         'django-userlog==0.2.1',

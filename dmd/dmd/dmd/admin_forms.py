@@ -1,8 +1,10 @@
 from django import forms
 from django.core.urlresolvers import reverse_lazy
 from models import *
+
 from registry.forms.widgets import ComboWidget, LiveComboWidget, PercentageWidget, StaticWidget
 from registry.forms.date import DateWidget
+from registry.utils import get_working_groups
 
 class DiagnosisForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -18,7 +20,7 @@ class DiagnosisForm(forms.ModelForm):
             if self.user.is_superuser:
                 self.fields["patient"] = forms.ModelChoiceField(Patient.objects.all())
             else:
-                self.fields["patient"] = forms.ModelChoiceField(Patient.objects.filter(working_group=user.working_group).filter(active=True))
+                self.fields["patient"] = forms.ModelChoiceField(Patient.objects.filter(working_group=get_working_groups(user)).filter(active=True))
 
     class Meta:
        model = Diagnosis

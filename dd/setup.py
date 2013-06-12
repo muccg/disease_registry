@@ -26,7 +26,7 @@ os.chdir('../dd')
 
 
 setup(name='django-ddregistry',
-    version='1.0.13',
+    version='1.1.0',
     description='Django Disease Registry - DD',
     long_description='Django Disease registry for DD',
     author='Centre for Comparative Genomics',
@@ -40,7 +40,8 @@ setup(name='django-ddregistry',
         'registry.genetic',
         'registry.groups',
         'registry.forms',
-        'registry.humangenome'
+        'registry.humangenome',
+        'registry.configuration'
     ],
     package_data=data_files,
     zip_safe=False,
@@ -56,8 +57,8 @@ setup(name='django-ddregistry',
         'ccg-auth==0.3.2',
         'ccg-extras==0.1.5',
         'django-userlog==0.2.1',
+        'django-messages-ui==0.2.6',
         'django-nose',
-        'django-progressbarupload',
     ],
     dependency_links = [
         "http://repo.ccgapps.com.au",

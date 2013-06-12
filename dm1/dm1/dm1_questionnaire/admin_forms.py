@@ -31,7 +31,11 @@ class RespiratoryForm(forms.ModelForm):
         # field by setting a property on the class the way the Django
         # documentation suggests.
         #self.fields["fvc"].widget = PercentageWidget()
-        self.fields["fvc_date"].widget=DateWidget(popup=True, today=True, years=-5)
+
+        # fvc_date excluded by inline form
+        if 'fvc_date' in self.fields:
+            self.fields["fvc_date"].widget = DateWidget(popup=True, today=True, years=-5)
+
         #self.fields["calculatedfvc"].widget = PercentageWidget()
 
     class Meta:
@@ -46,9 +50,18 @@ class HeartForm(forms.ModelForm):
         # custom verbose name, which is what happens if you just override the
         # field by setting a property on the class the way the Django
         # documentation suggests.
-        self.fields["echocardiogram_lvef"].widget = PercentageWidget()
-        self.fields["ecg_examination_date"].widget=DateWidget(popup=True, today=True, years=-20)
-        self.fields["echocardiogram_lvef_date"].widget=DateWidget(popup=True, today=True, years=-5)
+
+        # echocardiogram_lvef maybe excluded in inline form
+        if 'echocardiogram_lvef' in self.fields:
+            self.fields["echocardiogram_lvef"].widget = PercentageWidget()
+
+        # ecg_examination_date maybe excluded by inline form
+        if 'ecg_examination_date' in self.fields:
+            self.fields["ecg_examination_date"].widget=DateWidget(popup=True, today=True, years=-20)
+
+        # echocardiogram_lvef_date maybe excluded in inline form
+        if 'echocardiogram_lvef_date' in self.fields:
+            self.fields["echocardiogram_lvef_date"].widget=DateWidget(popup=True, today=True, years=-5)
 
     class Meta:
         model = Heart
@@ -98,3 +111,11 @@ class PatientForm(forms.ModelForm):
         if exists:
             raise forms.ValidationError('There is already a patient with the same family and given names in this working group: "%s %s %s".' % (familyname, givennames, workinggroup))
         return cleaneddata
+
+
+class GeneralMedicalFactorsInlineForm(forms.ModelForm):
+    weight = forms.IntegerField(label="What is your weight", help_text="Body weight in kilograms", required=False)
+    height = forms.IntegerField(label="What is your height", help_text="Height in centimetres", required=False)
+
+    class Meta:
+        model = GeneralMedicalFactors

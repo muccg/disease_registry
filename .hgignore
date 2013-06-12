@@ -16,6 +16,11 @@ registry/registry/logs*
 ^dm1/django_dm1registry.egg-info*
 ^sma/django_smaregistry.egg-info*
 .*\.rpm$
-^dd/logs/*
+.*\.sh$
+^dd/log/*
 ^dd/media/*
-^dmd/logs/*
+^dmd/log/*
+^dm1/log/*
+^sma/log/*
+.ccgplatform
+.idea

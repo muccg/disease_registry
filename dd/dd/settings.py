@@ -57,14 +57,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.messages',
     'django_extensions',
+    'messages_ui',
     'south',
     'userlog',
     'registry.groups',
     'registry.patients',
     'registry.genetic',
     'registry.common',
+    'registry.configuration',
     'dd.dd',
-    'progressbarupload',
     'django.contrib.admin',
 ]
 
@@ -117,11 +118,6 @@ SESSION_COOKIE_NAME = "registry_dd"
 SESSION_ENGINE = 'django.contrib.sessions.backends.file'
 SESSION_FILE_PATH = WRITABLE_DIRECTORY
 
-FILE_UPLOAD_HANDLERS = (
-    "progressbarupload.uploadhandler.ProgressBarUploadHandler",
-    "django.core.files.uploadhandler.MemoryFileUploadHandler",
-    "django.core.files.uploadhandler.TemporaryFileUploadHandler",
-)
 
 # APPLICATION SPECIFIC SETTINGS
 AUTH_PROFILE_MODULE = 'groups.User'
@@ -130,13 +126,13 @@ EMAIL_APP_NAME = "Registry "
 # #
 # # LOGGING
 # #
-LOG_DIRECTORY = os.path.join(WEBAPP_ROOT, "logs")
+LOG_DIRECTORY = os.path.join(WEBAPP_ROOT, "log")
 try:
     if not os.path.exists(LOG_DIRECTORY):
         os.mkdir(LOG_DIRECTORY)
 except:
     pass
-os.path.exists(LOG_DIRECTORY), "No logs directory, please create one: %s" % LOG_DIRECTORY
+os.path.exists(LOG_DIRECTORY), "No log directory, please create one: %s" % LOG_DIRECTORY
 
 LOGGING = {
     'version': 1,

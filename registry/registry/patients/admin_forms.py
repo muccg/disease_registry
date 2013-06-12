@@ -14,7 +14,7 @@ class PatientDoctorForm(forms.ModelForm):
         "Geneticist",
         "Specialist - Other",
     ]
-    relationship = forms.CharField(label="Relationship", widget=ComboWidget(options=OPTIONS))
+    relationship = forms.CharField(label="Type of Medical Professional", widget=ComboWidget(options=OPTIONS))
 
     class Meta:
         model = PatientDoctor
@@ -46,7 +46,11 @@ class PatientForm(forms.ModelForm):
     class Media:
         js = (
             "https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js",
-            "js/patient.js"
+            'js/handlebars.runtime.js',
+            'js/jquery.ba-dotimeout.min.js',
+            'messages_ui/jquery.messages-ui.js',
+            'messages_ui/message.js',
+            "js/patient.js",
         )
 
     class Meta:

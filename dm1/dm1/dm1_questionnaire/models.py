@@ -81,7 +81,7 @@ class Patient(ApproveMixin, models.Model):
         return "%s %s" % (self.family_name.upper(), self.given_names)
 
     def approve(self):
-        o = super(Patient, self).approve(patients.models.Patient, keys=True)
+        o = super(Patient, self).approve(registry.patients.models.Patient, keys=True)
 
         # Handle next of kin fields by copying the patient details for now.
         fields = (
@@ -327,7 +327,7 @@ class Consent(ApproveMixin, base.Consent):
         return super(Consent, self).approve(dm1models.Consent, diagnosis=diagnosis, commit=True, delete=True)
 
 class FamilyMember(ApproveMixin, base.FamilyMember):
-    diagnosis = models.ForeignKey(Diagnosis, primary_key=True)
+    diagnosis = models.ForeignKey(Diagnosis)
 
     def __unicode__(self):
         return unicode(self.diagnosis)

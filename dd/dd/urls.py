@@ -11,7 +11,6 @@ urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls), {}),
     (r'^$', include("dd.dd.urls"), {}),
     (r'', include(registry.urls, namespace="registry")),
-    (r'^progressbarupload/', include('progressbarupload.urls')),
     (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT})
 )
 

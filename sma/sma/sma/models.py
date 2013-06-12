@@ -4,6 +4,9 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.core.exceptions import ObjectDoesNotExist
 from registry.patients.models import Patient
+from registry.configuration.models import EmailTemplate
+from registry.mail import sendNewPatientEmail
+from registry.groups.models import User
 
 import logging
 logger = logging.getLogger('sma')
@@ -212,5 +215,12 @@ def signal_patient_post_save(sender, **kwargs):
         raise
 
 
+def signal_diagnosis_post_save(sender, **kwargs):
+    diagnosis = kwargs['instance']
+    wg = diagnosis.patient.working_group
+    recipients = User.objects.filter(working_groups=wg)
+    sendNewPatientEmail(recipients)
+
 # connect up django signals
 post_save.connect(signal_patient_post_save, sender=Patient)
+post_save.connect(signal_diagnosis_post_save, sender=Diagnosis)
