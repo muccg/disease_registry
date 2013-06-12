@@ -11,7 +11,7 @@ class Migration(SchemaMigration):
         
         for patient in orm['patients.Patient'].objects.all():
             if patient.umrn is None:
-                patient.umrn = 'GENERATED-%s' % str(randint(0, 9999))
+                patient.umrn = 'GENERATED-%s' % str(patient.id))
                 patient.save()
 
         # Changing field 'Patient.umrn'
