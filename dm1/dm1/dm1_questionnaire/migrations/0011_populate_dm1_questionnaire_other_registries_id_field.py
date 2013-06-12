@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
 import datetime
 from south.db import db
-from south.v2 import SchemaMigration
+from south.v2 import DataMigration
 from django.db import models
 
-
-class Migration(SchemaMigration):
+class Migration(DataMigration):
 
     def forwards(self, orm):
-        # Adding field 'OtherRegistries.id'
-        db.add_column('dm1_questionnaire_clinicaltrials', 'id',
-                      self.gf('django.db.models.fields.IntegerField')(null=True, blank=True),
-                      keep_default=False)
-
+        "Write your forwards methods here."
+        # Note: Don't use "from appname.models import ModelName". 
+        # Use orm.ModelName to refer to models in this application,
+        # and orm['appname.ModelName'] for models in other applications.
+        for other_registry in orm['dm1_questionnaire.OtherRegistries'].objects.all():
+            other_registry.id = other_registry.diagnosis_id
+            other_registry.save()
 
     def backwards(self, orm):
-        # Deleting field 'OtherRegistries.id'
-        db.delete_column('dm1_questionnaire_clinicaltrials', 'id')
-
+        "Write your backwards methods here."
+        pass
 
     models = {
         'dm1.cancertypechoices': {
@@ -27,9 +27,9 @@ class Migration(SchemaMigration):
         },
         'dm1_questionnaire.clinicaltrials': {
             'Meta': {'object_name': 'ClinicalTrials'},
-            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dm1_questionnaire.Diagnosis']", 'primary_key': 'True'}),
+            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dm1_questionnaire.Diagnosis']"}),
             'drug_name': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'trial_name': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'trial_phase': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'trial_sponsor': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'})
@@ -229,7 +229,8 @@ class Migration(SchemaMigration):
         },
         'dm1_questionnaire.otherregistries': {
             'Meta': {'object_name': 'OtherRegistries'},
-            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dm1_questionnaire.Diagnosis']", 'primary_key': 'True'}),
+            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dm1_questionnaire.Diagnosis']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'registry': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'})
         },
         'dm1_questionnaire.patient': {
@@ -296,3 +297,4 @@ class Migration(SchemaMigration):
     }
 
     complete_apps = ['dm1_questionnaire']
+    symmetrical = True

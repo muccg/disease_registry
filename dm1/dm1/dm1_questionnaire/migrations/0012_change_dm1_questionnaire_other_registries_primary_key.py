@@ -8,15 +8,24 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'OtherRegistries.id'
-        db.add_column('dm1_questionnaire_clinicaltrials', 'id',
-                      self.gf('django.db.models.fields.IntegerField')(null=True, blank=True),
-                      keep_default=False)
+        db.execute('ALTER TABLE dm1_questionnaire_otherregistries DROP CONSTRAINT dm1_questionnaire_otherregistries_pkey CASCADE')
 
+        # Adding unique constraint on 'OtherRegistries', fields ['id']
+        db.create_unique('dm1_questionnaire_otherregistries', ['id'])
+        db.create_primary_key('dm1_questionnaire_otherregistries', ['id'])
+        # Changing field 'OtherRegistries.diagnosis'
+        db.alter_column('dm1_questionnaire_otherregistries', 'diagnosis_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dm1_questionnaire.Diagnosis'], unique=True))
 
     def backwards(self, orm):
-        # Deleting field 'OtherRegistries.id'
-        db.delete_column('dm1_questionnaire_clinicaltrials', 'id')
+        # Removing unique constraint on 'OtherRegistries', fields ['id']
+        db.delete_unique('dm1_questionnaire_otherregistries', ['id'])
+
+
+        # Changing field 'OtherRegistries.id'
+        db.alter_column('dm1_questionnaire_otherregistries', 'id', self.gf('django.db.models.fields.IntegerField')(null=True))
+
+        # Changing field 'OtherRegistries.diagnosis'
+        db.alter_column('dm1_questionnaire_otherregistries', 'diagnosis_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dm1_questionnaire.Diagnosis'], unique=True, primary_key=True))
 
 
     models = {
@@ -27,9 +36,9 @@ class Migration(SchemaMigration):
         },
         'dm1_questionnaire.clinicaltrials': {
             'Meta': {'object_name': 'ClinicalTrials'},
-            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dm1_questionnaire.Diagnosis']", 'primary_key': 'True'}),
+            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dm1_questionnaire.Diagnosis']"}),
             'drug_name': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'trial_name': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'trial_phase': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'trial_sponsor': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'})
@@ -229,7 +238,8 @@ class Migration(SchemaMigration):
         },
         'dm1_questionnaire.otherregistries': {
             'Meta': {'object_name': 'OtherRegistries'},
-            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dm1_questionnaire.Diagnosis']", 'primary_key': 'True'}),
+            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dm1_questionnaire.Diagnosis']"}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'registry': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'})
         },
         'dm1_questionnaire.patient': {

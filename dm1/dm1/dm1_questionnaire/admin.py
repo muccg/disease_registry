@@ -74,6 +74,10 @@ class FamilyMemberInline(admin.TabularInline):
     model = FamilyMember
     extra = 1
 
+class OtherRegistryInline(admin.TabularInline):
+    model = OtherRegistries
+    extra = 1
+
 class ConsentInline(admin.StackedInline):
     model = Consent
 
@@ -95,6 +99,7 @@ class DiagnosisAdmin(admin.ModelAdmin):
         GeneticTestDetailsInline,
         EthnicOriginInline,
         ClinicalTrialsInline,
+        OtherRegistryInline,
         FamilyMemberInline,
         ConsentInline,
     ]

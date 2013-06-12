@@ -336,7 +336,7 @@ class FamilyMember(ApproveMixin, base.FamilyMember):
         return super(FamilyMember, self).approve(dm1models.FamilyMember, diagnosis=diagnosis, commit=True, delete=True)
 
 class OtherRegistries(ApproveMixin, base.OtherRegistries):
-    diagnosis = models.ForeignKey(Diagnosis, primary_key=True)
+    diagnosis = models.ForeignKey(Diagnosis)
 
     def __unicode__(self):
         return unicode(self.diagnosis)
