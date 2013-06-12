@@ -8,14 +8,14 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'OtherRegistries.id'
+        # Adding field 'ClinicalTrials.id'
         db.add_column('dm1_questionnaire_clinicaltrials', 'id',
                       self.gf('django.db.models.fields.IntegerField')(null=True, blank=True),
                       keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting field 'OtherRegistries.id'
+        # Deleting field 'ClinicalTrials.id'
         db.delete_column('dm1_questionnaire_clinicaltrials', 'id')
 
 
