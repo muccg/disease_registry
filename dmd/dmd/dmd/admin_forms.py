@@ -20,7 +20,7 @@ class DiagnosisForm(forms.ModelForm):
             if self.user.is_superuser:
                 self.fields["patient"] = forms.ModelChoiceField(Patient.objects.all())
             else:
-                self.fields["patient"] = forms.ModelChoiceField(Patient.objects.filter(working_group=get_working_groups(user)).filter(active=True))
+                self.fields["patient"] = forms.ModelChoiceField(Patient.objects.filter(working_group__in=get_working_groups(user)).filter(active=True))
 
     class Meta:
        model = Diagnosis
