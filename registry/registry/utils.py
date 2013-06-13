@@ -31,4 +31,4 @@ if __name__ == "__main__":
 
 
 def get_working_groups(user):
-    return [working_group.id for working_group in user.working_group.all()]
+    return [working_group.id for working_group in user.working_groups.all()]
