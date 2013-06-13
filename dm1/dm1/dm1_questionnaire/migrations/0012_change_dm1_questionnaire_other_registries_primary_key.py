@@ -14,7 +14,7 @@ class Migration(SchemaMigration):
         db.create_unique('dm1_questionnaire_otherregistries', ['id'])
         db.create_primary_key('dm1_questionnaire_otherregistries', ['id'])
         # Changing field 'OtherRegistries.diagnosis'
-        db.alter_column('dm1_questionnaire_otherregistries', 'diagnosis_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dm1_questionnaire.Diagnosis'], unique=True))
+        db.alter_column('dm1_questionnaire_otherregistries', 'diagnosis_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dm1_questionnaire.Diagnosis']))
 
     def backwards(self, orm):
         # Removing unique constraint on 'OtherRegistries', fields ['id']
