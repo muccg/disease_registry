@@ -1,0 +1,45 @@
+.inline-group .aligned label, .aligned label {
+    width: 12em;
+}
+/* FJ added 'form .aligned input' to keep the help text and input/select aligned in the DM1 change form */
+/* form .aligned p, form .aligned ul, form .aligned input, form .aligned select { */
+/* form .aligned p, form .aligned ul, form .aligned div.helpfieldblock { */
+form .aligned p, form .aligned ul {
+    margin-left: 0;
+}
+
+form .aligned div.helpfieldblock {
+    margin-left: 14.4em;
+}
+
+form .aligned div.helpfieldblock input, form .aligned div.helpfieldblock select, form .aligned p.help {
+    margin-left: 0;
+    padding-left: 0;
+}
+
+label {
+    font-weight: normal !important;
+    color: #333;
+    font-size: 12px;
+    /* height: 4em; */ /* FJ to force the help text and the input/select field on the right side, should be removed when the help/input block margin is set */
+}
+
+.help, p.help {
+    color: #333;    /* #999; */
+}
+
+.formcheckboxlabel {
+    float: left;
+}
+
+/* FJ Trac 16 #44 */
+/* div.helpfieldblock p.help ul li { */
+div.helpfieldblock ul {
+    padding: 0;
+}
+
+div.helpfieldblock ul li {
+    display: inline;
+    list-style: none;
+    vertical-align: baseline;
+}
