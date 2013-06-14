@@ -11,9 +11,11 @@ class Migration(DataMigration):
         # Note: Don't use "from appname.models import ModelName". 
         # Use orm.ModelName to refer to models in this application,
         # and orm['appname.ModelName'] for models in other applications.
+        n = 1
         for other_registry in orm['dm1_questionnaire.OtherRegistries'].objects.all():
-            other_registry.id = other_registry.diagnosis_id
+            other_registry.id = n
             other_registry.save()
+            n += 1
 
     def backwards(self, orm):
         "Write your backwards methods here."
