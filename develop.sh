@@ -14,7 +14,7 @@ port[dm1]='8003'
 port[dd]='8004'
 
 PROJECT_NAME='disease_registry'
-AWS_BUILD_INSTANCE='rpmbuild-centos6-aws'
+AWS_BUILD_INSTANCE='aws_rpmbuild_centos6'
 AWS_STAGING_INSTANCE='aws_syd_registry_staging'
 TARGET_DIR="/usr/local/src/${PROJECT_NAME}"
 CLOSURE="/usr/local/closure/compiler.jar"
