@@ -9,7 +9,7 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
 
-        db.execute('ALTER TABLE dm1_questionnaire_familymember DROP CONSTRAINT dm1_questionnaire_familymember_pkey CASCADE')
+
 
         # Adding unique constraint on 'FamilyMember', fields ['id']
         db.create_unique('dm1_questionnaire_familymember', ['id'])
