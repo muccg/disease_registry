@@ -317,6 +317,9 @@ class GeneralMedicalFactorsForm(forms.ModelForm):
     YESNO_CHOICES = (('', "---"),) + base.GeneralMedicalFactors.YESNO_CHOICES
     YESNOUNSURE_CHOICES = (('', "---"),) + base.GeneralMedicalFactors.YESNOUNSURE_CHOICES
 
+    weight = forms.IntegerField(label="What is your weight?", required=False)
+    height = forms.IntegerField(label="What is your height?", required=False)
+
     diabetes = forms.CharField(label="Have you been diagnosed with diabetes", required=False, widget=Select(choices=DIABETES_CHOICES))
     diabetesage = forms.IntegerField(required=False, label='Age at diagnosis')
 
