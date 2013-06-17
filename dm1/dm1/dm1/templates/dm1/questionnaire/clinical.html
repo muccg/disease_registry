@@ -1,5 +1,5 @@
 {% extends "dm1/questionnaire/base.html" %}
-
+{% load  get_classname %}
 {% block content %}
 
     <h2>Myotonic Dystrophy Questionnaire</h2>
@@ -12,8 +12,13 @@
         <span>Note:</span> All fields in <span>BOLD</span> are required
     </div>
 
-    <form method="POST">{% csrf_token %}
+    <form method="POST">{% csrf_token %}f
 		{% for label, form, save in forms %}
+        {% if form|get_classname|slice:"-7:" == "FormSet" %}
+            {{ form.management_form }}
+        {% endif %}
+
+
         <div class='subform'>
             <div class='label'>{{ label }}</div>
             <div class='content'>
@@ -31,6 +36,7 @@
 				</table>
 			</div>
         </div>
+
 		{% endfor %}
         <!-- FJ MD Questionnaire item 7 -->
         <input type="submit" value="Submit">
