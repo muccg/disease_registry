@@ -1,7 +1,75 @@
 {% extends "dm1/questionnaire/base.html" %}
 {% load  get_classname %}
 {% block content %}
+    <script style="text/javascript">
+            // Functions to dynamically add and remove new objects to inline formsets
+            var row_cache = {};
 
+
+            function get_table_id(el) {
+                return $(el).closest('.subform').find('table').attr('id');
+            }
+
+            function new_specifier(old_name_or_id,new_row_index) {
+                    // We replace the -0- with new index , e.g. -23-
+                    // name="otherregistries-0-diagnosis"
+                    // id="id_otherregistries-0-diagnosis"
+                    var s = "-" + new_row_index.toString() + "-";
+                    return old_name_or_id.replace("-0-",s);
+            }
+
+            function add_row(el) {
+                var table_name = get_table_id(el);
+                var table_selector = '#' + table_name;
+                var first_data_row_selector =  table_selector + " tbody tr:first";
+                var new_row_index =   $("#" + table_name + " > tbody > tr").length;
+                var total_forms_selector = "#id_" + table_name + "-TOTAL_FORMS";
+                var total_forms = parseInt($(total_forms_selector).val());
+
+                $(first_data_row_selector).clone()
+                        .find(":input")
+                           .each(function () {
+                                $(this).attr({
+                                      'id': function(_, old_id) { return new_specifier(old_id,new_row_index); },
+                                      'name': function(_, old_name) { return new_specifier(old_name,new_row_index); },
+                                      'value': function(_, old_value) { return "";}
+                                    })
+                                    .val("");
+                                })
+                        .end().appendTo(table_selector);
+
+                $(total_forms_selector).val(total_forms + 1);
+
+            }
+
+            function remove_row(el) {
+                var table_name = get_table_id(el);
+                var last_row_selector = "#" + table_name + " tr:last";
+                var total_forms_selector = "#id_" + table_name + "-TOTAL_FORMS";
+                var total_forms = parseInt($(total_forms_selector).val());
+                if (total_forms > 1) {
+                    $(last_row_selector).remove();
+                    $(total_forms_selector).val(total_forms - 1);
+                }
+                else {
+                    // zero the row
+                    var table_selector = '#' + table_name;
+                    var first_data_row_selector =  table_selector + " tbody tr:first";
+                    $(first_data_row_selector)
+                        .find(":input")
+                           .each(function () {
+                                $(this).attr({
+                                      'id': function(_, old_id) { return new_specifier(old_id,0); },
+                                      'name': function(_, old_name) { return new_specifier(old_name,0); },
+                                      'value': function(_, old_value) { return "";}
+                                    })
+                                    .val("");
+                                });
+
+                     $(total_forms_selector).val(1);
+                }
+            }
+    </script>
     <h2>Myotonic Dystrophy Questionnaire</h2>
 
 	{% if family_name %}
@@ -12,13 +80,48 @@
         <span>Note:</span> All fields in <span>BOLD</span> are required
     </div>
 
-    <form method="POST">{% csrf_token %}
+    <form id="mainform" method="POST">{% csrf_token %}
 		{% for label, form, save in forms %}
             {% if form|get_classname|slice:"-7:" == "FormSet" %}
+                {# Show a table for form sets #}
                 {{ form.management_form }}
+                {{ form.non_form_errors.as_ul }}
+                <div class='subform'>
+                <div class='label'>{{ label }}</div>
+                <div class="actionbutton" onclick="add_row(this);">Add</div> <div class="actionbutton" onclick="remove_row(this);">Remove</div>
+                <div class='content'>
+                <table id='{{form.prefix}}'>
+                {% for frm in form.forms %}
+                      {% if forloop.first %}
+                          <thead><tr>
+                            {% for field in frm.visible_fields %}
+                                <th>{{ field.label|capfirst }}</th>
+                            {% endfor %}
 
-
-            {% endif %}
+                          </tr></thead>
+                      {% endif %}
+                      <tbody>
+                      <tr class="{% cycle row1,row2 %}">
+                      {% for field in frm.visible_fields %}
+                            <td>
+                            {# Include the hidden fields in the form #}
+                            {% if forloop.first %}
+                              {% for hidden in frm.hidden_fields %}
+                                {{ hidden }}
+                              {% endfor %}
+                            {% endif %}
+                              {{ field.errors.as_ul }}
+                              {{ field }}
+                            </td>
+                      {% endfor %}
+                  </tr>
+                   </tbody>
+                {% endfor %}
+                </table>
+                </div>
+                </div>
+            {% else %}
+            {# show normal subform #}
             <div class='subform'>
                 <div class='label'>{{ label }}</div>
                 <div class='content'>
@@ -36,6 +139,7 @@
                     </table>
                 </div>
             </div>
+        {% endif %}
 
 		{% endfor %}
         <!-- FJ MD Questionnaire item 7 -->
