@@ -24,6 +24,18 @@ def clinical(request):
         o.diagnosis = diagnosis
         o.save()
 
+    from django.forms.models import inlineformset_factory
+
+    def ifs(form_class):
+        from models import Diagnosis
+        return inlineformset_factory(Diagnosis, form_class.Meta.model)
+
+    def save_inline(inline_form, diagnosis):
+        for form in inline_form.forms:
+            o = form.save(commit=False)
+            o.diagnosis = diagnosis
+            o.save()
+
     # This is a list of the forms that need to be displayed on this page. Each
     # element within this tuple is a 3-element tuple containing the name of the
     # form (to be displayed in the fieldset legend), the form itself, and a
@@ -48,9 +60,9 @@ def clinical(request):
         ("General Medical Factors", GeneralMedicalFactorsForm, save_default),
         ("Genetic Test Details", GeneticTestDetailsForm, save_default),
         ("Ethnic Origin", EthnicOriginForm, save_default),
-        ("Family Member", FamilyMemberForm, save_default),
-        ("Clinical Trials", ClinicalTrialsForm, save_default),
-        ("Other Registries", OtherRegistriesForm, save_default),
+        ("Family Member", ifs(FamilyMemberForm), save_inline),
+        ("Clinical Trials", ifs(ClinicalTrialsForm), save_inline),
+        ("Other Registries", ifs(OtherRegistriesForm), save_inline),
         #("Consent Form", ConsentForm, save_default), # validated separately
     )
 
@@ -97,9 +109,12 @@ def clinical(request):
         # validation errors.
         forms = []
         valid = True
+
+
         for definition in form_definitions:
             form = instantiate_form(definition, request.POST)
             if not form.is_valid():
+                print "Form %s is not valid" % str(form)
                 valid = False
             #print "form: %s valid: %s" % (definition[0], valid)
             forms.append((definition[0], form, definition[2]))
