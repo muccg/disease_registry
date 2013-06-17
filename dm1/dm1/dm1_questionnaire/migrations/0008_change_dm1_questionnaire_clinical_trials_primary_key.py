@@ -8,7 +8,7 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        db.execute('ALTER TABLE dm1_questionnaire_clinicaltrials DROP CONSTRAINT dm1_questionnaire_clinicaltrials_pkey CASCADE')
+
 
         # Adding unique constraint on 'ClinicalTrials', fields ['id']
         db.create_unique('dm1_questionnaire_clinicaltrials', ['id'])
