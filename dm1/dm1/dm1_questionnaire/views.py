@@ -28,13 +28,15 @@ def clinical(request):
 
     def ifs(form_class):
         from models import Diagnosis
-        return inlineformset_factory(Diagnosis, form_class.Meta.model)
+        return inlineformset_factory(Diagnosis, form_class.Meta.model, can_delete=False, extra=1,)
 
     def save_inline(inline_form, diagnosis):
         for form in inline_form.forms:
-            o = form.save(commit=False)
-            o.diagnosis = diagnosis
-            o.save()
+            if form.changed_data:
+                # Don't save empty forms with no data
+                o = form.save(commit=False)
+                o.diagnosis = diagnosis
+                o.save()
 
     # This is a list of the forms that need to be displayed on this page. Each
     # element within this tuple is a 3-element tuple containing the name of the
