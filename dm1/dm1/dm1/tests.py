@@ -1,5 +1,6 @@
 import urllib2
 
+from django.test import TestCase
 from django.test import LiveServerTestCase
 from django.test.client import Client
 
