@@ -11,9 +11,20 @@ class Migration(DataMigration):
         # Note: Don't use "from appname.models import ModelName". 
         # Use orm.ModelName to refer to models in this application,
         # and orm['appname.ModelName'] for models in other applications.
+        db.execute('ALTER TABLE dm1_questionnaire_otherregistries DROP CONSTRAINT dm1_questionnaire_otherregistries_pkey CASCADE')
+        n = 1
+        print "populating other_registry id values ..."
         for other_registry in orm['dm1_questionnaire.OtherRegistries'].objects.all():
-            other_registry.id = other_registry.diagnosis_id
+            print "updating other registry with diagnosis_id = %s" % other_registry.diagnosis_id
+            print "n = %s" % n
+            other_registry.id = n
             other_registry.save()
+            print "other registry with id %s saved OK" % other_registry.id
+            n += 1
+        # this introduces rows with blank ids
+        print "deleting rows with null id ..."
+        db.execute("DELETE FROM dm1_questionnaire_otherregistries WHERE id is NULL")
+        print "deleted OK"
 
     def backwards(self, orm):
         "Write your backwards methods here."
@@ -230,7 +241,7 @@ class Migration(DataMigration):
         'dm1_questionnaire.otherregistries': {
             'Meta': {'object_name': 'OtherRegistries'},
             'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dm1_questionnaire.Diagnosis']"}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            #'id': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'registry': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'})
         },
         'dm1_questionnaire.patient': {

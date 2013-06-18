@@ -11,9 +11,12 @@ class Migration(DataMigration):
         # Note: Don't use "from appname.models import ModelName". 
         # Use orm.ModelName to refer to models in this application,
         # and orm['appname.ModelName'] for models in other applications.
+        db.execute('ALTER TABLE dm1_questionnaire_familymember DROP CONSTRAINT dm1_questionnaire_familymember_pkey CASCADE')
+        n = 1
         for f in orm['dm1_questionnaire.FamilyMember'].objects.all():
-            f.id = f.diagnosis_id
+            f.id = n
             f.save()
+            n += 1
 
     def backwards(self, orm):
         "Write your backwards methods here."
