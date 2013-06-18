@@ -24,7 +24,7 @@ class UserChangeForm(forms.Form):
     email_address = forms.EmailField(label="E-mail address")
     title = forms.CharField(max_length=50, label="Position")
     groups = forms.ModelMultipleChoiceField(queryset=Group.objects.all())
-    working_group = forms.ModelChoiceField(queryset=WorkingGroup.objects.all(), empty_label=None)
+    working_group = forms.ModelMultipleChoiceField(queryset=WorkingGroup.objects.all())
 
     def __init__(self, user, *args, **kwargs):
         super(UserChangeForm, self).__init__(*args, **kwargs)

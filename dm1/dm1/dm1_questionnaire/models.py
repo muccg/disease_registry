@@ -309,7 +309,7 @@ class EthnicOrigin(ApproveMixin, base.EthnicOrigin):
 
 
 class ClinicalTrials(ApproveMixin, base.ClinicalTrials):
-    diagnosis = models.ForeignKey(Diagnosis, primary_key=True)
+    diagnosis = models.ForeignKey(Diagnosis)
 
     def __unicode__(self):
         return unicode(self.diagnosis)
@@ -327,7 +327,7 @@ class Consent(ApproveMixin, base.Consent):
         return super(Consent, self).approve(dm1models.Consent, diagnosis=diagnosis, commit=True, delete=True)
 
 class FamilyMember(ApproveMixin, base.FamilyMember):
-    diagnosis = models.ForeignKey(Diagnosis, primary_key=True)
+    diagnosis = models.ForeignKey(Diagnosis)
 
     def __unicode__(self):
         return unicode(self.diagnosis)
@@ -336,7 +336,7 @@ class FamilyMember(ApproveMixin, base.FamilyMember):
         return super(FamilyMember, self).approve(dm1models.FamilyMember, diagnosis=diagnosis, commit=True, delete=True)
 
 class OtherRegistries(ApproveMixin, base.OtherRegistries):
-    diagnosis = models.ForeignKey(Diagnosis, primary_key=True)
+    diagnosis = models.ForeignKey(Diagnosis)
 
     def __unicode__(self):
         return unicode(self.diagnosis)

@@ -8,6 +8,8 @@ from dm1.dm1 import base
 from registry.genetic.models import MolecularData
 #from patients.models import Patient as BasePatient
 from registry.patients.models import Patient
+from registry.mail import sendNewPatientEmail
+from registry.groups.models import User
 
 import logging
 logger = logging.getLogger('dm1')
@@ -155,8 +157,8 @@ class Muscle(base.Muscle):
     tibialis_anterior = models.DecimalField(max_digits=2, decimal_places=1, choices=MRC_CHOICES, help_text=MRC_HELP_TEXT, null=True, blank=True)
     neck_flexion = models.DecimalField(max_digits=2, decimal_places=1, choices=MRC_CHOICES, help_text=MRC_HELP_TEXT, null=True, blank=True)
     iliopsoas = models.DecimalField(max_digits=2, decimal_places=1, choices=MRC_CHOICES, help_text=MRC_HELP_TEXT, null=True, blank=True)
-    #face = models.NullBooleanField(verbose_name="facial muscle weakness", null=True, blank=True)
-    face = models.CharField(max_length=1, choices=UYN_CHOICES, null=True, blank=True)
+    face = models.CharField(max_length=1, choices=UYN_CHOICES, null=True, blank=True,
+                            verbose_name="facial muscle weakness")
 
     #early_weakness = models.NullBooleanField(verbose_name="Was there any evidence of hypotonia or weakness within the first four weeks", null=True, blank=True)
     early_weakness = models.CharField(verbose_name="Was there any evidence of hypotonia or weakness within the first four weeks",max_length=1, choices=UYN_CHOICES, null=True, blank=True)
@@ -252,6 +254,26 @@ class GeneticTestDetails(base.GeneticTestDetails):
     def __unicode__(self):
         return str(self.diagnosis)
 
+class DMTestDetails(models.Model):
+    DISEASE_TYPE_TESTED_CHOICES = (
+        ("", "Unknown"),
+        ("DM1", "DM1"),
+        ("DM2", "DM2"),
+    )
+
+    molecular_data = models.OneToOneField(MolecularData, primary_key=True)
+    disease_type_tested = models.CharField(max_length=3, choices=DISEASE_TYPE_TESTED_CHOICES, blank=True, default="")
+    genetic_variant_typed = models.CharField(max_length=200, blank=True)
+    repeat_sequence = models.CharField(max_length=200, verbose_name="DNA repeat sequence involved", blank=True)
+    repeat_number = models.CharField(max_length=200, verbose_name="Sequence repeat number", blank=True)
+    region_targeted = models.CharField(max_length=200, verbose_name="Chromosomal region targeted for testing", blank=True)
+    typing_method = models.TextField(max_length=400, blank=True)
+
+    class Meta:
+        verbose_name_plural = "myotonic dystrophy test details"
+
+    def __unicode__(self):
+        return str(self.molecular_data)
 
 class EthnicOrigin(base.EthnicOrigin):
     diagnosis = models.OneToOneField(Diagnosis, primary_key=True)
@@ -341,15 +363,9 @@ def signal_patient_post_save(sender, **kwargs):
 
 def signal_diagnosis_post_save(sender, **kwargs):
     diagnosis = kwargs['instance']
-    working_group_id = diagnosis.patient.working_group.id
-    regusers = User.objects.filter(working_group__id=working_group_id).filter(user__groups__id__in = [2,3]).distinct()
-
-    email_to = []
-
-    for reguser in regusers:
-        email_to.append(reguser.user.email)
-
-    sendNewPatientEmail(email_to)
+    wg = diagnosis.patient.working_group
+    recipients = User.objects.filter(working_groups=wg)
+    sendNewPatientEmail(recipients)
 
 # connect up django signals
 post_save.connect(signal_patient_post_save, sender=Patient)

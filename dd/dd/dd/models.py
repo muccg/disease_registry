@@ -8,6 +8,9 @@ from django.db.models.signals import post_save
 from django.core.exceptions import ObjectDoesNotExist
 #from registry.genetic.models import MolecularData
 from registry.patients.models import Patient
+from registry.groups.models import User
+
+from registry.mail import sendNewPatientEmail
 
 import logging
 logger = logging.getLogger('registry_log')
@@ -102,7 +105,6 @@ class Diagnosis(models.Model):
     date_of_diagnosis = models.DateField(null=True, blank=True)
 
     age_at_clinical_diagnosis = models.IntegerField('age in years at clinical diagnosis', null=True, blank=True)
-    age_at_molecular_diagnosis = models.IntegerField('age in years at molecular diagnosis', null=True, blank=True)
 
     orphanet = models.ForeignKey(OrphanetChoices, null=True, blank = True)
 
@@ -265,6 +267,7 @@ class DDClinicalData(models.Model):
     date_first_symtoms      = models.DateField(verbose_name = "Date of first symptoms")
     edss_rating             = models.ForeignKey(EdssRating)
     edss_evaluation_type    = models.PositiveSmallIntegerField(choices=EVALUATION_TYPE_CHOICES, verbose_name="Evaluation type")
+    edss_form               = models.FileField(upload_to='edss_form', storage=file_system, verbose_name="EDSS Form")
     date_of_visits          = models.DateField(verbose_name = "Date of visits")
 
     def __unicode__(self):
@@ -275,13 +278,18 @@ class DDClinicalData(models.Model):
         verbose_name_plural = "Clinical Data"
 
 class LabData(models.Model):
+    PLUS_MINUS_CHOICES = (
+        ('+', '+'),
+        ('-', '-')
+    )
+    
     diagnosis =         models.ForeignKey(Diagnosis)
     date =              models.DateField()
-    protein =           models.FloatField(default = 0.0, verbose_name = "Protein (g/L)")
-    leucocytes =        models.FloatField(default = 0.0, verbose_name = "Leucocytes (/ul)")
-    erythrocytes =      models.FloatField(default = 0.0, verbose_name = "Erythrocytes (/ul)")
-    oligoclonal_bands = models.FloatField(default = 0.0, verbose_name = "Oligoclonal Bands")
-    igg_alb =           models.FloatField(default = 0.0, verbose_name = "IgG/Alb")
+    protein =           models.CharField(max_length=1, choices=PLUS_MINUS_CHOICES, verbose_name = "Protein (g/L)")
+    leucocytes =        models.CharField(max_length=1, choices=PLUS_MINUS_CHOICES, verbose_name = "Leucocytes (/ul)")
+    erythrocytes =      models.CharField(max_length=1, choices=PLUS_MINUS_CHOICES, verbose_name = "Erythrocytes (/ul)")
+    oligoclonal_bands = models.CharField(max_length=1, choices=PLUS_MINUS_CHOICES, verbose_name = "Oligoclonal Bands")
+    igg_alb =           models.CharField(max_length=1, choices=PLUS_MINUS_CHOICES, verbose_name = "IgG/Alb")
 
     class Meta:
         verbose_name = "Lab Data"
@@ -329,15 +337,9 @@ def signal_patient_post_save(sender, **kwargs):
 
 def signal_diagnosis_post_save(sender, **kwargs):
     diagnosis = kwargs['instance']
-    working_group_id = diagnosis.patient.working_group.id
-    regusers = User.objects.filter(working_group__id=working_group_id).filter(user__groups__id__in = [2,3]).distinct()
-
-    email_to = []
-
-    for reguser in regusers:
-        email_to.append(reguser.user.email)
-
-    sendNewPatientEmail(email_to)
+    wg = diagnosis.patient.working_group
+    recipients = User.objects.filter(working_groups=wg)
+    sendNewPatientEmail(recipients)
 
 # connect up django signals
 post_save.connect(signal_patient_post_save, sender=Patient)
