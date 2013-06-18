@@ -26,7 +26,7 @@ os.chdir('../sma')
 
 
 setup(name='django-diseaseregistry',
-    version='1.0.12',
+    version='1.3.0',
     description='Django Disease Registry',
     long_description='Collection of Django applications implementing various aspects for disease registries',
     author='Centre for Comparative Genomics',
@@ -39,12 +39,14 @@ setup(name='django-diseaseregistry',
         'registry.genetic',
         'registry.groups',
         'registry.forms',
-        'registry.humangenome'
+        'registry.humangenome',
+        'registry.configuration'
     ],
     package_data=data_files,
     zip_safe=False,
     install_requires=[
         'South>=0.7.3',
+        'django-messages-ui>=0.1.0'
     ],
 )
 

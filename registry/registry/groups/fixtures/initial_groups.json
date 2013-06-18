@@ -5,37 +5,19 @@
         "fields": {
             "name": "Western Australia"
         }
-    }, 
+    },
     {
-        "pk": 1, 
-        "model": "groups.user", 
+        "pk": 2, 
+        "model": "groups.workinggroup", 
         "fields": {
-            "working_group": 1, 
-            "title": "Co-ordinator"
+            "name": "New Zealand"
         }
     },
     {
-        "pk": 6, 
-        "model": "groups.user", 
+        "pk": 3, 
+        "model": "groups.workinggroup", 
         "fields": {
-            "working_group": 1, 
-            "title": "Clinical"
+            "name": "Unallocated"
         }
-    },
-    {
-        "pk": 5, 
-        "model": "groups.user", 
-        "fields": {
-            "working_group": 1, 
-            "title": "Genetic"
-        }
-    },
-    {
-        "pk": 4, 
-        "model": "groups.user", 
-        "fields": {
-            "working_group": 1, 
-            "title": "Curator"
-        }
-    } 
+    }
 ]
