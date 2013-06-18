@@ -8,26 +8,19 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-
-
-
-        # Adding unique constraint on 'FamilyMember', fields ['id']
-        db.create_unique('dm1_questionnaire_familymember', ['id'])
-        db.create_primary_key('dm1_questionnaire_familymember', ['id'])
-
-        # Changing field 'FamilyMember.diagnosis'
-        db.alter_column('dm1_questionnaire_familymember', 'diagnosis_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dm1_questionnaire.Diagnosis']))
+        # Changing field 'ClinicalTrials.id' to primary key
+        db.alter_column('dm1_questionnaire_clinicaltrials', 'id', self.gf('django.db.models.fields.IntegerField')(primary_key=True))
+        # create sequence for autonumbering
+        db.execute("CREATE SEQUENCE dm1_questionnaire_clinicaltrials_id_seq")
+        db.execute("SELECT setval('dm1_questionnaire_clinicaltrials_id_seq', (SELECT MAX(id) FROM dm1_questionnaire_clinicaltrials))")
+        db.execute("ALTER TABLE dm1_questionnaire_clinicaltrials ALTER COLUMN id SET DEFAULT nextval('dm1_questionnaire_clinicaltrials_id_seq'::regclass)")
 
     def backwards(self, orm):
-        # Removing unique constraint on 'FamilyMember', fields ['id']
-        db.delete_unique('dm1_questionnaire_familymember', ['id'])
 
-
-        # Changing field 'FamilyMember.id'
-        db.alter_column('dm1_questionnaire_familymember', 'id', self.gf('django.db.models.fields.IntegerField')(null=True))
-
-        # Changing field 'FamilyMember.diagnosis'
-        db.alter_column('dm1_questionnaire_familymember', 'diagnosis_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dm1_questionnaire.Diagnosis'], unique=True, primary_key=True))
+        # Changing field 'ClinicalTrials.id'
+        db.alter_column('dm1_questionnaire_clinicaltrials', 'id', self.gf('django.db.models.fields.IntegerField')(unique=True, primary_key=True))
+        # Adding unique constraint on 'clinicaltrials', fields ['diagnosis']
+        db.create_unique('dm1_questionnaire_clinicaltrials', ['diagnosis_id'])
 
     models = {
         'dm1.cancertypechoices': {
@@ -39,6 +32,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'ClinicalTrials'},
             'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dm1_questionnaire.Diagnosis']", 'primary_key': 'True'}),
             'drug_name': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
+            'id': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'trial_name': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'trial_phase': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'trial_sponsor': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'})
@@ -115,9 +109,9 @@ class Migration(SchemaMigration):
         },
         'dm1_questionnaire.familymember': {
             'Meta': {'object_name': 'FamilyMember'},
-            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dm1_questionnaire.Diagnosis']", 'unique': 'True'}),
+            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dm1_questionnaire.Diagnosis']"}),
             'family_member_diagnosis': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.IntegerField', [], {'unique': 'True', 'primary_key': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'relationship': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'sex': ('django.db.models.fields.CharField', [], {'max_length': '1', 'null': 'True', 'blank': 'True'})
         },

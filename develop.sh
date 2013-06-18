@@ -14,14 +14,15 @@ port[dm1]='8003'
 port[dd]='8004'
 
 PROJECT_NAME='disease_registry'
-AWS_BUILD_INSTANCE='rpmbuild-centos6-aws'
+AWS_BUILD_INSTANCE='aws_rpmbuild_centos6'
+AWS_STAGING_INSTANCE='aws_syd_registry_staging'
 TARGET_DIR="/usr/local/src/${PROJECT_NAME}"
 CLOSURE="/usr/local/closure/compiler.jar"
 MODULES="psycopg2==2.4.6 Werkzeug flake8"
 
 
 function usage() {
-    echo 'Usage ./develop.sh (test|lint|jslint|start|install|clean|purge|pipfreeze|pythonversion|dropdb|ci_remote_build|ci_remote_destroy|ci_rpm_publish) (dd|dmd|dm1|sma)'
+    echo 'Usage ./develop.sh (test|lint|jslint|start|install|clean|purge|pipfreeze|pythonversion|dropdb|ci_remote_build|ci_remote_destroy|ci_rpm_publish|ci_staging) (dd|dmd|dm1|sma)'
 }
 
 
@@ -75,6 +76,14 @@ function ci_rpm_publish() {
 # destroy our ci build server
 function ci_remote_destroy() {
     ccg ${AWS_BUILD_INSTANCE} destroy
+}
+
+
+# puppet up staging which will install the latest rpm for each registry
+function ci_staging() {
+    ccg ${AWS_STAGING_INSTANCE} boot
+    ccg ${AWS_STAGING_INSTANCE} puppet
+    ccg ${AWS_STAGING_INSTANCE} shutdown:50
 }
 
 
@@ -239,6 +248,10 @@ ci_remote_destroy)
 ci_rpm_publish)
     ci_ssh_agent
     ci_rpm_publish
+    ;;
+ci_staging)
+    ci_ssh_agent
+    ci_staging
     ;;
 dropdb)
     dropdb

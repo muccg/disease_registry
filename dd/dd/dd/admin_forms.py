@@ -7,6 +7,8 @@ from django.forms import Select
 from django.forms.models import modelformset_factory, inlineformset_factory
 from registry.forms.widgets import NoDotsRadioSelect
 
+from registry.utils import get_working_groups
+
 class ClinicalDataForm(forms.ModelForm):
     class Meta:
         model = DDClinicalData
@@ -33,7 +35,7 @@ class DDDiagnosisForm(forms.ModelForm):
             if self.user.is_superuser:
                 self.fields["patient"] = forms.ModelChoiceField(Patient.objects.all())
             else:
-                self.fields["patient"] = forms.ModelChoiceField(Patient.objects.filter(working_group=user.working_group).filter(active=True))
+                self.fields["patient"] = forms.ModelChoiceField(Patient.objects.filter(working_group__in=get_working_groups(user)).filter(active=True))
 
     class Media:
         js = ("js/min_extra.js",)

@@ -27,7 +27,7 @@ class FeedingFunctionInline(admin.StackedInline):
 
 class ClinicalTrialsInline(admin.TabularInline):
     model = ClinicalTrials
-    extra = 3
+    extra = 1
 
 class HeartMedicationInline(admin.TabularInline):
     model = HeartMedication
@@ -74,6 +74,10 @@ class FamilyMemberInline(admin.TabularInline):
     model = FamilyMember
     extra = 1
 
+class OtherRegistryInline(admin.TabularInline):
+    model = OtherRegistries
+    extra = 1
+
 class ConsentInline(admin.StackedInline):
     model = Consent
 
@@ -95,6 +99,7 @@ class DiagnosisAdmin(admin.ModelAdmin):
         GeneticTestDetailsInline,
         EthnicOriginInline,
         ClinicalTrialsInline,
+        OtherRegistryInline,
         FamilyMemberInline,
         ConsentInline,
     ]
