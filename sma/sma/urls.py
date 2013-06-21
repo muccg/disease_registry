@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import include
 from django.conf.urls import patterns
 from django.contrib import admin
+from django.shortcuts import render_to_response
 
 from registry.common import views as cviews
 
@@ -13,5 +14,8 @@ urlpatterns = patterns('',
     (r'^qbe/', include('django_qbe.urls'))
 )
 
-handler404 = cviews.handler404
-handler500 = cviews.handler500
+def handler404(request):
+    return render_to_response("error/404.html")
+
+def handler500(request):
+    return render_to_response("error/500.html")

@@ -14,5 +14,8 @@ urlpatterns = patterns('',
     (r'^qbe/', include('django_qbe.urls')),
 )
 
-handler404 = views.handler404
-handler500 = views.handler500
+def handler404(request):
+    return render_to_response("error/404.html")
+
+def handler500(request):
+    return render_to_response("error/500.html")
