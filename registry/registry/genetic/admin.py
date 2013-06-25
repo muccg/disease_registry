@@ -48,6 +48,24 @@ class VariationInline(admin.TabularInline):
     }
 
 
+class VariationSmaInline(admin.TabularInline):
+    model = VariationSma
+    form = VariationSmaForm
+    raw_id_fields = ("gene",)
+    extra = 1
+    max_num = 100
+    formfield_overrides = {
+        models.TextField: {"widget": django.forms.TextInput},
+    }
+
+
+class MolecularDataSmaAdmin(admin.ModelAdmin):
+    form = MolecularDataSmaForm
+    inlines = [
+        VariationSmaInline,
+    ]
+
+
 class MolecularDataAdmin(admin.ModelAdmin):
     actions = None
     add_form_template = "admin/genetic/change_form.html"
@@ -199,6 +217,9 @@ if settings.INSTALL_NAME == "dm1":
     MolecularDataAdmin.inlines = [DiagnosticCategoryInline, DMTestingInline] + \
         MolecularDataAdmin.inlines
 
-admin.site.register(MolecularData, MolecularDataAdmin)
+if settings.INSTALL_NAME == 'SMA':
+    admin.site.register(MolecularData, MolecularDataAdmin)
+else:
+    admin.site.register(MolecularDataSma, MolecularDataSmaAdmin)
 admin.site.register(Gene, GeneAdmin)
 admin.site.register(Laboratory, LaboratoryAdmin)
