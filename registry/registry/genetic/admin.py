@@ -217,9 +217,9 @@ if settings.INSTALL_NAME == "dm1":
     MolecularDataAdmin.inlines = [DiagnosticCategoryInline, DMTestingInline] + \
         MolecularDataAdmin.inlines
 
-if settings.INSTALL_NAME == 'SMA':
-    admin.site.register(MolecularData, MolecularDataAdmin)
-else:
+if settings.INSTALL_NAME == 'sma':
     admin.site.register(MolecularDataSma, MolecularDataSmaAdmin)
+else:
+    admin.site.register(MolecularData, MolecularDataAdmin)
 admin.site.register(Gene, GeneAdmin)
 admin.site.register(Laboratory, LaboratoryAdmin)
