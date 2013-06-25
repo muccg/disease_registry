@@ -226,26 +226,34 @@ def personal(request):
     #print "form: %s" % dir(form)
     #print "form.errors: %s" % dir(form.errors)
     #print "form errors: %s" % str(form.errors)
-    return render_to_response("dm1/questionnaire/personal.html",
-            { "form": form, "label": "Personal Details" },
-            context_instance=RequestContext(request))
+    return render_to_response("dm1/questionnaire/personal.html", { 
+            "form": form, 
+            "label": "Personal Details"
+    },  context_instance=RequestContext(request))
 
 def index(request, country):
     country_template = "dm1/questionnaire/%s/index.html" % country
     
     if request.method == "POST":
-        form = ConsentForm(request.POST)
+        form = ConsentForm(request.POST) if country == 'au' else ConsentFormNz(request.POST)
         if form.is_valid():
             request.session["consentform"] = request.POST.copy() # keep the data for the "personal" & "clinical" views
             return HttpResponseRedirect("personal")
         else:
-            return render_to_response(country_template, {"form": form }, context_instance=RequestContext(request))
+            return render_to_response(country_template, {
+                "form": form,
+                "country": get_country(country)
+            }, context_instance=RequestContext(request))
     else:
-        form = ConsentForm()
+        form = ConsentForm if country == 'au' else ConsentFormNz()
 
     return render_to_response(country_template, {
-        "form": form
+        "form": form,
+        "country": get_country(country)
     }, context_instance=RequestContext(request))
 
 def thanks(request):
     return render_to_response("dm1/questionnaire/thanks.html", {})
+
+def get_country(code):
+    return "Australia" if code == 'au' else 'New Zealand'

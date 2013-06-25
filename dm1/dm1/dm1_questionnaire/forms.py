@@ -1,6 +1,6 @@
 from django import forms
 from django.conf import settings
-from django.forms.widgets import Select, RadioSelect
+from django.forms.widgets import Select, RadioSelect, CheckboxInput
 from registry.forms.date import DateWidget
 from registry.patients.models import Patient as RegistryPatient
 from registry.utils import stripspaces
@@ -86,6 +86,16 @@ class ConsentForm(forms.ModelForm):
     class Meta:
         exclude = ("firstname", "lastname", "diagnosis")
         model = models.Consent
+
+class ConsentFormNz(ConsentForm):
+    CHOICES = (('N', 'NO'), ('Y', 'YES'))
+    q8 = forms.ChoiceField(widget=RadioSelect, choices=CHOICES, required=True)
+    q9 = forms.ChoiceField(widget=RadioSelect, choices=CHOICES, required=True)
+    q10 = forms.ChoiceField(widget=RadioSelect, choices=CHOICES, required=True)
+    
+    class  Meta:
+        exclude = ("firstname", "lastname", "diagnosis")
+        model = models.ConsentNz
 
 class DiagnosisForm(forms.ModelForm):
     # keep that in sync with base.py and add the null option

@@ -8,7 +8,7 @@
 <h2>Myotonic Dystrophy Questionnaire</h2>
 
 <div id="blurb">
-This questionnaire is to be completed by the person enrolling in the Australian Myotonic Dystrophy Registry. The information that you, as the registrant, provide may be used to inform clinical management, social services and health strategies for people with myotonic dystrophy. Please carefully read the patient information document shown below then tick the appropriate boxes to indicate that you have read the information and consent to participate in the registry. You may then proceed to the start of the questionnaire.
+This questionnaire is to be completed by the person enrolling in the New Zealand Myotonic Dystrophy Registry. The information that you, as the registrant, provide may be used to inform clinical management, social services and health strategies for people with myotonic dystrophy. Please carefully read the patient information document shown below then tick the appropriate boxes to indicate that you have read the information and consent to participate in the registry. You may then proceed to the start of the questionnaire.
 </div>
 
 <div id='consent'>
@@ -22,7 +22,23 @@ Please correct the errors in the form below!
 
 <h2 id='consent-title'>Patient Information and Informed Consent</h2>
 
-<h4>The Australian National Myotonic Dystrophy Registry is a member of the TREAT-NMD global network of national patient registries for Neuromuscular Diseases.</h4>
+<table width='50%' align="center">
+    <tr>
+        <td>Principal Investigator</td><td>Dr Richard Roxburgh</td><td><a href="mailto:RichardR@adhb.govt.nz">RichardR@adhb.govt.nz</a></td>
+    </tr>
+    <tr>
+        <td>Registry Curator</td><td>Miriam Rodrigues</td><td><a href="mailto:MRodrigues@adhb.govt.nz">MRodrigues@adhb.govt.nz</a></td>
+    </tr>
+    <tr>
+        <td>Co- Investigators</td><td>Professor Donald Love</td><td><a href="mailto:DonaldL@adhb.govt.nz">DonaldL@adhb.govt.nz</a></td>
+    </tr>
+    <tr>
+        <td>Co- Investigators</td><td>Dr Alexa Kidd</td><td><a href="mailto:alexa.kidd2@cdhb.govt.nz">alexa.kidd2@cdhb.govt.nz</a></td>
+    </tr>
+    <tr>
+        <td>Co- Investigators</td><td>Dr Rakesh Patel</td><td><a href="mailto:RakeshP@adhb.govt.nz">RakeshP@adhb.govt.nz</a></td>
+    </tr>
+</table>
 
 <h4 id='patient-information'>INFORMATION FOR PATIENTS</h4>
 
@@ -119,18 +135,99 @@ Please correct the errors in the form below!
 <hr size=1>
 
 </div>
-{{form}}
 <form id='consent-form' method="post">{% csrf_token %}
 <table id='informed-consent'>
     <caption>
         The New Zealand Neuromuscular Disease Registry<br>
         CONSENT FORM
-    </caption>
+    </caption>    
     <tbody>
         <!-- Question 1 -->
         <tr>
             <td class='numbered'>
                 1.
+            </td>
+            <td>
+				{{ form.q8.errors }}
+                I have read and I have understood the New Zealand Neuromuscular Disease Registry ‘Participant / parent Information Sheet dated Nov. 2012 (v4)’. I have had the opportunity to discuss this information and I am satisfied with the answers I have been given.
+            </td>
+            <td>
+            {% if form.q8.value == 'Y' %}
+                <label><input type="radio" name="q8" value="N"/>NO</label>
+            </td>
+            <td>
+                <label><input type="radio" checked='checked' name="q8" value="Y"/>YES</label>
+            {% elif form.q8.value == 'N' %}
+                <label><input type="radio" checked='checked' name="q8" value="N"/>NO</label>
+            </td>
+            <td>
+                <label><input type="radio" name="q8" value="Y"/>YES</label>
+            {% else %}
+                <label><input type="radio" name="q8" value="N"/>NO</label>
+            </td>
+            <td>
+                <label><input type="radio" name="q8" value="Y"/>YES</label>
+            {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td class='numbered'>
+                2.
+            </td>
+            <td>
+				{{ form.q9.errors }}
+                I understand that taking part in this registry is voluntary (my choice) and that I / my child may withdraw from the registry at any time and this will in no way affect my medical care.
+            </td>
+            <td>
+            {% if form.q9.value == 'Y' %}
+                <label><input type="radio" name="q9" value="N"/>NO</label>
+            </td>
+            <td>
+                <label><input type="radio" checked='checked' name="q9" value="Y"/>YES</label>
+            {% elif form.q9.value == 'N' %}
+                <label><input type="radio" checked='checked' name="q9" value="N"/>NO</label>
+            </td>
+            <td>
+                <label><input type="radio" name="q9" value="Y"/>YES</label>
+            {% else %}
+                <label><input type="radio" name="q9" value="N"/>NO</label>
+            </td>
+            <td>
+                <label><input type="radio" name="q9" value="Y"/>YES</label>
+            {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td class='numbered'>
+                3.
+            </td>
+            <td>
+				{{ form.q10.errors }}
+                I understand that my participation / my child’s participation in this registry is confidential and that no material which could identify me / my child will be used in any subsequent reports.
+            </td>
+            <td>
+            {% if form.q10.value == 'Y' %}
+                <label><input type="radio" name="q1" value="N"/>NO</label>
+            </td>
+            <td>
+                <label><input type="radio" checked='checked' name="q10" value="Y"/>YES</label>
+            {% elif form.q10.value == 'N' %}
+                <label><input type="radio" checked='checked' name="q10" value="N"/>NO</label>
+            </td>
+            <td>
+                <label><input type="radio" name="q10" value="Y"/>YES</label>
+            {% else %}
+                <label><input type="radio" name="q10" value="N"/>NO</label>
+            </td>
+            <td>
+                <label><input type="radio" name="q10" value="Y"/>YES</label>
+            {% endif %}
+            </td>
+        </tr>
+
+        <tr>
+            <td class='numbered'>
+                4.
             </td>
             <td>
 				<!--
@@ -165,7 +262,7 @@ Please correct the errors in the form below!
         <!--## Question 2-->
         <tr>
             <td class='numbered'>
-                2.
+                5.
             </td>
             <td>
                 {{ form.q2.errors }}
@@ -193,7 +290,7 @@ Please correct the errors in the form below!
         <!--## Question 3-->
         <tr>
             <td class='numbered'>
-                3.
+                6.
             </td>
             <td>
                 {{ form.q3.errors }}
@@ -221,7 +318,7 @@ Please correct the errors in the form below!
         <!--## Question 4-->
         <tr>
             <td class='numbered'>
-                4.
+                7.
             </td>
             <td>
                 {{ form.q4.errors }}
@@ -248,7 +345,7 @@ Please correct the errors in the form below!
         </tr>
         <tr>
             <td class='numbered'>
-                5.
+                8.
             </td>
             <td>
                 {{ form.q5.errors }}
@@ -277,7 +374,7 @@ Please correct the errors in the form below!
         <!--## Question 6 -->
         <tr>
             <td class='numbered'>
-                6.
+                9.
             </td>
             <td>
                 {{ form.q6.errors }}
@@ -306,7 +403,7 @@ Please correct the errors in the form below!
         <!--## Question 7-->
         <tr>
             <td class='numbered'>
-                7.
+                10.
             </td>
             <td>
                 {{ form.q7.errors }}
