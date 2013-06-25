@@ -54,22 +54,8 @@ def nmd_report(request, working_group):
 
         if variation:
             items['gene'] = str(get_gene_name(variation[0].gene_id))
-            items['exon'] = str(variation[0].exon)
-            items['dna_variation'] = str(variation[0].dna_variation)
-            items['deletion'] = str(variation[0].deletion_all_exons_tested)
-            items['duplication'] = str(variation[0].duplication_all_exons_tested)
-            items['deletion_duplication'] = str(variation[0].exon_boundaries_known)
-            items['point_mutation'] = str(variation[0].point_mutation_all_exons_sequenced)
-            items['all_exons_in_male_relative'] = str(variation[0].all_exons_in_male_relative)
         else:
             items['gene'] = 'Unknown'
-            items['exon'] = 'Unknown'
-            items['dna_variation'] = 'Unknown'
-            items['deletion'] = 'Unknown'
-            items['duplication'] = 'Unknown'
-            items['deletion_duplication'] = 'Unknown'
-            items['point_mutation'] = 'Unknown'
-            items['all_exons_in_male_relative'] = 'Unknown'
 
         trials = ClinicalTrials.objects.filter(diagnosis_id=d.id)
         items['trials'] = yes_no_str(trials)
@@ -87,13 +73,6 @@ def nmd_report(request, working_group):
     writer.writerow((
         'Patient ID', 
         'Gene',
-        'Exon',
-        'DNA Variation',
-        'All Exons Tested (Deletion)', 
-        'All Exons Tested (Duplications)', 
-        'Exon Boundaries Known', 
-        'All Exons Sequenced (Point Mutation)', 
-        'All expons tested in Male Relative',
         'Diagnosis', 
         'Currently Able To Walk', 
         'Wheelchair Use', 
@@ -111,8 +90,7 @@ def nmd_report(request, working_group):
         'Family History',
         'SMA Classification'))
     for r in results:
-        writer.writerow((r['patient_id'], r['gene'], r['exon'], r['dna_variation'], r['deletion'], r['duplication'], r['deletion_duplication'],
-                        r['point_mutation'], r['all_exons_in_male_relative'], r['diagnosis'], r['able_to_walk'],
+        writer.writerow((r['patient_id'], r['gene'], r['diagnosis'], r['able_to_walk'],
                         r['wheelchair_use'], r['scoliosis_surgery'], r['feeding_function'],
                         r['trials'], r['age'], r['last_follow_up'], r['localisation'], r['able_to_sit'], 
                         r['non_invasive_ventilation'], r['invasive_ventilation'], r['last_fvc'], r['other_registries'], r['family_history'], r['sma_classification']))
