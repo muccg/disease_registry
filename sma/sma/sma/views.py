@@ -33,9 +33,9 @@ def nmd_report(request, working_group):
 
         items['last_follow_up'] = str(d.updated) if d.updated is not None else str(d.created)
 
-        items['able_to_walk'] = yes_no_str(d.motorfunction.walk) if d.motorfunction is not None else 'Unknown'
-        items['wheelchair_use'] = yes_no_str(d.motorfunction.wheelchair_use) if d.motorfunction is not None else 'Unknown'
-        items['able_to_sit'] = yes_no_str(d.motorfunction.sit) if d.motorfunction is not None else 'Unknown'
+        items['able_to_walk'] = yes_no_unknown_str(d.motorfunction.walk) if d.motorfunction is not None else 'No/Unknown'
+        items['wheelchair_use'] = wheelchair_use(d.motorfunction) if d.motorfunction is not None else 'Unknown'
+        items['able_to_sit'] = yes_no_unknown_str(d.motorfunction.sit) if d.motorfunction is not None else 'No/Unknown'
 
         items['scoliosis_surgery'] = yes_no_str(d.surgery.surgery) if d.surgery is not None else 'Unknown'
         
@@ -57,14 +57,9 @@ def nmd_report(request, working_group):
         else:
             items['gene'] = 'Unknown'
 
-        trials = ClinicalTrials.objects.filter(diagnosis_id=d.id)
-        items['trials'] = yes_no_str(trials)
-
-        other_regs = OtherRegistries.objects.filter(diagnosis_id=d.id)
-        items['other_registries'] = yes_no_str(other_regs)
-
-        family_history = FamilyMember.objects.filter(diagnosis_id=d.id)
-        items['family_history'] = yes_no_str(family_history)
+        items['trials'] = clinical_trials(d)
+        items['other_registries'] = other_registries(d)
+        items['family_history'] = family_members(d)
 
         items['sma_classification'] = str(get_classification(d.classification))
         
@@ -97,6 +92,55 @@ def nmd_report(request, working_group):
 
     response['Content-Disposition'] = 'attachment; filename=sma_nmdreport_' + working_group + '.csv'
     return response
+
+def family_members(obj):
+    members = obj.familymember_set.all()
+    if len(members) > 0:
+        result = ''
+        for member in members:
+            result += '%s (%s), ' % (member.family_member_diagnosis, member.registry_patient_id)
+        return result[:-2]
+    else:
+        return 'Unknown'
+
+def other_registries(obj):
+    other_regs = obj.otherregistries_set.all()
+    if len(other_regs) > 0:
+        result = ''
+        for other_reg in other_regs:
+            result += '%s, ' % other_reg.registry
+        return result[:-2]
+    else:
+        return 'Unknown'    
+
+def clinical_trials(obj):
+    trials = obj.clinicaltrials_set.all()
+    if len(trials) > 0:
+        result = ''
+        for trial in trials:
+            result += '%s, ' % trial.drug_name
+        return result[:-2]
+    else:
+        return 'Unknown'
+
+def heart_medication(obj):
+    if obj.heart:
+        medications = obj.heartmedication_set.all()
+        result = ''
+        for medication in medications:
+            result += '%s, ' % medication.drug
+        return result[:-2]
+    else:
+        return 'Unknown'
+
+def wheelchair_use(motorfunction):
+    return '%s, (%s years)' % (motorfunction.wheelchair_use.title(), motorfunction.wheelchair_usage_age)
+
+def yes_no_unknown_str(value):
+    if value:
+        return 'Yes'
+    else:
+        return 'No/Unknown'
 
 def get_gene_name(gene_id):
     return Gene.objects.get(id=gene_id).name
