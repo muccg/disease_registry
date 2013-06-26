@@ -37,15 +37,15 @@ def nmd_report(request, working_group):
 
         items['muscle_biopsy'] = yes_no_str(d.muscle_biopsy) if d.muscle_biopsy is not None else 'Unknown'
 
-        items['able_to_walk'] = yes_no_str(d.motorfunction.walk) if d.motorfunction is not None else 'Unknown'
-        items['wheelchair_use'] = yes_no_str(d.motorfunction.wheelchair_use) if d.motorfunction is not None else 'Unknown'
-        items['able_to_sit'] = yes_no_str(d.motorfunction.sit) if d.motorfunction is not None else 'Unknown'
+        items['able_to_walk'] = yes_no_unknown_str(d.motorfunction.walk) if d.motorfunction is not None else 'No/Unknown'
+        items['wheelchair_use'] = wheelchair_use(d.motorfunction) if d.motorfunction is not None else 'Unknown'
+        items['able_to_sit'] = yes_no_unknown_str(d.motorfunction.sit) if d.motorfunction is not None else 'No/Unknown'
 
         items['current_steroid_theraphy'] = yes_no_str(d.steroids.current) if d.steroids is not None else 'Unknown'
 
         items['scoliosis_surgery'] = yes_no_str(d.surgery.surgery) if d.surgery is not None else 'Unknown'
 
-        items['heart'] = yes_no_str(d.heart.current) if d.heart is not None else 'Unknown'
+        items['heartmedication'] = heart_medication(d)
         items['heart_failure'] = yes_no_str(d.heart.failure) if d.heart is not None else 'Unknown'
         items['last_lvef'] = '%s, %s' % (d.heart.lvef, d.heart.lvef_date) if d.heart is not None else 'Unknown'
 
@@ -64,11 +64,11 @@ def nmd_report(request, working_group):
             items['gene'] = str(get_gene_name(variation[0].gene_id))
             items['exon'] = str(variation[0].exon)
             items['dna_variation'] = str(variation[0].dna_variation)
-            items['deletion'] = str(variation[0].deletion_all_exons_tested)
-            items['duplication'] = str(variation[0].duplication_all_exons_tested)
-            items['deletion_duplication'] = str(variation[0].exon_boundaries_known)
-            items['point_mutation'] = str(variation[0].point_mutation_all_exons_sequenced)
-            items['all_exons_in_male_relative'] = str(variation[0].all_exons_in_male_relative)
+            items['deletion'] = str(yes_no_str(variation[0].deletion_all_exons_tested))
+            items['duplication'] = str(yes_no_str(variation[0].duplication_all_exons_tested))
+            items['deletion_duplication'] = str(yes_no_str(variation[0].exon_boundaries_known))
+            items['point_mutation'] = str(yes_no_str(variation[0].point_mutation_all_exons_sequenced))
+            items['all_exons_in_male_relative'] = str(yes_no_str(variation[0].all_exons_in_male_relative))
         else:
             items['gene'] = 'Unknown'
             items['exon'] = 'Unknown'
@@ -79,14 +79,10 @@ def nmd_report(request, working_group):
             items['point_mutation'] = 'Unknown'
             items['all_exons_in_male_relative'] = 'Unknown'
 
-        trials = ClinicalTrials.objects.filter(diagnosis_id=d.id)
-        items['trials'] = yes_no_str(trials)
+        items['trials'] = clinical_trials(d)
+        items['other_registries'] = other_registries(d)
 
-        other_regs = OtherRegistries.objects.filter(diagnosis_id=d.id)
-        items['other_registries'] = yes_no_str(other_regs)
-
-        family_history = FamilyMember.objects.filter(diagnosis_id=d.id)
-        items['family_history'] = yes_no_str(family_history)
+        items['family_history'] = family_members(d)
 
         results.append(items)
 
@@ -123,11 +119,61 @@ def nmd_report(request, working_group):
         writer.writerow((r['patient_id'], r['gene'], r['exon'], r['dna_variation'], r['deletion'], r['duplication'], r['deletion_duplication'],
                         r['point_mutation'], r['all_exons_in_male_relative'], r['diagnosis'], r['able_to_walk'],
                         r['wheelchair_use'], r['current_steroid_theraphy'], r['scoliosis_surgery'],
-                        r['heart'], r['trials'], r['age'], r['last_follow_up'], r['localisation'], r['able_to_sit'], r['heart_failure'], r['last_lvef'],
+                        r['heartmedication'], r['trials'], r['age'], r['last_follow_up'], r['localisation'], r['able_to_sit'], r['heart_failure'], r['last_lvef'],
                         r['non_invasive_ventilation'], r['invasive_ventilation'], r['last_fvc'], r['muscle_biopsy'], r['other_registries'], r['family_history']))
 
     response['Content-Disposition'] = 'attachment; filename=dmd_nmdreport_' + working_group + '.csv'
     return response
+
+def family_members(obj):
+    members = obj.familymember_set.all()
+    if len(members) > 0:
+        result = ''
+        for member in members:
+            result += '%s (%s), ' % (member.family_member_diagnosis, member.registry_patient_id)
+        return result[:-2]
+    else:
+        return 'Unknown'
+
+def other_registries(obj):
+    other_regs = obj.otherregistries_set.all()
+    if len(other_regs) > 0:
+        result = ''
+        for other_reg in other_regs:
+            result += '%s, ' % other_reg.registry
+        return result[:-2]
+    else:
+        return 'Unknown'    
+
+def clinical_trials(obj):
+    trials = obj.clinicaltrials_set.all()
+    if len(trials) > 0:
+        result = ''
+        for trial in trials:
+            result += '%s, ' % trial.drug_name
+        return result[:-2]
+    else:
+        return 'Unknown'
+
+def heart_medication(obj):
+    if obj.heart:
+        medications = obj.heartmedication_set.all()
+        result = ''
+        for medication in medications:
+            result += '%s, ' % medication.drug
+        return result[:-2]
+    else:
+        return 'Unknown'
+        
+
+def wheelchair_use(motorfunction):
+    return '%s, (%s years)' % (motorfunction.wheelchair_use.title(), motorfunction.wheelchair_usage_age)
+
+def yes_no_unknown_str(value):
+    if value:
+        return 'Yes'
+    else:
+        return 'No/Unknown'
 
 def get_gene_name(gene_id):
     return Gene.objects.get(id=gene_id).name
