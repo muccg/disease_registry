@@ -81,7 +81,6 @@ def nmd_report(request, working_group):
 
         items['trials'] = clinical_trials(d)
         items['other_registries'] = other_registries(d)
-
         items['family_history'] = family_members(d)
 
         results.append(items)
