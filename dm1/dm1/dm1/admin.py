@@ -161,7 +161,7 @@ class DiagnosisAdmin(admin.ModelAdmin):
 
 
 # Defined but not used here: this needs to be available for genetic.admin.
-class DiagnosticCategoryInline(admin.StackedInline):
+class DiagnosticCategoryInline(admin.TabularInline):
     max_num = 1
     model = DiagnosticCategory
 
