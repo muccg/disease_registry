@@ -335,7 +335,7 @@ class DiagnosticCategory(models.Model):
         ("DNA test (DM-1 or DM-2) not done", "DNA test (DM-1 or DM-2) not done"),
     )
 
-    molecular_data = models.OneToOneField(MolecularData, primary_key=True)
+    molecular_data = models.OneToOneField(MolecularData)
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
     repeat_size = models.IntegerField(null=True, blank=True)
     relative_test = models.BooleanField(verbose_name="DNA test performed on relative")
