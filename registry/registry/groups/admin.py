@@ -49,13 +49,15 @@ class UserAdmin(admin.ModelAdmin):
                 # Set up the correct group.
                 for group in form.cleaned_data["groups"]:
                     django_user.groups.add(group)
-
+                    
                 # Now create the internal user record.
                 user = User(user=django_user)
                 user.title = form.cleaned_data["title"]
-                user.working_group = form.cleaned_data["working_group"]
-                user.save()
+                
+                for working_group in form.cleaned_data["working_group"]:
+                    user.working_groups.add(working_group)
 
+                user.save()
                 return HttpResponseRedirect("../")
         else:
             form = UserNewForm(request.user)
@@ -148,7 +150,7 @@ class UserAdmin(admin.ModelAdmin):
                 user.working_groups.clear()
                 for working_group in form.cleaned_data["working_group"]:
                     user.working_groups.add(working_group)
-
+                    
                 user.save()
 
                 return HttpResponseRedirect("../")
@@ -198,7 +200,7 @@ class UserAdmin(admin.ModelAdmin):
         user = User.objects.get(user=request.user)
 
         if self.has_change_permission(request):
-            return User.objects.filter(working_group=user.working_group)
+            return User.objects.filter(working_groups__in=user.working_groups.all())
         else:
             return User.objects.none()
 
