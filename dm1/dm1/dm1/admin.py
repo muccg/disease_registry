@@ -175,18 +175,13 @@ class DMTestingInline(admin.TabularInline):
     model = DMTestDetails
     form = DMTestDetailsForm
 
-admin.site.register(Diagnosis, DiagnosisAdmin)
-
-# Trac 16 item 9, change in the DM1 Registry Admin
-# FJ added to limit the sex choices to Male/Female and remove Intersex
-# Could not do it in dm1/Patient, some relationships point directly to the patients/models.Patient
-#class PatientAdmin(admin.ModelAdmin):
-#    form = PatientForm
-
-#admin.site.register(Patient, PatientAdmin)
-
-#Trac #35
 class CancerTypeChoicesAdmin(admin.ModelAdmin):
     search_fields = ["description"]
 
+
+class VariationDm1Admin(admin.TabularInline):
+    model = VariationDm1
+    extra = 1
+
+admin.site.register(Diagnosis, DiagnosisAdmin)
 admin.site.register(CancerTypeChoices, CancerTypeChoicesAdmin)

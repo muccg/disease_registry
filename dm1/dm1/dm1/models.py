@@ -10,6 +10,7 @@ from registry.genetic.models import MolecularData
 from registry.patients.models import Patient
 from registry.mail import sendNewPatientEmail
 from registry.groups.models import User
+from registry.genetic.models import MolecularData, Laboratory
 
 import logging
 logger = logging.getLogger('dm1')
@@ -335,7 +336,7 @@ class DiagnosticCategory(models.Model):
         ("DNA test (DM-1 or DM-2) not done", "DNA test (DM-1 or DM-2) not done"),
     )
 
-    molecular_data = models.OneToOneField(MolecularData)
+    molecular_data = models.ForeignKey(MolecularData)
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
     repeat_size = models.IntegerField(null=True, blank=True)
     relative_test = models.BooleanField(verbose_name="DNA test performed on relative")
@@ -347,7 +348,19 @@ class DiagnosticCategory(models.Model):
 
     def __unicode__(self):
         return str(self.molecular_data)
-
+        
+class VariationDm1(models.Model):
+    molecular_data = models.ForeignKey(MolecularData)
+    disease_type = models.CharField(max_length=20)
+    genetic_variant = models.CharField(max_length=100)
+    dna_repeat_sequence = models.CharField(max_length=20)
+    sequence_repeat_number = models.IntegerField()
+    chromosome_region_text = models.CharField(max_length=20)
+    typing_method = models.CharField(max_length=100)
+    laboratory = models.OneToOneField(Laboratory)
+    
+    class Meta:
+        verbose_name = 'Variation'
 
 def signal_patient_post_save(sender, **kwargs):
     logger.debug("patient post_save signal")
