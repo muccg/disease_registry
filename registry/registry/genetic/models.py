@@ -123,11 +123,11 @@ class Laboratory(models.Model):
 
     def __unicode__(self):
         val = self.name
-        contacts = filter(bool, [self.contact_name, self.contact_email, self.contact_phone])
-        if self.address:
-            val = "%s, %s" % (val, self.address)
-        if contacts:
-            val = "%s; Contact: %s" % (val, ", ".join(contacts))
+#        contacts = filter(bool, [self.contact_name, self.contact_email, self.contact_phone])
+#        if self.address:
+#            val = "%s, %s" % (val, self.address)
+#        if contacts:
+#            val = "%s; Contact: %s" % (val, ", ".join(contacts))
         return val
 
 def signal_patient_post_save(sender, **kwargs):
