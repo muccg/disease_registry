@@ -1,6 +1,6 @@
 from django import forms
 from django.conf import settings
-from django.forms.widgets import Select, RadioSelect
+from django.forms.widgets import Select, RadioSelect, CheckboxInput
 from registry.forms.date import DateWidget
 from registry.patients.models import Patient as RegistryPatient
 from registry.utils import stripspaces
@@ -87,12 +87,23 @@ class ConsentForm(forms.ModelForm):
         exclude = ("firstname", "lastname", "diagnosis")
         model = models.Consent
 
+class ConsentFormNz(ConsentForm):
+    CHOICES = (('N', 'NO'), ('Y', 'YES'))
+    q8 = forms.ChoiceField(widget=RadioSelect, choices=CHOICES, required=True)
+    q9 = forms.ChoiceField(widget=RadioSelect, choices=CHOICES, required=True)
+    q10 = forms.ChoiceField(widget=RadioSelect, choices=CHOICES, required=True)
+    
+    class  Meta:
+        exclude = ("firstname", "lastname", "diagnosis")
+        model = models.ConsentNz
+
 class DiagnosisForm(forms.ModelForm):
     # keep that in sync with base.py and add the null option
     DIAGNOSIS_CHOICES = (
         ('', "--------"),
         ("DM1", "DM1"),
         ("DM2", "DM2"),
+        ("U", "Don't know"),
         ("O", "Not yet diagnosed"), # the text is different from registry, but the value is the same as 'Other' in the registry in base.py
     )
 
@@ -316,6 +327,7 @@ class GeneralMedicalFactorsForm(forms.ModelForm):
     )
     YESNO_CHOICES = (('', "---"),) + base.GeneralMedicalFactors.YESNO_CHOICES
     YESNOUNSURE_CHOICES = (('', "---"),) + base.GeneralMedicalFactors.YESNOUNSURE_CHOICES
+    YESNODONTKNOW_CHOICES = (('', "---"), ('Y', 'Yes'), ('N', 'No'), ('U', 'Don\'t know'))
 
     weight = forms.IntegerField(label="What is your weight in kilograms?", required=False)
     height = forms.IntegerField(label="What is your height in centimetres?", required=False)
@@ -328,11 +340,11 @@ class GeneralMedicalFactorsForm(forms.ModelForm):
 
     medicalert = forms.CharField(label="Do you wear a Medicalert bracelet", widget=Select(choices=YESNO_CHOICES), required=False)
 
-    physiotherapy = forms.CharField(label="Have you received any of the following: Physiotherapy", widget=Select(choices=YESNO_CHOICES), required=False)
-    psychologicalcounseling = forms.CharField(label="Emotional & psychological counseling", widget=Select(choices=YESNO_CHOICES), required=False)
-    speechtherapy = forms.CharField(label="Speech therapy", widget=Select(choices=YESNO_CHOICES), required=False)
-    occupationaltherapy = forms.CharField(label="Occupational therapy", widget=Select(choices=YESNO_CHOICES), required=False)
-    vocationaltraining = forms.CharField(label="Vocational rehabilitation", widget=Select(choices=YESNO_CHOICES), required=False)
+    physiotherapy = forms.CharField(label="Have you received any of the following: Physiotherapy", widget=Select(choices=YESNODONTKNOW_CHOICES), required=False)
+    psychologicalcounseling = forms.CharField(label="Emotional & psychological counseling", widget=Select(choices=YESNODONTKNOW_CHOICES), required=False)
+    speechtherapy = forms.CharField(label="Speech therapy", widget=Select(choices=YESNODONTKNOW_CHOICES), required=False)
+    occupationaltherapy = forms.CharField(label="Occupational therapy", widget=Select(choices=YESNODONTKNOW_CHOICES), required=False)
+    vocationaltraining = forms.CharField(label="Vocational rehabilitation", widget=Select(choices=YESNODONTKNOW_CHOICES), required=False)
 
     liver = forms.BooleanField(label="Have you been diagnosed with: Liver disease", required=False)
 
@@ -342,7 +354,7 @@ class GeneralMedicalFactorsForm(forms.ModelForm):
 
 
 class GeneticTestDetailsForm(forms.ModelForm):
-    YESNO_CHOICES = (('', "---"), ('Y', 'Yes'), ('N', 'No'))
+    YESNO_CHOICES = (('', "---"), ('Y', 'Yes'), ('N', 'No'), ('U', 'Don\'t know'))
 
     details = forms.CharField(label="Have you had a genetic test for myotonic dystrophy", required=False, widget=Select(choices=YESNO_CHOICES))
     counselling = forms.CharField(label="Have you received genetic counselling", required=False, widget=Select(choices=YESNO_CHOICES))

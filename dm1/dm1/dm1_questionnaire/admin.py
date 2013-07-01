@@ -172,3 +172,5 @@ class PatientAdmin(admin.ModelAdmin):
 
 admin.site.register(Diagnosis, DiagnosisAdmin)
 admin.site.register(Patient, PatientAdmin)
+admin.site.register(Consent)
+admin.site.register(ConsentNz)

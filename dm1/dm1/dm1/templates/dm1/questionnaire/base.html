@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
-        <title>Australian Myotonic Dystrophy Registry &mdash; Questionnaire</title>
+        <title>{{country}} Myotonic Dystrophy Registry &mdash; Questionnaire</title>
 
         <link rel="stylesheet" type="text/css" href="{% static 'css/dm1.css' %}"/>
         <link rel="stylesheet" type="text/css" href="{% static 'css/questionnaire.css' %}"/>
@@ -19,7 +19,7 @@
     </head>
     <body>
         <div id="header-container">
-            <h1>Australian Myotonic Dystrophy Registry</h1>
+            <h1>{{country}} Myotonic Dystrophy Registry</h1>
         </div>
 
         <div id="container">
@@ -42,55 +42,3 @@
         </div>
     </body>
 </html>
-<!--
-<%def name="head()" />
-
-<%def name="output_form(form)">
-    <% row = 0 %>
-
-% for field in form:
-    <%
-        row += 1
-        cls = "even" if row % 2 else "odd"
-
-        if field.field.required:
-            cls += " required"
-    %>
-
-%    if field.errors:
-        <div class="row error-message ${cls}">
-            <div class="cell">&nbsp;</div>
-            <div class="cell">
-%        for error in field.errors:
-                <div>${error}</div>
-%        endfor
-            </div>
-        </div>
-
-        <div class="row error ${cls}">
-            ${field.label_tag()}
-            <div class="cell">
-                ${field.as_widget()}
-%        if field.field.help_text:
-                <div class="help-text">
-                    ${field.field.help_text}
-                </div>
-%        endif
-            </div>
-        </div>
-%    else:
-        <div class="row ${cls}">
-            ${field.label_tag()}
-            <div class="cell">
-                ${field.as_widget()}
-%        if field.field.help_text:
-                <div class="help-text">
-                    ${field.field.help_text}
-                </div>
-%        endif
-            </div>
-        </div>
-%    endif
-% endfor
-</%def>
--->

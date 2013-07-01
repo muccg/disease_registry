@@ -326,6 +326,18 @@ class Consent(ApproveMixin, base.Consent):
     def approve(self, diagnosis):
         return super(Consent, self).approve(dm1models.Consent, diagnosis=diagnosis, commit=True, delete=True)
 
+class ConsentNz(ApproveMixin, base.Consent):
+    diagnosis = models.ForeignKey(Diagnosis, primary_key=True)
+    q8 = models.CharField(max_length=1, null=True, blank=True, verbose_name='I have read and I have understood the New Zealand Neuromuscular Disease Registry ‘Participant / parent Information Sheet dated Nov. 2012 (v4)’. I have had the opportunity to discuss this information and I am satisfied with the answers I have been given.')
+    q9 = models.CharField(max_length=1, null=True, blank=True, verbose_name='New question 9')
+    q10 = models.CharField(max_length=1, null=True, blank=True, verbose_name='New question 10')
+
+    def __unicode__(self):
+        return unicode(self.diagnosis)
+
+    def approve(self, diagnosis):
+        return super(Consent, self).approve(dm1models.Consent, diagnosis=diagnosis, commit=True, delete=True)
+
 class FamilyMember(ApproveMixin, base.FamilyMember):
     diagnosis = models.ForeignKey(Diagnosis)
 

@@ -6,6 +6,6 @@ urlpatterns = patterns("",
     (r"^clinical", clinical),
     (r"^personal", personal),
     (r"^thanks", thanks),
-    (r"^index", index),
-    (r"^[/]*$", index),
+    (r"^(?P<country>\w{2})/index", index),
+    (r"^(?P<country>\w{2})[/]*$", index),
 )

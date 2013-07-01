@@ -48,6 +48,24 @@ class VariationInline(admin.TabularInline):
     }
 
 
+class VariationSmaInline(admin.TabularInline):
+    model = VariationSma
+    form = VariationSmaForm
+    raw_id_fields = ("gene",)
+    extra = 1
+    max_num = 100
+    formfield_overrides = {
+        models.TextField: {"widget": django.forms.TextInput},
+    }
+
+
+class MolecularDataSmaAdmin(admin.ModelAdmin):
+    form = MolecularDataSmaForm
+    inlines = [
+        VariationSmaInline,
+    ]
+
+
 class MolecularDataAdmin(admin.ModelAdmin):
     actions = None
     add_form_template = "admin/genetic/change_form.html"
@@ -195,10 +213,16 @@ class LaboratoryAdmin(admin.ModelAdmin):
 if settings.INSTALL_NAME == "dm1":
     # TODO remove this from the core registry
     #from registry.dm1.admin import DiagnosticCategoryInline
-    from dm1.dm1.admin import DiagnosticCategoryInline, DMTestingInline
-    MolecularDataAdmin.inlines = [DiagnosticCategoryInline, DMTestingInline] + \
-        MolecularDataAdmin.inlines
-
-admin.site.register(MolecularData, MolecularDataAdmin)
+    from dm1.dm1.admin import DiagnosticCategoryInline, DMTestingInline, VariationDm1Admin
+    MolecularDataAdmin.inlines = [
+        DMTestingInline, 
+        DiagnosticCategoryInline,
+        VariationDm1Admin
+    ]
+    
+if settings.INSTALL_NAME == 'sma':
+    admin.site.register(MolecularDataSma, MolecularDataSmaAdmin)
+else:
+    admin.site.register(MolecularData, MolecularDataAdmin)
 admin.site.register(Gene, GeneAdmin)
 admin.site.register(Laboratory, LaboratoryAdmin)

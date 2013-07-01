@@ -87,7 +87,14 @@
                 {{ form.management_form }}
                 {{ form.non_form_errors.as_ul }}
                 <div class='subform'>
-                <div class='label'>{{ label }}</div>
+                <div class='label'>{{ label }}{{form|get_classname}}</div>
+                {% if form|get_classname == 'FamilyMemberFormFormSet' %}
+                    <p>Do any of your family members have myotonic dystrophy?</p>
+                {% elif form|get_classname == 'ClinicalTrialsFormFormSet' %}
+                    <p>Have you taken part in any clinical trials?</p>
+                {% elif form|get_classname == 'OtherRegistriesFormFormSet' %}
+                    <p>Have you signed up to any other registries?</p>
+                {% endif %}
                 <div class="actionbutton" onclick="add_row(this);">Add</div> <div class="actionbutton" onclick="remove_row(this);">Remove</div>
                 <div class='content'>
                 <table id='{{form.prefix}}'>
