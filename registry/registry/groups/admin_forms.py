@@ -32,18 +32,18 @@ class UserChangeForm(forms.Form):
         #print "UserChangeForm.__init__ superuser: %s" % self.user.is_superuser
         # Note: it seems that every suer created is a superuser, could not find out why
         if not self.user.is_superuser:
-            working_group = User.objects.get(user=self.user).working_group
+            working_group = User.objects.get(user=self.user).working_groups.all()
             #print "working group: %s" % working_group
             #Trac #40: added "if working_group:"
-            if working_group:
-                self.fields["working_group"] = forms.ModelChoiceField(queryset=WorkingGroup.objects.filter(name=working_group.name), empty_label=None)
+#            if working_group:
+#                self.fields["working_group"] = forms.ModelChoiceField(queryset=WorkingGroup.objects.filter(name=working_group.name), empty_label=None)
 
     def clean_working_group(self):
         if not self.user.is_superuser:
             user = User.objects.get(user=self.user)
 
-            if self.cleaned_data["working_group"] != user.working_group:
-                raise forms.ValidationError("Cannot add a user to another working group.")
+#            if self.cleaned_data["working_group"] != user.working_group:
+#                raise forms.ValidationError("Cannot add a user to another working group.")
 
         return self.cleaned_data["working_group"]
 

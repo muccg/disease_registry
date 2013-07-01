@@ -91,6 +91,7 @@ class PatientAdmin(admin.ModelAdmin):
              "next_of_kin_mobile_phone",
              "next_of_kin_work_phone",
              "next_of_kin_email",
+             "next_of_kin_parent_place_of_birth"
              )})
 
         fieldset = (consent, personal_details, next_of_kin,)

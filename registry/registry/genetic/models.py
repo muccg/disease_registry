@@ -32,6 +32,15 @@ class MolecularData(models.Model):
     def __unicode__(self):
         return str(self.patient)
 
+class MolecularDataSma(models.Model):
+    patient = models.OneToOneField(Patient, primary_key=True)
+
+    class Meta:
+        ordering = ["patient"]
+        verbose_name_plural = "molecular data"
+
+    def __unicode__(self):
+        return str(self.patient)
 
 class Variation(models.Model):
     molecular_data = models.ForeignKey(MolecularData)
@@ -77,6 +86,27 @@ class Variation(models.Model):
     def set_validation_override(self, type):
         setattr(self, self.VALIDATION_FIELDS[type], True)
 
+class VariationSma(models.Model):
+    SMN1_CHOICES = (
+        (1, 'Homozygous'),
+        (2, 'Heterozygous'),
+        (3, 'No')
+    )
+    
+    molecular_data = models.ForeignKey(MolecularDataSma)
+    gene = models.ForeignKey(Gene)
+    technique = models.TextField()
+    exon_7_smn1_deletion = models.IntegerField(choices=SMN1_CHOICES, verbose_name = "Deletion of Exon 7 SMN1 gene")
+    exon_7_sequencing = models.BooleanField(verbose_name="Exon 7 Sequencing")
+    dna_variation = models.CharField(max_length=200, verbose_name="DNA variation")
+
+    def __unicode__(self):
+        return str(self.molecular_data)
+    
+    class Meta:
+        verbose_name = "Molecular Data"
+        verbose_name_plural = "Molecular Data Records"
+
 class Laboratory(models.Model):
     """
     Laboratory is a model for preset values of "laboratory site"
@@ -93,11 +123,11 @@ class Laboratory(models.Model):
 
     def __unicode__(self):
         val = self.name
-        contacts = filter(bool, [self.contact_name, self.contact_email, self.contact_phone])
-        if self.address:
-            val = "%s, %s" % (val, self.address)
-        if contacts:
-            val = "%s; Contact: %s" % (val, ", ".join(contacts))
+#        contacts = filter(bool, [self.contact_name, self.contact_email, self.contact_phone])
+#        if self.address:
+#            val = "%s, %s" % (val, self.address)
+#        if contacts:
+#            val = "%s; Contact: %s" % (val, ", ".join(contacts))
         return val
 
 def signal_patient_post_save(sender, **kwargs):
