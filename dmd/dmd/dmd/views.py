@@ -166,7 +166,10 @@ def heart_medication(obj):
         
 
 def wheelchair_use(motorfunction):
-    return '%s, (%s years)' % (motorfunction.wheelchair_use.title(), motorfunction.wheelchair_usage_age)
+    if motorfunction.wheelchair_use is not None:
+        return '%s, (%s years)' % (motorfunction.wheelchair_use.title(), motorfunction.wheelchair_usage_age)
+    else:
+        return 'Unknown'
 
 def yes_no_unknown_str(value):
     if value:
