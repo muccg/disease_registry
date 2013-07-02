@@ -22,5 +22,6 @@ registry/registry/logs*
 ^dmd/log/*
 ^dm1/log/*
 ^sma/log/*
+^fshd/log/*
 .ccgplatform
 .idea

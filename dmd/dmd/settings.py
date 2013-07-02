@@ -71,7 +71,8 @@ INSTALLED_APPS.extend([
     'django_qbe',
     'django_qbe.savedqueries',
     'dmd.dmd',
-    'django.contrib.admin'
+    'django.contrib.admin',
+    'admin_views'
 ])
 
 # these determine which authentication method to use
