@@ -57,7 +57,8 @@ setup(name='django-smaregistry',
         'ccg-extras==0.1.5',
         'django-userlog==0.2.1',
         'django_qbe',
-        'django_nose'
+        'django_nose',
+        'django-admin-views'
     ],
     dependency_links = [
         "http://repo.ccgapps.com.au",
