@@ -18,11 +18,12 @@ AWS_BUILD_INSTANCE='aws_rpmbuild_centos6'
 AWS_STAGING_INSTANCE='aws_syd_registry_staging'
 TARGET_DIR="/usr/local/src/${PROJECT_NAME}"
 CLOSURE="/usr/local/closure/compiler.jar"
-MODULES="psycopg2==2.4.6 Werkzeug flake8"
+TESTING_MODULES="pyvirtualdisplay nose selenium"
+MODULES="psycopg2==2.4.6 Werkzeug flake8 ${TESTING_MODULES}"
 
 
 function usage() {
-    echo 'Usage ./develop.sh (test|lint|jslint|start|install|clean|purge|pipfreeze|pythonversion|dropdb|ci_remote_build|ci_remote_destroy|ci_rpm_publish|ci_staging) (dd|dmd|dm1|sma)'
+    echo 'Usage ./develop.sh (test|lint|jslint|start|install|clean|purge|pipfreeze|pythonversion|dropdb|ci_remote_build|ci_remote_destroy|ci_rpm_publish|ci_staging|ci_staging_tests) (dd|dmd|dm1|sma)'
 }
 
 
@@ -84,6 +85,29 @@ function ci_staging() {
     ccg ${AWS_STAGING_INSTANCE} boot
     ccg ${AWS_STAGING_INSTANCE} puppet
     ccg ${AWS_STAGING_INSTANCE} shutdown:50
+}
+
+
+# run tests on staging
+function ci_staging_tests() {
+    registry_needed
+
+    # /tmp is used for test results because the apache user has
+    # permission to write there.
+    REMOTE_TEST_DIR=/tmp
+    REMOTE_TEST_RESULTS=${REMOTE_TEST_DIR}/tests.xml
+
+    # Grant permission to create a test database.
+    DATABASE_USER=registryapp
+    ccg ${AWS_STAGING_INSTANCE} dsudo:"su postgres -c \"psql -c 'ALTER ROLE ${DATABASE_USER} CREATEDB;'\""
+
+    # This is the command which runs manage.py with the correct environment
+    DJANGO_ADMIN="registry${REGISTRY}"
+
+    # Run tests, collect results
+    TEST_LIST="${PROJECT_NAME}"
+    ccg ${AWS_STAGING_INSTANCE} dsudo:"cd ${REMOTE_TEST_DIR} && ${DJANGO_ADMIN} test --noinput --with-xunit --xunit-file\=${REMOTE_TEST_RESULTS} ${TEST_LIST}"
+    ccg ${AWS_STAGING_INSTANCE} getfile:${REMOTE_TEST_RESULTS},./
 }
 
 
@@ -252,6 +276,10 @@ ci_rpm_publish)
 ci_staging)
     ci_ssh_agent
     ci_staging
+    ;;
+ci_staging_tests)
+    ci_ssh_agent
+    ci_staging_tests
     ;;
 dropdb)
     dropdb
