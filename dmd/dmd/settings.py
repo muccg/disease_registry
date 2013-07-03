@@ -122,6 +122,16 @@ SESSION_COOKIE_NAME = "registry_dmd"
 SESSION_ENGINE = 'django.contrib.sessions.backends.file'
 SESSION_FILE_PATH = WRITABLE_DIRECTORY
 
+# Testing settings
+INSTALLED_APPS.extend(['django_nose'])
+TEST_RUNNER = 'dmd.dmd.tests.PatchedNoseTestSuiteRunner'
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-erase',
+    '--cover-html',
+    '--cover-branches',
+    '--cover-package=dmd',
+]
 
 # APPLICATION SPECIFIC SETTINGS
 AUTH_PROFILE_MODULE = 'groups.User'

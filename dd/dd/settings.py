@@ -118,6 +118,9 @@ SESSION_COOKIE_NAME = "registry_dd"
 SESSION_ENGINE = 'django.contrib.sessions.backends.file'
 SESSION_FILE_PATH = WRITABLE_DIRECTORY
 
+# Testing settings
+INSTALLED_APPS.extend(['django_nose'])
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 # APPLICATION SPECIFIC SETTINGS
 AUTH_PROFILE_MODULE = 'groups.User'
