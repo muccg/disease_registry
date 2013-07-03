@@ -12,6 +12,14 @@ port[dmd]='8001'
 port[sma]='8002'
 port[dm1]='8003'
 port[dd]='8004'
+port[fshd]='8005'
+
+declare -A django_admin
+django_admin["dmd"]=dmd
+django_admin["sma"]=sma
+django_admin["dd"]=registrydd
+django_admin["dm1"]=dm1
+django_admin["fshd"]=fshd
 
 PROJECT_NAME='disease_registry'
 AWS_BUILD_INSTANCE='aws_rpmbuild_centos6'
@@ -102,7 +110,7 @@ function ci_staging_tests() {
     ccg ${AWS_STAGING_INSTANCE} dsudo:"su postgres -c \"psql -c 'ALTER ROLE ${DATABASE_USER} CREATEDB;'\""
 
     # This is the command which runs manage.py with the correct environment
-    DJANGO_ADMIN="registry${REGISTRY}"
+    DJANGO_ADMIN="${django_admin[${REGISTRY}]}"
 
     # Run tests, collect results
     TEST_LIST="${PROJECT_NAME}"
