@@ -1,0 +1,26 @@
+Create database.
+python manage.py syncdb
+python manage.py migrate --all
+
+This also loads the genetic information from the Internet, 
+negating the need to run the following command:
+    LOCALDEV=1 python manage.py importgenes 
+    Or if you have a file already:
+    LOCALDEV=1 python manage.py importgenes [filename]
+
+Check permissions:
+Clinical:
+DMD, SMA etc, all permissions except add or delete diagnosis
+patients.patients
+patients.doctors
+
+Genetics:
+genetic.moleculardata
+patients.patients
+patients.doctors
+
+Curators
+All of the above
+groups.users
+
+Thank you
