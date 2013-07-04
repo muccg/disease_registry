@@ -60,7 +60,9 @@ setup(name='django-dm1registry',
         'ccg-extras==0.1.5',
         'django-userlog==0.2.1',
         'django-messages-ui==0.2.6',
-        'django-nose'
+        'django-nose',
+        'lettuce',
+        'selenium'
     ],
     dependency_links = [
         "http://repo.ccgapps.com.au",
