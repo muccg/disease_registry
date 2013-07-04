@@ -5,9 +5,10 @@ import lettuce_webdriver.webdriver
 
 from pyvirtualdisplay import Display
 
+display = Display(visible=0, size=(800, 600))
+
 @before.all
 def set_browser():
-    display = Display(visible=0, size=(800, 600))
     display.start()
     world.browser = webdriver.Firefox()
 

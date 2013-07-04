@@ -1,4 +1,4 @@
-Feature: Login page
+Feature: Login
 
     Scenario: You are on login page
         Given I go to "http://localhost:8080/admin"
