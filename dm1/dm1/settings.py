@@ -72,6 +72,7 @@ INSTALLED_APPS.extend([
     'dm1.dm1',
     'dm1.dm1_questionnaire',
     'django.contrib.admin',
+    'lettuce.django'
 ])
 
 # these determine which authentication method to use
