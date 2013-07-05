@@ -62,6 +62,7 @@ setup(name='django-dm1registry',
         'django-messages-ui==0.2.6',
         'django-nose',
         'distribute>=0.6.49',
+        'lettuce_webdriver'
     ],
     dependency_links = [
         "http://repo.ccgapps.com.au",
