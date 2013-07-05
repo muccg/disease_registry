@@ -31,7 +31,7 @@ MODULES="psycopg2==2.4.6 Werkzeug flake8 ${TESTING_MODULES}"
 
 
 function usage() {
-    echo 'Usage ./develop.sh (test|lint|jslint|start|install|clean|purge|pipfreeze|pythonversion|dropdb|ci_remote_build|ci_remote_destroy|ci_rpm_publish|ci_staging|ci_staging_tests) (dd|dmd|dm1|sma)'
+    echo 'Usage ./develop.sh (test|lint|jslint|start|install|clean|purge|pipfreeze|pythonversion|dropdb|ci_remote_build|ci_remote_destroy|ci_rpm_publish|ci_staging|ci_staging_selenium|ci_staging_tests) (dd|dmd|dm1|sma)'
 }
 
 
@@ -93,6 +93,15 @@ function ci_staging() {
     ccg ${AWS_STAGING_INSTANCE} boot
     ccg ${AWS_STAGING_INSTANCE} puppet
     ccg ${AWS_STAGING_INSTANCE} shutdown:50
+}
+
+
+# staging seleinium test
+function ci_staging_selenium() {
+    ccg ${AWS_STAGING_INSTANCE} dsudo:'dm1 harvest dm1/dm1/features/*.feature'
+    #ccg ${AWS_STAGING_INSTANCE} dsudo:'dmd harvest dmd/dmd/features/*.feature'
+    #ccg ${AWS_STAGING_INSTANCE} dsudo:'dd harvest dd/dd/features/*.feature'
+    #ccg ${AWS_STAGING_INSTANCE} dsudo:'sma harvest sma/sma/features/*.feature'
 }
 
 
@@ -284,6 +293,10 @@ ci_rpm_publish)
 ci_staging)
     ci_ssh_agent
     ci_staging
+    ;;
+ci_staging_selenium)
+    ci_ssh_agent
+    ci_staging_selenium
     ;;
 ci_staging_tests)
     ci_ssh_agent
