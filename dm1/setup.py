@@ -61,10 +61,6 @@ setup(name='django-dm1registry',
         'django-userlog==0.2.1',
         'django-messages-ui==0.2.6',
         'django-nose',
-        'sure==1.2.1',
-        'lettuce_webdriver',
-        'selenium',
-        'pyvirtualdisplay'
     ],
     dependency_links = [
         "http://repo.ccgapps.com.au",
