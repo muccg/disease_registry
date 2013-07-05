@@ -59,6 +59,7 @@ setup(name='django-dmdregistry',
         'django-userlog==0.2.1',
         'django_qbe',
         'django-nose',
+        'distribute>=0.6.49',
         'django-admin-views'
     ],
     dependency_links = [
