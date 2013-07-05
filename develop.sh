@@ -7,20 +7,6 @@ set -e
 ACTION="$1"
 REGISTRY="$2"
 
-declare -A port
-port[dmd]='8001'
-port[sma]='8002'
-port[dm1]='8003'
-port[dd]='8004'
-port[fshd]='8005'
-
-declare -A django_admin
-django_admin["dmd"]=dmd
-django_admin["sma"]=sma
-django_admin["dd"]=registrydd
-django_admin["dm1"]=dm1
-django_admin["fshd"]=fshd
-
 PROJECT_NAME='disease_registry'
 AWS_BUILD_INSTANCE='aws_rpmbuild_centos6'
 AWS_STAGING_INSTANCE='aws_syd_registry_staging'
@@ -104,6 +90,17 @@ function ci_staging_selenium() {
     #ccg ${AWS_STAGING_INSTANCE} dsudo:'sma harvest sma/sma/features/*.feature'
 }
 
+# gets the manage.py command for a registry
+function django_admin() {
+    case $1 in
+        dd)
+            echo "registrydd"
+            ;;
+        *)
+            echo $1
+            ;;
+    esac
+}
 
 # run tests on staging
 function ci_staging_tests() {
@@ -119,7 +116,7 @@ function ci_staging_tests() {
     ccg ${AWS_STAGING_INSTANCE} dsudo:"su postgres -c \"psql -c 'ALTER ROLE ${DATABASE_USER} CREATEDB;'\""
 
     # This is the command which runs manage.py with the correct environment
-    DJANGO_ADMIN="${django_admin[${REGISTRY}]}"
+    DJANGO_ADMIN=$(django_admin ${REGISTRY})
 
     # Run tests, collect results
     TEST_LIST="${PROJECT_NAME}"
@@ -204,11 +201,33 @@ function syncmigrate() {
     virt_${REGISTRY}/bin/django-admin.py collectstatic --noinput --settings=${DJANGO_SETTINGS_MODULE} 1> collectstatic-develop.log
 }
 
+# chooses a tcp port number for the debug server
+function port() {
+    # this could be an associative array, but they aren't compatible
+    # with bash3
+    case $1 in
+        dmd)
+            echo "8001"
+            ;;
+        sma)
+            echo "8002"
+            ;;
+        dm1)
+            echo "8003"
+            ;;
+        dd)
+            echo "8004"
+            ;;
+        fshd)
+            echo "8005"
+            ;;
+    esac
+}
 
 # start runserver
 function startserver() {
     registry_needed
-    virt_${REGISTRY}/bin/django-admin.py runserver_plus ${port[${REGISTRY}]}
+    virt_${REGISTRY}/bin/django-admin.py runserver_plus $(port ${REGISTRY})
 }
 
 
