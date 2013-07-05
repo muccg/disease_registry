@@ -58,6 +58,7 @@ setup(name='django-smaregistry',
         'django-userlog==0.2.1',
         'django_qbe',
         'django_nose',
+        'distribute>=0.6.49',
         'django-admin-views'
     ],
     dependency_links = [
