@@ -121,6 +121,7 @@ SESSION_FILE_PATH = WRITABLE_DIRECTORY
 # Testing settings
 INSTALLED_APPS.extend(['django_nose'])
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+SOUTH_TESTS_MIGRATE = False
 
 # APPLICATION SPECIFIC SETTINGS
 AUTH_PROFILE_MODULE = 'groups.User'
