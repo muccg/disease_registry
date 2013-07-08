@@ -61,7 +61,6 @@ setup(name='django-dm1registry',
         'django-userlog==0.2.1',
         'django-messages-ui==0.2.6',
         'django-nose',
-        'distribute>=0.6.49',
         'sure==1.2.1',
         'lettuce_webdriver'
     ],
