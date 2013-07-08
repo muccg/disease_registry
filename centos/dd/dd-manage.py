@@ -3,9 +3,10 @@ import os
 import sys
 import pwd
 
-(uid, gid) = pwd.getpwnam('apache')[2:4]
+(uid, gid, gecos, homedir) = pwd.getpwnam('apache')[2:6]
 os.setegid(gid)
 os.seteuid(uid)
+os.chdir(homedir) # otherwise pkg_resources (nose) doesn't work
 
 if __name__ == "__main__":
 

@@ -59,7 +59,6 @@ setup(name='django-fshdregistry',
         'ccg-extras==0.1.5',
         'django-userlog==0.2.1',
         'django-nose',
-        'distribute>=0.6.49',
     ],
     dependency_links = [
         "http://repo.ccgapps.com.au",
