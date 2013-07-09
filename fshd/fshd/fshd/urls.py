@@ -1,5 +1,5 @@
 from django.conf.urls import patterns
-from django.conf.urls.defaults import include
+from django.conf.urls import include
 from django.contrib import admin
 
 urlpatterns = patterns('',
