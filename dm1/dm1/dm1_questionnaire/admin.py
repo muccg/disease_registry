@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
-from django.conf.urls.defaults import patterns
+from django.conf.urls import patterns
 from django.db import transaction
 from django.http import HttpResponseRedirect
 from registry.utils import get_static_url, get_working_groups

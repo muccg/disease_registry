@@ -1,5 +1,5 @@
 from django import template
-from django.conf.urls.defaults import patterns
+from django.conf.urls import patterns
 from django.contrib import admin
 from django.db import transaction
 from django.http import HttpResponseRedirect
