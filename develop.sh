@@ -119,8 +119,9 @@ function ci_staging_tests() {
     DJANGO_ADMIN=$(django_admin ${REGISTRY})
 
     # Run tests, collect results
-    TEST_LIST="${PROJECT_NAME}"
-    ccg ${AWS_STAGING_INSTANCE} dsudo:"cd ${REMOTE_TEST_DIR} && ${DJANGO_ADMIN} test --noinput --with-xunit --xunit-file\=${REMOTE_TEST_RESULTS} ${TEST_LIST}"
+    TEST_LIST="${REGISTRY}.${REGISTRY}.tests"
+    ccg ${AWS_STAGING_INSTANCE} drun:"nohup Xvfb :0 || true"
+    ccg ${AWS_STAGING_INSTANCE} dsudo:"cd ${REMOTE_TEST_DIR} && env DISPLAY=:0 dbus-launch ${DJANGO_ADMIN} test --noinput --with-xunit --xunit-file\=${REMOTE_TEST_RESULTS} --liveserver=localhost:8082,8090-8100,9000-9200,7041 ${TEST_LIST}"
     ccg ${AWS_STAGING_INSTANCE} getfile:${REMOTE_TEST_RESULTS},./
 }
 
