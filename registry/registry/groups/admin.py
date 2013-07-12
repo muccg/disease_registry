@@ -174,7 +174,7 @@ class UserAdmin(admin.ModelAdmin):
             "change": True,
             "show_delete": True,
             "has_add_permission": False,
-            "has_delete_permission": self.has_delete_permission(request),
+            "has_delete_permission": False,#self.has_delete_permission(request),
             "has_change_permission": True,
             "has_file_field": False,
             "has_absolute_url": False,
@@ -208,6 +208,13 @@ class UserAdmin(admin.ModelAdmin):
 class WorkingGroupAdmin(admin.ModelAdmin):
     search_fields = ["name"]
 
+    def queryset(self, request):
+        if request.user.is_superuser:
+            return WorkingGroup.objects.all()
+
+        user = User.objects.get(user=request.user)
+
+        return WorkingGroup.objects.filter(id__in=user.working_groups.all())
 
 admin.site.register(User, UserAdmin)
 admin.site.register(WorkingGroup, WorkingGroupAdmin)

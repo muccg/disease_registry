@@ -125,8 +125,8 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.file'
 
 # Testing settings
 INSTALLED_APPS.extend(['django_nose'])
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-SOUTH_TESTS_MIGRATE = False
+#TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+SOUTH_TESTS_MIGRATE = True
 
 # APPLICATION SPECIFIC SETTINGS
 AUTH_PROFILE_MODULE = 'groups.User'
