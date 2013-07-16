@@ -16,7 +16,12 @@ class SimpleTest(LiveServerTestCase):
     DISPLAY = Display(visible=0, size=(800, 600))
 
     def setUp(self):
-        self.DISPLAY.start()
+        if "DISPLAY" not in os.environ:
+            from pyvirtualdisplay import Display
+            self.DISPLAY = Display(visible=0, size=(800, 600))
+            self.DISPLAY.start()
+            self.addCleanup(self.DISPLAY.stop)
+
         self.DRIVER = webdriver.Firefox()
 
     def tearDown(self):
