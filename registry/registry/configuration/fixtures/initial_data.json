@@ -15,8 +15,6 @@
             "description": "", 
             "name": "Test Template", 
             "groups": [
-                3, 
-                2
             ], 
             "target": 1
         }
