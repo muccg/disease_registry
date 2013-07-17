@@ -4,9 +4,9 @@ import sys
 import pwd
 
 (uid, gid, gecos, homedir) = pwd.getpwnam('apache')[2:6]
-os.setegid(gid)
-os.seteuid(uid)
-os.chdir(homedir) # otherwise pkg_resources (nose) doesn't work
+os.setgid(gid)
+os.setuid(uid)
+os.environ["HOME"] = homedir
 
 if __name__ == "__main__":
 
