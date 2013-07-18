@@ -5,6 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 
 import csv, StringIO
+import time
 
 from models import *
 from registry.genetic.models import *
@@ -32,16 +33,18 @@ def nmd_report(request, working_group):
         items['diagnosis'] = str(diagnosis_name(d.diagnosis))
         items['localisation'] = str(d.patient.postcode)
 
-        items['last_follow_up'] = str(d.updated) if d.updated is not None else str(d.created)
+        items['last_follow_up'] = str(d.updated.strftime('%Y-%m-%d')) if d.updated is not None else str(d.updated.strftime('%Y-%m-%d'))
 
         try:
             items['able_to_walk'] = yes_no_unknown_str(d.motorfunction.walk)
             items['wheelchair_use'] = wheelchair_use(d.motorfunction)
             items['able_to_sit'] = yes_no_unknown_str(d.motorfunction.sit)
+            items['motor_function'] = motor_function(d.motorfunction)
         except ObjectDoesNotExist:
             items['able_to_walk'] = 'No/Unknown'
             items['wheelchair_use'] = 'Unknown'
             items['able_to_sit'] = 'No/Unknown'
+            items['motor_function'] = 'No/Unknown'
 
         try:
             items['scoliosis_surgery'] = yes_no_str(d.surgery.surgery)
@@ -49,7 +52,7 @@ def nmd_report(request, working_group):
             items['scoliosis_surgery'] = 'Unknown'
 
         try:
-            items['feeding_function'] = d.feedingfunction.gastric_nasal_tube
+            items['feeding_function'] = yes_no_str(d.feedingfunction.gastric_nasal_tube)
         except ObjectDoesNotExist:
             items['feeding_function'] = 'Unknown'
 
@@ -87,9 +90,10 @@ def nmd_report(request, working_group):
         'Gene',
         'Diagnosis', 
         'Currently Able To Walk', 
-        'Wheelchair Use', 
+        'Wheelchair Use',
+        'Motor Function', 
         'Scoliosis Surgery',
-        'Feeding function',
+        'Gastric/nasal tube',
         'Clinical Trials', 
         'Date of birth', 
         'Last updated', 
@@ -103,19 +107,26 @@ def nmd_report(request, working_group):
         'SMA Classification'))
     for r in results:
         writer.writerow((r['patient_id'], r['gene'], r['diagnosis'], r['able_to_walk'],
-                        r['wheelchair_use'], r['scoliosis_surgery'], r['feeding_function'],
+                        r['wheelchair_use'], r['motor_function'], r['scoliosis_surgery'], r['feeding_function'],
                         r['trials'], r['age'], r['last_follow_up'], r['localisation'], r['able_to_sit'], 
                         r['non_invasive_ventilation'], r['invasive_ventilation'], r['last_fvc'], r['other_registries'], r['family_history'], r['sma_classification']))
 
     response['Content-Disposition'] = 'attachment; filename=sma_nmdreport_' + working_group + '.csv'
     return response
 
+def motor_function(obj):
+    if obj.best_function == 'walking':
+        return '%s - %s year(s)' % (obj.best_function.title(), obj.acquisition_age if obj.acquisition_age is not None else 'Unknown')
+    else:
+        return obj.best_function.title()
+    
+
 def family_members(obj):
     members = obj.familymember_set.all()
     if len(members) > 0:
         result = ''
         for member in members:
-            result += '%s (%s), ' % (member.family_member_diagnosis, member.registry_patient_id)
+            result += '%s (%s - %s), ' % (member.family_member_diagnosis, member.registry_patient_id, member.relationship)
         return result[:-2]
     else:
         return 'Unknown'
