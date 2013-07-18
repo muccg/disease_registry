@@ -138,7 +138,7 @@ def clinical_trials(obj):
             result += '%s, ' % trial.drug_name
         return result[:-2]
     else:
-        return 'Unknown'
+        return 'No/Unknown'
 
 def heart_medication(obj):
     if obj.heart:
