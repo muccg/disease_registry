@@ -129,7 +129,7 @@ def family_members(obj):
     if len(members) > 0:
         result = ''
         for member in members:
-            result += '%s (%s), ' % (member.family_member_diagnosis, member.registry_patient_id)
+            result += '%s (%s - %s), ' % (member.family_member_diagnosis, member.registry_patient_id, member.relationship)
         return result[:-2]
     else:
         return 'Unknown'
