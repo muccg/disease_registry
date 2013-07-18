@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.db.models import Q
+from django.core.exceptions import ObjectDoesNotExist
 
 from django.contrib.auth.decorators import login_required
 
@@ -33,17 +34,33 @@ def nmd_report(request, working_group):
 
         items['last_follow_up'] = str(d.updated) if d.updated is not None else str(d.created)
 
-        items['able_to_walk'] = yes_no_unknown_str(d.motorfunction.walk) if d.motorfunction is not None else 'No/Unknown'
-        items['wheelchair_use'] = wheelchair_use(d.motorfunction) if d.motorfunction is not None else 'Unknown'
-        items['able_to_sit'] = yes_no_unknown_str(d.motorfunction.sit) if d.motorfunction is not None else 'No/Unknown'
+        try:
+            items['able_to_walk'] = yes_no_unknown_str(d.motorfunction.walk)
+            items['wheelchair_use'] = wheelchair_use(d.motorfunction)
+            items['able_to_sit'] = yes_no_unknown_str(d.motorfunction.sit)
+        except ObjectDoesNotExist:
+            items['able_to_walk'] = 'No/Unknown'
+            items['wheelchair_use'] = 'Unknown'
+            items['able_to_sit'] = 'No/Unknown'
 
-        items['scoliosis_surgery'] = yes_no_str(d.surgery.surgery) if d.surgery is not None else 'Unknown'
-        
-        items['feeding_function'] = d.feedingfunction.gastric_nasal_tube if d.feedingfunction is not None else 'Unknown'
+        try:
+            items['scoliosis_surgery'] = yes_no_str(d.surgery.surgery)
+        except ObjectDoesNotExist:
+            items['scoliosis_surgery'] = 'Unknown'
 
-        items['non_invasive_ventilation'] = yes_no_pt_str(d.respiratory.non_invasive_ventilation) if d.respiratory is not None else 'Unknown'
-        items['invasive_ventilation'] = yes_no_pt_str(d.respiratory.invasive_ventilation) if d.respiratory is not None else 'Unknown'
-        items['last_fvc'] = yes_no_str(d.respiratory.fvc) if d.respiratory is not None else 'Unknown'
+        try:
+            items['feeding_function'] = d.feedingfunction.gastric_nasal_tube
+        except ObjectDoesNotExist:
+            items['feeding_function'] = 'Unknown'
+
+        try:
+            items['non_invasive_ventilation'] = yes_no_pt_str(d.respiratory.non_invasive_ventilation)
+            items['invasive_ventilation'] = yes_no_pt_str(d.respiratory.invasive_ventilation)
+            items['last_fvc'] = yes_no_str(d.respiratory.fvc)
+        except ObjectDoesNotExist:
+            items['non_invasive_ventilation'] = 'Unknown'
+            items['invasive_ventilation'] = 'Unknown'
+            items['last_fvc'] = 'Unknown'
 
         molecular_data = MolecularData.objects.filter(patient_id=d.patient.id)
 

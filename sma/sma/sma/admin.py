@@ -51,7 +51,7 @@ class DiagnosisAdmin(AdminViews):
     
     admin_views = (
         ('NMD Report Australia', '%s/%s' % (app_url, 'nmdreport/au') ),
-        ('NMD Report New Zealand', '%s/%s' % (app_url, 'nmdreport/nz') ),
+        ('NMD Report New Zealand', '%s/%s' % (app_url, 'nmdreport/nz') )
     )
     
     actions = None
