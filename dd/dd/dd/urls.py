@@ -1,6 +1,7 @@
 from django.conf import settings
-from django.conf.urls.defaults import patterns
+from django.conf.urls import patterns
+from django.views.generic import TemplateView
 
 urlpatterns = patterns('',
-    (r"^$", "django.views.generic.simple.direct_to_template",{"template": "dd/index.html"})
+    (r"^$", TemplateView.as_view(template_name = "dd/index.html"))
 )

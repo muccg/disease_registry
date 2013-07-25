@@ -1,5 +1,11 @@
+import os
+
 from django.contrib import admin
+
+from admin_views.admin import AdminViews
+
 from admin_forms import *
+
 from models import *
 from registry.utils import get_static_url, get_working_groups
 
@@ -40,7 +46,14 @@ class NotesInline(admin.TabularInline):
     model = Notes
 
 
-class DiagnosisAdmin(admin.ModelAdmin):
+class DiagnosisAdmin(AdminViews):
+    app_url = os.environ.get("SCRIPT_NAME", "")
+    
+    admin_views = (
+        ('NMD Report Australia', '%s/%s' % (app_url, 'nmdreport/au') ),
+        ('NMD Report New Zealand', '%s/%s' % (app_url, 'nmdreport/nz') )
+    )
+    
     actions = None
     form = DiagnosisForm
     inlines = [

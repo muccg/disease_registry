@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.db.models import Q
+from django.core.exceptions import ObjectDoesNotExist
 
 from django.contrib.auth.decorators import login_required
 
@@ -37,21 +38,41 @@ def nmd_report(request, working_group):
 
         items['muscle_biopsy'] = yes_no_str(d.muscle_biopsy) if d.muscle_biopsy is not None else 'Unknown'
 
-        items['able_to_walk'] = yes_no_unknown_str(d.motorfunction.walk) if d.motorfunction is not None else 'No/Unknown'
-        items['wheelchair_use'] = wheelchair_use(d.motorfunction) if d.motorfunction is not None else 'Unknown'
-        items['able_to_sit'] = yes_no_unknown_str(d.motorfunction.sit) if d.motorfunction is not None else 'No/Unknown'
+        try:
+            items['able_to_walk'] = yes_no_unknown_str(d.motorfunction.walk)
+            items['wheelchair_use'] = wheelchair_use(d.motorfunction)
+            items['able_to_sit'] = yes_no_unknown_str(d.motorfunction.sit) 
+        except ObjectDoesNotExist:
+            items['able_to_walk'] = 'No/Unknown'
+            items['wheelchair_use'] = 'Unknown'
+            items['able_to_sit'] = 'No/Unknown'            
 
-        items['current_steroid_theraphy'] = yes_no_str(d.steroids.current) if d.steroids is not None else 'Unknown'
+        try:
+            items['current_steroid_theraphy'] = yes_no_str(d.steroids.current)
+        except ObjectDoesNotExist:
+            items['current_steroid_theraphy'] = 'Unknown'
 
-        items['scoliosis_surgery'] = yes_no_str(d.surgery.surgery) if d.surgery is not None else 'Unknown'
+        try:
+            items['scoliosis_surgery'] = yes_no_str(d.surgery.surgery)
+        except ObjectDoesNotExist:
+            items['scoliosis_surgery'] = 'Unknown'
 
-        items['heartmedication'] = heart_medication(d)
-        items['heart_failure'] = yes_no_str(d.heart.failure) if d.heart is not None else 'Unknown'
-        items['last_lvef'] = '%s, %s' % (d.heart.lvef, d.heart.lvef_date) if d.heart is not None else 'Unknown'
+        try:
+            items['heartmedication'] = heart_medication(d)
+            items['heart_failure'] = yes_no_str(d.heart.failure)
+            items['last_lvef'] = '%s, %s' % (d.heart.lvef, d.heart.lvef_date)
+        except ObjectDoesNotExist:
+            items['heart_failure'] = 'Unknown'
+            items['last_lvef'] = 'Unknown'
 
-        items['non_invasive_ventilation'] = yes_no_pt_str(d.respiratory.non_invasive_ventilation) if d.respiratory is not None else 'Unknown'
-        items['invasive_ventilation'] = yes_no_pt_str(d.respiratory.invasive_ventilation) if d.respiratory is not None else 'Unknown'
-        items['last_fvc'] = '%s, %s' % (d.respiratory.fvc, d.respiratory.fvc_date) if d.respiratory is not None else 'Unknown'
+        try:
+            items['non_invasive_ventilation'] = yes_no_pt_str(d.respiratory.non_invasive_ventilation)
+            items['invasive_ventilation'] = yes_no_pt_str(d.respiratory.invasive_ventilation)
+            items['last_fvc'] = '%s, %s' % (d.respiratory.fvc, d.respiratory.fvc_date)
+        except ObjectDoesNotExist:
+            items['non_invasive_ventilation'] = 'Unknown'
+            items['invasive_ventilation'] = 'Unknown'
+            items['last_fvc'] = 'Unknown'
 
         molecular_data = MolecularData.objects.filter(patient_id=d.patient.id)
 
@@ -129,7 +150,7 @@ def family_members(obj):
     if len(members) > 0:
         result = ''
         for member in members:
-            result += '%s (%s), ' % (member.family_member_diagnosis, member.registry_patient_id)
+            result += '%s (%s - %s), ' % (member.family_member_diagnosis, member.registry_patient_id, member.relationship)
         return result[:-2]
     else:
         return 'Unknown'
@@ -155,13 +176,16 @@ def clinical_trials(obj):
         return 'Unknown'
 
 def heart_medication(obj):
-    if obj.heart:
-        medications = obj.heartmedication_set.all()
-        result = ''
-        for medication in medications:
-            result += '%s, ' % medication.drug
-        return result[:-2]
-    else:
+    try:
+        if obj.heart:
+            medications = obj.heartmedication_set.all()
+            result = ''
+            for medication in medications:
+                result += '%s, ' % medication.drug
+            return result[:-2]
+        else:
+            return 'Unknown'
+    except ObjectDoesNotExist:
         return 'Unknown'
         
 

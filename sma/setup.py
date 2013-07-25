@@ -6,7 +6,7 @@ data_files = {}
 for package in ['sma']:
     data_files['sma.' + package] = []
     os.chdir(os.path.join('sma', package))
-    for data_dir in ('templates', 'static', 'migrations', 'fixtures'):
+    for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'features'):
 	    data_files['sma.' + package].extend(
 	        [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files])
     os.chdir('../..')
@@ -17,14 +17,14 @@ for package in ['sma']:
 for package in ('common', 'patients', 'genetic', 'groups', 'humangenome'):
     data_files['registry.' + package] = []
     os.chdir(os.path.join('registry', package))
-    for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags'):
+    for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags', 'features'):
        data_files['registry.' + package].extend(
            [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files])
     os.chdir('../..')
 os.chdir('../sma')
 
 setup(name='django-smaregistry',
-    version='1.3.0',
+    version='1.4.0',
     description='Django Disease Registry - SMA',
     long_description='Django Disease registry for SMA',
     author='Centre for Comparative Genomics',
@@ -44,7 +44,7 @@ setup(name='django-smaregistry',
     package_data=data_files,
     zip_safe=False,
     install_requires=[
-        'Django==1.4.5',
+        'Django==1.5.1',
         'django-picklefield==0.1.9',
         'django-templatetag-sugar==0.1',
         'pyparsing==1.5.6',
@@ -54,10 +54,11 @@ setup(name='django-smaregistry',
         'django-extensions>=0.7.1',
         'django-messages-ui==0.2.6',
         'ccg-auth==0.3.2',
-        'ccg-extras==0.1.5',
+        'ccg-extras==0.1.6',
         'django-userlog==0.2.1',
         'django_qbe',
-        'django_nose'
+        'django_nose',
+        'django-admin-views'
     ],
     dependency_links = [
         "http://repo.ccgapps.com.au",

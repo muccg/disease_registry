@@ -72,6 +72,7 @@ INSTALLED_APPS.extend([
     'dm1.dm1',
     'dm1.dm1_questionnaire',
     'django.contrib.admin',
+    'lettuce.django'
 ])
 
 # these determine which authentication method to use
@@ -122,6 +123,10 @@ SESSION_COOKIE_SECURE = False
 SESSION_ENGINE = 'django.contrib.sessions.backends.file'
 #SESSION_FILE_PATH = WRITABLE_DIRECTORY
 
+# Testing settings
+INSTALLED_APPS.extend(['django_nose'])
+#TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+SOUTH_TESTS_MIGRATE = True
 
 # APPLICATION SPECIFIC SETTINGS
 AUTH_PROFILE_MODULE = 'groups.User'
@@ -186,6 +191,7 @@ LOGGING = {
         },
         'mail_admins': {
             'level': 'ERROR',
+            'filters': [],
             'class': 'django.utils.log.AdminEmailHandler',
             'formatter':'verbose',
             'include_html':True

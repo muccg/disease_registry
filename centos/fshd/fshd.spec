@@ -1,6 +1,6 @@
 %define namefshd
-%define version 1.3.0
-%define unmangled_version 1.3.0
+%define version 1.4.0
+%define unmangled_version 1.4.0
 %define release 1
 %define webapps /usr/local/webapps
 %define installdir %{webapps}/%{name}
@@ -85,8 +85,8 @@ install -D ../centos/fshd/django.wsgi %{buildinstalldir}/django.wsgi
 install -m 0755 -D ../centos/fshd/%{name}-manage.py %{buildroot}/%{_bindir}/registry%{name}
 
 # At least one python package has hardcoded shebangs to /usr/local/bin/python
-find %{buildinstalldir} -name '*.py' -type f | xargs sed -i 's:^#!/usr/local/bin/python:#!/usr/bin/python:'
-find %{buildinstalldir} -name '*.py' -type f | xargs sed -i 's:^#!/usr/local/python:#!/usr/bin/python:'
+find %{buildinstalldir} -name '*.py' -type f -exec sed -i 's:^#!/usr/local/bin/python:#!/usr/bin/python:' '{}' ';'
+find %{buildinstalldir} -name '*.py' -type f -exec sed -i 's:^#!/usr/local/python:#!/usr/bin/python:' '{}' ';'
 
 %post
 # Clear out staticfiles data and regenerate
