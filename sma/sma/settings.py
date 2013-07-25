@@ -75,7 +75,8 @@ INSTALLED_APPS.extend([
     'django_qbe',
     'django_qbe.savedqueries',
     'sma.sma',
-    'django.contrib.admin'
+    'django.contrib.admin',
+    'admin_views'
 ])
 
 # these determine which authentication method to use
@@ -188,6 +189,7 @@ LOGGING = {
         },
         'mail_admins': {
             'level': 'ERROR',
+            'filters': [],
             'class': 'django.utils.log.AdminEmailHandler',
             'formatter':'verbose',
             'include_html':True

@@ -7,22 +7,17 @@ set -e
 ACTION="$1"
 REGISTRY="$2"
 
-declare -A port
-port[dmd]='8001'
-port[sma]='8002'
-port[dm1]='8003'
-port[dd]='8004'
-
 PROJECT_NAME='disease_registry'
 AWS_BUILD_INSTANCE='aws_rpmbuild_centos6'
 AWS_STAGING_INSTANCE='aws_syd_registry_staging'
 TARGET_DIR="/usr/local/src/${PROJECT_NAME}"
 CLOSURE="/usr/local/closure/compiler.jar"
-MODULES="psycopg2==2.4.6 Werkzeug flake8"
+TESTING_MODULES="pyvirtualdisplay nose selenium"
+MODULES="psycopg2==2.4.6 Werkzeug flake8 ${TESTING_MODULES}"
 
 
 function usage() {
-    echo 'Usage ./develop.sh (test|lint|jslint|start|install|clean|purge|pipfreeze|pythonversion|dropdb|ci_remote_build|ci_remote_destroy|ci_rpm_publish|ci_staging) (dd|dmd|dm1|sma)'
+    echo 'Usage ./develop.sh (test|lint|jslint|start|install|clean|purge|pipfreeze|pythonversion|dropdb|ci_remote_build|ci_remote_destroy|ci_rpm_publish|ci_staging|ci_staging_selenium|ci_staging_tests) (dd|dmd|dm1|sma)'
 }
 
 
@@ -55,7 +50,7 @@ function ci_remote_build() {
     time ccg ${AWS_BUILD_INSTANCE} puppet
     time ccg ${AWS_BUILD_INSTANCE} shutdown:50
 
-    EXCLUDES="('bootstrap'\, '.hg*'\, 'virt*'\, '*.log'\, '*.rpm')"
+    EXCLUDES="('bootstrap'\, '.hg*'\, 'virt*'\, '*.log'\, '*.rpm'\, 'build'\, 'dist'\, '*/build'\, '*/dist')"
     SSH_OPTS="-o StrictHostKeyChecking\=no"
     RSYNC_OPTS="-l"
     time ccg ${AWS_BUILD_INSTANCE} rsync_project:local_dir=./,remote_dir=${TARGET_DIR}/,ssh_opts="${SSH_OPTS}",extra_opts="${RSYNC_OPTS}",exclude="${EXCLUDES}",delete=True
@@ -84,6 +79,50 @@ function ci_staging() {
     ccg ${AWS_STAGING_INSTANCE} boot
     ccg ${AWS_STAGING_INSTANCE} puppet
     ccg ${AWS_STAGING_INSTANCE} shutdown:50
+}
+
+
+# staging seleinium test
+function ci_staging_selenium() {
+    ccg ${AWS_STAGING_INSTANCE} dsudo:'dm1 harvest dm1/dm1/features/*.feature'
+    #ccg ${AWS_STAGING_INSTANCE} dsudo:'dmd harvest dmd/dmd/features/*.feature'
+    #ccg ${AWS_STAGING_INSTANCE} dsudo:'dd harvest dd/dd/features/*.feature'
+    #ccg ${AWS_STAGING_INSTANCE} dsudo:'sma harvest sma/sma/features/*.feature'
+}
+
+# gets the manage.py command for a registry
+function django_admin() {
+    case $1 in
+        dd)
+            echo "registrydd"
+            ;;
+        *)
+            echo $1
+            ;;
+    esac
+}
+
+# run tests on staging
+function ci_staging_tests() {
+    registry_needed
+
+    # /tmp is used for test results because the apache user has
+    # permission to write there.
+    REMOTE_TEST_DIR=/tmp
+    REMOTE_TEST_RESULTS=${REMOTE_TEST_DIR}/tests.xml
+
+    # Grant permission to create a test database.
+    DATABASE_USER=registryapp
+    ccg ${AWS_STAGING_INSTANCE} dsudo:"su postgres -c \"psql -c 'ALTER ROLE ${DATABASE_USER} CREATEDB;'\""
+
+    # This is the command which runs manage.py with the correct environment
+    DJANGO_ADMIN=$(django_admin ${REGISTRY})
+
+    # Run tests, collect results
+    TEST_LIST="${REGISTRY}.${REGISTRY}.tests"
+    ccg ${AWS_STAGING_INSTANCE} drunbg:"Xvfb \:0"
+    ccg ${AWS_STAGING_INSTANCE} dsudo:"cd ${REMOTE_TEST_DIR} && env DISPLAY\=\:0 dbus-launch ${DJANGO_ADMIN} test --noinput --with-xunit --xunit-file\=${REMOTE_TEST_RESULTS} --liveserver\=localhost\:8082\,8090-8100\,9000\-9200\,7041 ${TEST_LIST} || true"
+    ccg ${AWS_STAGING_INSTANCE} getfile:${REMOTE_TEST_RESULTS},./
 }
 
 
@@ -163,11 +202,33 @@ function syncmigrate() {
     virt_${REGISTRY}/bin/django-admin.py collectstatic --noinput --settings=${DJANGO_SETTINGS_MODULE} 1> collectstatic-develop.log
 }
 
+# chooses a tcp port number for the debug server
+function port() {
+    # this could be an associative array, but they aren't compatible
+    # with bash3
+    case $1 in
+        dmd)
+            echo "8001"
+            ;;
+        sma)
+            echo "8002"
+            ;;
+        dm1)
+            echo "8003"
+            ;;
+        dd)
+            echo "8004"
+            ;;
+        fshd)
+            echo "8005"
+            ;;
+    esac
+}
 
 # start runserver
 function startserver() {
     registry_needed
-    virt_${REGISTRY}/bin/django-admin.py runserver_plus ${port[${REGISTRY}]}
+    virt_${REGISTRY}/bin/django-admin.py runserver_plus $(port ${REGISTRY})
 }
 
 
@@ -252,6 +313,14 @@ ci_rpm_publish)
 ci_staging)
     ci_ssh_agent
     ci_staging
+    ;;
+ci_staging_selenium)
+    ci_ssh_agent
+    ci_staging_selenium
+    ;;
+ci_staging_tests)
+    ci_ssh_agent
+    ci_staging_tests
     ;;
 dropdb)
     dropdb

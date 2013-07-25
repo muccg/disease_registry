@@ -9,7 +9,7 @@ start_dir = os.getcwd()
 for package in ('dm1', 'dm1_questionnaire'):
     data_files['dm1.' + package] = []
     os.chdir(os.path.join('dm1', package))
-    for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags'):
+    for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags', 'features'):
 	    data_files['dm1.' + package].extend(
 	        [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files])
     os.chdir(start_dir)
@@ -20,14 +20,14 @@ for package in ('dm1', 'dm1_questionnaire'):
 for package in ('common', 'patients', 'genetic', 'groups', 'humangenome'):
     data_files['registry.' + package] = []
     os.chdir(os.path.join('registry', package))
-    for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags'):
+    for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags', 'features'):
        data_files['registry.' + package].extend(
            [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files])
     os.chdir('../..')
 os.chdir('../dm1')
 
 setup(name='django-dm1registry',
-    version='1.3.0',
+    version='1.4.0',
     description='Django Disease Registry - DM1',
     long_description='Django Disease registry for DM1',
     author='Centre for Comparative Genomics',
@@ -48,7 +48,7 @@ setup(name='django-dm1registry',
     package_data=data_files,
     zip_safe=False,
     install_requires=[
-        'Django==1.4.5',
+        'Django==1.5.1',
         'django-picklefield==0.1.9',
         'django-templatetag-sugar==0.1',
         'pyparsing==1.5.6',
@@ -57,13 +57,15 @@ setup(name='django-dm1registry',
         'South>=0.7.3',
         'django-extensions>=0.7.1',
         'ccg-auth==0.3.2',
-        'ccg-extras==0.1.5',
+        'ccg-extras==0.1.6',
         'django-userlog==0.2.1',
         'django-messages-ui==0.2.6',
-        'django-nose'
+        'django-nose',
+        'sure==1.2.1',
+        'lettuce_webdriver'
     ],
     dependency_links = [
         "http://repo.ccgapps.com.au",
-        "https://bitbucket.org/ccgmurdoch/django-userlog/downloads/django_userlog-0.2.1.tar.gz",
+        "https://bitbucket.org/ccgmurdoch/django-userlog/downloads/django_userlog-0.2.1.tar.gz",    
     ],
 )

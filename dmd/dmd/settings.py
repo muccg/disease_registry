@@ -71,7 +71,8 @@ INSTALLED_APPS.extend([
     'django_qbe',
     'django_qbe.savedqueries',
     'dmd.dmd',
-    'django.contrib.admin'
+    'django.contrib.admin',
+    'admin_views'
 ])
 
 # these determine which authentication method to use
@@ -121,6 +122,17 @@ SESSION_COOKIE_NAME = "registry_dmd"
 SESSION_ENGINE = 'django.contrib.sessions.backends.file'
 SESSION_FILE_PATH = WRITABLE_DIRECTORY
 
+# Testing settings
+INSTALLED_APPS.extend(['django_nose'])
+TEST_RUNNER = 'dmd.dmd.tests.PatchedNoseTestSuiteRunner'
+SOUTH_TESTS_MIGRATE = False
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-erase',
+    '--cover-html',
+    '--cover-branches',
+    '--cover-package=dmd',
+]
 
 # APPLICATION SPECIFIC SETTINGS
 AUTH_PROFILE_MODULE = 'groups.User'
@@ -185,6 +197,7 @@ LOGGING = {
         },
         'mail_admins': {
             'level': 'ERROR',
+            'filters': [],
             'class': 'django.utils.log.AdminEmailHandler',
             'formatter':'verbose',
             'include_html':True

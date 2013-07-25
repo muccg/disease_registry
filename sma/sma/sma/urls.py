@@ -1,6 +1,7 @@
 from django.conf import settings
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from django.shortcuts import render_to_response
+from django.views.generic import TemplateView
 
 from django.contrib import admin
 
@@ -13,7 +14,7 @@ def variation_entry(request):
     return render_to_response("variation-entry/index.html")
 
 urlpatterns = patterns('',
-    (r'^$', "django.views.generic.simple.direct_to_template", {"template": "sma/index.html"}),
+    (r'^$', TemplateView.as_view(template_name = "sma/index.html")),
     (r'^genetic/', include("registry.genetic.urls"), {}),
     (r'^admin/', include(admin.site.urls), {}),
     (r'^nmdreport/(?P<working_group>\w{2})$', views.nmd_report)

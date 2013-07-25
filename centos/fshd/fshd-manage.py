@@ -3,9 +3,10 @@ import os
 import sys
 import pwd
 
-(uid, gid) = pwd.getpwnam('apache')[2:4]
-os.setegid(gid)
-os.seteuid(uid)
+(uid, gid, gecos, homedir) = pwd.getpwnam('apache')[2:6]
+os.setgid(gid)
+os.setuid(uid)
+os.environ["HOME"] = homedir
 
 if __name__ == "__main__":
 

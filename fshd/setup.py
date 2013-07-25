@@ -9,7 +9,7 @@ start_dir = os.getcwd()
 for package in ('fshd', 'fshd_questionnaire'):
     data_files['fshd.' + package] = []
     os.chdir(os.path.join('fshd', package))
-    for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags'):
+    for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags', 'features'):
 	    data_files['fshd.' + package].extend(
 	        [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files])
     os.chdir(start_dir)
@@ -20,14 +20,14 @@ for package in ('fshd', 'fshd_questionnaire'):
 for package in ('common', 'patients', 'genetic', 'groups', 'humangenome'):
     data_files['registry.' + package] = []
     os.chdir(os.path.join('registry', package))
-    for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags'):
+    for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags', 'features'):
        data_files['registry.' + package].extend(
            [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files])
     os.chdir('../..')
 os.chdir('../fshd')
 
 setup(name='django-fshdregistry',
-    version='1.0.14',
+    version='1.4.0',
     description='Django Disease Registry - FSHD',
     long_description='Django Disease registry for FSHD',
     author='Centre for Comparative Genomics',
@@ -47,7 +47,7 @@ setup(name='django-fshdregistry',
     package_data=data_files,
     zip_safe=False,
     install_requires=[
-        'Django==1.4.5',
+        'Django==1.5.1',
         'django-picklefield==0.1.9',
         'django-templatetag-sugar==0.1',
         'pyparsing==1.5.6',
@@ -56,9 +56,9 @@ setup(name='django-fshdregistry',
         'South>=0.7.3',
         'django-extensions>=0.7.1',
         'ccg-auth==0.3.2',
-        'ccg-extras==0.1.5',
+        'ccg-extras==0.1.6',
         'django-userlog==0.2.1',
-        'django-nose'
+        'django-nose',
     ],
     dependency_links = [
         "http://repo.ccgapps.com.au",
