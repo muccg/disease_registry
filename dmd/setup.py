@@ -59,7 +59,8 @@ setup(name='django-dmdregistry',
         'django-userlog==0.2.1',
         'django_qbe',
         'django-nose',
-        'django-admin-views'
+        'django-admin-views',
+        'django-reversion'
     ],
     dependency_links = [
         "http://repo.ccgapps.com.au",
