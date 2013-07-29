@@ -9,6 +9,7 @@ from admin_forms import *
 from models import *
 from registry.utils import get_static_url, get_working_groups
 
+import reversion
 
 class MotorFunctionInline(admin.StackedInline):
     model = MotorFunction
@@ -46,7 +47,7 @@ class NotesInline(admin.TabularInline):
     model = Notes
 
 
-class DiagnosisAdmin(AdminViews):
+class DiagnosisAdmin(AdminViews, reversion.VersionAdmin):
     app_url = os.environ.get("SCRIPT_NAME", "")
     
     admin_views = (
