@@ -173,12 +173,12 @@ class PatientAdmin(admin.ModelAdmin):
     progress_graph.short_description = "Diagnosis Entry Progress"
 
     def moleculardata_entered(self, obj):
-        if not hasattr(obj, 'moleculardata') or not hasattr(obj.moleculardata, 'variation_set') or not obj.moleculardata.variation_set.all():
+        if not hasattr(obj, 'moleculardatasma') or not hasattr(obj.moleculardatasma, 'variationsma_set') or not obj.moleculardatasma.variationsma_set.all():
             return ''
 
         imagefile = 'tick.png'
 
-        genetic_url = '<a href="%s">' % urlresolvers.reverse('admin:genetic_moleculardata_change', args=(obj.id,))
+        genetic_url = '<a href="%s">' % urlresolvers.reverse('admin:genetic_moleculardatasma_change', args=(obj.id,))
         genetic_url += '<img src="%s"/>' % get_static_url("images/" + imagefile)
         genetic_url += '</a>'
         return genetic_url
