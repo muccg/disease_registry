@@ -52,7 +52,8 @@ def generate_random_str(length):
     return ''.join(random.sample(s,length))
 
 def find_field_only(field):
-    return find_field_no_value_by_id(field) or find_field_no_value_by_name(field)
+    return find_field_no_value_by_id(field) or \
+            find_field_no_value_by_name(field)
     
 def find_field_no_value_by_id(field):
     ele = world.browser.find_elements_by_xpath('.//input[@id="%s"]' % field)

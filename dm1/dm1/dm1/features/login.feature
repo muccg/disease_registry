@@ -6,7 +6,5 @@ Feature: Login
     
     Scenario: Login successful
         Given I go to "http://localhost:8080/admin"
-        When I fill in "username" with "admin"
-        When I fill in "password" with "admin"
-        And I press "Log in"
-        Then I should see "Site administration"
+        Then I log in as "admin" with "admin" password
+        And I click "Log out"
