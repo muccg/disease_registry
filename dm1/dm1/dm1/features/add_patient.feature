@@ -2,10 +2,7 @@ Feature: Patient
 
     Scenario: Add Patient
         Given I go to "http://localhost:8000/admin"
-        When I fill in "username" with "admin"
-        When I fill in "password" with "admin"
-        And I press "Log in"
-        Then I should see "Site administration"
+        When I fill log in as "admin" with "admin" password
         Given I go to "http://localhost:8000/admin/patients/patient/add/"
         Then I should see "Add patient"
         When I check "consent"
@@ -21,6 +18,8 @@ Feature: Patient
         And I press "Save"
         Then I should see "Select patient to change"
         And I should see "DOE John"
+        And I click "Log out"
+        
         
         
         

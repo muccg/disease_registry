@@ -7,6 +7,8 @@ from lettuce import *
 from selenium import webdriver
 import lettuce_webdriver.webdriver
 
+from lettuce_webdriver.webdriver import contains_content
+
 if "DISPLAY" not in os.environ:
     from pyvirtualdisplay import Display
     display = Display(visible=0, size=(800, 600))
@@ -43,6 +45,7 @@ def login_as_user(step, username, password):
     password_field = world.browser.find_element_by_xpath('.//input[@name="password"]')
     password_field.send_keys(password)
     password_field.submit()
+    assert contains_content(world.browser, "Site administration")
 
 def generate_random_str(length):
     s = string.lowercase + string.uppercase
