@@ -27,7 +27,7 @@ Feature: User
     Scenario: Delete Django and RDR user
         Given I go to "http://localhost:8000/admin/auth/user/"
         When I click "pumpernickel"
-        Then I should see "Change user"
+        Then I should see "Change user" within 1 seconds
         When I click "Delete"
         Then I should see "Are you sure?"
         When I press "Yes, I'm sure"
