@@ -91,7 +91,7 @@ find %{buildinstalldir} -name '*.py' -type f -exec sed -i 's:^#!/usr/local/pytho
 %post
 # Clear out staticfiles data and regenerate
 rm -rf %{installdir}/static/*
-registry%{name} collectstatic --noinput > /dev/null
+%{name} collectstatic --noinput > /dev/null
 # Remove root-owned logged files just created by collectstatic
 rm -rf /var/log/%{name}/*
 # Touch the wsgi file to get the app reloaded by mod_wsgi
@@ -109,7 +109,7 @@ rm -rf %{buildroot}
 %files
 %defattr(-,apache,apache,-)
 /etc/httpd/conf.d/*
-%{_bindir}/registry%{name}
+%{_bindir}/%{name}
 %attr(-,apache,,apache) %{webapps}/%{name}
 %attr(-,apache,,apache) /var/log/%{name}
 %attr(-,apache,,apache) /var/lib/%{name}
