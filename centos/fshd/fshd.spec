@@ -1,4 +1,4 @@
-%define namefshd
+%define name fshd
 %define version 1.5.0
 %define unmangled_version 1.5.0
 %define release 1
@@ -82,7 +82,7 @@ ln -fs /var/lib/%{name}/media %{buildinstalldir}/media
 install -D ../centos/fshd/%{name}_mod_wsgi_daemons.conf %{buildroot}/etc/httpd/conf.d/%{name}_mod_wsgi_daemons.conf
 install -D ../centos/fshd/%{name}_mod_wsgi.conf %{buildroot}/etc/httpd/conf.d/%{name}_mod_wsgi.conf
 install -D ../centos/fshd/django.wsgi %{buildinstalldir}/django.wsgi
-install -m 0755 -D ../centos/fshd/%{name}-manage.py %{buildroot}/%{_bindir}/registry%{name}
+install -m 0755 -D ../centos/fshd/%{name}-manage.py %{buildroot}/%{_bindir}/%{name}
 
 # At least one python package has hardcoded shebangs to /usr/local/bin/python
 find %{buildinstalldir} -name '*.py' -type f -exec sed -i 's:^#!/usr/local/bin/python:#!/usr/bin/python:' '{}' ';'
