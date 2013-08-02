@@ -18,3 +18,10 @@ Feature: Patient
         And I press "Save"
         Then I should see "was added successfully"
         And I click "Log out"
+    
+    #TODO
+    Scenario: Can't Add Duplicate Patient
+        Given I go to "http://localhost:8000/admin"
+        And I log in as "admin" with "admin" password
+        Given I go to "http://localhost:8000/admin/patients/patient/add/"
+        And I click "Log out"

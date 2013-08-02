@@ -73,7 +73,8 @@ INSTALLED_APPS.extend([
     'dmd.dmd',
     'django.contrib.admin',
     'admin_views',
-    'reversion'
+    'reversion',
+    'lettuce.django'
 ])
 
 # these determine which authentication method to use
