@@ -18,8 +18,11 @@ dm1/django_dm1registry.egg-info*
 sma/django_smaregistry.egg-info*
 sma/django_fshdregistry.egg-info*
 registry/log/*
+{dd,dmd,dm1,sma,fshd}/logs
 {dd,dmd,dm1,sma,fshd}/log
 {dd,dmd,dm1,sma,fshd}/media
+build-number.txt
 
+.ccgplatform
 .idea
 .gitignore
