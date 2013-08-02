@@ -60,7 +60,8 @@ setup(name='django-dmdregistry',
         'django_qbe',
         'django-nose',
         'django-admin-views',
-        'django-reversion'
+        'django-reversion',
+        'lettuce_webdriver'
     ],
     dependency_links = [
         "http://repo.ccgapps.com.au",
