@@ -15,6 +15,8 @@ from registry.patients.models import Patient, State, Country
 from registry.groups.models import WorkingGroup
 from django_nose.runner import NoseTestSuiteRunner
 
+from django.core.management import call_command
+
 # #Add this to your settings file
 
 # # testing settings
@@ -29,6 +31,10 @@ from django_nose.runner import NoseTestSuiteRunner
 #     '--cover-branches',
 #     '--cover-package=dmd',
 # ]
+
+class LoginLettuceTests(TestCase):
+    def test_run_lettuce(self):
+        call_command('harvest', 'dmd/dmd/features/login.feature')
 
 class PatchedNoseTestSuiteRunner(NoseTestSuiteRunner):
     """This class required by django_nose to correctly load all models, not sure why. See,
