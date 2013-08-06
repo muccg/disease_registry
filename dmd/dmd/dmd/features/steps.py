@@ -9,22 +9,6 @@ import lettuce_webdriver.webdriver
 
 from lettuce_webdriver.webdriver import contains_content
 
-if "DISPLAY" not in os.environ:
-    from pyvirtualdisplay import Display
-    display = Display(visible=0, size=(800, 600))
-else:
-    display = None
-
-@before.all
-def set_browser():
-    if display: display.start()
-    world.browser = webdriver.Firefox()
-
-@after.all
-def clean_after_tests(result):
-    world.browser.quit()
-    if display: display.stop()
-
 @step('I fill in "(.*)" with "(.*)" year')
 def fill_in_year_type(step, field, value):
     year_field = world.browser.find_element_by_xpath('.//input[@id="%s"][@type="year"]' % field)

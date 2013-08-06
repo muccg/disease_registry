@@ -1,0 +1,130 @@
+[
+{
+    "pk": 1, 
+    "model": "groups.workinggroup", 
+    "fields": {
+        "name": "Western Australia"
+    }
+},
+{
+    "pk": 2, 
+    "model": "groups.workinggroup", 
+    "fields": {
+        "name": "New Zealand"
+    }
+},
+{
+    "pk": 3, 
+    "model": "groups.workinggroup", 
+    "fields": {
+        "name": "Unallocated"
+    }
+},
+{
+    "pk": 1, 
+    "model": "auth.group", 
+    "fields": {
+        "name": "Working Group Curators", 
+        "permissions": []
+    }
+},
+{
+    "pk": 2, 
+    "model": "auth.group", 
+    "fields": {
+        "name": "Genetic Staff", 
+        "permissions": []
+    }
+},
+{
+    "pk": 3, 
+    "model": "auth.group", 
+    "fields": {
+        "name": "Clinical Staff", 
+        "permissions": []
+    }
+},
+
+{
+    "pk": 1, 
+    "model": "auth.user", 
+    "fields": {
+        "username": "admin", 
+        "first_name": "admin", 
+        "last_name": "admin", 
+        "is_active": true, 
+        "is_superuser": true, 
+        "is_staff": true, 
+        "last_login": "2013-08-06T14:44:47.923", 
+        "groups": [
+            3, 
+            2, 
+            1
+        ], 
+        "user_permissions": [], 
+        "password": "pbkdf2_sha256$10000$szUdtOwnjPCj$aHSA+qMOVw2AmzlqmIUiLsDlnePrg+aInH5XoFPXz/8=", 
+        "email": "admin@example.com", 
+        "date_joined": "2010-08-18T16:28:19"
+    }
+},
+{
+    "pk": 4, 
+    "model": "auth.user", 
+    "fields": {
+        "username": "curator", 
+        "first_name": "curator", 
+        "last_name": "curator", 
+        "is_active": true, 
+        "is_superuser": false, 
+        "is_staff": true, 
+        "last_login": "2010-08-18T17:06:15", 
+        "groups": [
+            1
+        ], 
+        "user_permissions": [], 
+        "password": "sha1$005da$3579413835a39b5013b56dc964692b27314e89a2", 
+        "email": "curator@example.com", 
+        "date_joined": "2010-08-18T16:32:32"
+    }
+},
+{
+    "pk": 5, 
+    "model": "auth.user", 
+    "fields": {
+        "username": "genetic", 
+        "first_name": "genetic", 
+        "last_name": "genetic", 
+        "is_active": true, 
+        "is_superuser": false, 
+        "is_staff": true, 
+        "last_login": "2010-08-18T17:06:00", 
+        "groups": [
+            2
+        ], 
+        "user_permissions": [], 
+        "password": "sha1$a93bf$107c80b515f13f2e22feef0970112a0c1a91a97e", 
+        "email": "genetic@example.com", 
+        "date_joined": "2010-08-18T16:33:13"
+    }
+},
+{
+    "pk": 6, 
+    "model": "auth.user", 
+    "fields": {
+        "username": "clinical", 
+        "first_name": "clinical", 
+        "last_name": "clinical", 
+        "is_active": true, 
+        "is_superuser": false, 
+        "is_staff": true, 
+        "last_login": "2010-08-18T17:05:31", 
+        "groups": [
+            3
+        ], 
+        "user_permissions": [], 
+        "password": "sha1$fa8a1$e8c3db576ce04f995bcef694d0d6cc1db1d13305", 
+        "email": "clinical@example.com", 
+        "date_joined": "2010-08-18T16:33:38"
+    }
+}
+]
