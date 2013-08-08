@@ -59,7 +59,9 @@ setup(name='django-smaregistry',
         'django_qbe',
         'django_nose',
         'django-admin-views',
-        'django-reversion'
+        'django-reversion',
+        'sure==1.2.1',
+        'lettuce_webdriver'
     ],
     dependency_links = [
         "http://repo.ccgapps.com.au",
