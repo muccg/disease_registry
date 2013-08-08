@@ -168,5 +168,25 @@
             106
         ]
     }
+},
+{
+    "pk": 1, 
+    "model": "groups.user", 
+    "fields": {
+        "working_groups": [
+            1
+        ], 
+        "title": "Administrator"
+    }
+},
+{
+    "pk": 4, 
+    "model": "groups.user", 
+    "fields": {
+        "working_groups": [
+            1
+        ], 
+        "title": "Curator"
+    }
 }
 ]
