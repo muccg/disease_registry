@@ -32,9 +32,17 @@ from django.core.management import call_command
 #     '--cover-package=dmd',
 # ]
 
-class LoginLettuceTests(TestCase):
-    def test_run_lettuce(self):
-        call_command('harvest', 'dmd/dmd/features/login.feature')
+class LettuceLoginTests(TestCase):
+    def test_login(self):
+        call_command('harvest', 'dmd/dmd/features/report_links.feature')
+
+class LettucePatientTests(TestCase):
+    def test_patient(self):
+        call_command('harvest', 'dmd/dmd/features/patient.feature')
+
+class LettuceReportLinksTests(TestCase):
+    def test_report_links(self):
+        call_command('harvest', 'dmd/dmd/features/report_links.feature')
 
 class PatchedNoseTestSuiteRunner(NoseTestSuiteRunner):
     """This class required by django_nose to correctly load all models, not sure why. See,
