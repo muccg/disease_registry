@@ -115,7 +115,7 @@ def nmd_report(request, working_group):
     return response
 
 def motor_function(obj):
-    if obj.best_function == 'walking':
+    if obj.best_function == 'walking' or obj.best_function == 'sitting':
         return '%s - %s year(s)' % (obj.best_function.title(), obj.acquisition_age if obj.acquisition_age is not None else 'Unknown')
     else:
         return obj.best_function.title()

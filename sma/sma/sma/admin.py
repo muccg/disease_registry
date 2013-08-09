@@ -4,6 +4,8 @@ from django.contrib import admin
 
 from admin_views.admin import AdminViews
 
+from admin_views_ccg import AdminViewsCCG
+
 from admin_forms import *
 
 from models import *
