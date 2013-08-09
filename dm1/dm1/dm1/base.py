@@ -49,6 +49,7 @@ class Diagnosis(models.Model):
     DIAGNOSIS_CHOICES = (
         ("DM1", "DM1"),
         ("DM2", "DM2"),
+        ("D", "Don\'t know"),
         ("O", "Other"),
         ("N", "Not yet diagnosed"),
         ("U", "Unknown"),
