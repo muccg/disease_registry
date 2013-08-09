@@ -8,4 +8,7 @@ urlpatterns = patterns("",
     (r"^thanks", thanks),
     (r"^(?P<country>\w{2})/index", index),
     (r"^(?P<country>\w{2})[/]*$", index),
+    (r"^(?P<country>\w{2})/clinical", clinical),
+    (r"^(?P<country>\w{2})/personal", personal),
+    (r"^(?P<country>\w{2})/thanks", thanks),
 )

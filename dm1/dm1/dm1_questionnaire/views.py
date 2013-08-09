@@ -13,7 +13,7 @@ from registry.patients.models import Country
 from registry.utils import stripspaces
 
 @transaction.commit_on_success
-def clinical(request):
+def clinical(request, country):
     def save_default(form, diagnosis):
         """
         Default save handler for clinical forms: calls ModelForm.save() and
@@ -167,7 +167,7 @@ def clinical(request):
         "forms": forms, "family_name": family_name, "given_names": given_names
     }, context_instance=RequestContext(request))
 
-def personal(request):
+def personal(request, country):
     if request.method == "POST":
         # Process the patient form. Since we'll do all the saving in one hit
         # after the clinical questionnaire has been filled out, all we need to
@@ -252,7 +252,7 @@ def index(request, country):
         "country": get_country(country)
     }, context_instance=RequestContext(request))
 
-def thanks(request):
+def thanks(request, country):
     return render_to_response("dm1/questionnaire/thanks.html", {})
 
 def get_country(code):
