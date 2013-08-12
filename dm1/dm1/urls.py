@@ -13,7 +13,8 @@ urlpatterns = patterns('',
     (r"^questionnaire/", include("dm1.dm1_questionnaire.urls"), {}),
     (r'^$', include("dm1.dm1.urls"), {}),
     (r'', include(registry.urls, namespace="registry")),
-    (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT})
+    (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+    (r'^iprestrict/', include('iprestrict.urls'))
 )
 
 def handler404(request):
