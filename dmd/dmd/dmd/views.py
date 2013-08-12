@@ -34,7 +34,7 @@ def nmd_report(request, working_group):
         items['diagnosis'] = str(diagnosis_name(d.diagnosis))
         items['localisation'] = str(d.patient.postcode)
 
-        items['last_follow_up'] = str(d.updated) if d.updated is not None else str(d.created)
+        items['last_follow_up'] = str(d.updated.strftime('%d-%m-%Y')) if d.updated is not None else str(d.created.strftime('%d-%m-%Y'))
 
         items['muscle_biopsy'] = yes_no_str(d.muscle_biopsy) if d.muscle_biopsy is not None else 'Unknown'
 
