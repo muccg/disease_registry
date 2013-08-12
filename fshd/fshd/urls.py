@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     (r"^questionnaire/", include("fshd.fshd_questionnaire.urls"), {}),
     (r'^$', include("fshd.fshd.urls"), {}),
     (r'', include(registry.urls, namespace="registry")),
+    (r'^iprestrict/', include('iprestrict.urls'))
 )
 
 def handler404(request):

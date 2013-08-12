@@ -42,6 +42,7 @@ TEMPLATE_LOADERS = [
 # see: https://docs.djangoproject.com/en/dev/ref/settings/#middleware-classes
 MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
+    'iprestrict.middleware.IPRestrictMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -72,7 +73,8 @@ INSTALLED_APPS.extend([
     'dm1.dm1',
     'dm1.dm1_questionnaire',
     'django.contrib.admin',
-    'lettuce.django'
+    'lettuce.django',
+    'iprestrict'
 ])
 
 # these determine which authentication method to use
