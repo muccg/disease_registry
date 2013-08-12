@@ -17,7 +17,8 @@ urlpatterns = patterns('',
     (r'^$', TemplateView.as_view(template_name = "sma/index.html")),
     (r'^genetic/', include("registry.genetic.urls"), {}),
     (r'^admin/', include(admin.site.urls), {}),
-    (r'^nmdreport/(?P<working_group>\w{2})$', views.nmd_report)
+    (r'^nmdreport/(?P<working_group>\w{2})$', views.nmd_report),
+    (r'^iprestrict/', include('iprestrict.urls'))
 )
 
 def handler404(request):
