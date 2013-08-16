@@ -35,7 +35,7 @@ class VariationInline(admin.TabularInline):
     model = Variation
     form = VariationForm
     raw_id_fields = ("gene",)
-    extra = 2
+    extra = 1
     max_num = 100
     exclude = (
         "exon_validation_override",
