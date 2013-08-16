@@ -62,7 +62,6 @@ setup(name='django-dm1registry',
         'django-messages-ui==0.2.6',
         'django-nose',
         'sure==1.2.1',
-        'lettuce_webdriver',
         'django-iprestrict==0.1'
     ],
     dependency_links = [

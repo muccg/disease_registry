@@ -62,7 +62,6 @@ setup(name='django-dmdregistry',
         'django-admin-views',
         'django-reversion',
         'sure==1.2.1',
-        'lettuce_webdriver',
         'django-iprestrict==0.1'
     ],
     dependency_links = [
