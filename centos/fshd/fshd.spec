@@ -15,7 +15,7 @@
 # We still byte compile everything by passing in -O paramaters to python
 %global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
 
-Summary: Registry DD
+Summary: Registry FSHD
 Name: %{name}
 Version: %{version}
 Release: %{release}
