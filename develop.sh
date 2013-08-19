@@ -84,7 +84,7 @@ function ci_staging() {
 
 # staging seleinium test
 function ci_staging_selenium() {
-    ccg ${AWS_STAGING_INSTANCE} dsudo:'dm1 harvest dm1/dm1/features/*.feature'
+    ccg ${AWS_STAGING_INSTANCE} dsudo:'lettuce dmd/dmd/features/'
     #ccg ${AWS_STAGING_INSTANCE} dsudo:'dmd harvest dmd/dmd/features/*.feature'
     #ccg ${AWS_STAGING_INSTANCE} dsudo:'dd harvest dd/dd/features/*.feature'
     #ccg ${AWS_STAGING_INSTANCE} dsudo:'sma harvest sma/sma/features/*.feature'
