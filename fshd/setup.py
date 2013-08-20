@@ -27,7 +27,7 @@ for package in ('common', 'patients', 'genetic', 'groups', 'humangenome'):
 os.chdir('../fshd')
 
 setup(name='django-fshdregistry',
-    version='1.5.0',
+    version='1.6.0',
     description='Django Disease Registry - FSHD',
     long_description='Django Disease registry for FSHD',
     author='Centre for Comparative Genomics',
