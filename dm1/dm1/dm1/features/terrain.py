@@ -23,5 +23,5 @@ def clean_after_tests(result):
     tests_xml = open("tests.xml", "w")
     tests_xml.write("<testsuite errors='%d' tests='%d'></testsuite>" % (result.scenarios_ran - result.scenarios_passed, result.scenarios_ran) )
     tests_xml.close()
-    world.browser.quit()
+    if world.browser != None: world.browser.quit()
     if display: display.stop()
