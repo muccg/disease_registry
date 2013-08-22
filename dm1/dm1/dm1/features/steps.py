@@ -37,6 +37,11 @@ def login_as_user(step, username, password):
     password_field.submit()
     assert contains_content(world.browser, "Site administration")
 
+@step('I choose "(.*)" radio')
+def radio_button(step, field):
+    radio = world.browser.find_element_by_xpath('.//input[@id="%s"][@type="radio"]' % field)
+    radio.click()
+
 def generate_random_str(length):
     s = string.lowercase + string.uppercase
     return ''.join(random.sample(s,length))
