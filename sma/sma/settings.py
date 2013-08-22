@@ -225,6 +225,8 @@ LOGGING = {
 INSTALL_NAME = 'sma'
 QBE_ACCESS_FOR = lambda user: user.is_superuser
 
+VERSION = 'v1.6.0'
+
 try:
     print "Attempting to import default settings as appsettings.sma"
     from appsettings.sma import *
