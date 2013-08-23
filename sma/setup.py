@@ -1,7 +1,7 @@
 import setuptools
 import os
 from setuptools import setup
-from sma import VERSION
+from registry import VERSION
 
 data_files = {}
 for package in ['sma']:

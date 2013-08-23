@@ -1,13 +1,14 @@
 {% extends "admin/base.html" %}
 {% load i18n %}
 {% load staticfiles %}
+{% load version_number %}
 
 {% block title %}{{ title }} | {% trans 'Django site admin' %}{% endblock %}
 
 {% block extrastyle %}<link rel="stylesheet" type="text/css" href="{% static "css/fshd_admin.css" %}" />{% endblock %}
 
 {% block branding %}
-<h1 id="site-name">{% trans 'Australian Facioscapulohumeral Muscular Dystrophy' %}</h1>
+<h1 id="site-name">{% trans 'Australian Facioscapulohumeral Muscular Dystrophy' %} ({% version_number %})</h1>
 {% endblock %}
 
 {% block nav-global %}{% endblock %}
