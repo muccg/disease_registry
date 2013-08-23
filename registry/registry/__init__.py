@@ -1,3 +1,2 @@
-"""
-This is the common registry module. It is a core component of all disease registry projects.
-"""
+VERSION = "1.6.0"
+__version__ = VERSION

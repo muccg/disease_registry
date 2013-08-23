@@ -1,6 +1,7 @@
 import setuptools
 import os
 from setuptools import setup
+from registry import VERSION
 
 data_files = {}
 start_dir = os.getcwd()
@@ -26,7 +27,7 @@ os.chdir('../dd')
 
 
 setup(name='django-ddregistry',
-    version='1.6.0',
+    version=VERSION,
     description='Django Disease Registry - DD',
     long_description='Django Disease registry for DD',
     author='Centre for Comparative Genomics',
