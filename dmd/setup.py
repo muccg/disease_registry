@@ -8,7 +8,7 @@ start_dir = os.getcwd()
 for package in ['dmd']:
     data_files['dmd.' + package] = []
     os.chdir(os.path.join('dmd', package))
-    for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'features'):
+    for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'features', 'templatetags'):
 	    data_files['dmd.' + package].extend(
 	        [os.path.join(subdir, f) for (subdir, dirs, files) in os.walk(data_dir) for f in files])
     os.chdir(start_dir)
@@ -16,7 +16,7 @@ for package in ['dmd']:
 # Include common disease registry modules from registry sibling directory
 # This isn't what we want to be doing because we need to do this in the other
 # registry apps too. Instead there should be a single setup.py for all the registries (IMO)
-for package in ('common', 'patients', 'genetic', 'groups', 'humangenome'):
+for package in ('common', 'patients', 'genetic', 'groups', 'humangenome', 'configuration'):
     data_files['registry.' + package] = []
     os.chdir(os.path.join('registry', package))
     for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags', 'features'):
