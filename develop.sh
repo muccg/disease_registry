@@ -84,7 +84,7 @@ function ci_staging() {
 
 # staging seleinium test
 function ci_staging_selenium() {
-    ccg ${AWS_STAGING_INSTANCE} dsudo:'lettuce /usr/local/webapps/dmd/lib/django_dmdregistry-*.egg/dmd/dmd/features/login.feature'
+    ccg ${AWS_STAGING_INSTANCE} dsudo:'lettuce /usr/local/webapps/dmd/lib/django_dmdregistry-*.egg/dmd/dmd/features/login.feature --with-xunit'
     #ccg ${AWS_STAGING_INSTANCE} dsudo:'dmd harvest dmd/dmd/features/*.feature'
     #ccg ${AWS_STAGING_INSTANCE} dsudo:'dd harvest dd/dd/features/*.feature'
     #ccg ${AWS_STAGING_INSTANCE} dsudo:'sma harvest sma/sma/features/*.feature'
