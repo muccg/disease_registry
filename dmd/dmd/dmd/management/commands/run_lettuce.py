@@ -5,7 +5,7 @@ from optparse import make_option
 from lettuce import Runner
 
 from django.core.management.base import BaseCommand, CommandError
-from dmd.dmd import __file__
+import dmd.dmd
 
 class Command(BaseCommand):
     help = 'Runs lettuce features'
@@ -33,7 +33,7 @@ class Command(BaseCommand):
     )
 
     def handle(self, *args, **options):
-        path = '%s/features/' % os.path.dirname(__file__)
+        path = '%s/features/' % os.path.dirname(dmd.dmd.__file__)
         runner = Runner(path, verbosity=options.get('verbosity'),
                         enable_xunit=options.get('enable_xunit'),
                         xunit_filename=options.get('xunit_file'),)
