@@ -85,7 +85,7 @@ function ci_staging() {
 # staging seleinium test
 function ci_staging_selenium() {
     ccg ${AWS_STAGING_INSTANCE} dsudo:'dbus-uuidgen --ensure'
-    ccg ${AWS_STAGING_INSTANCE} dsudo:'lettuce /usr/local/webapps/dmd/lib/django_dmdregistry-*.egg/dmd/dmd/features/ --with-xunit --xunit-file\=/tmp/tests.xml || true'
+    ccg ${AWS_STAGING_INSTANCE} dsudo:'dmd run_lettuce --with-xunit --xunit-file\=/tmp/tests.xml || true'
     ccg ${AWS_STAGING_INSTANCE} getfile:/tmp/tests.xml,./
     #ccg ${AWS_STAGING_INSTANCE} dsudo:'dmd harvest dmd/dmd/features/*.feature'
     #ccg ${AWS_STAGING_INSTANCE} dsudo:'dd harvest dd/dd/features/*.feature'
