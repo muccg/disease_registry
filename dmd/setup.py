@@ -8,7 +8,7 @@ start_dir = os.getcwd()
 for package in ['dmd']:
     data_files['dmd.' + package] = []
     os.chdir(os.path.join('dmd', package))
-    for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'features', 'templatetags'):
+    for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'features', 'templatetags', 'management'):
 	    data_files['dmd.' + package].extend(
 	        [os.path.join(subdir, f) for (subdir, dirs, files) in os.walk(data_dir) for f in files])
     os.chdir(start_dir)
