@@ -79,10 +79,9 @@ ln -fs /var/lib/%{name}/scratch %{buildinstalldir}/scratch
 ln -fs /var/lib/%{name}/media %{buildinstalldir}/media
 
 # Install WSGI configuration into httpd/conf.d
-install -D ../centos/dmd/%{name}_mod_wsgi_daemons.conf %{buildroot}/etc/httpd/conf.d/%{name}_mod_wsgi_daemons.conf
-install -D ../centos/dmd/%{name}_mod_wsgi.conf %{buildroot}/etc/httpd/conf.d/%{name}_mod_wsgi.conf
-install -D ../centos/dmd/django.wsgi %{buildinstalldir}/django.wsgi
-install -m 0755 -D ../centos/dmd/%{name}-manage.py %{buildroot}/%{_bindir}/%{name}
+install -D centos/%{name}.ccg %{buildroot}/etc/httpd/conf.d/%{name}.ccg
+install -D centos/django.wsgi %{buildinstalldir}/django.wsgi
+install -m 0755 -D centos/%{name}-manage.py %{buildroot}/%{_bindir}/%{name}
 
 # At least one python package has hardcoded shebangs to /usr/local/bin/python
 find %{buildinstalldir} -name '*.py' -type f -exec sed -i 's:^#!/usr/local/bin/python:#!/usr/bin/python:' '{}' ';'
@@ -113,3 +112,5 @@ rm -rf %{buildroot}
 %attr(-,apache,,apache) %{webapps}/%{name}
 %attr(-,apache,,apache) /var/log/%{name}
 %attr(-,apache,,apache) /var/lib/%{name}
+
+%config /etc/httpd/conf.d/%{name}.ccg
