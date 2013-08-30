@@ -5,12 +5,16 @@ from optparse import make_option
 from lettuce import Runner
 
 from django.core.management.base import BaseCommand, CommandError
-import dmd.dmd
 
 class Command(BaseCommand):
     help = 'Runs lettuce features'
 
     option_list = BaseCommand.option_list[1:] + (
+        make_option('--app-name',
+                    action='store',
+                    dest='app_name',
+                    help='Application name'),
+        
         make_option('-v', '--verbosity',
                     action='store',
                     dest='verbosity',
@@ -33,7 +37,9 @@ class Command(BaseCommand):
     )
 
     def handle(self, *args, **options):
-        path = '%s/features/' % os.path.dirname(dmd.dmd.__file__)
+        app_name = options.get('app_name')
+        module = __import__(app_name)
+        path = '%s/%s/features/' % (os.path.dirname(module.__file__), app_name)
         runner = Runner(path, verbosity=options.get('verbosity'),
                         enable_xunit=options.get('enable_xunit'),
                         xunit_filename=options.get('xunit_file'),)
