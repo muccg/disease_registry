@@ -11,6 +11,6 @@ rare diseases in Australia and is open source. The results of this work demonstr
 disease registry system in a scalable and customizable fashion and designed to facilitate interoperability with other systems.
 
 `Hum Mutat. 2012 Oct;33(10):E2356-66. doi: 10.1002/humu.22154. Epub 2012 Jul 2. <http://www.ncbi.nlm.nih.gov/pubmed/22753342#>`_
-A modular approach to disease registry design: successful adoption of an internet-based rare disease registry.
-Bellgard MI, Macgregor A, Janon F, Harvey A, O'Leary P, Hunter A, Dawkins H.
-Centre for Comparative Genomics, Murdoch University, Perth, WA 6150, Australia. mbellgard@ccg.murdoch.edu.au
+| A modular approach to disease registry design: successful adoption of an internet-based rare disease registry.
+| Bellgard MI, Macgregor A, Janon F, Harvey A, O'Leary P, Hunter A, Dawkins H.
+| Centre for Comparative Genomics, Murdoch University, Perth, WA 6150, Australia. mbellgard@ccg.murdoch.edu.au
