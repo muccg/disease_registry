@@ -1,9 +1,9 @@
 Feature: Patient
 
     Scenario: Add Patient
-        Given I go to "http://localhost:8000/admin"
+        Given I go to "http://localhost/dmd/admin"
         And I log in as "admin" with "admin" password expects "Site administration"
-        Given I go to "http://localhost:8000/admin/patients/patient/add/"
+        Given I go to "http://localhost/dmd/admin/patients/patient/add/"
         Then I should see "Add patient"
         When I check "consent"
         When I select "Western Australia" from "working_group"
@@ -21,7 +21,7 @@ Feature: Patient
     
     #TODO
     Scenario: Can't Add Duplicate Patient
-        Given I go to "http://localhost:8000/admin"
+        Given I go to "http://localhost/dmd/admin"
         And I log in as "admin" with "admin" password expects "Site administration"
-        Given I go to "http://localhost:8000/admin/patients/patient/add/"
+        Given I go to "http://localhost/dmd/admin/patients/patient/add/"
         And I click "Log out"
