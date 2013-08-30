@@ -101,8 +101,8 @@ class DiagnosisForm(forms.ModelForm):
     # keep that in sync with base.py and add the null option
     DIAGNOSIS_CHOICES = (
         ('', "--------"),
-        ("DM1", "DM1"),
-        ("DM2", "DM2"),
+        ("DM1", "Myotonic dystrophy type 1"),
+        ("DM2", "Myotonic dystrophy type 2"),
         ("U", "Don't know"),
         ("O", "Not yet diagnosed"), # the text is different from registry, but the value is the same as 'Other' in the registry in base.py
     )

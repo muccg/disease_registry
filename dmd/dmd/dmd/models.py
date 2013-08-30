@@ -4,6 +4,7 @@ import traceback, datetime
 from django.db import models
 from django.db.models.signals import post_save
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 
 from registry.groups.models import User
 from registry.patients.models import Patient
@@ -11,6 +12,15 @@ from registry.mail import sendNewPatientEmail
 
 import logging
 logger = logging.getLogger('dmd')
+
+class DiagnosisManager(models.Manager):
+    def by_working_group(self, working_group):
+        if working_group == 'nz':
+            country_filter = Q(patient__working_group__name='New Zealand')
+        if working_group == 'au':
+            country_filter = ~Q(patient__working_group__name='New Zealand')
+            
+        return Diagnosis.objects.filter(country_filter)
 
 class Diagnosis(models.Model):
     DIAGNOSIS_CHOICES = (
@@ -26,6 +36,7 @@ class Diagnosis(models.Model):
     muscle_biopsy = models.NullBooleanField(verbose_name="previous muscle biopsy")
     created = models.DateTimeField(editable=False)
     updated = models.DateTimeField(editable=False)
+    objects = DiagnosisManager()
 
     class Meta:
         ordering = ["patient"]

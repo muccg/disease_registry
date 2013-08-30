@@ -1,7 +1,7 @@
 import setuptools
 import os
 from setuptools import setup
-
+from registry import VERSION
 
 
 data_files = {}
@@ -27,7 +27,7 @@ for package in ('common', 'patients', 'genetic', 'groups', 'humangenome'):
 os.chdir('../dm1')
 
 setup(name='django-dm1registry',
-    version='1.5.0',
+    version=VERSION,
     description='Django Disease Registry - DM1',
     long_description='Django Disease registry for DM1',
     author='Centre for Comparative Genomics',
@@ -62,7 +62,6 @@ setup(name='django-dm1registry',
         'django-messages-ui==0.2.6',
         'django-nose',
         'sure==1.2.1',
-        'lettuce_webdriver',
         'django-iprestrict==0.1'
     ],
     dependency_links = [

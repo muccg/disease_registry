@@ -1,6 +1,7 @@
 import setuptools
 import os
 from setuptools import setup
+from registry import VERSION
 
 data_files = {}
 for package in ['sma']:
@@ -24,7 +25,7 @@ for package in ('common', 'patients', 'genetic', 'groups', 'humangenome'):
 os.chdir('../sma')
 
 setup(name='django-smaregistry',
-    version='1.5.0',
+    version=VERSION,
     description='Django Disease Registry - SMA',
     long_description='Django Disease registry for SMA',
     author='Centre for Comparative Genomics',
@@ -61,7 +62,6 @@ setup(name='django-smaregistry',
         'django-admin-views',
         'django-reversion',
         'sure==1.2.1',
-        'lettuce_webdriver',
         'django-iprestrict==0.1'
     ],
     dependency_links = [

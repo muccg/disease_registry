@@ -1,13 +1,14 @@
 import setuptools
 import os
 from setuptools import setup
+from registry import VERSION
 
 data_files = {}
 start_dir = os.getcwd()
 for package in ['dmd']:
     data_files['dmd.' + package] = []
     os.chdir(os.path.join('dmd', package))
-    for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'features'):
+    for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'features', 'templatetags', 'management'):
 	    data_files['dmd.' + package].extend(
 	        [os.path.join(subdir, f) for (subdir, dirs, files) in os.walk(data_dir) for f in files])
     os.chdir(start_dir)
@@ -15,7 +16,7 @@ for package in ['dmd']:
 # Include common disease registry modules from registry sibling directory
 # This isn't what we want to be doing because we need to do this in the other
 # registry apps too. Instead there should be a single setup.py for all the registries (IMO)
-for package in ('common', 'patients', 'genetic', 'groups', 'humangenome'):
+for package in ('common', 'patients', 'genetic', 'groups', 'humangenome', 'configuration'):
     data_files['registry.' + package] = []
     os.chdir(os.path.join('registry', package))
     for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags', 'features'):
@@ -25,7 +26,7 @@ for package in ('common', 'patients', 'genetic', 'groups', 'humangenome'):
 os.chdir('../dmd')
 
 setup(name='django-dmdregistry',
-    version='1.5.0',
+    version=VERSION,
     description='Django Disease Registry - DMD',
     long_description='Django Disease registry for Duchenne Muscular Dystrophy',
     author='Centre for Comparative Genomics',
@@ -62,7 +63,6 @@ setup(name='django-dmdregistry',
         'django-admin-views',
         'django-reversion',
         'sure==1.2.1',
-        'lettuce_webdriver',
         'django-iprestrict==0.1'
     ],
     dependency_links = [
