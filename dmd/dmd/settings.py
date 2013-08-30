@@ -230,6 +230,10 @@ LOGGING = {
 ## Customize settings for each registry below
 ################################################################################
 
+ALLOWED_HOSTS = [
+    'localhost'
+]
+
 INSTALL_NAME = 'dmd'
 
 QBE_ACCESS_FOR = lambda user: user.is_superuser

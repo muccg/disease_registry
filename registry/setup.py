@@ -4,7 +4,7 @@ from setuptools import setup
 
 data_files = {}
 start_dir = os.getcwd()
-for package in ('common', 'patients', 'genetic', 'groups', 'humangenome'):
+for package in ('common', 'patients', 'genetic', 'groups', 'humangenome', 'configuration'):
     data_files['registry.' + package] = []
     os.chdir(os.path.join('registry', package))
     for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags', 'features'):
@@ -15,7 +15,7 @@ for package in ('common', 'patients', 'genetic', 'groups', 'humangenome'):
 # Include common disease registry modules from registry sibling directory
 # This isn't what we want to be doing because we need to do this in the other
 # registry apps too. Instead there should be a single setup.py for all the registries (IMO)
-for package in ('common', 'patients', 'genetic', 'groups', 'humangenome'):
+for package in ('common', 'patients', 'genetic', 'groups', 'humangenome', 'configuration'):
     data_files['registry.' + package] = []
     os.chdir(os.path.join('registry', package))
     for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags', 'features'):
@@ -26,7 +26,7 @@ os.chdir('../sma')
 
 
 setup(name='django-diseaseregistry',
-    version='1.5.0',
+    version='1.6.0',
     description='Django Disease Registry',
     long_description='Collection of Django applications implementing various aspects for disease registries',
     author='Centre for Comparative Genomics',

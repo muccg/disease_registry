@@ -1,6 +1,6 @@
 %define name dm1
-%define version 1.5.0
-%define unmangled_version 1.5.0
+%define version 1.6.0
+%define unmangled_version 1.6.0
 %define release 1
 %define webapps /usr/local/webapps
 %define installdir %{webapps}/%{name}
@@ -15,7 +15,7 @@
 # We still byte compile everything by passing in -O paramaters to python
 %global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
 
-Summary: WardaBDR
+Summary: Registry DM1
 Name: %{name}
 Version: %{version}
 Release: %{release}

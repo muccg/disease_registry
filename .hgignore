@@ -22,6 +22,8 @@ registry/log/*
 {dd,dmd,dm1,sma,fshd}/log
 {dd,dmd,dm1,sma,fshd}/media
 build-number.txt
+tests.xml
+*komodo*
 
 .ccgplatform
 .idea

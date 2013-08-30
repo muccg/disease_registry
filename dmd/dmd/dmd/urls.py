@@ -8,6 +8,8 @@ import views
 import registry
 import registry.urls
 
+from report import NmdReport
+
 
 admin.autodiscover()
 
@@ -25,5 +27,5 @@ urlpatterns += patterns('', (r'^squerycsv/(?P<working_group>\w{2})$', views.sque
 urlpatterns += patterns('', (r'^squeryreport/(?P<working_group>\w{2})$', views.squeryreport))
 urlpatterns += patterns('', (r'^squeryreportcsv/(?P<working_group>\w{2})$', views.squeryreportcsv))
 
-urlpatterns += patterns('', (r'^nmdreport/(?P<working_group>\w{2})$', views.nmd_report))
+urlpatterns += patterns('', (r'^nmdreport/(?P<working_group>\w{2})$', NmdReport.as_view()))
 urlpatterns += patterns('', (r'^dmdreport/(?P<working_group>\w{2})$', views.dmd_report))

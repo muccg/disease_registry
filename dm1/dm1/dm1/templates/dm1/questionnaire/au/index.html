@@ -252,20 +252,20 @@ Q1 value: ${form['q1'].value()}
             <td>
                 <!--## ${form['q1'].value()} ## for debugging-->
             {% if form.q1.value == 'Y' %}
-                <label><input type="radio" name="q1" value="N"/>NO</label>
+                <label><input id="id_q1n" type="radio" name="q1" value="N"/>NO</label>
             </td>
             <td>
-                <label><input type="radio" checked='checked' name="q1" value="Y"/>YES</label>
+                <label><input id="id_q1" type="radio" checked='checked' name="q1" value="Y"/>YES</label>
             {% elif form.q1.value == 'N' %}
-                <label><input type="radio" checked='checked' name="q1" value="N"/>NO</label>
+                <label><input id="id_q1n" type="radio" checked='checked' name="q1" value="N"/>NO</label>
             </td>
             <td>
-                <label><input type="radio" name="q1" value="Y"/>YES</label>
+                <label><input id="id_q1" type="radio" name="q1" value="Y"/>YES</label>
             {% else %}
-                <label><input type="radio" name="q1" value="N"/>NO</label>
+                <label><input id="id_q1n" type="radio" name="q1" value="N"/>NO</label>
             </td>
             <td>
-                <label><input type="radio" name="q1" value="Y"/>YES</label>
+                <label><input id="id_q1" type="radio" name="q1" value="Y"/>YES</label>
             {% endif %}
             </td>
         </tr>
