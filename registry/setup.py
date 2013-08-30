@@ -7,7 +7,7 @@ start_dir = os.getcwd()
 for package in ('common', 'patients', 'genetic', 'groups', 'humangenome', 'configuration'):
     data_files['registry.' + package] = []
     os.chdir(os.path.join('registry', package))
-    for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags', 'features'):
+    for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags', 'features', 'management'):
 	   data_files['registry.' + package].extend(
 	       [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files])
     os.chdir(start_dir)
@@ -18,7 +18,7 @@ for package in ('common', 'patients', 'genetic', 'groups', 'humangenome', 'confi
 for package in ('common', 'patients', 'genetic', 'groups', 'humangenome', 'configuration'):
     data_files['registry.' + package] = []
     os.chdir(os.path.join('registry', package))
-    for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags', 'features'):
+    for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags', 'features', 'management'):
        data_files['registry.' + package].extend(
            [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files])
     os.chdir('../..')
