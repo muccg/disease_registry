@@ -222,6 +222,10 @@ LOGGING = {
 ## Customize settings for each registry below
 ################################################################################
 
+ALLOWED_HOSTS = [
+    'localhost'
+]
+
 INSTALL_NAME = 'sma'
 QBE_ACCESS_FOR = lambda user: user.is_superuser
 
