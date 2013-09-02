@@ -85,7 +85,8 @@ function ci_staging() {
 # staging seleinium test
 function ci_staging_selenium() {
     ccg ${AWS_STAGING_INSTANCE} dsudo:'dbus-uuidgen --ensure'
-    ccg ${AWS_STAGING_INSTANCE} dsudo:'service httpd restart'
+    ccg ${AWS_STAGING_INSTANCE} dsudo:'killall httpd'
+    ccg ${AWS_STAGING_INSTANCE} dsudo:'service httpd start'
     ccg ${AWS_STAGING_INSTANCE} dsudo:'chown apache:apache /var/www'
     ccg ${AWS_STAGING_INSTANCE} dsudo:'dmd run_lettuce --app-name dmd --with-xunit --xunit-file\=/tmp/tests-dmd.xml || true'
     ccg ${AWS_STAGING_INSTANCE} dsudo:'sma run_lettuce --app-name sma --with-xunit --xunit-file\=/tmp/tests-sma.xml || true'
