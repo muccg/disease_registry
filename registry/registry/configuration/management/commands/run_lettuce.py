@@ -38,10 +38,13 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         app_name = options.get('app_name')
-        module = __import__(app_name)
-        path = '%s/%s/features/' % (os.path.dirname(module.__file__), app_name)
-        runner = Runner(path, verbosity=options.get('verbosity'),
-                        enable_xunit=options.get('enable_xunit'),
-                        xunit_filename=options.get('xunit_file'),)
+        if app_name:
+            module = __import__(app_name)
+            path = '%s/%s/features/' % (os.path.dirname(module.__file__), app_name)
+            runner = Runner(path, verbosity=options.get('verbosity'),
+                            enable_xunit=options.get('enable_xunit'),
+                            xunit_filename=options.get('xunit_file'),)
 
-        runner.run()
+            runner.run()
+        else:
+            raise CommandError('Application name not provided')
