@@ -7,7 +7,7 @@ data_files = {}
 for package in ['sma']:
     data_files['sma.' + package] = []
     os.chdir(os.path.join('sma', package))
-    for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'features'):
+    for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'features', 'templatetags', 'management'):
 	    data_files['sma.' + package].extend(
 	        [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files])
     os.chdir('../..')
@@ -18,7 +18,7 @@ for package in ['sma']:
 for package in ('common', 'patients', 'genetic', 'groups', 'humangenome'):
     data_files['registry.' + package] = []
     os.chdir(os.path.join('registry', package))
-    for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags', 'features'):
+    for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags', 'features','management'):
        data_files['registry.' + package].extend(
            [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files])
     os.chdir('../..')
