@@ -79,8 +79,7 @@ ln -fs /var/lib/%{name}/scratch %{buildinstalldir}/scratch
 ln -fs /var/lib/%{name}/media %{buildinstalldir}/media
 
 # Install WSGI configuration into httpd/conf.d
-install -D ../centos/sma/%{name}_mod_wsgi_daemons.conf %{buildroot}/etc/httpd/conf.d/%{name}_mod_wsgi_daemons.conf
-install -D ../centos/sma/%{name}_mod_wsgi.conf %{buildroot}/etc/httpd/conf.d/%{name}_mod_wsgi.conf
+install -D ../centos/sma/%{name}.ccg %{buildroot}/etc/httpd/conf.d/%{name}.ccg
 install -D ../centos/sma/django.wsgi %{buildinstalldir}/django.wsgi
 install -m 0755 -D ../centos/sma/%{name}-manage.py %{buildroot}/%{_bindir}/%{name}
 
@@ -113,3 +112,5 @@ rm -rf %{buildroot}
 %attr(-,apache,,apache) %{webapps}/%{name}
 %attr(-,apache,,apache) /var/log/%{name}
 %attr(-,apache,,apache) /var/lib/%{name}
+
+%config /etc/httpd/conf.d/%{name}.ccg
