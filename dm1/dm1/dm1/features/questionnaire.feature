@@ -1,17 +1,17 @@
 Feature: Questionnaire
 
     Scenario: Access to Australian questionnaire
-        Given I go to "http://localhost:8000/questionnaire/au"
+        Given I go to "http://localhost/dm1/questionnaire/au"
         I should see "Australia Myotonic Dystrophy Registry"
 
     Scenario: Submit incomplete Australian questionnaire
-        Given I go to "http://localhost:8000/questionnaire/au"
+        Given I go to "http://localhost/dm1/questionnaire/au"
         I should see "Australia Myotonic Dystrophy Registry"
         When I press "Continue"
         I should see "Please correct the errors in the form below!"
 
     Scenario: Submit Australian questionnaire
-        Given I go to "http://localhost:8000/questionnaire/au"
+        Given I go to "http://localhost/dm1/questionnaire/au"
         I should see "Australia Myotonic Dystrophy Registry"
         When I choose "id_q1" radio
         When I choose "id_q2_1" radio
@@ -41,11 +41,11 @@ Feature: Questionnaire
 
 
     Scenario: Access to New Zealand questionnaire
-        Given I go to "http://localhost:8000/questionnaire/nz"
+        Given I go to "http://localhost/dm1/questionnaire/nz"
         I should see "New Zealand Myotonic Dystrophy Registry"
 
     Scenario: Submit New Zealand questionnaire
-        Given I go to "http://localhost:8000/questionnaire/nz"
+        Given I go to "http://localhost/dm1/questionnaire/nz"
         I should see "New Zealand Myotonic Dystrophy Registry"
         When I choose "id_q8" radio
         When I choose "id_q9" radio
@@ -77,7 +77,7 @@ Feature: Questionnaire
         And The browser's URL should contain "thanks"
 
     Scenario: Submit incomplete New Zealand questionnaire
-        Given I go to "http://localhost:8000/questionnaire/nz"
+        Given I go to "http://localhost/dm1/questionnaire/nz"
         I should see "New Zealand Myotonic Dystrophy Registry"
         When I press "Continue"
         I should see "Please correct the errors in the form below!"
