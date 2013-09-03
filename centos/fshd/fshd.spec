@@ -108,7 +108,7 @@ rm -rf %{buildroot}
 %files
 %defattr(-,apache,apache,-)
 /etc/httpd/conf.d/*
-%{_bindir}/registry%{name}
+%{_bindir}/%{name}
 %attr(-,apache,,apache) %{webapps}/%{name}
 %attr(-,apache,,apache) /var/log/%{name}
 %attr(-,apache,,apache) /var/lib/%{name}
