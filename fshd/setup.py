@@ -42,7 +42,8 @@ setup(name='django-fshdregistry',
         'registry.genetic',
         'registry.groups',
         'registry.forms',
-        'registry.humangenome'
+        'registry.humangenome',
+        'registry.configuration'
     ],
     package_data=data_files,
     zip_safe=False,
