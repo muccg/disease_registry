@@ -1,9 +1,9 @@
 Feature: User
 
     Scenario: Add User
-        Given I go to "http://localhost:8000/admin"
+        Given I go to "http://localhost/dm1/admin"
         And I log in as "admin" with "admin" password
-        Given I go to "http://localhost:8000/admin/groups/user/add/"
+        Given I go to "http://localhost/dm1/admin/groups/user/add/"
         Then I should see "Add user"
         When I fill in "username" with "pumpernickel"
         When I fill in "password" with "password"
@@ -19,16 +19,16 @@ Feature: User
         Then I click "Log out"
 
     Scenario: Verify Django user created
-        Given I go to "http://localhost:8000/admin"
+        Given I go to "http://localhost/dm1/admin"
         And I log in as "admin" with "admin" password
-        Given I go to "http://localhost:8000/admin/auth/user/"
+        Given I go to "http://localhost/dm1/admin/auth/user/"
         Then I should see "pumpernickel"
         Then I click "Log out"
     
     Scenario: Delete Django and RDR user
-        Given I go to "http://localhost:8000/admin"
+        Given I go to "http://localhost/dm1/admin"
         And I log in as "admin" with "admin" password
-        Given I go to "http://localhost:8000/admin/auth/user/"
+        Given I go to "http://localhost/dm1/admin/auth/user/"
         When I click "pumpernickel"
         Then I should see "Change user" within 1 seconds
         When I click "Delete"
