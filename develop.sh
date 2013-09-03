@@ -98,12 +98,16 @@ function ci_staging_selenium() {
     ccg ${AWS_STAGING_INSTANCE} dsudo:'killall httpd'
     ccg ${AWS_STAGING_INSTANCE} dsudo:'service httpd start'
     ccg ${AWS_STAGING_INSTANCE} dsudo:'sma run_lettuce --app-name sma --with-xunit --xunit-file\=/tmp/tests-sma.xml || true'
-
+    ccg ${AWS_STAGING_INSTANCE} dsudo:'yum remove sma -y'
+    
+    ccg ${AWS_STAGING_INSTANCE} dsudo:'yum install dm1 -y'
+    ccg ${AWS_STAGING_INSTANCE} dsudo:'killall httpd'
+    ccg ${AWS_STAGING_INSTANCE} dsudo:'service httpd start'
+    ccg ${AWS_STAGING_INSTANCE} dsudo:'dm1 run_lettuce --app-name dm1 --with-xunit --xunit-file\=/tmp/tests-dm1.xml || true'
+    
     ccg ${AWS_STAGING_INSTANCE} getfile:/tmp/tests-dmd.xml,./
     ccg ${AWS_STAGING_INSTANCE} getfile:/tmp/tests-sma.xml,./
-    #ccg ${AWS_STAGING_INSTANCE} dsudo:'dmd harvest dmd/dmd/features/*.feature'
-    #ccg ${AWS_STAGING_INSTANCE} dsudo:'dd harvest dd/dd/features/*.feature'
-    #ccg ${AWS_STAGING_INSTANCE} dsudo:'sma harvest sma/sma/features/*.feature'
+    ccg ${AWS_STAGING_INSTANCE} getfile:/tmp/tests-dm1.xml,./
 }
 
 # gets the manage.py command for a registry
