@@ -68,6 +68,7 @@ INSTALLED_APPS.extend([
     'registry.patients',
     'registry.genetic',
     'registry.common',
+    'registry.configuration',
     'fshd.fshd',
     'fshd.fshd_questionnaire',
     'django.contrib.admin',
