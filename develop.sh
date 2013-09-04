@@ -89,19 +89,19 @@ function ci_staging_selenium() {
 
     ccg ${AWS_STAGING_INSTANCE} dsudo:'yum remove dd dm1 sma fshd -y'
 
-    ccg ${AWS_STAGING_INSTANCE} dsudo:'killall httpd'
+    ccg ${AWS_STAGING_INSTANCE} dsudo:'killall httpd || true'
     ccg ${AWS_STAGING_INSTANCE} dsudo:'service httpd start'
     ccg ${AWS_STAGING_INSTANCE} dsudo:'dmd run_lettuce --app-name dmd --with-xunit --xunit-file\=/tmp/tests-dmd.xml || true'
     ccg ${AWS_STAGING_INSTANCE} dsudo:'yum remove dmd -y'
     
     ccg ${AWS_STAGING_INSTANCE} dsudo:'yum install sma -y'
-    ccg ${AWS_STAGING_INSTANCE} dsudo:'killall httpd'
+    ccg ${AWS_STAGING_INSTANCE} dsudo:'killall httpd || true'
     ccg ${AWS_STAGING_INSTANCE} dsudo:'service httpd start'
     ccg ${AWS_STAGING_INSTANCE} dsudo:'sma run_lettuce --app-name sma --with-xunit --xunit-file\=/tmp/tests-sma.xml || true'
     ccg ${AWS_STAGING_INSTANCE} dsudo:'yum remove sma -y'
     
     ccg ${AWS_STAGING_INSTANCE} dsudo:'yum install dm1 -y'
-    ccg ${AWS_STAGING_INSTANCE} dsudo:'killall httpd'
+    ccg ${AWS_STAGING_INSTANCE} dsudo:'killall httpd || true'
     ccg ${AWS_STAGING_INSTANCE} dsudo:'service httpd start'
     ccg ${AWS_STAGING_INSTANCE} dsudo:'dm1 run_lettuce --app-name dm1 --with-xunit --xunit-file\=/tmp/tests-dm1.xml || true'
     
