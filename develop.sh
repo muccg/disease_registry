@@ -109,7 +109,7 @@ function ci_staging_selenium() {
     ccg ${AWS_STAGING_INSTANCE} dsudo:'yum install dd -y'
     ccg ${AWS_STAGING_INSTANCE} dsudo:'killall httpd || true'
     ccg ${AWS_STAGING_INSTANCE} dsudo:'service httpd start'
-    ccg ${AWS_STAGING_INSTANCE} dsudo:'dd run_lettuce --app-name dd --with-xunit --xunit-file\=/tmp/tests-dd.xml || true'
+    ccg ${AWS_STAGING_INSTANCE} dsudo:'registrydd run_lettuce --app-name dd --with-xunit --xunit-file\=/tmp/tests-dd.xml || true'
     
     ccg ${AWS_STAGING_INSTANCE} getfile:/tmp/tests-dmd.xml,./
     ccg ${AWS_STAGING_INSTANCE} getfile:/tmp/tests-sma.xml,./
