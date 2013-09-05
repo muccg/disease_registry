@@ -59,9 +59,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.messages',
     'django_extensions',
-    ]
-
-INSTALLED_APPS.extend([
     'south',
     'messages_ui',
     'userlog',
@@ -73,9 +70,8 @@ INSTALLED_APPS.extend([
     'dm1.dm1',
     'dm1.dm1_questionnaire',
     'django.contrib.admin',
-    'lettuce.django',
     'iprestrict'
-])
+]
 
 # these determine which authentication method to use
 # apps use modelbackend by default, but can be overridden here
