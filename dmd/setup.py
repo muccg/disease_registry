@@ -1,7 +1,7 @@
 import setuptools
 import os
 from setuptools import setup
-from registry import VERSION
+from dmd import VERSION
 
 data_files = {}
 start_dir = os.getcwd()
@@ -26,7 +26,7 @@ for package in ('common', 'patients', 'genetic', 'groups', 'humangenome', 'confi
 os.chdir('../dmd')
 
 setup(name='django-dmdregistry',
-    version='1.6.1',
+    version=VERSION,
     description='Django Disease Registry - DMD',
     long_description='Django Disease registry for Duchenne Muscular Dystrophy',
     author='Centre for Comparative Genomics',
