@@ -25,7 +25,7 @@ for package in ('common', 'patients', 'genetic', 'groups', 'humangenome', 'confi
 os.chdir('../sma')
 
 setup(name='django-smaregistry',
-    version=VERSION,
+    version='1.6.1',
     description='Django Disease Registry - SMA',
     long_description='Django Disease registry for SMA',
     author='Centre for Comparative Genomics',

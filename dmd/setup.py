@@ -26,7 +26,7 @@ for package in ('common', 'patients', 'genetic', 'groups', 'humangenome', 'confi
 os.chdir('../dmd')
 
 setup(name='django-dmdregistry',
-    version=VERSION,
+    version='1.6.1',
     description='Django Disease Registry - DMD',
     long_description='Django Disease registry for Duchenne Muscular Dystrophy',
     author='Centre for Comparative Genomics',
