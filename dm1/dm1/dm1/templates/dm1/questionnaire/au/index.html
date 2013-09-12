@@ -221,6 +221,12 @@ Q1 value: ${form['q1'].value()}
 %endif
 -->
 
+<br/>
+
+<b>
+This electronic consent can ONLY be completed by individuals 18 years of age and over. If you are under 18 years of age you must complete a hardcopy consent and this must include your parent or guardian’s signature.
+</b>
+
 <form id='consent-form' method="post">{% csrf_token %}
 <table id='informed-consent'>
     <caption>
