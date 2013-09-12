@@ -209,16 +209,6 @@ class LaboratoryAdmin(admin.ModelAdmin):
         response = [[unicode(lab)] for lab in queryset]
 
         return HttpResponse(json.dumps(response), mimetype="application/json")
-
-if settings.INSTALL_NAME == "dm1":
-    # TODO remove this from the core registry
-    #from registry.dm1.admin import DiagnosticCategoryInline
-    from dm1.dm1.admin import DiagnosticCategoryInline, DMTestingInline, VariationDm1Admin
-    MolecularDataAdmin.inlines = [
-        DMTestingInline, 
-        DiagnosticCategoryInline,
-        VariationDm1Admin
-    ]
     
 if settings.INSTALL_NAME == 'sma':
     admin.site.register(MolecularDataSma, MolecularDataSmaAdmin)
