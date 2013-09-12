@@ -47,6 +47,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'ccg.middleware.ssl.SSLRedirect',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 # see: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -72,7 +73,8 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'admin_views',
     'reversion',
-    'iprestrict'
+    'iprestrict',
+    'debug_toolbar',
 ]
 
 # these determine which authentication method to use
@@ -225,6 +227,8 @@ LOGGING = {
 ################################################################################
 ## Customize settings for each registry below
 ################################################################################
+
+INTERNAL_IPS = ('127.0.0.1', '172.16.2.1')
 
 ALLOWED_HOSTS = [
     'localhost'
