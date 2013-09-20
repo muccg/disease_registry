@@ -1,10 +1,10 @@
 Feature: Patient
 
-    Scenario: Add Patient
+    Scenario: [SMA] Add Patient
         Given I go to "http://localhost/sma/admin"
         And I log in as "admin" with "admin" password expects "Site administration"
         Given I go to "http://localhost/sma/admin/patients/patient/add/"
-        Then I should see "Add patient"
+        Then I should see "Add patient" within 3 seconds
         When I check "consent"
         When I select "New Zealand" from "working_group"
         When I fill in "family_name" with random text
@@ -16,12 +16,13 @@ Feature: Patient
         When I select "Western Australia" from "state"
         When I fill in "postcode" with "6666"
         And I press "Save"
-        Then I should see "was added successfully"
+        Then I should see "was added successfully" within 3 seconds
         And I click "Log out"
     
     #TODO
-    Scenario: Can't Add Duplicate Patient
+    Scenario: [SMA] Can't Add Duplicate Patient
         Given I go to "http://localhost/sma/admin"
-        And I log in as "admin" with "admin" password expects "Site administration"
+        And I log in as "admin" with "admin" password
+        Then I should see "Site administration" within 3 seconds
         Given I go to "http://localhost/sma/admin/patients/patient/add/"
         And I click "Log out"
