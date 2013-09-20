@@ -7,6 +7,8 @@ from lettuce import *
 from selenium import webdriver
 import lettuce_webdriver.webdriver
 
+from registry import steps
+
 if "DISPLAY" not in os.environ:
     from pyvirtualdisplay import Display
     display = Display(visible=0, size=(800, 600))

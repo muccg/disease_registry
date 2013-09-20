@@ -1,10 +1,10 @@
 Feature: User
 
-    Scenario: Add User
+    Scenario: [DM1] Add User
         Given I go to "http://localhost/dm1/admin"
         And I log in as "admin" with "admin" password
         Given I go to "http://localhost/dm1/admin/groups/user/add/"
-        Then I should see "Add user"
+        Then I should see "Add user" within 3 seconds
         When I fill in "username" with "pumpernickel"
         When I fill in "password" with "password"
         When I fill in "confirm_password" with "password"
@@ -15,24 +15,24 @@ Feature: User
         When I select "Working Group Curators" from "groups"
         When I select "Western Australia" from "working_group"
         And I press "Save"
-        Then I should see "Select user to change"
+        Then I should see "Select user to change" within 3 seconds
         Then I click "Log out"
 
-    Scenario: Verify Django user created
+    Scenario: [DM1] Verify Django user created
         Given I go to "http://localhost/dm1/admin"
         And I log in as "admin" with "admin" password
         Given I go to "http://localhost/dm1/admin/auth/user/"
-        Then I should see "pumpernickel"
+        Then I should see "pumpernickel" within 3 seconds
         Then I click "Log out"
     
-    Scenario: Delete Django and RDR user
+    Scenario: [DM1] Delete Django and RDR user
         Given I go to "http://localhost/dm1/admin"
         And I log in as "admin" with "admin" password
         Given I go to "http://localhost/dm1/admin/auth/user/"
         When I click "pumpernickel"
-        Then I should see "Change user" within 1 seconds
+        Then I should see "Change user" within 3 seconds
         When I click "Delete"
-        Then I should see "Are you sure?" within 1 seconds
+        Then I should see "Are you sure?" within 3 seconds
         When I press "Yes, I'm sure"
-        Then I should see "was deleted successfully" within 1 seconds
+        Then I should see "was deleted successfully" within 3 seconds
         Then I click "Log out"

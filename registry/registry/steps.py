@@ -23,13 +23,21 @@ def fill_in_year_type(step, field):
     field.send_keys(value)
 
 @step('I log in as "(.*)" with "(.*)" password expects "(.*)"')
-def login_as_user(step, username, password, expectation):
+def login_as_user_with_expectations(step, username, password, expectation):
     username_field = world.browser.find_element_by_xpath('.//input[@name="username"]')
     username_field.send_keys(username)
     password_field = world.browser.find_element_by_xpath('.//input[@name="password"]')
     password_field.send_keys(password)
     password_field.submit()
     assert contains_content(world.browser, expectation)
+
+@step('I log in as "(.*)" with "(.*)" password')
+def login_as_user(step, username, password):
+    username_field = world.browser.find_element_by_xpath('.//input[@name="username"]')
+    username_field.send_keys(username)
+    password_field = world.browser.find_element_by_xpath('.//input[@name="password"]')
+    password_field.send_keys(password)
+    password_field.submit()
 
 def generate_random_str(length):
     s = string.lowercase + string.uppercase
