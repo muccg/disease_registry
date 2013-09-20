@@ -64,7 +64,7 @@ function ci_remote_build() {
 # publish rpms 
 function ci_rpm_publish() {
     registry_needed
-    time ccg ${AWS_BUILD_INSTANCE} publish_rpm:build/${REGISTRY}*.rpm,release=6
+    time ccg publish_testing_rpm:build/${REGISTRY}*.rpm,release=6
 }
 
 
