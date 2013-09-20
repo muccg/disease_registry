@@ -47,7 +47,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'ccg.middleware.ssl.SSLRedirect',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+#    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 # see: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
