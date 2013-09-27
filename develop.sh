@@ -255,7 +255,7 @@ function port() {
 # start runserver
 function startserver() {
     registry_needed
-    virt_${REGISTRY}/bin/django-admin.py runserver_plus $(port ${REGISTRY})
+    virt_${REGISTRY}/bin/django-admin.py runserver_plus 0.0.0.0:$(port ${REGISTRY})
 }
 
 
