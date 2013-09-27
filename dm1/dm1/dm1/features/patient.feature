@@ -1,9 +1,9 @@
 Feature: Patient
 
     Scenario: [DM1] Add Patient
-        Given I go to "http://localhost/dm1/admin"
+        Given I go to "/admin"
         And I log in as "admin" with "admin" password
-        Given I go to "http://localhost/dm1/admin/patients/patient/add/"
+        Given I go to "/admin/patients/patient/add/"
         Then I should see "Add patient" within 3 seconds
         When I check "consent"
         When I select "Western Australia" from "working_group"
@@ -21,7 +21,7 @@ Feature: Patient
     
     #TODO
     Scenario: [DM1] Can't Add Duplicate Patient
-        Given I go to "http://localhost/dm1/admin"
+        Given I go to "/admin"
         And I log in as "admin" with "admin" password
-        Given I go to "http://localhost/dm1/admin/patients/patient/add/"
+        Given I go to "/admin/patients/patient/add/"
         And I click "Log out"

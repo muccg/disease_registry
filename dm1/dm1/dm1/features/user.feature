@@ -1,10 +1,10 @@
 Feature: User
 
     Scenario: [DM1] Add User
-        Given I go to "http://localhost/dm1/admin"
+        Given I go to "/admin"
         And I log in as "admin" with "admin" password
-        Given I go to "http://localhost/dm1/admin/groups/user/add/"
-        Then I should see "Add user" within 3 seconds
+        Given I go to "/admin/groups/user/add/"
+        Then I should see "Add user"
         When I fill in "username" with "pumpernickel"
         When I fill in "password" with "password"
         When I fill in "confirm_password" with "password"
@@ -15,24 +15,24 @@ Feature: User
         When I select "Working Group Curators" from "groups"
         When I select "Western Australia" from "working_group"
         And I press "Save"
-        Then I should see "Select user to change" within 3 seconds
+        Then I should see "Select user to change"
         Then I click "Log out"
 
     Scenario: [DM1] Verify Django user created
-        Given I go to "http://localhost/dm1/admin"
+        Given I go to "/admin"
         And I log in as "admin" with "admin" password
-        Given I go to "http://localhost/dm1/admin/auth/user/"
-        Then I should see "pumpernickel" within 3 seconds
+        Given I go to "/admin/auth/user/"
+        Then I should see "pumpernickel"
         Then I click "Log out"
     
     Scenario: [DM1] Delete Django and RDR user
-        Given I go to "http://localhost/dm1/admin"
+        Given I go to "/admin"
         And I log in as "admin" with "admin" password
-        Given I go to "http://localhost/dm1/admin/auth/user/"
+        Given I go to "/admin/auth/user/"
         When I click "pumpernickel"
-        Then I should see "Change user" within 3 seconds
+        Then I should see "Change user"
         When I click "Delete"
-        Then I should see "Are you sure?" within 3 seconds
+        Then I should see "Are you sure?"
         When I press "Yes, I'm sure"
-        Then I should see "was deleted successfully" within 3 seconds
+        Then I should see "was deleted successfully"
         Then I click "Log out"
