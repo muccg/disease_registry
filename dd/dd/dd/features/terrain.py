@@ -34,3 +34,7 @@ def clean_after_tests(result):
     if display: display.stop()
 
 
+@before.each_scenario
+def delete_cookies(scenario):
+    # delete all cookies so when we browse to a url at the start we have to log in
+    world.browser.delete_all_cookies()
