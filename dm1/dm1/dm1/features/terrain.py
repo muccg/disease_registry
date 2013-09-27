@@ -24,6 +24,10 @@ def set_browser():
 def set_site_url():
     world.site_url = steps.get_site_url(default_url="http://localhost:8003")
 
+@before.all
+def set_wait_seconds():
+    world.wait_seconds = 3
+
 
 @after.all
 def clean_after_tests(result):
