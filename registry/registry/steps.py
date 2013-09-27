@@ -44,6 +44,21 @@ def radio_button(step, field):
     radio = world.browser.find_element_by_xpath('.//input[@id="%s"][@type="radio"]' % field)
     radio.click()
 
+@step('Given I go to "(.*)"')
+def our_goto(step, relative_url):
+    """
+    NB. This allows tests to run in different contexts ( locally, staging.)
+    We delegate to the library supplied version of the step with the same pattern after fixing the path
+    """
+    absolute_url = world.site_url + relative_url
+    lettuce_webdriver.webdriver.goto(step, absolute_url)
+
+@step('Then I should see "(.*)"')
+def eventually(step, expectation):
+    number_of_seconds_to_wait = getattr(world,"wait_seconds", 10)
+    lettuce_webdriver.webdriver.should_see_in_seconds(step,expectation, number_of_seconds_to_wait)
+
+
 def generate_random_str(length):
     s = string.lowercase + string.uppercase
     return ''.join(random.sample(s,length))
@@ -63,3 +78,10 @@ def find_field_no_value_by_name(field):
     if not ele:
         return False
     return ele[0]
+
+def get_site_url(default_url):
+    """
+    :return: http://example.com:8081
+    """
+    import os
+    return os.environ.get("SITE_URL", default_url)
