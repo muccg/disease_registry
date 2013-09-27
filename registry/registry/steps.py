@@ -79,9 +79,13 @@ def find_field_no_value_by_name(field):
         return False
     return ele[0]
 
-def get_site_url(default_url):
+def get_site_url(app_name, default_url):
     """
     :return: http://example.com:8081
     """
     import os
-    return os.environ.get("SITE_URL", default_url)
+    site_url_file = "/tmp/%s_site_url" % app_name
+    if not os.path.exists(site_url_file):
+        return default_url
+    else:
+        return open(site_url_file).read()
