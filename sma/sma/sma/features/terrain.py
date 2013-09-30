@@ -22,7 +22,7 @@ def set_browser():
 
 @before.all
 def set_site_url():
-    world.site_url = steps.get_site_url(default_url="http://localhost:8002")
+    world.site_url = steps.get_site_url("sma", default_url="http://localhost:8002")
 
 
 @before.all
