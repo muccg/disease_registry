@@ -92,3 +92,6 @@ def get_site_url(app_name, default_url):
             site_url = f.read()
         os.unlink(site_url_file)
         return site_url
+
+def get_default_page_timeout_seconds():
+    return 3
