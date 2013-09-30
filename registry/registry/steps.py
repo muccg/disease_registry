@@ -56,7 +56,7 @@ def our_goto(step, relative_url):
 @step('Then I should see "(.*)"')
 def eventually(step, expectation):
     number_of_seconds_to_wait = getattr(world,"wait_seconds", 10)
-    lettuce_webdriver.webdriver.should_see_in_seconds(step,expectation, number_of_seconds_to_wait)
+    lettuce_webdriver.webdriver.should_see_in_seconds(step, expectation, number_of_seconds_to_wait)
 
 
 def generate_random_str(length):
@@ -94,4 +94,4 @@ def get_site_url(app_name, default_url):
         return site_url
 
 def get_default_page_timeout_seconds():
-    return 3
+    return 10
