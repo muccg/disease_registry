@@ -88,4 +88,7 @@ def get_site_url(app_name, default_url):
     if not os.path.exists(site_url_file):
         return default_url
     else:
-        return open(site_url_file).read()
+        with open(site_url_file) as f:
+            site_url = f.read()
+        os.unlink(site_url_file)
+        return site_url
