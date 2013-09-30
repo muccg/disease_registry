@@ -87,8 +87,10 @@ function ci_staging_selenium() {
     ccg ${AWS_STAGING_INSTANCE} dsudo:'dbus-uuidgen --ensure'
     ccg ${AWS_STAGING_INSTANCE} dsudo:'chown apache:apache /var/www'
 
-    ccg ${AWS_STAGING_INSTANCE} dsudo:'yum remove dd dm1 sma fshd -y'
 
+    ccg ${AWS_STAGING_INSTANCE} dsudo:'yum remove dmd dd dm1 sma fshd -y'
+
+    ccg ${AWS_STAGING_INSTANCE} dsudo:'yum install dmd -y'
     ccg ${AWS_STAGING_INSTANCE} dsudo:'killall httpd || true'
     ccg ${AWS_STAGING_INSTANCE} dsudo:'service httpd start'
     ccg ${AWS_STAGING_INSTANCE} dsudo:'echo http://localhost/dmd > /tmp/dmd_site_url'
