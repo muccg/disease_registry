@@ -26,7 +26,7 @@ def set_site_url():
 
 @before.all
 def set_wait_seconds():
-    world.wait_seconds = 3
+    world.wait_seconds = 10
 
 
 @after.all
