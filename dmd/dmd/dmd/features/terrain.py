@@ -26,7 +26,7 @@ def set_site_url():
 
 @before.all
 def set_wait_seconds():
-    world.wait_seconds = steps.get_default_page_timeout_seconds()
+    world.wait_seconds = 10
 
 @after.all
 def clean_after_tests(result):
