@@ -4,7 +4,7 @@ Feature: Patient
         Given I go to "/admin"
         And I log in as "admin" with "admin" password
         Given I go to "/admin/patients/patient/add/"
-        Then I should see "Add patient" within 3 seconds
+        Then I should see "Add patient"
         When I check "consent"
         When I select "Western Australia" from "working_group"
         When I fill in "family_name" with random text
@@ -16,7 +16,7 @@ Feature: Patient
         When I select "Western Australia" from "state"
         When I fill in "postcode" with "6666"
         And I press "Save"
-        Then I should see "was added successfully" within 3 seconds
+        Then I should see "was added successfully"
         And I click "Log out"
     
     #TODO
