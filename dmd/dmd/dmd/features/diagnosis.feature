@@ -6,10 +6,3 @@ Feature: Diagnosis
         Given I go to "/admin/dmd/diagnosis/add/"
         Then I should see "Add clinical diagnosis"
         And I click "Log out"
-
-    Scenario: [DMD] Add diagnosis page accessible by curator
-        Given I go to "/admin"
-        Then I log in as "curator" with "curator" password expects "Site administration"
-        Given I go to "/admin/dmd/diagnosis/add/"
-        Then I should see "Add clinical diagnosis"
-        And I click "Log out"
