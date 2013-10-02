@@ -90,7 +90,7 @@ def get_site_url(app_name, default_url):
     else:
         with open(site_url_file) as f:
             site_url = f.read()
-        os.unlink(site_url_file)
+        #os.unlink(site_url_file)
         return site_url
 
 def get_default_page_timeout_seconds():
