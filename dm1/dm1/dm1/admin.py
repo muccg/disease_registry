@@ -182,6 +182,7 @@ class CancerTypeChoicesAdmin(admin.ModelAdmin):
 class VariationDm1Admin(admin.TabularInline):
     model = VariationDm1
     extra = 1
+    exclude = ['typing_method','laboratory']
 
 admin.site.register(Diagnosis, DiagnosisAdmin)
 admin.site.register(CancerTypeChoices, CancerTypeChoicesAdmin)
