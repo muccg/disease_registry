@@ -141,6 +141,22 @@ NOSE_ARGS = [
 AUTH_PROFILE_MODULE = 'groups.User'
 EMAIL_APP_NAME = "Registry "
 
+
+# CDEs
+def get_patient_class():
+    from registry.patients.models import Patient
+    return Patient
+
+def get_diagnosis_class():
+    from dmd.models import Diagnosis
+    return Diagnosis
+
+
+CDE_OWNER_CLASS_MAP = {
+    "P": get_patient_class,
+    "D": get_diagnosis_class,
+}
+
 # #
 # # LOGGING
 # #

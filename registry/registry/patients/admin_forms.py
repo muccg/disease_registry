@@ -31,7 +31,6 @@ class PatientParentForm(forms.ModelForm):
         model = PatientParent
 
 
-@add_cdes('P')
 class PatientForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(PatientForm, self).__init__(*args, **kwargs)
