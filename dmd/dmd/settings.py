@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     'reversion',
     'iprestrict',
     'debug_toolbar',
+    'ccg_cdes',
 ]
 
 # these determine which authentication method to use
