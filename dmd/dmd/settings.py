@@ -35,8 +35,10 @@ DATABASES = {
 
 # Django Core stuff
 TEMPLATE_LOADERS = [
+    'django.template.loaders.eggs.Loader',
     'django.template.loaders.app_directories.Loader',
 ]
+
 
 # see: https://docs.djangoproject.com/en/dev/ref/settings/#middleware-classes
 MIDDLEWARE_CLASSES = [
@@ -142,7 +144,7 @@ AUTH_PROFILE_MODULE = 'groups.User'
 EMAIL_APP_NAME = "Registry "
 
 
-# CDEs
+# CDE bridging functions
 def get_patient_class():
     from registry.patients.models import Patient
     return Patient
@@ -152,10 +154,18 @@ def get_diagnosis_class():
     return Diagnosis
 
 
-CDE_OWNER_CLASS_MAP = {
-    "P": get_patient_class,
-    "D": get_diagnosis_class,
+# CDE SUPPORT
+# Allow arbritary attachment of Common Data Elements to Registry classes.
+# ( django-ccg-cdes must installed )
+# NB. This is a map of (display ) names to  _functions_ that return the model _classes_
+# Each model class mentioned here will be assignable CDEs. from ccg_cde package
+# The names appear in the drop down on a CDE in the admin page
+
+CDE_MODEL_MAP = {
+    "Patient":    get_patient_class,
+    "Diagnosis": get_diagnosis_class,
 }
+
 
 # #
 # # LOGGING
