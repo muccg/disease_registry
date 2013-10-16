@@ -68,9 +68,14 @@ class CommonDataElement(models.Model):
             print "added choice %s" % permitted_value.value
             choices.append(choice_tuple)
 
-        if len(choices) == 0:
+        if len(choices) - 1 == 0:
             # just have a pure data type
-            raise NotImplementedError("Pure datatype not yet")
+            if self.datatype == "Boolean":
+                return forms.BooleanField(label=field_name, required=False)
+            else:
+                return forms.Textarea(label=field_name)
+
+            #raise NotImplementedError("Pure datatype not yet")
         else:
             # choice field - ignore the "other - please specify for now
             # complication
