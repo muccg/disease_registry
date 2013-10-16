@@ -46,10 +46,13 @@ def patient_cdes(request, patient_id):
         print "values for post = %s" % values
         return values
 
+    class Media:
+         css = {
+            'all': ('dmd_admin.css',)
+         }
 
 
-
-    form_class = type('CDEForm', (BaseForm,), {"base_fields": field_map})
+    form_class = type('CDEForm', (BaseForm,), {"base_fields": field_map, 'Media': Media})
 
     def get_value_from_code(cde_field, code):
         for (c,v) in cde_field.choices:
@@ -82,7 +85,10 @@ def patient_cdes(request, patient_id):
 
                 # store code and the value because later will support "Other please specify" ( which has a code but allows free value )
                 cde_value.code = code
-                value = get_value_from_code(cde_field, code)
+                if element.datatype == 'Boolean':
+                    value = form.cleaned_data[field]
+                else:
+                    value = get_value_from_code(cde_field, code)
                 cde_value.value = value
                 cde_value.save()
                 logger.debug("CDEValue saved: %s" % cde_value)
