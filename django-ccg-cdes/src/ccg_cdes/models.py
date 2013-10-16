@@ -73,7 +73,7 @@ class CommonDataElement(models.Model):
             if self.datatype == "Boolean":
                 return forms.BooleanField(label=field_name, required=False)
             else:
-                return forms.Textarea(label=field_name)
+                return forms.CharField(label=field_name, widget=forms.Textarea)
 
             #raise NotImplementedError("Pure datatype not yet")
         else:
