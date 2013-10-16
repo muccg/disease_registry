@@ -85,7 +85,7 @@ def patient_cdes(request, patient_id):
 
                 # store code and the value because later will support "Other please specify" ( which has a code but allows free value )
                 cde_value.code = code
-                if element.datatype == 'Boolean':
+                if element.datatype in ['Boolean','String']:
                     value = form.cleaned_data[field]
                 else:
                     value = get_value_from_code(cde_field, code)
