@@ -78,10 +78,13 @@ class Diagnosis(models.Model):
         ('AS3', 'DD Affected Status 3'),
         ('AS4', 'DD Affected Status 4'),
     )
+
     DD_DIAGNOSIS_CHOICES = (
-        ("UNK", "Unknown"),
-        ("DD1", "Demyelinating Disease 1"),
-        ("DD2", "Demyelinating Disease 2"),
+        ('CIS', 'Clinically isolated syndrome'),
+        ('RR',  'Relapsing remitting'),
+        ('SP',  'Secondary progressive'),
+        ('PP',  'Primary progressive'),
+        ('PR',  'Progressive relapsing'),
     )
 
     DD_FIRST_SUSPECTED_CHOICES = (
