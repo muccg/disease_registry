@@ -74,21 +74,20 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('dd', ['MedicalHistory'])
 
-        # Adding model 'EdssRating'
-        db.create_table('dd_edssrating', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('rating', self.gf('django.db.models.fields.FloatField')()),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=300)),
-        ))
-        db.send_create_signal('dd', ['EdssRating'])
-
         # Adding model 'DDClinicalData'
         db.create_table('dd_ddclinicaldata', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.Diagnosis'])),
             ('date', self.gf('django.db.models.fields.DateField')()),
             ('date_first_symtoms', self.gf('django.db.models.fields.DateField')()),
-            ('edss_rating', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.EdssRating'])),
+            ('edss_visual', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
+            ('edss_brainstem', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
+            ('edss_pyramidal', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
+            ('edss_cerebellar', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
+            ('edss_sensory', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
+            ('edss_bowel_bladder', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
+            ('edss_cerebral_mental', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
+            ('edss_ambulation', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
             ('edss_evaluation_type', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
             ('edss_form', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
             ('date_of_visits', self.gf('django.db.models.fields.DateField')()),
@@ -149,9 +148,6 @@ class Migration(SchemaMigration):
         # Deleting model 'MedicalHistory'
         db.delete_table('dd_medicalhistory')
 
-        # Deleting model 'EdssRating'
-        db.delete_table('dd_edssrating')
-
         # Deleting model 'DDClinicalData'
         db.delete_table('dd_ddclinicaldata')
 
@@ -174,7 +170,14 @@ class Migration(SchemaMigration):
             'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.Diagnosis']"}),
             'edss_evaluation_type': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
             'edss_form': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
-            'edss_rating': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.EdssRating']"}),
+            'edss_visual': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
+            'edss_brainstem': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
+            'edss_pyramidal': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
+            'edss_cerebellar': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
+            'edss_sensory': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
+            'edss_bowel_bladder': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
+            'edss_cerebral_mental': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
+            'edss_ambulation': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         'dd.diagnosis': {
@@ -192,12 +195,6 @@ class Migration(SchemaMigration):
             'patient': ('django.db.models.fields.related.OneToOneField', [], {'related_name': "'patient_diagnosis'", 'unique': 'True', 'primary_key': 'True', 'to': "orm['patients.Patient']"}),
             'treatments': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['dd.Treatment']", 'through': "orm['dd.TreatmentCourse']", 'symmetrical': 'False'}),
             'updated': ('django.db.models.fields.DateTimeField', [], {})
-        },
-        'dd.edssrating': {
-            'Meta': {'ordering': "['rating']", 'object_name': 'EdssRating'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '300'}),
-            'rating': ('django.db.models.fields.FloatField', [], {})
         },
         'dd.labdata': {
             'Meta': {'object_name': 'LabData'},
