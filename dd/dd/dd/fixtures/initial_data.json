@@ -50657,55 +50657,7 @@
         }
     },
     {
-        "pk": 8,
-        "model": "dd.treatment",
-        "fields": {
-            "common_name": "Avonex",
-            "name": "1FN\u03b20 1a"
-        }
-    },
-    {
-        "pk": 9,
-        "model": "dd.treatment",
-        "fields": {
-            "common_name": "Rebif",
-            "name": "1FN\u03b2 1a"
-        }
-    },
-    {
-        "pk": 10,
-        "model": "dd.treatment",
-        "fields": {
-            "common_name": "Betaferon",
-            "name": "1FN\u03b2 1b"
-        }
-    },
-    {
-        "pk": 11,
-        "model": "dd.treatment",
-        "fields": {
-            "common_name": "Tysabri",
-            "name": "Natalizumab"
-        }
-    },
-    {
-        "pk": 12,
-        "model": "dd.treatment",
-        "fields": {
-            "common_name": "Copaxone",
-            "name": "Glatiramer Acetate"
-        }
-    },
-    {
-        "pk": 13,
-        "model": "dd.treatment",
-        "fields": {
-            "common_name": "Gilenya",
-            "name": "Fingolimod"
-        }
-    },
-    {
-        "pk": 14,
+        "pk": 7,
         "model": "dd.treatment",
         "fields": {
             "common_name": "",
@@ -50713,7 +50665,7 @@
         }
     },
     {
-        "pk": 15,
+        "pk": 8,
         "model": "dd.treatment",
         "fields": {
             "common_name": "",
@@ -50721,7 +50673,7 @@
         }
     },
     {
-        "pk": 16,
+        "pk": 7,
         "model": "dd.treatment",
         "fields": {
             "common_name": "",
@@ -50729,7 +50681,7 @@
         }
     },
     {
-        "pk": 17,
+        "pk": 8,
         "model": "dd.treatment",
         "fields": {
             "common_name": "",
@@ -50737,23 +50689,15 @@
         }
     },
     {
-        "pk": 18,
+        "pk": 9,
         "model": "dd.treatment",
         "fields": {
             "common_name": "",
-            "name": "Bone Marrow"
+            "name": "Bone Marrow Transplants"
         }
     },
     {
-        "pk": 19,
-        "model": "dd.treatment",
-        "fields": {
-            "common_name": "",
-            "name": "Transplants"
-        }
-    },
-    {
-        "pk": 20,
+        "pk": 10,
         "model": "dd.treatment",
         "fields": {
             "common_name": "",
@@ -50761,7 +50705,7 @@
         }
     },
     {
-        "pk": 21,
+        "pk": 11,
         "model": "dd.treatment",
         "fields": {
             "common_name": "",
