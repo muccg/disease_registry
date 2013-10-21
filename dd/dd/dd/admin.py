@@ -45,7 +45,8 @@ class TreatmentCourseAdmin(admin.ModelAdmin):
 class TreatmentAdmin(admin.ModelAdmin):
     inlines = [TreatmentCourseInline]
 
-class DDClinicalDataInline(admin.TabularInline):
+class DDClinicalDataInline(admin.StackedInline):
+    readonly_fields = ('edss_score',)
     model = DDClinicalData
     extra = 0
 
@@ -133,4 +134,3 @@ admin.site.register(Diagnosis, DDDiagnosisAdmin)
 admin.site.register(DDClinicalData, ClinicalDataAdmin)
 admin.site.register(MRIData, MRIDataAdmin)
 admin.site.register(MedicalHistoryDisease, MedicalHistoryDiseaseAdmin)
-admin.site.register(EdssRating)
