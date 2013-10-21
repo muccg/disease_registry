@@ -16,6 +16,8 @@ class ClinicalDataForm(forms.ModelForm):
             'edss_evaluation_type': NoDotsRadioSelect()
         }
 
+    edss_score = forms.CharField(max_length=10)
+
 class MedicalHistoryForm(forms.ModelForm):
     class Meta:
         model = MedicalHistory
