@@ -336,7 +336,17 @@ class EDSS(models.Model):
         (5, 'Worse eye with maximal visual acuity (corrected) less than 20/200 (0.1); grade 4 plus maximal acuity of better eye of 20/60 (0.3) or less'),
         (6, 'Grade 5 plus maximal visual acuity of better eye of 20/60 (0.3) or less'))
 
+    BRAINSTEM_CHOICES = (
+        (0, 'Normal'),
+        (1, 'Signs only'),
+        (2, 'Moderate nystagmus; other mild disability'),
+        (3, 'Severe nystagmus; marked extraocular weakness; moderate disability of other cranial nerves'),
+        (4, 'Marked dysarthria; other marked disability'),
+        (5, 'Inability to swallow or speak'))
+
     visual = models.PositiveSmallIntegerField(choices=VISUAL_CHOICES, verbose_name='Visual', blank=True)
+    brainstem = models.PositiveSmallIntegerField(choices=BRAINSTEM_CHOICES, verbose_name='Brainstem', blank=True)
+
 
 
 def signal_patient_post_save(sender, **kwargs):
