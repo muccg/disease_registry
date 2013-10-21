@@ -344,8 +344,19 @@ class EDSS(models.Model):
         (4, 'Marked dysarthria; other marked disability'),
         (5, 'Inability to swallow or speak'))
 
+    PYRAMIDAL_CHOICES = (
+        (0, 'Normal'),
+        (1, 'Abnormal signs without disability'),
+        (2, 'Minimal disability, patient complains about fatiguability in motor tasks and/or BMRC grade 4 in one or two muscle groups'),
+        (3, 'Mild to moderate paraparesis or hemiparesis, full range of mevement against gravity; severe monoparesis, refers to BMRC grade 2 or less in one muscle group'),
+        (4, 'marked paraparesis or hemiparesis; moderate tetraparesis (refers to BMRC grade 3); monoplegia'),
+        (5, 'Paraplegia, grade 0 or 1 in all muscle groups of the lower limbs, hemiplegia, marked tetraparesis (BMRC grade 2 or less)'),
+        (6, 'Tetraplegia (grade 0 or 1 in all muscle groups of upper and lower limbs)'))
+
     visual = models.PositiveSmallIntegerField(choices=VISUAL_CHOICES, verbose_name='Visual', blank=True)
     brainstem = models.PositiveSmallIntegerField(choices=BRAINSTEM_CHOICES, verbose_name='Brainstem', blank=True)
+    pyramidal = models.PositiveSmallIntegerField(choices=PYRAMIDAL_CHOICES, verbose_name='Pyramidal', blank=True)
+
 
 
 
