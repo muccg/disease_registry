@@ -353,7 +353,7 @@ class EDSS(models.Model):
         (5, 'Paraplegia, grade 0 or 1 in all muscle groups of the lower limbs, hemiplegia, marked tetraparesis (BMRC grade 2 or less)'),
         (6, 'Tetraplegia (grade 0 or 1 in all muscle groups of upper and lower limbs)'))
 
-    CEREBELLAR = (
+    CEREBELLAR_CHOICES = (
         (0, 'Normal'),
         (1, 'Abnormal signs without disability'),
         (2, 'Mild ataxia'),
@@ -361,10 +361,11 @@ class EDSS(models.Model):
         (4, 'Severe ataxia in all limbs or trunk'),
         (5, 'Unable to perform coordinated movements due to ataxia'))
 
+
     visual = models.PositiveSmallIntegerField(choices=VISUAL_CHOICES, verbose_name='Visual', blank=True)
     brainstem = models.PositiveSmallIntegerField(choices=BRAINSTEM_CHOICES, verbose_name='Brainstem', blank=True)
     pyramidal = models.PositiveSmallIntegerField(choices=PYRAMIDAL_CHOICES, verbose_name='Pyramidal', blank=True)
-    cerebellar = models.PositiveSmallIntegerField(choices=CEREBELLAR, verbose_name='Cerebellar', blank=True)
+    cerebellar = models.PositiveSmallIntegerField(choices=CEREBELLAR_CHOICES, verbose_name='Cerebellar', blank=True)
 
 
 
