@@ -361,11 +361,20 @@ class EDSS(models.Model):
         (4, 'Severe ataxia in all limbs or trunk'),
         (5, 'Unable to perform coordinated movements due to ataxia'))
 
+    SENSORY_CHOICES = (
+        (0, 'Normal'),
+        (1, 'Mild vibration or figure-writing decrease only in 1 or 2 limbs'),
+        (2, 'Mild decrease in touch or pain or position sense and/or moderate decrease in vibration in 1 or 2 limbs; vibration or figure-writing decrease, alone or in 3 or 4 limbs'),
+        (3, 'Moderate decrease in touch or pain or position sense and/or essentially lost vibration in 1 or 2 limbs; mild decrease in touch or pain and/or moderated decrease in all proprioceptive tests in 3 or 4 limbs'),
+        (4, 'Marked decrease in touch or pain or loss of proprioception, alone or combined in 1 or 2 limbs; moderate decrease in touch or pain and/or severe proprioceptive decrease in more than 2 limbs'),
+        (5, 'Loss (essentially) of sensation in 1 or 2 limbs; moderate decrease in touch or pain and/or loss or proprioception for most of the body below the head'),
+        (6, 'Sensation essentially lost below the head'))
 
     visual = models.PositiveSmallIntegerField(choices=VISUAL_CHOICES, verbose_name='Visual', blank=True)
     brainstem = models.PositiveSmallIntegerField(choices=BRAINSTEM_CHOICES, verbose_name='Brainstem', blank=True)
     pyramidal = models.PositiveSmallIntegerField(choices=PYRAMIDAL_CHOICES, verbose_name='Pyramidal', blank=True)
     cerebellar = models.PositiveSmallIntegerField(choices=CEREBELLAR_CHOICES, verbose_name='Cerebellar', blank=True)
+    sensory = models.PositiveSmallIntegerField(choices=SENSORY_CHOICES, verbose_name='Sensory', blank=True)
 
 
 
