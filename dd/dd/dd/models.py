@@ -203,75 +203,109 @@ class MedicalHistory(models.Model):
     def __unicode__(self):
         return unicode(self.diagnosis)
 
-class EdssRating(models.Model):
-    rating = models.FloatField()
-    name = models.CharField(max_length=300)
-
-    class Meta:
-        verbose_name = "EDSS Rating"
-        ordering = ['rating',]
-
-    def __unicode__(self):
-        return '(%s) %s' % (self.rating, self.name)
 
 class DDClinicalData(models.Model):
-    ''' The full text of EDSS ratings. Possibly for use in a pop up widget - dropdown descriptions have been shortened for layout purposes.
-    (0.0, "Normal Neurological Exam"),
-    (1.0, "No disability, minimal signs on 1 FS"),
-    (1.5, "No disability, minimal signs on 2 of 7 FS"),
-    (2.0, "Minimal disability in 1 of 7 FS"),
-    (2.5, "Minimal disability in 2 FS"),
-    (3.0, "Moderate disability in 1 FS; or mild disability in 3 - 4 FS, though fully ambulatory"),
-    (3.5, "Fully ambulatory but with moderate disability in 1 FS and mild disability in 1 or 2 FS; or moderate disability in 2 FS; or mild disability in 5 FS"),
-    (4.0, "Fully ambulatory without aid, up and about 12hrs a day despite relatively severe disability. Able to walk without aid 500 meters"),
-    (4.5, "Fully ambulatory without aid, up and about much of day, able to work a full day, may otherwise have some limitations of full activity or require minimal assistance. Relatively severe disability. Able to walk without aid 300 meters"),
-    (5.0, "Ambulatory without aid for about 200 meters. Disability impairs full daily activities"),
-    (5.5, "Ambulatory for 100 meters, disability precludes full daily activities"),
-    (6.0, "Intermittent or unilateral constant assistance (cane, crutch or brace) required to walk 100 meters with or without resting"),
-    (6.5, "Constant bilateral support (cane, crutch or braces) required to walk 20 meters without resting"),
-    (7.0, "Unable to walk beyond 5 meters even with aid, essentially restricted to wheelchair, wheels self, transfers alone; active in wheelchair about 12 hours a day"),
-    (7.5, "Unable to take more than a few steps, restricted to wheelchair, may need aid to transfer; wheels self, but may require motorized chair for full day's activities"),
-    (8.0, "Essentially restricted to bed, chair, or wheelchair, but may be out of bed much of day; retains self care functions, generally effective use of arms"),
-    (8.5, "Essentially restricted to bed much of day, some effective use of arms, retains some self care functions"),
-    (9.0, "Helpless bed patient, can communicate and eat"),
-    (9.5, "Unable to communicate effectively or eat/swallow"),
-    (10.0, "Death due to MS")
-    '''
-
-    EDSSRatingChoices = ( ('0.0', "Normal Neurological Exam"),
-                          ('1.0', "No disability, minimal signs on 1 FS"),
-                          ('1.5', "No disability, minimal signs on 2 of 7 FS"),
-                          ('2.0', "Minimal disability in 1 of 7 FS"),
-                          ('2.5', "Minimal disability in 2 FS"),
-                          ('3.0', "Fully amb (mod dblty in 1 FS; or mild dblty in 3-4 FS)"),
-                          ('3.5', "Fully amb but with mod/mild disability in several FS"),
-                          ('4.0', "Fully amb w/out aid 500m"),
-                          ('4.5', "Fully amb w/out aid 300m"),
-                          ('5.0', "Amb w/out aid 200m. Impaired activity"),
-                          ('5.5', "Amb 100m, daily activities impaired"),
-                          ('6.0', "Amb 100m with unilateral assist"),
-                          ('6.5', "Amb 20m with bilateral assist"),
-                          ('7.0', "Amb <5m w/out wheelchair"),
-                          ('7.5', "Wheelchair restricted, mainly self propelled"),
-                          ('8.0', "Bed/chair/wheelchair restricted, self care"),
-                          ('8.5', "Bed restricted, some arm use/self care"),
-                          ('9.0', "Helpless bed patient, can communicate and eat"),
-                          ('9.5', "Unable to communicate effectively or eat/swallow"),
-                          ('10.0', "Death due to MS")
-                        )
 
     EVALUATION_TYPE_CHOICES = (
         (1, "Formal"),
         (2, "From notes"),
     )
 
+    VISUAL_CHOICES = (
+        (0, 'NORMAL'),
+        (1, 'Disc pallor and/or mild scotoma and/or visual acuity of worse eye (corrected) less than 30/30 (1.0) but better than 20/30 (0.67)'),
+        (2, 'Worse eye with large scotoma and/or maximal visual acuity (corrected) of 20/30 to 20/59 (0.67-0.34)'),
+        (3, 'Worse eye with large scotoma or moderate decrease in fields and/or maximal visual acuity (corrected) of 20/60 to 20/99 (0.33-0.2)'),
+        (4, 'Worse eye with marked decrease of fields and/or maximal visual acuity (corrected) of 20/100 to 20/200 (0.1-0.2); grade 3 plus maximal acuity of better eye of 20/60 (0.3) or less'),
+        (5, 'Worse eye with maximal visual acuity (corrected) less than 20/200 (0.1); grade 4 plus maximal acuity of better eye of 20/60 (0.3) or less'),
+        (6, 'Grade 5 plus maximal visual acuity of better eye of 20/60 (0.3) or less'))
+
+    BRAINSTEM_CHOICES = (
+        (0, 'Normal'),
+        (1, 'Signs only'),
+        (2, 'Moderate nystagmus; other mild disability'),
+        (3, 'Severe nystagmus; marked extraocular weakness; moderate disability of other cranial nerves'),
+        (4, 'Marked dysarthria; other marked disability'),
+        (5, 'Inability to swallow or speak'))
+
+    PYRAMIDAL_CHOICES = (
+        (0, 'Normal'),
+        (1, 'Abnormal signs without disability'),
+        (2, 'Minimal disability, patient complains about fatiguability in motor tasks and/or BMRC grade 4 in one or two muscle groups'),
+        (3, 'Mild to moderate paraparesis or hemiparesis, full range of mevement against gravity; severe monoparesis, refers to BMRC grade 2 or less in one muscle group'),
+        (4, 'marked paraparesis or hemiparesis; moderate tetraparesis (refers to BMRC grade 3); monoplegia'),
+        (5, 'Paraplegia, grade 0 or 1 in all muscle groups of the lower limbs, hemiplegia, marked tetraparesis (BMRC grade 2 or less)'),
+        (6, 'Tetraplegia (grade 0 or 1 in all muscle groups of upper and lower limbs)'))
+
+    CEREBELLAR_CHOICES = (
+        (0, 'Normal'),
+        (1, 'Abnormal signs without disability'),
+        (2, 'Mild ataxia'),
+        (3, 'Moderate truncal ataxia; moderate limb ataxia'),
+        (4, 'Severe ataxia in all limbs or trunk'),
+        (5, 'Unable to perform coordinated movements due to ataxia'))
+
+    SENSORY_CHOICES = (
+        (0, 'Normal'),
+        (1, 'Mild vibration or figure-writing decrease only in 1 or 2 limbs'),
+        (2, 'Mild decrease in touch or pain or position sense and/or moderate decrease in vibration in 1 or 2 limbs; vibration or figure-writing decrease, alone or in 3 or 4 limbs'),
+        (3, 'Moderate decrease in touch or pain or position sense and/or essentially lost vibration in 1 or 2 limbs; mild decrease in touch or pain and/or moderated decrease in all proprioceptive tests in 3 or 4 limbs'),
+        (4, 'Marked decrease in touch or pain or loss of proprioception, alone or combined in 1 or 2 limbs; moderate decrease in touch or pain and/or severe proprioceptive decrease in more than 2 limbs'),
+        (5, 'Loss (essentially) of sensation in 1 or 2 limbs; moderate decrease in touch or pain and/or loss or proprioception for most of the body below the head'),
+        (6, 'Sensation essentially lost below the head'))
+
+    BOWEL_BLADDER_CHOICES = (
+        (0, 'Normal'),
+        (1, 'Mild urinary hesitancy, urgency and/or constipation'),
+        (2, 'Moderate urinary hesitancy and/or urgency and/or rare incontinence and/or severe constipation'),
+        (3, 'Frequent urinary incontinence or intermittent self catheterisation once or twice a day, needs constantly enemata or manual measures to evacuate bowel'),
+        (4, 'In need of almost constant catheterisation, intermittent self-catheterisation more than twice a day'),
+        (5, 'Loss of bladder function, external or indwelling catheter'),
+        (6, 'Loss of bowel and bladder function'))
+
+    CEREBRAL_MENTAL_CHOICES = (
+        (0,'Normal'),
+        (1, 'Mood alteration only (does not affect EDSS score)'),
+        (2, 'Mild decrease in mentation/fatigue'),
+        (3, 'Moderate decrease in mentation'),
+        (4, 'Marked decrease in mentation'),
+        (5, 'Dementia'))
+
+    AMBULATION_CHOICES = (
+        (0, 'Fully ambulatory'),
+        (1, 'About 500 metres without aid or rest'),
+        (2,'About 300 metres without aid or rest'),
+        (3, 'About 200 metres without aid or rest'),
+        (4, 'About 100 metres without aid or rest'),
+        (5, 'About 100 metres with unilateral assistance'),
+        (6, 'About 20 metres with bilateral assistance'),
+        (7, 'Essentially restricted to wheelchair (wheels self)'),
+        (8, 'Restricted to wheelchair (may need help in transfer)'),
+        (9, 'Essentially restricted to bed or chair'),
+        (10, 'Restricted to bed much of the day'),
+        (11, 'Bed patient, can communicate and eat'),
+        (12, 'Helpless bed patient, unable to communicate, eat or swallow'))
+
     diagnosis               = models.ForeignKey(Diagnosis)
     date                    = models.DateField(verbose_name = "Clinical Data date")
     date_first_symtoms      = models.DateField(verbose_name = "Date of first symptoms")
-    edss_rating             = models.ForeignKey(EdssRating)
+
+    edss_visual             = models.PositiveSmallIntegerField(choices=VISUAL_CHOICES, verbose_name='Visual', blank=True)
+    edss_brainstem          = models.PositiveSmallIntegerField(choices=BRAINSTEM_CHOICES, verbose_name='Brainstem', blank=True)
+    edss_pyramidal          = models.PositiveSmallIntegerField(choices=PYRAMIDAL_CHOICES, verbose_name='Pyramidal', blank=True)
+    edss_cerebellar         = models.PositiveSmallIntegerField(choices=CEREBELLAR_CHOICES, verbose_name='Cerebellar', blank=True)
+    edss_sensory            = models.PositiveSmallIntegerField(choices=SENSORY_CHOICES, verbose_name='Sensory', blank=True)
+    edss_bowel_bladder      = models.PositiveSmallIntegerField(choices=BOWEL_BLADDER_CHOICES, verbose_name="Bowel/Bladder", blank=True)
+    edss_cerebral_mental    = models.PositiveSmallIntegerField(choices=CEREBRAL_MENTAL_CHOICES, verbose_name="Cerebral (Mental)", blank=True)
+    edss_ambulation         = models.PositiveSmallIntegerField(choices=AMBULATION_CHOICES, verbose_name="Ambulation", blank=True)
+
     edss_evaluation_type    = models.PositiveSmallIntegerField(choices=EVALUATION_TYPE_CHOICES, verbose_name="Evaluation type")
     edss_form               = models.FileField(upload_to='edss_form', storage=file_system, verbose_name="EDSS Form")
     date_of_visits          = models.DateField(verbose_name = "Date of visits")
+
+    @property
+    def edss_score(self):
+        return 'TODO'
 
     def __unicode__(self):
         return unicode(self.diagnosis)
@@ -320,63 +354,11 @@ class MRIData(models.Model):
     def __unicode__(self):
         return unicode(self.diagnosis)
 
+
 class MRIFile(models.Model):
     data = models.ForeignKey(MRIData, related_name="images")
     image = models.FileField(upload_to='mri_images', storage=mri_store,
                              verbose_name="MRI Image File")
-
-
-class EDSS(models.Model):
-    VISUAL_CHOICES = (
-        (0, 'NORMAL'),
-        (1, 'Disc pallor and/or mild scotoma and/or visual acuity of worse eye (corrected) less than 30/30 (1.0) but better than 20/30 (0.67)'),
-        (2, 'Worse eye with large scotoma and/or maximal visual acuity (corrected) of 20/30 to 20/59 (0.67-0.34)'),
-        (3, 'Worse eye with large scotoma or moderate decrease in fields and/or maximal visual acuity (corrected) of 20/60 to 20/99 (0.33-0.2)'),
-        (4, 'Worse eye with marked decrease of fields and/or maximal visual acuity (corrected) of 20/100 to 20/200 (0.1-0.2); grade 3 plus maximal acuity of better eye of 20/60 (0.3) or less'),
-        (5, 'Worse eye with maximal visual acuity (corrected) less than 20/200 (0.1); grade 4 plus maximal acuity of better eye of 20/60 (0.3) or less'),
-        (6, 'Grade 5 plus maximal visual acuity of better eye of 20/60 (0.3) or less'))
-
-    BRAINSTEM_CHOICES = (
-        (0, 'Normal'),
-        (1, 'Signs only'),
-        (2, 'Moderate nystagmus; other mild disability'),
-        (3, 'Severe nystagmus; marked extraocular weakness; moderate disability of other cranial nerves'),
-        (4, 'Marked dysarthria; other marked disability'),
-        (5, 'Inability to swallow or speak'))
-
-    PYRAMIDAL_CHOICES = (
-        (0, 'Normal'),
-        (1, 'Abnormal signs without disability'),
-        (2, 'Minimal disability, patient complains about fatiguability in motor tasks and/or BMRC grade 4 in one or two muscle groups'),
-        (3, 'Mild to moderate paraparesis or hemiparesis, full range of mevement against gravity; severe monoparesis, refers to BMRC grade 2 or less in one muscle group'),
-        (4, 'marked paraparesis or hemiparesis; moderate tetraparesis (refers to BMRC grade 3); monoplegia'),
-        (5, 'Paraplegia, grade 0 or 1 in all muscle groups of the lower limbs, hemiplegia, marked tetraparesis (BMRC grade 2 or less)'),
-        (6, 'Tetraplegia (grade 0 or 1 in all muscle groups of upper and lower limbs)'))
-
-    CEREBELLAR_CHOICES = (
-        (0, 'Normal'),
-        (1, 'Abnormal signs without disability'),
-        (2, 'Mild ataxia'),
-        (3, 'Moderate truncal ataxia; moderate limb ataxia'),
-        (4, 'Severe ataxia in all limbs or trunk'),
-        (5, 'Unable to perform coordinated movements due to ataxia'))
-
-    SENSORY_CHOICES = (
-        (0, 'Normal'),
-        (1, 'Mild vibration or figure-writing decrease only in 1 or 2 limbs'),
-        (2, 'Mild decrease in touch or pain or position sense and/or moderate decrease in vibration in 1 or 2 limbs; vibration or figure-writing decrease, alone or in 3 or 4 limbs'),
-        (3, 'Moderate decrease in touch or pain or position sense and/or essentially lost vibration in 1 or 2 limbs; mild decrease in touch or pain and/or moderated decrease in all proprioceptive tests in 3 or 4 limbs'),
-        (4, 'Marked decrease in touch or pain or loss of proprioception, alone or combined in 1 or 2 limbs; moderate decrease in touch or pain and/or severe proprioceptive decrease in more than 2 limbs'),
-        (5, 'Loss (essentially) of sensation in 1 or 2 limbs; moderate decrease in touch or pain and/or loss or proprioception for most of the body below the head'),
-        (6, 'Sensation essentially lost below the head'))
-
-    visual = models.PositiveSmallIntegerField(choices=VISUAL_CHOICES, verbose_name='Visual', blank=True)
-    brainstem = models.PositiveSmallIntegerField(choices=BRAINSTEM_CHOICES, verbose_name='Brainstem', blank=True)
-    pyramidal = models.PositiveSmallIntegerField(choices=PYRAMIDAL_CHOICES, verbose_name='Pyramidal', blank=True)
-    cerebellar = models.PositiveSmallIntegerField(choices=CEREBELLAR_CHOICES, verbose_name='Cerebellar', blank=True)
-    sensory = models.PositiveSmallIntegerField(choices=SENSORY_CHOICES, verbose_name='Sensory', blank=True)
-
-
 
 
 def signal_patient_post_save(sender, **kwargs):
