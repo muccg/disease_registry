@@ -325,6 +325,20 @@ class MRIFile(models.Model):
     image = models.FileField(upload_to='mri_images', storage=mri_store,
                              verbose_name="MRI Image File")
 
+
+class EDSS(models.Model):
+    VISUAL_CHOICES = (
+        (0, 'NORMAL'),
+        (1, 'Disc pallor and/or mild scotoma and/or visual acuity of worse eye (corrected) less than 30/30 (1.0) but better than 20/30 (0.67)'),
+        (2, 'Worse eye with large scotoma and/or maximal visual acuity (corrected) of 20/30 to 20/59 (0.67-0.34)'),
+        (3, 'Worse eye with large scotoma or moderate decrease in fields and/or maximal visual acuity (corrected) of 20/60 to 20/99 (0.33-0.2)'),
+        (4, 'Worse eye with marked decrease of fields and/or maximal visual acuity (corrected) of 20/100 to 20/200 (0.1-0.2); grade 3 plus maximal acuity of better eye of 20/60 (0.3) or less'),
+        (5, 'Worse eye with maximal visual acuity (corrected) less than 20/200 (0.1); grade 4 plus maximal acuity of better eye of 20/60 (0.3) or less'),
+        (6, 'Grade 5 plus maximal visual acuity of better eye of 20/60 (0.3) or less'))
+
+    visual = models.PositiveSmallIntegerField(choices=VISUAL_CHOICES, verbose_name='Visual', blank=True)
+
+
 def signal_patient_post_save(sender, **kwargs):
     logger.debug("patient post_save signal")
 
