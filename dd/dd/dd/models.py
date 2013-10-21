@@ -212,7 +212,7 @@ class DDClinicalData(models.Model):
     )
 
     VISUAL_CHOICES = (
-        (0, 'NORMAL'),
+        (0, 'Normal'),
         (1, 'Disc pallor and/or mild scotoma and/or visual acuity of worse eye (corrected) less than 30/30 (1.0) but better than 20/30 (0.67)'),
         (2, 'Worse eye with large scotoma and/or maximal visual acuity (corrected) of 20/30 to 20/59 (0.67-0.34)'),
         (3, 'Worse eye with large scotoma or moderate decrease in fields and/or maximal visual acuity (corrected) of 20/60 to 20/99 (0.33-0.2)'),
@@ -290,14 +290,14 @@ class DDClinicalData(models.Model):
     date                    = models.DateField(verbose_name = "Clinical Data date")
     date_first_symtoms      = models.DateField(verbose_name = "Date of first symptoms")
 
-    edss_visual             = models.PositiveSmallIntegerField(choices=VISUAL_CHOICES, verbose_name='Visual', blank=True)
-    edss_brainstem          = models.PositiveSmallIntegerField(choices=BRAINSTEM_CHOICES, verbose_name='Brainstem', blank=True)
-    edss_pyramidal          = models.PositiveSmallIntegerField(choices=PYRAMIDAL_CHOICES, verbose_name='Pyramidal', blank=True)
-    edss_cerebellar         = models.PositiveSmallIntegerField(choices=CEREBELLAR_CHOICES, verbose_name='Cerebellar', blank=True)
-    edss_sensory            = models.PositiveSmallIntegerField(choices=SENSORY_CHOICES, verbose_name='Sensory', blank=True)
-    edss_bowel_bladder      = models.PositiveSmallIntegerField(choices=BOWEL_BLADDER_CHOICES, verbose_name="Bowel/Bladder", blank=True)
-    edss_cerebral_mental    = models.PositiveSmallIntegerField(choices=CEREBRAL_MENTAL_CHOICES, verbose_name="Cerebral (Mental)", blank=True)
-    edss_ambulation         = models.PositiveSmallIntegerField(choices=AMBULATION_CHOICES, verbose_name="Ambulation", blank=True)
+    edss_visual             = models.PositiveSmallIntegerField(choices=VISUAL_CHOICES, verbose_name='Visual', default=0)
+    edss_brainstem          = models.PositiveSmallIntegerField(choices=BRAINSTEM_CHOICES, verbose_name='Brainstem', default=0)
+    edss_pyramidal          = models.PositiveSmallIntegerField(choices=PYRAMIDAL_CHOICES, verbose_name='Pyramidal', default=0)
+    edss_cerebellar         = models.PositiveSmallIntegerField(choices=CEREBELLAR_CHOICES, verbose_name='Cerebellar', default=0)
+    edss_sensory            = models.PositiveSmallIntegerField(choices=SENSORY_CHOICES, verbose_name='Sensory', default=0)
+    edss_bowel_bladder      = models.PositiveSmallIntegerField(choices=BOWEL_BLADDER_CHOICES, verbose_name="Bowel/Bladder", default=0)
+    edss_cerebral_mental    = models.PositiveSmallIntegerField(choices=CEREBRAL_MENTAL_CHOICES, verbose_name="Cerebral (Mental)", default=0)
+    edss_ambulation         = models.PositiveSmallIntegerField(choices=AMBULATION_CHOICES, verbose_name="Ambulation", default=0)
 
     edss_evaluation_type    = models.PositiveSmallIntegerField(choices=EVALUATION_TYPE_CHOICES, verbose_name="Evaluation type")
     edss_form               = models.FileField(upload_to='edss_form', storage=file_system, verbose_name="EDSS Form")
