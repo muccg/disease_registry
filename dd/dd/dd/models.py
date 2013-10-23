@@ -378,7 +378,6 @@ def signal_patient_post_save(sender, **kwargs):
         diagnosis, created = Diagnosis.objects.get_or_create(patient=patient)
         logger.debug("Diagnosis record %s" % ("created" if created else "already existed"))
     except Exception, e:
-        logger.debug("xxerror %s" % e)
         logger.critical(e)
         logger.critical(traceback.format_exc())
         raise
