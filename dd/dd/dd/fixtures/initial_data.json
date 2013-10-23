@@ -50552,5 +50552,49 @@
             "common_name": "",
             "name": "Alemtuzumab"
         }
+    },
+
+    {
+	"pk": 1,
+	"model": "dd.diagnosedcondition",
+	"fields": {
+        	"common_name": "Clinically isolated syndrome",
+		"name": "CIS"
+	}
+    },
+
+    {
+	"pk": 2,
+	"model": "dd.diagnosedcondition",
+	"fields": {
+        	"common_name": "Relapsing remitting",
+		"name": "RR"
+	}
+    },
+
+    {
+	"pk": 3,
+	"model": "dd.diagnosedcondition",
+	"fields": {
+        	"common_name": "Primary progressive",
+		"name": "PP"
+	}
+    },
+    {
+	"pk": 4,
+	"model": "dd.diagnosedcondition",
+	"fields": {
+        	"common_name": "Secondary progressive",
+		"name": "SP"
+	}
+    },
+    {
+
+	"pk": 5,
+	"model": "dd.diagnosedcondition",
+	"fields": {
+        	"common_name": "Progressive relapsing",
+		"name": "PR"
+	}
     }
 ]
