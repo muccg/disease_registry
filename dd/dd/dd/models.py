@@ -70,6 +70,18 @@ class TreatmentCourse(models.Model):
     def __unicode__(self):
         return "%s/%s" % (unicode(self.diagnosis), unicode(self.treatment))
 
+
+class DiagnosedCondition(models.Model):
+    name = models.CharField(max_length = 100)
+    common_name = models.CharField(max_length=100, blank=True, help_text="Leave blank if same as <em>Name</em>")
+
+    def __unicode__(self):
+        if self.common_name:
+            return "%s (%s)" % (self.name, self.common_name)
+        else:
+            return "%s" % (self.name)
+
+
 class Diagnosis(models.Model):
 
     DD_AFFECTED_STATUS_CHOICES = (
@@ -77,14 +89,6 @@ class Diagnosis(models.Model):
         ('AS2', 'DD Affected Status 2'),
         ('AS3', 'DD Affected Status 3'),
         ('AS4', 'DD Affected Status 4'),
-    )
-
-    DD_DIAGNOSIS_CHOICES = (
-        ('CIS', 'Clinically isolated syndrome'),
-        ('RR',  'Relapsing remitting'),
-        ('SP',  'Secondary progressive'),
-        ('PP',  'Primary progressive'),
-        ('PR',  'Progressive relapsing'),
     )
 
     DD_FIRST_SUSPECTED_CHOICES = (
@@ -100,7 +104,11 @@ class Diagnosis(models.Model):
         ("Other", "Other"),
     )
     patient = models.OneToOneField(Patient, primary_key=True, related_name='patient_diagnosis')
-    diagnosis = models.CharField(max_length=3, choices = DD_DIAGNOSIS_CHOICES, verbose_name = "Condition", default = 'UNK')
+    #diagnosis = models.CharField(max_length=3, choices = DD_DIAGNOSIS_CHOICES, verbose_name = "Condition", default = 'UNK')
+
+    # NB. We allow the list of conditions to be editable but we avoid deleting diagnosis if condition deleted!
+    diagnosis = models.ForeignKey(DiagnosedCondition, null=True, blank=True, verbose_name="Condition", on_delete=models.SET_NULL)
+
     affected_status = models.CharField(max_length=30, choices=DD_AFFECTED_STATUS_CHOICES, verbose_name = "Affected Status", default = '')
 
     first_suspected_by = models.CharField(max_length=50, choices = DD_FIRST_SUSPECTED_CHOICES, null=True, blank=True)
@@ -366,9 +374,11 @@ def signal_patient_post_save(sender, **kwargs):
 
     try:
         patient = kwargs['instance']
+
         diagnosis, created = Diagnosis.objects.get_or_create(patient=patient)
         logger.debug("Diagnosis record %s" % ("created" if created else "already existed"))
     except Exception, e:
+        logger.debug("xxerror %s" % e)
         logger.critical(e)
         logger.critical(traceback.format_exc())
         raise
