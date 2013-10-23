@@ -313,7 +313,7 @@ class DDClinicalData(models.Model):
 
     @property
     def edss_score(self):
-        return 'TODO'
+        return ''
 
     def __unicode__(self):
         return unicode(self.diagnosis)
