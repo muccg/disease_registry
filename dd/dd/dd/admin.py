@@ -126,10 +126,17 @@ class DDDiagnosisAdmin(admin.ModelAdmin):
 class MedicalHistoryDiseaseAdmin(admin.ModelAdmin):
     list_display = ['disease',]
 
+
+class DiagnosedConditionAdmin(admin.ModelAdmin):
+    list_display = ['name', 'common_name']
+
+
+
 admin.site.register(MedicalHistory, MedicalHistoryAdmin)
 admin.site.register(LabData, LabDataAdmin)
 admin.site.register(Treatment, TreatmentAdmin)
 admin.site.register(TreatmentCourse, TreatmentCourseAdmin)
+admin.site.register(DiagnosedCondition, DiagnosedConditionAdmin)
 admin.site.register(Diagnosis, DDDiagnosisAdmin)
 admin.site.register(DDClinicalData, ClinicalDataAdmin)
 admin.site.register(MRIData, MRIDataAdmin)
