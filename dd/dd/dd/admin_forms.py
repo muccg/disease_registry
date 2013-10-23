@@ -18,6 +18,12 @@ class ClinicalDataForm(forms.ModelForm):
 
     edss_score = forms.CharField(max_length=10)
 
+
+class DiagnosedConditionForm(forms.ModelForm):
+    class Meta:
+        model = DiagnosedCondition
+
+
 class MedicalHistoryForm(forms.ModelForm):
     class Meta:
         model = MedicalHistory
