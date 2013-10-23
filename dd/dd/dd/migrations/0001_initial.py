@@ -44,10 +44,19 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('dd', ['TreatmentCourse'])
 
+        # Adding model 'DiagnosedCondition'
+        db.create_table('dd_diagnosedcondition', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('common_name', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
+        ))
+        db.send_create_signal('dd', ['DiagnosedCondition'])
+
+
         # Adding model 'Diagnosis'
         db.create_table('dd_diagnosis', (
             ('patient', self.gf('django.db.models.fields.related.OneToOneField')(related_name='patient_diagnosis', unique=True, primary_key=True, to=orm['patients.Patient'])),
-            ('diagnosis', self.gf('django.db.models.fields.CharField')(default='UNK', max_length=3)),
+            ('diagnosis', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dd.DiagnosedCondition'], null=True, blank=True)),
             ('affected_status', self.gf('django.db.models.fields.CharField')(default='', max_length=30)),
             ('first_suspected_by', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
             ('date_of_first_symptom', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
@@ -142,6 +151,9 @@ class Migration(SchemaMigration):
         # Deleting model 'TreatmentCourse'
         db.delete_table('dd_treatmentcourse')
 
+        # Deleting model 'DiagnosedCondition'
+        db.delete_table('dd_diagnosedcondition')
+
         # Deleting model 'Diagnosis'
         db.delete_table('dd_diagnosis')
 
@@ -180,6 +192,13 @@ class Migration(SchemaMigration):
             'edss_ambulation': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
+        'dd.diagnosedcondition': {
+            'Meta': {'object_name': 'DiagnosedCondition'},
+            'common_name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
+        },
+
         'dd.diagnosis': {
             'Meta': {'object_name': 'Diagnosis'},
             'affected_status': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '30'}),
@@ -187,7 +206,7 @@ class Migration(SchemaMigration):
             'created': ('django.db.models.fields.DateTimeField', [], {}),
             'date_of_diagnosis': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             'date_of_first_symptom': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
-            'diagnosis': ('django.db.models.fields.CharField', [], {'default': "'UNK'", 'max_length': '3'}),
+            'diagnosis': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['dd.DiagnosedCondition']", 'null': 'True', 'blank': 'True'}),
             'family_consent': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'family_history': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'first_suspected_by': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
