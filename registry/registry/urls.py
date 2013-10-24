@@ -7,4 +7,5 @@ urlpatterns = patterns('',
     url(r'^patients/', include("registry.patients.urls")),
     url(r'^configuration/', include("registry.configuration.urls")),
     url(r'^errortest/', include("registry.common.urls")),
+    url(r'^reports/', include("registry.common.report_urls")),
 )
