@@ -4,7 +4,7 @@ from registry.patients.models import Patient
 from django.conf import settings
 
 class PatientReport(SimpleReport):
-    NAME = "Patient Report"
+    NAME = "PatientReport"
 
     SPEC = [["Patient ID", lambda patient: patient.pk],
            ["Given Names", "given_names"],
