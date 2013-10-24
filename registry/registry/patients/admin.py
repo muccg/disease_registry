@@ -4,6 +4,8 @@ from django.db.models import Q
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.core import urlresolvers
 from django.conf import settings
+from admin_views.admin import AdminViews
+import os
 import json, datetime
 
 from registry.utils import get_static_url, get_working_groups
@@ -37,8 +39,13 @@ class PatientConsentAdmin(admin.TabularInline):
     model = PatientConsent
     extra = 1
 
-class PatientAdmin(admin.ModelAdmin):
+class PatientAdmin(AdminViews, admin.ModelAdmin):
+    app_url = os.environ.get("SCRIPT_NAME", "")
     form = PatientForm
+    admin_views = (
+        ('Patient Report (SuperUser only)', '%s/%s' % (app_url, 'reports/patient/')),
+    )
+
     inlines = [PatientConsentAdmin, PatientParentAdmin, PatientDoctorAdmin]
     search_fields = ["family_name", "given_names"]
     list_display = ['__unicode__', 'progress_graph', 'moleculardata_entered', 'freshness', 'working_group', 'diagnosis_last_update']
