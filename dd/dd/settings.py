@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'registry.configuration',
     'dd.dd',
     'django.contrib.admin',
+    'admin_views',
     'iprestrict'
 ]
 

@@ -60,6 +60,7 @@ setup(name='django-ddregistry',
         'django-userlog==0.2.1',
         'django-messages-ui==0.2.6',
         'django-nose',
+        'django-admin-views',
         'django-iprestrict==0.1'
     ],
     dependency_links = [
