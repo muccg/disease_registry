@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'dm1.dm1',
     'dm1.dm1_questionnaire',
     'django.contrib.admin',
+    'admin_views',
     'iprestrict'
 ]
 
