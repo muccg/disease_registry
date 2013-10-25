@@ -56,6 +56,9 @@ class Diagnosis(base.Diagnosis):
                 score += 1.0
             except ObjectDoesNotExist, e:
                 pass
+            except AttributeError, ae:
+                pass
+
         return  int(score / len(fieldlist) * 100.0)
 
     def incomplete_sections(self):
@@ -66,6 +69,8 @@ class Diagnosis(base.Diagnosis):
                 getattr(self, f)
             except ObjectDoesNotExist, e:
                 fields_to_complete.append(f)
+            except AttributeError, ae:
+                pass
 
         if fields_to_complete:
             return "Incomplete sections: %s." % ", ".join(fields_to_complete)
