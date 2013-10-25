@@ -16,9 +16,9 @@ def nmd_report(request, working_group):
     writer = csv.writer(response)
 
     if working_group == 'nz':
-        country_filter = Q(patient__working_group__name='New Zealand')
+        country_filter = Q(patient__working_group__name__iexact='New Zealand')
     if working_group == 'au':
-        country_filter = ~Q(patient__working_group__name='New Zealand')
+        country_filter = ~Q(patient__working_group__name__iexact='New Zealand')
 
     diagnosis = Diagnosis.objects.all().filter(country_filter).select_related(
         'motorfunction', 'steroids', 'surgery', 'heart', 'heartmedication', 'respiratory', 'feedingfunction')
