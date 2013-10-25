@@ -7,7 +7,7 @@ from django.views.generic.base import View
 import csv
 
 from models import Diagnosis
-from registry.genetic.models import MolecularData, Variation
+from registry.genetic.models import MolecularData, Variation, Gene
 
 class NmdReport(View):
     
