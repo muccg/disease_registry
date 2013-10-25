@@ -7,6 +7,9 @@ class SimpleReport(object):
     SPEC = []
     QUERY = None
 
+    def query(self):
+        raise NotImplementedError("Subclasses must override and return a Django Query Object")
+
     def _get_report_field(self, field_spec):
         return field_spec[0]
 
@@ -42,7 +45,8 @@ class SimpleReport(object):
 
         logger.info("starting report %s" % self.NAME)
 
-        for obj in self.QUERY:
+        for obj in self.query():
+            logger.debug("checking %s" % obj)
             items = {}
             for report_field, selector_function, formatting_function in spec:
                 try:

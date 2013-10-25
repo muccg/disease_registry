@@ -14,7 +14,10 @@ class PatientReport(SimpleReport):
            ["Jurisdiction", "working_group.name"],
            ]
 
-    QUERY = Patient.objects.all().filter(active=True)
+    #QUERY = "Patient.objects.all().filter(active=True)"
+
+    def query(self):
+        return Patient.objects.all().filter(active=True)
 
 
 
