@@ -72,6 +72,7 @@ INSTALLED_APPS.extend([
     'fshd.fshd',
     'fshd.fshd_questionnaire',
     'django.contrib.admin',
+    'admin_views',
     'iprestrict'
 ])
 
