@@ -60,6 +60,7 @@ setup(name='django-fshdregistry',
         'ccg-extras==0.1.6',
         'django-userlog==0.2.1',
         'django-nose',
+        'django-admin-views',
         'django-iprestrict==0.1'
     ],
     dependency_links = [
