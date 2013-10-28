@@ -89,7 +89,7 @@ function ci_staging_selenium() {
 
 
     ccg ${AWS_STAGING_INSTANCE} dsudo:'yum remove dmd dd dm1 sma fshd -y'
-    ccg ${AWS_STAGING_INSTANCE} dsudo:'yum --enablerepo=ccg-testing clean all'
+    ccg ${AWS_STAGING_INSTANCE} dsudo:'yum \-\-enablerepo=ccg-testing clean all'
 
     ccg ${AWS_STAGING_INSTANCE} dsudo:'yum install dmd -y'
     ccg ${AWS_STAGING_INSTANCE} dsudo:'killall httpd || true'
