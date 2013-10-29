@@ -74,7 +74,7 @@ INSTALLED_APPS = [
     'admin_views',
     'reversion',
     'iprestrict',
-    'debug_toolbar',
+    #'debug_toolbar',
 ]
 
 # these determine which authentication method to use
