@@ -33,7 +33,7 @@ Feature: Questionnaire
         When I select "Australia" from "country"
         When I fill in "postcode" with "6666"
         And I press "Continue"
-        I should see "Diagnosis"
+        Then browser's URL should contain "clinical"
         And The browser's URL should contain "clinical"
         When I press "Submit"
         I should see "Thank you for your submission."
