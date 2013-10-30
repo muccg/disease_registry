@@ -5,6 +5,7 @@ from registry.utils import get_static_url
 
 from models import *
 
+from ccg_cdes.decorators import add_cdes
 
 class PatientDoctorForm(forms.ModelForm):
     OPTIONS = [
@@ -28,6 +29,7 @@ class PatientParentForm(forms.ModelForm):
 
     class Meta:
         model = PatientParent
+
 
 class PatientForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
