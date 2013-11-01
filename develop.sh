@@ -79,7 +79,7 @@ function ci_remote_destroy() {
 function ci_staging() {
     ccg ${AWS_STAGING_INSTANCE} boot
     ccg ${AWS_STAGING_INSTANCE} puppet
-    ccg ${AWS_STAGING_INSTANCE} shutdown:50
+    ccg ${AWS_STAGING_INSTANCE} shutdown:120
 }
 
 
