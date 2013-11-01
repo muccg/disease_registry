@@ -226,7 +226,10 @@ function installapp() {
     pushd ${REGISTRY}
     ../virt_${REGISTRY}/bin/pip install ${PIP_OPTS} -e .
     popd
-    virt_${REGISTRY}/bin/pip install ${MODULES}
+    virt_${REGISTRY}/bin/pip install ${PIP_OPTS} ${MODULES}
+
+    mkdir -p ${HOME}/bin
+    ln -sf ${VIRTUALENV}/bin/python ${HOME}/bin/vpython-${REGISTRY}
 }
 
 
