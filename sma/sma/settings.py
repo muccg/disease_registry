@@ -51,6 +51,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'ccg.middleware.ssl.SSLRedirect',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'registry.common.middleware.TimeLogMiddleware'
 ]
 
 # see: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -154,6 +155,9 @@ LOGGING = {
         'simple': {
             'format': 'Registry %(levelname)s %(message)s'
         },
+        'timelog': {
+            'format': '%(asctime)s %(message)s',
+        }
     },
     'filters': {
     },
@@ -193,7 +197,13 @@ LOGGING = {
             'class': 'django.utils.log.AdminEmailHandler',
             'formatter':'verbose',
             'include_html':True
-        }
+        },
+        'timelog': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIRECTORY, 'timelog.log'),
+            'formatter': 'timelog',
+        },
     },
     'root': {
             'handlers':['console', 'errorfile', 'mail_admins'],
@@ -210,6 +220,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': False,
         },
+        'registry.common.middleware': {
+            'handlers': ['timelog'],
+            'level': 'DEBUG',
+            'propogate': False,
+        }
     }
 }
 
