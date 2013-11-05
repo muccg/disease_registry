@@ -203,6 +203,8 @@ LOGGING = {
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(LOG_DIRECTORY, 'timelog.log'),
             'formatter': 'timelog',
+            'maxBytes': 1024*1024*5,
+            'backupCount': 5,
         },
     },
     'root': {
@@ -223,7 +225,7 @@ LOGGING = {
         'registry.common.middleware': {
             'handlers': ['timelog'],
             'level': 'DEBUG',
-            'propogate': False,
+            'propagate': False,
         }
     }
 }
