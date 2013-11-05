@@ -1,3 +1,4 @@
+import operator
 import time
 import logging
 from django.db import connection
@@ -11,10 +12,7 @@ class TimeLogMiddleware(object):
         request._start = time.time()
 
     def process_response(self, request, response):
-        sqltime = 0.0
-
-        for q in connection.queries:
-            sqltime += float(getattr(q, 'time', 0.0))
+        sqltime = reduce(operator.add, [float(q['time']) for q in connection.queries], 0.0)
 
         if hasattr(request, '_start'):
             d = {
