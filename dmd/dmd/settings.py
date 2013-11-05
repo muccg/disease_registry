@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'south',
     'messages_ui',
     'userlog',
+    'rdrf_cdes',
     'registry.groups',
     'registry.patients',
     'registry.genetic',
@@ -76,8 +77,6 @@ INSTALLED_APPS = [
     'admin_views',
     'reversion',
     'iprestrict',
-    #'debug_toolbar',
-    'ccg_cdes',
 ]
 
 # these determine which authentication method to use

@@ -5,7 +5,7 @@ from registry.utils import get_static_url
 
 from models import *
 
-from ccg_cdes.decorators import add_cdes
+
 
 class PatientDoctorForm(forms.ModelForm):
     OPTIONS = [

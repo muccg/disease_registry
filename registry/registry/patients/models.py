@@ -3,6 +3,8 @@ from django.db import models
 from django.db.models.signals import post_save, pre_delete
 from django.core.files.storage import FileSystemStorage
 
+from rdrf_cdes.decorators import has_dynamic_data
+
 import registry.groups.models
 
 import logging
@@ -72,6 +74,8 @@ class Parent(models.Model):
     def __unicode__(self):
         return '%s %s of %s' % (self.parent_given_names, self.parent_family_name, self.parent_place_of_birth)
 
+
+@has_dynamic_data
 class Patient(models.Model):
     if settings.INSTALL_NAME == 'dm1':   # Trac #16 item 9
         SEX_CHOICES = ( ("M", "Male"), ("F", "Female") )

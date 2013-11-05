@@ -13,7 +13,7 @@ urlpatterns = patterns('',
     (r'', include(common_urls, namespace="registry")),
     (r'^qbe/', include('django_qbe.urls')),
     (r'^iprestrict/', include('iprestrict.urls')),
-    (r'^cdes/', include('ccg_cdes.urls')),
+    (r'^cdes/', include('rdrf_cdes.urls')),
 )
 
 def handler404(request):
