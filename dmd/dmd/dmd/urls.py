@@ -9,6 +9,7 @@ import registry
 import registry.urls
 
 from report import NmdReport
+from report_cdes import PatientReport
 
 
 admin.autodiscover()
@@ -29,3 +30,5 @@ urlpatterns += patterns('', (r'^squeryreportcsv/(?P<working_group>\w{2})$', view
 
 urlpatterns += patterns('', (r'^nmdreport/(?P<working_group>\w{2})$', NmdReport.as_view()))
 urlpatterns += patterns('', (r'^dmdreport/(?P<working_group>\w{2})$', views.dmd_report))
+
+urlpatterns += patterns('', (r'^nmdreport/patient/$', PatientReport.as_view()))

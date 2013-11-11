@@ -1,0 +1,12 @@
+{
+    "patient_id": 1,
+    "first_name": "John",
+    "lastname": "Doe",
+    "date_of_birth": "01/06/1975",
+    "address": {
+        "street": "Discovery Dr",
+        "number": 24,
+        "suburb": "Neverland",
+        "state": "WA"
+    }
+}

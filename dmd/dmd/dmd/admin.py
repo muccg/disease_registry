@@ -79,6 +79,7 @@ class DiagnosisAdmin(AdminViews, reversion.VersionAdmin):
     admin_views = (
         ('NMD Report Australia', '%s/%s' % (app_url, 'nmdreport/au') ),
         ('NMD Report New Zealand', '%s/%s' % (app_url, 'nmdreport/nz') ),
+        ('NMD Report Australia (Patient)', '%s/%s' % (app_url, 'nmdreport/patient') ),
     )
 
     actions = None
