@@ -1,3 +1,4 @@
+import os
 import json
 
 import django.forms
@@ -12,6 +13,8 @@ import json
 from admin_forms import *
 from models import *
 from registry.utils import get_static_url, get_working_groups
+
+from admin_views.admin import AdminViews
 
 class GeneAdmin(admin.ModelAdmin):
     list_display = ["symbol", "name", "status", "chromosome"]
@@ -66,7 +69,13 @@ class MolecularDataSmaAdmin(admin.ModelAdmin):
     ]
 
 
-class MolecularDataAdmin(admin.ModelAdmin):
+class MolecularDataAdmin(AdminViews):
+    app_url = os.environ.get("SCRIPT_NAME", "")
+    
+    admin_views = (
+        ('Report', '%s/%s' % (app_url, 'reports/genetic') ),
+    )
+    
     actions = None
     add_form_template = "admin/genetic/change_form.html"
     change_form_template = "admin/genetic/change_form.html"
