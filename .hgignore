@@ -5,6 +5,8 @@ bootstrap
 build
 dist
 *.rpm
+*.log
+*.cfg
 
 virt_*/*
 registry/tmp/*
