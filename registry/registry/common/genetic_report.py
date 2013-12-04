@@ -11,7 +11,6 @@ from django.db.models import Q
 
 from registry.genetic.models import Variation
 from registry.patients.models import Patient
-from dmd.dmd.models import Diagnosis, MotorFunction, Steroids, Respiratory, ClinicalTrials
 
 class GeneticReport(View):
     
@@ -41,6 +40,7 @@ class GeneticReport(View):
     
     @method_decorator(login_required)
     def get(self, request):
+        from dmd.dmd.models import Diagnosis, MotorFunction, Steroids, Respiratory, ClinicalTrials
         response = HttpResponse(mimetype="text/csv")
         writer = csv.writer(response)
         
