@@ -9,11 +9,12 @@ REGISTRY="$2"
 
 PROJECT_NAME='disease_registry'
 AWS_BUILD_INSTANCE='aws_rpmbuild_centos6'
-AWS_STAGING_INSTANCE='aws_syd_registry_staging'
+AWS_STAGING_INSTANCE='aws-syd-registry-staging'
 TARGET_DIR="/usr/local/src/${PROJECT_NAME}"
 CLOSURE="/usr/local/closure/compiler.jar"
 TESTING_MODULES="pyvirtualdisplay nose selenium"
 MODULES="psycopg2==2.4.6 Werkzeug flake8 ${TESTING_MODULES}"
+PIP_OPTS='--download-cache ~/.pip/cache --index-url=https://restricted.crate.io'
 
 
 function usage() {
@@ -78,7 +79,7 @@ function ci_remote_destroy() {
 function ci_staging() {
     ccg ${AWS_STAGING_INSTANCE} boot
     ccg ${AWS_STAGING_INSTANCE} puppet
-    ccg ${AWS_STAGING_INSTANCE} shutdown:50
+    ccg ${AWS_STAGING_INSTANCE} shutdown:120
 }
 
 
@@ -223,9 +224,12 @@ function installapp() {
     echo "Install ${REGISTRY}"
     virtualenv --system-site-packages virt_${REGISTRY}
     pushd ${REGISTRY}
-    ../virt_${REGISTRY}/bin/python setup.py develop
+    ../virt_${REGISTRY}/bin/pip install ${PIP_OPTS} -e .
     popd
-    virt_${REGISTRY}/bin/easy_install ${MODULES}
+    virt_${REGISTRY}/bin/pip install ${PIP_OPTS} ${MODULES}
+
+    mkdir -p ${HOME}/bin
+    ln -sf ${VIRTUALENV}/bin/python ${HOME}/bin/vpython-${REGISTRY}
 }
 
 

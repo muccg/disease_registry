@@ -42,7 +42,16 @@ class MolecularDataSma(models.Model):
     def __unicode__(self):
         return str(self.patient)
 
+class VariationManager(models.Manager):
+    def get_containing(self, field, value):
+        from django.db.models import Q
+        import operator
+        query_list = [('%s__contains' % field, v) for v in value]
+        query = [Q(item) for item in query_list]
+        return Variation.objects.filter(reduce(operator.or_, query))
+
 class Variation(models.Model):
+    objects = VariationManager()
     molecular_data = models.ForeignKey(MolecularData)
     gene = models.ForeignKey(Gene)
     exon = models.TextField(blank=True)

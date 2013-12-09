@@ -5,6 +5,8 @@ bootstrap
 build
 dist
 *.rpm
+*.log
+*.cfg
 
 virt_*/*
 registry/tmp/*
@@ -21,6 +23,7 @@ registry/log/*
 {dd,dmd,dm1,sma,fshd}/logs
 {dd,dmd,dm1,sma,fshd}/log
 {dd,dmd,dm1,sma,fshd}/media
+{dd,dmd,dm1,sma,fshd}/static
 build-number.txt
 tests*.xml
 *komodo*
