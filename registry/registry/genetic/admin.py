@@ -69,13 +69,7 @@ class MolecularDataSmaAdmin(admin.ModelAdmin):
     ]
 
 
-class MolecularDataAdmin(AdminViews):
-    app_url = os.environ.get("SCRIPT_NAME", "")
-    
-    admin_views = (
-        ('Report', '%s/%s' % (app_url, 'reports/genetic') ),
-    )
-    
+class MolecularDataAdmin(admin.ModelAdmin):
     actions = None
     add_form_template = "admin/genetic/change_form.html"
     change_form_template = "admin/genetic/change_form.html"
