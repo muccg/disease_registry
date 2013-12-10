@@ -28,8 +28,7 @@ class DiagnosisForm(forms.ModelForm):
         model = Diagnosis
 
 class MotorFunctionForm(forms.ModelForm):
-    best_function = forms.CharField(widget=RadioSelect(choices=base.MotorFunction.MOTOR_FUNCTION_CHOICES), required=False, label="What is the best motor function level the patient has achieved",
-                        help_text="<b>Walking:</b> walking with or without help (orthoses or assistive device or human assistance), inside or outdoors<br/><b>Sitting independently</b>: able to maintain a sitting position on a chair or a wheelchair without support of upper limbs or leaning against the back of the chair")
+    best_function = forms.CharField(widget=RadioSelect(choices=base.MotorFunction.MOTOR_FUNCTION_CHOICES), required=True, label="Current best motor function")
 
     class Meta:
         model = MotorFunction
