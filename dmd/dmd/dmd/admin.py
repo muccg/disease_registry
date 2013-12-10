@@ -79,8 +79,11 @@ class DiagnosisAdmin(AdminViews, reversion.VersionAdmin):
     admin_views = (
         ('NMD Report Australia', '%s/%s' % (app_url, 'nmdreport/au') ),
         ('NMD Report New Zealand', '%s/%s' % (app_url, 'nmdreport/nz') ),
+        ('Genetic Report', '%s/%s' % (app_url, 'genetic') ),
     )
 
+    app_url = os.environ.get("SCRIPT_NAME", "")
+    
     actions = None
     form = DiagnosisForm
     inlines = [
