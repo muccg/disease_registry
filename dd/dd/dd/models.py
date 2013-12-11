@@ -220,6 +220,7 @@ class DDClinicalData(models.Model):
     )
 
     VISUAL_CHOICES = (
+        (99, 'Unknown'),
         (0, 'Normal'),
         (1, 'Disc pallor and/or mild scotoma and/or visual acuity of worse eye (corrected) less than 30/30 (1.0) but better than 20/30 (0.67)'),
         (2, 'Worse eye with large scotoma and/or maximal visual acuity (corrected) of 20/30 to 20/59 (0.67-0.34)'),
@@ -229,6 +230,7 @@ class DDClinicalData(models.Model):
         (6, 'Grade 5 plus maximal visual acuity of better eye of 20/60 (0.3) or less'))
 
     BRAINSTEM_CHOICES = (
+        (99, 'Unknown'),
         (0, 'Normal'),
         (1, 'Signs only'),
         (2, 'Moderate nystagmus; other mild disability'),
@@ -237,6 +239,7 @@ class DDClinicalData(models.Model):
         (5, 'Inability to swallow or speak'))
 
     PYRAMIDAL_CHOICES = (
+        (99, 'Unknown'),
         (0, 'Normal'),
         (1, 'Abnormal signs without disability'),
         (2, 'Minimal disability, patient complains about fatiguability in motor tasks and/or BMRC grade 4 in one or two muscle groups'),
@@ -246,6 +249,7 @@ class DDClinicalData(models.Model):
         (6, 'Tetraplegia (grade 0 or 1 in all muscle groups of upper and lower limbs)'))
 
     CEREBELLAR_CHOICES = (
+        (99, 'Unknown'),
         (0, 'Normal'),
         (1, 'Abnormal signs without disability'),
         (2, 'Mild ataxia'),
@@ -254,6 +258,7 @@ class DDClinicalData(models.Model):
         (5, 'Unable to perform coordinated movements due to ataxia'))
 
     SENSORY_CHOICES = (
+        (99, 'Unknown'),
         (0, 'Normal'),
         (1, 'Mild vibration or figure-writing decrease only in 1 or 2 limbs'),
         (2, 'Mild decrease in touch or pain or position sense and/or moderate decrease in vibration in 1 or 2 limbs; vibration or figure-writing decrease, alone or in 3 or 4 limbs'),
@@ -263,6 +268,7 @@ class DDClinicalData(models.Model):
         (6, 'Sensation essentially lost below the head'))
 
     BOWEL_BLADDER_CHOICES = (
+        (99, 'Unknown'),
         (0, 'Normal'),
         (1, 'Mild urinary hesitancy, urgency and/or constipation'),
         (2, 'Moderate urinary hesitancy and/or urgency and/or rare incontinence and/or severe constipation'),
@@ -272,6 +278,7 @@ class DDClinicalData(models.Model):
         (6, 'Loss of bowel and bladder function'))
 
     CEREBRAL_MENTAL_CHOICES = (
+        (99, 'Unknown'),
         (0,'Normal'),
         (1, 'Mood alteration only (does not affect EDSS score)'),
         (2, 'Mild decrease in mentation/fatigue'),
@@ -280,6 +287,7 @@ class DDClinicalData(models.Model):
         (5, 'Dementia'))
 
     AMBULATION_CHOICES = (
+        (99, 'Unknown'),
         (0, 'Fully ambulatory'),
         (1, 'About 500 metres without aid or rest'),
         (2,'About 300 metres without aid or rest'),
@@ -298,22 +306,22 @@ class DDClinicalData(models.Model):
     date                    = models.DateField(verbose_name = "Clinical Data date")
     date_first_symtoms      = models.DateField(verbose_name = "Date of first symptoms")
 
-    edss_visual             = models.PositiveSmallIntegerField(choices=VISUAL_CHOICES, verbose_name='Visual', default=0)
-    edss_brainstem          = models.PositiveSmallIntegerField(choices=BRAINSTEM_CHOICES, verbose_name='Brainstem', default=0)
-    edss_pyramidal          = models.PositiveSmallIntegerField(choices=PYRAMIDAL_CHOICES, verbose_name='Pyramidal', default=0)
-    edss_cerebellar         = models.PositiveSmallIntegerField(choices=CEREBELLAR_CHOICES, verbose_name='Cerebellar', default=0)
-    edss_sensory            = models.PositiveSmallIntegerField(choices=SENSORY_CHOICES, verbose_name='Sensory', default=0)
-    edss_bowel_bladder      = models.PositiveSmallIntegerField(choices=BOWEL_BLADDER_CHOICES, verbose_name="Bowel/Bladder", default=0)
-    edss_cerebral_mental    = models.PositiveSmallIntegerField(choices=CEREBRAL_MENTAL_CHOICES, verbose_name="Cerebral (Mental)", default=0)
-    edss_ambulation         = models.PositiveSmallIntegerField(choices=AMBULATION_CHOICES, verbose_name="Ambulation", default=0)
+    edss_visual             = models.PositiveSmallIntegerField(choices=VISUAL_CHOICES, verbose_name='Visual', default=99)
+    edss_brainstem          = models.PositiveSmallIntegerField(choices=BRAINSTEM_CHOICES, verbose_name='Brainstem', default=99)
+    edss_pyramidal          = models.PositiveSmallIntegerField(choices=PYRAMIDAL_CHOICES, verbose_name='Pyramidal', default=99)
+    edss_cerebellar         = models.PositiveSmallIntegerField(choices=CEREBELLAR_CHOICES, verbose_name='Cerebellar', default=99)
+    edss_sensory            = models.PositiveSmallIntegerField(choices=SENSORY_CHOICES, verbose_name='Sensory', default=99)
+    edss_bowel_bladder      = models.PositiveSmallIntegerField(choices=BOWEL_BLADDER_CHOICES, verbose_name="Bowel/Bladder", default=99)
+    edss_cerebral_mental    = models.PositiveSmallIntegerField(choices=CEREBRAL_MENTAL_CHOICES, verbose_name="Cerebral (Mental)", default=99)
+    edss_ambulation         = models.PositiveSmallIntegerField(choices=AMBULATION_CHOICES, verbose_name="Ambulation", default=99)
 
     edss_evaluation_type    = models.PositiveSmallIntegerField(choices=EVALUATION_TYPE_CHOICES, verbose_name="Evaluation type")
     edss_form               = models.FileField(upload_to='edss_form', storage=file_system, verbose_name="EDSS Form")
     date_of_visits          = models.DateField(verbose_name = "Date of visits")
 
-    @property
-    def edss_score(self):
-        return ''
+    edss_score = models.CharField(max_length=20, blank=True, null=True)
+    
+    comments = models.TextField(blank=True, null=True)
 
     def __unicode__(self):
         return unicode(self.diagnosis)
