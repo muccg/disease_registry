@@ -5,6 +5,8 @@ from registry.utils import get_static_url,get_working_groups
 from registry import groups
 from registry import configuration
 
+import reversion
+
 class ClinicalDataAdmin(admin.ModelAdmin):
     model = DDClinicalData
     form = ClinicalDataForm
@@ -29,6 +31,7 @@ class LabDataAdmin(admin.ModelAdmin):
 class TreatmentCourseInline(admin.StackedInline):
     model = Diagnosis.treatments.through
     extra = 0
+    max_num = 1
     form = TreatmentCourseForm
 
     fields = ("diagnosis", "treatment",
@@ -69,7 +72,7 @@ class MRIDataAdmin(admin.ModelAdmin):
               ("brain", "cervical", "thoracic"),
               "report_file")
 
-class DDDiagnosisAdmin(admin.ModelAdmin):
+class DDDiagnosisAdmin(reversion.VersionAdmin):
     form = DDDiagnosisForm
 
     inlines = [
