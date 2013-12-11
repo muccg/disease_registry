@@ -50,6 +50,9 @@ class DDDiagnosisForm(forms.ModelForm):
             "js/diagnosis.js"
         )
 
+    class Meta:
+        exclude =('date_of_first_symptom',)
+
 class TreatmentCourseForm(forms.ModelForm):
     class Meta:
         model = TreatmentCourse

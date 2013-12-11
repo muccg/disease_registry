@@ -109,6 +109,7 @@ class Diagnosis(models.Model):
 
     # NB. We allow the list of conditions to be editable but we avoid deleting diagnosis if condition deleted!
     diagnosis = models.ForeignKey(DiagnosedCondition, null=True, blank=True, verbose_name="Condition", on_delete=models.SET_NULL)
+    condition_other = models.CharField(max_length=50, null=True, blank=True)
 
     affected_status = models.CharField(max_length=30, choices=DD_AFFECTED_STATUS_CHOICES, verbose_name = "Affected Status", default = '')
 
