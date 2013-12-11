@@ -49,7 +49,6 @@ class TreatmentAdmin(admin.ModelAdmin):
     inlines = [TreatmentCourseInline]
 
 class DDClinicalDataInline(admin.StackedInline):
-    readonly_fields = ('edss_score',)
     model = DDClinicalData
     extra = 0
 
