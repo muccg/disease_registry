@@ -44,7 +44,11 @@ class DDDiagnosisForm(forms.ModelForm):
                 self.fields["patient"] = forms.ModelChoiceField(Patient.objects.filter(working_group__in=get_working_groups(user)).filter(active=True))
 
     class Media:
-        js = ("js/min_extra.js",)
+        js = (
+            "https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js",
+            "js/min_extra.js",
+            "js/diagnosis.js"
+        )
 
 class TreatmentCourseForm(forms.ModelForm):
     class Meta:
