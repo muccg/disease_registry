@@ -59,6 +59,7 @@ class TreatmentCourse(models.Model):
         ]
 
     treatment = models.ForeignKey(Treatment)
+    treatment_other = models.CharField(max_length=50, blank=True, null=True)
     diagnosis = models.ForeignKey("Diagnosis")
     start_date = models.DateField()
     end_date = models.DateField(blank = True, null = True)

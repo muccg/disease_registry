@@ -33,13 +33,13 @@ class TreatmentCourseInline(admin.StackedInline):
     extra = 0
     form = TreatmentCourseForm
 
-    fields = ("diagnosis", "treatment",
+    fields = ("diagnosis", "treatment", "treatment_other",
               ("start_date", "end_date"),
               "dose_type", "dose_other", "notes")
 
 class TreatmentCourseAdmin(admin.ModelAdmin):
     model = TreatmentCourse
-    fields = ("diagnosis", "treatment",
+    fields = ("diagnosis", "treatment", "treatment_other",
               ("start_date", "end_date"),
               "dose_type", "dose_other", "notes")
     list_display = ("diagnosis", "treatment", "start_date", "end_date")
