@@ -319,7 +319,7 @@ class DDClinicalData(models.Model):
     edss_form               = models.FileField(upload_to='edss_form', storage=file_system, verbose_name="EDSS Form")
     date_of_visits          = models.DateField(verbose_name = "Date of visits")
 
-    edss_score = models.CharField(max_length=20, blank=True, null=True, verbose_name='EDDS Score')
+    edss_score = models.CharField(max_length=20, blank=True, null=True, verbose_name='EDSS Score')
     
     comments = models.TextField(blank=True, null=True)
 

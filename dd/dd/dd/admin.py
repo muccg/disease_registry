@@ -31,7 +31,6 @@ class LabDataAdmin(admin.ModelAdmin):
 class TreatmentCourseInline(admin.StackedInline):
     model = Diagnosis.treatments.through
     extra = 0
-    max_num = 1
     form = TreatmentCourseForm
 
     fields = ("diagnosis", "treatment",
