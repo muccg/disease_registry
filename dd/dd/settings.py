@@ -69,7 +69,8 @@ INSTALLED_APPS = [
     'dd.dd',
     'django.contrib.admin',
     'admin_views',
-    'iprestrict'
+    'iprestrict',
+    'reversion'
 ]
 
 
