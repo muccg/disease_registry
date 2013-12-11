@@ -323,18 +323,15 @@ class DDClinicalData(models.Model):
         verbose_name_plural = "Clinical Data"
 
 class LabData(models.Model):
-    PLUS_MINUS_CHOICES = (
-        ('+', '+'),
-        ('-', '-')
-    )
-    
     diagnosis =         models.ForeignKey(Diagnosis)
     date =              models.DateField()
-    protein =           models.CharField(max_length=1, choices=PLUS_MINUS_CHOICES, verbose_name = "Protein (g/L)")
-    leucocytes =        models.CharField(max_length=1, choices=PLUS_MINUS_CHOICES, verbose_name = "Leucocytes (/ul)")
-    erythrocytes =      models.CharField(max_length=1, choices=PLUS_MINUS_CHOICES, verbose_name = "Erythrocytes (/ul)")
-    oligoclonal_bands = models.CharField(max_length=1, choices=PLUS_MINUS_CHOICES, verbose_name = "Oligoclonal Bands")
-    igg_alb =           models.CharField(max_length=1, choices=PLUS_MINUS_CHOICES, verbose_name = "IgG/Alb")
+    protein =           models.CharField(max_length=20, verbose_name = "Protein (g/L)")
+    leucocytes =        models.CharField(max_length=20, verbose_name = "Leucocytes (/ul)")
+    erythrocytes =      models.CharField(max_length=20, verbose_name = "Erythrocytes (/ul)")
+    oligoclonal_bands = models.CharField(max_length=20, verbose_name = "Oligoclonal Bands")
+    igg_alb =           models.CharField(max_length=20, verbose_name = "IgG/Alb")
+    vitamin_d3 =        models.CharField(max_length=20, verbose_name = "Vitamin D3", blank=True, null=True)
+    aqp4_antiody =      models.CharField(max_length=20, verbose_name = "AQP4 Antiody", blank=True, null=True)
 
     class Meta:
         verbose_name = "Lab Data"
