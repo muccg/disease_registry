@@ -75,10 +75,10 @@ class GeneticReport(View):
             variations = variations.filter(molecular_data__patient__date_of_birth__range=(self.str_to_date(age[1]), self.str_to_date(age[2])))
             if variations:
                 report = [self.get_results(v) for v in variations]
-                writer.writerow([age[0]])    
-                writer.writerow([s[0] for s in self.spec])
+                #writer.writerow([age[0]])
+                writer.writerow([" "] + [s[0] for s in self.spec])
                 for r in report:
-                    writer.writerow([r[s[1]] for s in self.spec])
+                    writer.writerow([age[0]] +    [r[s[1]] for s in self.spec])
                 writer.writerow([''])
 
         response['Content-Disposition'] = 'attachment; filename=report.csv'
