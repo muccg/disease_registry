@@ -50,6 +50,20 @@ class VariationManager(models.Manager):
         query = [Q(item) for item in query_list]
         return Variation.objects.filter(reduce(operator.or_, query))
 
+    def get_any_containing(self, field_values):
+        """
+        e.g. People.objects.get_any_containing([('name',['fred','george']),('age',[13,50])])
+        returns all people name one of fred or george, or age one of 13 or 50
+        """
+        from django.db.models import Q
+        import operator
+        query_list = []
+        for field, values in field_values:
+            field_query_list = [('%s__contains' % field, v) for v in values]
+            query_list.extend(field_query_list)
+        query = [Q(item) for item in query_list]
+        return Variation.objects.filter(reduce(operator.or_, query))
+
 class Variation(models.Model):
     objects = VariationManager()
     molecular_data = models.ForeignKey(MolecularData)

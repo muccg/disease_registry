@@ -31,14 +31,36 @@ class GeneticReport(View):
         ['Gene', 'gene'],
         ['Exon', 'exon'],
         ['DNA Variation', 'dna_variation'],
+        ['DNA Variation - Mutation type', 'dna_mutation_type'],
         ['All exons tested deletions', 'exons_deletions'],
         ['All exons tested duplications', 'exons_duplications'],
         ['Currently able to walk', 'walk'],
         ['Current steroids use', 'steroids'],
         ['Non-invasive ventilation', 'non_invasive_ventilation'],
         ['Invasive ventilation','invasive_ventilation'],
-        ['Clinical Trials', 'trials']
+        ['Clinical Trials', 'trials'],
+        ['Jurisdiction', 'jurisdiction']
     ]
+
+    def _get_mutation_type(self, dna_variation):
+        if dna_variation is None:
+            return ""
+        elif ">" in dna_variation:
+            return "Substitution (point mutation)"
+        elif "del" in dna_variation and "ins" in dna_variation:
+            return "Insertion/Deletion"
+        elif "inv" in dna_variation:
+            return "Inversion"
+        elif "del" in dna_variation:
+            return "Deletion"
+        elif "ins" in dna_variation:
+            return "Insertion"
+        elif "dup" in dna_variation:
+            return "Duplication"
+        else:
+            return ""
+
+
     
     @method_decorator(login_required)
     def get(self, request):
@@ -46,7 +68,10 @@ class GeneticReport(View):
         writer = csv.writer(response)
         
         for age in self.age_range:
-            variations = Variation.objects.get_containing('protein_variation', ['X', '*'])
+            #variations = Variation.objects.get_containing('protein_variation', ['X', '*'])
+            # RDR-271 - find any patients with protein variation containing X  or * OR having a dna point mutation '>'
+            variations = Variation.objects.get_any_containing([ ('protein_variation',['X','*']), ('dna_variation', ['>'])])
+
             variations = variations.filter(molecular_data__patient__date_of_birth__range=(self.str_to_date(age[1]), self.str_to_date(age[2])))
             if variations:
                 report = [self.get_results(v) for v in variations]
@@ -66,6 +91,8 @@ class GeneticReport(View):
         results['gene'] = variation.gene
         results['exon'] = variation.exon
         results['dna_variation'] = variation.dna_variation
+
+        results['dna_mutation_type'] = self._get_mutation_type(variation.dna_variation)
         results['exons_deletions'] = self.yes_no_unknown(variation.deletion_all_exons_tested)
         results['exons_duplications'] = self.yes_no_unknown(variation.duplication_all_exons_tested)
         
@@ -96,6 +123,12 @@ class GeneticReport(View):
             results['trials'] = 'Yes'
         except ClinicalTrials.DoesNotExist:
             results['trials'] = 'No'
+
+        try:
+            jurisdiction = variation.molecular_data.patient.working_group.name
+            results['jurisdiction'] = jurisdiction
+        except Exception, ex:
+            results['jurisdiction'] = 'Unknown'
             
         return results
 
