@@ -1,3 +1,5 @@
+from dateutil.relativedelta import relativedelta
+
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 
@@ -117,7 +119,7 @@ class Diagnosis(models.Model):
     date_of_first_symptom = models.DateField(null=True, blank=True)
     date_of_diagnosis = models.DateField(null=True, blank=True)
 
-    age_at_clinical_diagnosis = models.IntegerField('age in years at clinical diagnosis', null=True, blank=True)
+    age_at_clinical_diagnosis = models.IntegerField('age in years at clinical diagnosis', null=True, blank=True, help_text="Auto-calculated from Date of Birth and Date of Diagnosis")
 
     orphanet = models.ForeignKey(OrphanetChoices, null=True, blank = True)
 
@@ -138,6 +140,12 @@ class Diagnosis(models.Model):
 
     def save(self, *args, **kwargs):
         '''On save, update timestamps, auto-fields reportedly unreliable'''
+        if self.date_of_diagnosis:
+            date_of_birth = self.patient.date_of_birth
+            self.age_at_clinical_diagnosis = relativedelta(self.date_of_diagnosis, date_of_birth).years
+        else:
+            self.age_at_clinical_diagnosis = 0
+
         if not self.created:
             self.created = datetime.datetime.now()
         self.updated = datetime.datetime.now()

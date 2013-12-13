@@ -63,6 +63,7 @@ setup(name='django-ddregistry',
         'django-admin-views',
         'django-iprestrict==0.1',
 	'django-reversion==1.7.1',
+	'python-dateutil'
     ],
     dependency_links = [
         "http://repo.ccgapps.com.au",
