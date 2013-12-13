@@ -73,6 +73,8 @@ class MRIDataAdmin(admin.ModelAdmin):
 class DDDiagnosisAdmin(reversion.VersionAdmin):
     form = DDDiagnosisForm
 
+    readonly_fields = ('age_at_clinical_diagnosis',)
+
     inlines = [
                MedicalHistoryAdminInline,
                DDClinicalDataInline,
