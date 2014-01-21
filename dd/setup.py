@@ -1,7 +1,7 @@
 import setuptools
 import os
 from setuptools import setup
-from registry import VERSION
+from dd import VERSION
 
 data_files = {}
 start_dir = os.getcwd()
