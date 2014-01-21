@@ -1,7 +1,7 @@
 import setuptools
 import os
 from setuptools import setup
-from registry import VERSION
+from fshd import VERSION
 
 
 data_files = {}
