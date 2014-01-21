@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     'admin_views',
     'reversion',
     'iprestrict',
+    'explorer',
     #'debug_toolbar',
 ]
 
