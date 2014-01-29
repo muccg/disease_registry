@@ -229,6 +229,8 @@ LOGGING = {
 ## Customize settings for each registry below
 ################################################################################
 
+EXPLORER_SQL_WHITELIST = ('UPDATE',)
+
 INTERNAL_IPS = ('127.0.0.1', '172.16.2.1')
 
 ALLOWED_HOSTS = [
