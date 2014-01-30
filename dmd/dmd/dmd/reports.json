@@ -20,5 +20,16 @@
         "created_by": "Maciej Radochonski (CCG)", 
         "title": "NMD Report"
     }
+},
+{
+    "pk": 3, 
+    "model": "explorer.query", 
+    "fields": {
+        "created_at": "2014-01-30T13:12:56.613", 
+        "sql": "SELECT \r\n\tgenetic_variation.protein_variation AS \"Protein Variation\",\r\n    genetic_gene.name AS \"Gene\",\r\n    genetic_variation.exon AS \"Exon\",\r\n    genetic_variation.dna_variation AS \"DNA Variation\"\r\nFROM genetic_variation\r\n\tINNER JOIN genetic_moleculardata ON genetic_variation.molecular_data_id = genetic_moleculardata.patient_id\r\n    INNER JOIN genetic_gene ON genetic_gene.id = genetic_variation.gene_id\r\n    INNER JOIN patients_patient ON patients_patient.id = genetic_moleculardata.patient_id\r\n    INNER JOIN groups_workinggroup ON groups_workinggroup.id = patients_patient.working_group_id", 
+        "description": "", 
+        "created_by": "", 
+        "title": "Genetic Report"
+    }
 }
 ]
