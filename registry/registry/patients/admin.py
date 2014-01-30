@@ -42,7 +42,7 @@ class PatientConsentAdmin(admin.TabularInline):
 class PatientAdmin(AdminViews, admin.ModelAdmin):
     form = PatientForm
     
-    admin_views = get_report_links("patient")
+    admin_views = (get_report_links("patient"))
 
     inlines = [PatientConsentAdmin, PatientParentAdmin, PatientDoctorAdmin]
     search_fields = ["family_name", "given_names"]
