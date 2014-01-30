@@ -1,4 +1,5 @@
 from django.conf import settings
+import os
 
 # Utility function to clean a string
 def stripspaces(s):
@@ -32,3 +33,14 @@ if __name__ == "__main__":
 
 def get_working_groups(user):
     return [working_group.id for working_group in user.working_groups.all()]
+
+def get_report_links(title):
+    app_url = os.environ.get("SCRIPT_NAME", "")
+    from explorer.models import Query
+    querys = Query.objects.filter(title__icontains=title)
+    report_urls = []
+
+    for q in querys:
+        report_urls.insert(0, (q.title, '%s/explorer/%s/download' % (app_url, q.id)) )
+    
+    return report_urls
