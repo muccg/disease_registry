@@ -8,7 +8,7 @@ from admin_views.admin import AdminViews
 import os
 import json, datetime
 
-from registry.utils import get_static_url, get_working_groups
+from registry.utils import get_static_url, get_working_groups, get_report_links
 from admin_forms import *
 from models import *
 
@@ -40,11 +40,9 @@ class PatientConsentAdmin(admin.TabularInline):
     extra = 1
 
 class PatientAdmin(AdminViews, admin.ModelAdmin):
-    app_url = os.environ.get("SCRIPT_NAME", "")
     form = PatientForm
-    admin_views = (
-        ('Patient Report (SuperUser only)', '%s/%s' % (app_url, 'reports/patient/')),
-    )
+    
+    admin_views = get_report_links("patient")
 
     inlines = [PatientConsentAdmin, PatientParentAdmin, PatientDoctorAdmin]
     search_fields = ["family_name", "given_names"]
