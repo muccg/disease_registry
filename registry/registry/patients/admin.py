@@ -40,9 +40,11 @@ class PatientConsentAdmin(admin.TabularInline):
     extra = 1
 
 class PatientAdmin(AdminViews, admin.ModelAdmin):
+    app_url = os.environ.get("SCRIPT_NAME", "")
     form = PatientForm
-    
-    admin_views = (get_report_links("patient"))
+    admin_views = (
+        ('Patient Report (SuperUser only)', '%s/%s' % (app_url, 'reports/patient/')),
+    )
 
     inlines = [PatientConsentAdmin, PatientParentAdmin, PatientDoctorAdmin]
     search_fields = ["family_name", "given_names"]
