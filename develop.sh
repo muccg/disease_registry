@@ -6,6 +6,7 @@ set -e
 
 ACTION="$1"
 REGISTRY="$2"
+PARAM="$3"
 
 PROJECT_NAME='disease_registry'
 AWS_BUILD_INSTANCE='aws_rpmbuild_centos6'
@@ -18,7 +19,7 @@ PIP_OPTS='--download-cache ~/.pip/cache --index-url=https://simple.crate.io'
 
 
 function usage() {
-    echo 'Usage ./develop.sh (test|lint|jslint|start|install|clean|purge|pipfreeze|pythonversion|dropdb|ci_remote_build|ci_remote_destroy|ci_rpm_publish|ci_staging|ci_staging_selenium|ci_staging_tests) (dd|dmd|dm1|sma|fshd)'
+    echo 'Usage ./develop.sh (test|lint|jslint|start|install|clean|purge|pipfreeze|pythonversion|dropdb|loaddata|ci_remote_build|ci_remote_destroy|ci_rpm_publish|ci_staging|ci_staging_selenium|ci_staging_tests) (dd|dmd|dm1|sma|fshd)'
 }
 
 
@@ -244,6 +245,12 @@ function syncmigrate() {
     virt_${REGISTRY}/bin/django-admin.py collectstatic --noinput --settings=${DJANGO_SETTINGS_MODULE} 1> collectstatic-develop.log
 }
 
+function loaddata() {
+    registry_needed
+    echo "loaddata"
+    virt_${REGISTRY}/bin/django-admin.py loaddata ${PARAM} --settings=${DJANGO_SETTINGS_MODULE} 1> loaddata-develop.log
+}
+
 # chooses a tcp port number for the debug server
 function port() {
     # this could be an associative array, but they aren't compatible
@@ -331,6 +338,10 @@ jslint)
 syncmigrate)
     settings
     syncmigrate
+    ;;
+loaddata)
+    settings
+    loaddata
     ;;
 start)
     settings
