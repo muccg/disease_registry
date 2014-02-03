@@ -76,10 +76,27 @@ class NotesInline(admin.TabularInline):
 class DiagnosisAdmin(AdminViews, reversion.VersionAdmin):
     app_url = os.environ.get("SCRIPT_NAME", "")
     
+    from explorer.models import Query
+    try:
+        nmd_link = Query.objects.get(title__icontains="NMD")
+        nmd_au_link = 'explorer/%s/download?params={%%22jurisdiction%%22:%%22Western%%20Australia%%22}' % nmd_link.id
+        nmd_nz_link = 'explorer/%s/download?params={%%22jurisdiction%%22:%%22New%%20Zealand%%22}' % nmd_link.id
+    except:
+        Query.DoesNotExist
+        nmd_au_link = ''
+        nmd_nz_link = ''
+
+    try:
+        genetic = Query.objects.get(title__icontains="Genetic")
+        genetic_link = 'explorer/%s/download' % genetic.id
+    except:
+        Query.DoesNotExist
+        genetic_link = ''
+
     admin_views = (
-        ('NMD Report Australia', '%s/%s' % (app_url, 'explorer/2/download?params={%22jurisdiction%22:%22Western%20Australia%22}') ),
-        ('NMD Report New Zealand', '%s/%s' % (app_url, 'explorer/2/download?params={%22jurisdiction%22:%22New%20Zealand%22}') ),
-        ('Genetic Report', '%s/%s' % (app_url, 'explorer/3/download') ),
+        ('NMD Report Australia', '%s/%s' % (app_url, nmd_au_link) ),
+        ('NMD Report New Zealand', '%s/%s' % (app_url, nmd_nz_link) ),
+        ('Genetic Report', '%s/%s' % (app_url, genetic_link) ),
     )
 
     app_url = os.environ.get("SCRIPT_NAME", "")
