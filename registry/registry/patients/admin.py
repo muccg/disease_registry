@@ -42,8 +42,19 @@ class PatientConsentAdmin(admin.TabularInline):
 class PatientAdmin(AdminViews, admin.ModelAdmin):
     app_url = os.environ.get("SCRIPT_NAME", "")
     form = PatientForm
+    
+    try:
+        from explorer.models import Query
+        try:
+            patient_obj = Query.objects.get(title__icontains="Patient")
+            patient_link = 'explorer/%s/download' % patient_obj.id
+        except Query.DoesNotExist:
+            patient_link = ''
+    except ImportError:
+        patient_link = 'reports/patient'
+    
     admin_views = (
-        ('Patient Report (SuperUser only)', '%s/%s' % (app_url, 'reports/patient/')),
+        ('Patient Report (SuperUser only)', '%s/%s' % (app_url, patient_link)),
     )
 
     inlines = [PatientConsentAdmin, PatientParentAdmin, PatientDoctorAdmin]
