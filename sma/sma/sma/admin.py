@@ -50,9 +50,18 @@ class NotesInline(admin.TabularInline):
 class DiagnosisAdmin(AdminViews, reversion.VersionAdmin):
     app_url = os.environ.get("SCRIPT_NAME", "")
     
+    from explorer.models import Query
+    try:
+        nmd_link = Query.objects.get(title__icontains="NMD")
+        nmd_au_link = 'explorer/%s/download?params={%%22jurisdiction%%22:%%22Western%%20Australia%%22}' % nmd_link.id
+        nmd_nz_link = 'explorer/%s/download?params={%%22jurisdiction%%22:%%22New%%20Zealand%%22}' % nmd_link.id
+    except Query.DoesNotExist:
+        nmd_au_link = ''
+        nmd_nz_link = ''
+    
     admin_views = (
-        ('NMD Report Australia', '%s/%s' % (app_url, 'nmdreport/au') ),
-        ('NMD Report New Zealand', '%s/%s' % (app_url, 'nmdreport/nz') )
+        ('NMD Report Australia', '%s/%s' % (app_url, nmd_au_link) ),
+        ('NMD Report New Zealand', '%s/%s' % (app_url, nmd_nz_link) )
     )
     
     actions = None
