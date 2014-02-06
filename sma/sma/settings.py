@@ -77,7 +77,8 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'admin_views',
     'reversion',
-    'iprestrict'
+    'iprestrict',
+    'explorer'
 ]
 
 # these determine which authentication method to use
@@ -234,6 +235,8 @@ LOGGING = {
 ################################################################################
 ## Customize settings for each registry below
 ################################################################################
+
+EXPLORER_SQL_WHITELIST = ('UPDATE',)
 
 ALLOWED_HOSTS = [
     'localhost'

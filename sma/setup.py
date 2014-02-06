@@ -62,7 +62,8 @@ setup(name='django-smaregistry',
         'django-admin-views',
         'django-reversion',
         'sure==1.2.1',
-        'django-iprestrict==0.1'
+        'django-iprestrict==0.1',
+	'django-sql-explorer'
     ],
     dependency_links = [
         "http://repo.ccgapps.com.au",
