@@ -50553,6 +50553,22 @@
             "name": "Alemtuzumab"
         }
     },
+    {
+        "pk": 12,
+        "model": "dd.treatment",
+        "fields": {
+            "common_name": "",
+            "name": "Aubagio"
+        }
+    },
+    {
+        "pk": 13,
+        "model": "dd.treatment",
+        "fields": {
+            "common_name": "",
+            "name": "Tecfidera"
+        }
+    },
 
     {
 	"pk": 1,
