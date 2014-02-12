@@ -1,0 +1,51 @@
+[
+ {
+  "pk": 3,
+  "model": "fshdapp.cancertypechoices",
+  "fields": {
+   "description": "Basal cell carcinomas"
+  }
+ },
+ {
+  "pk": 4,
+  "model": "fshdapp.cancertypechoices",
+  "fields": {
+   "description": "Insulinomas"
+  }
+ },
+ {
+  "pk": 5,
+  "model": "fshdapp.cancertypechoices",
+  "fields": {
+   "description": "Parathyroid tumours"
+  }
+ },
+ {
+  "pk": 6,
+  "model": "fshdapp.cancertypechoices",
+  "fields": {
+   "description": "Pilomatricomas"
+  }
+ },
+ {
+  "pk": 7,
+  "model": "fshdapp.cancertypechoices",
+  "fields": {
+   "description": "Salivery gland tumours"
+  }
+ },
+ {
+  "pk": 8,
+  "model": "fshdapp.cancertypechoices",
+  "fields": {
+   "description": "Thymomas"
+  }
+ },
+ {
+  "pk": 9,
+  "model": "fshdapp.cancertypechoices",
+  "fields": {
+   "description": "Thyroid tumours"
+  }
+ }
+]
