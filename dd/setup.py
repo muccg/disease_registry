@@ -61,13 +61,13 @@ setup(name='django-ddregistry',
         'django-messages-ui==0.2.6',
         'django-nose',
         'django-admin-views',
-        'django-iprestrict==0.1',
+        'django-iprestrict==0.2',
 	'django-reversion==1.7.1',
 	'python-dateutil'
     ],
     dependency_links = [
         "http://repo.ccgapps.com.au",
         "https://bitbucket.org/ccgmurdoch/django-userlog/downloads/django_userlog-0.2.1.tar.gz",
-        "https://bitbucket.org/ccgmurdoch/ccg-django-extras/downloads/django-iprestrict-0.1.tar.gz"
+        "https://bitbucket.org/ccgmurdoch/ccg-django-extras/downloads/django-iprestrict-0.2.tar.gz"
     ],
 )
