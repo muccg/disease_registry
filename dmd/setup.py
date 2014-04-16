@@ -64,13 +64,13 @@ setup(name='django-dmdregistry',
         'django-reversion',
         'sure==1.2.1',
         'django-templatetag-handlebars==1.2.0',
-        'django-iprestrict==0.1',
+        'django-iprestrict==0.2',
 	'django-sql-explorer'
     ],
     dependency_links = [
         "http://repo.ccgapps.com.au",
         "https://pypi.python.org/packages/source/d/django-templatetag-handlebars/django-templatetag-handlebars-1.2.0.zip",
         "https://bitbucket.org/ccgmurdoch/django-userlog/downloads/django_userlog-0.2.1.tar.gz",
-        "https://bitbucket.org/ccgmurdoch/ccg-django-extras/downloads/django-iprestrict-0.1.tar.gz"
+        "https://bitbucket.org/ccgmurdoch/ccg-django-extras/downloads/django-iprestrict-0.2.tar.gz"
     ],
 )
