@@ -61,11 +61,11 @@ setup(name='django-fshdregistry',
         'django-userlog==0.2.1',
         'django-nose',
         'django-admin-views',
-        'django-iprestrict==0.1'
+        'django-iprestrict==0.2'
     ],
     dependency_links = [
         "http://repo.ccgapps.com.au",
         "https://bitbucket.org/ccgmurdoch/django-userlog/downloads/django_userlog-0.2.1.tar.gz",
-        "https://bitbucket.org/ccgmurdoch/ccg-django-extras/downloads/django-iprestrict-0.1.tar.gz"
+        "https://bitbucket.org/ccgmurdoch/ccg-django-extras/downloads/django-iprestrict-0.2.tar.gz"
     ],
 )
