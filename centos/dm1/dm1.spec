@@ -67,7 +67,6 @@ echo "build.host=\"$HOSTNAME\"" >> build-number.txt
 cp build-number.txt %{buildinstalldir}/
 
 export PYTHONPATH=%{buildinstalldir}/lib
-mkdir -p /usr/local/bin && ln -s /usr/pgsql-9.3/bin/pg_config /usr/local/bin/pg_config
 easy_install -O1 --prefix %{buildinstalldir} --install-dir %{buildinstalldir}/lib .
 
 # Create settings symlink so we can run collectstatic with the default settings
