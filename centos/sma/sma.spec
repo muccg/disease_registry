@@ -26,7 +26,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Prefix: %{_prefix}
 BuildArch: x86_64
 Vendor: Centre for Comparative Genomics <web@ccg.murdoch.edu.au>
-BuildRequires: python-setuptools postgresql93-libs
+BuildRequires: python-setuptools postgresql93-devel
 Requires: httpd mod_wsgi postgresql93-libs
 
 %description
