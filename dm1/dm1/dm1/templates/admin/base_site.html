@@ -1,0 +1,14 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+{% load version_number %}
+
+{% block title %}{{ title }} | {% trans 'Django site admin' %}{% endblock %}
+
+{% block extrastyle %}<link rel="stylesheet" type="text/css" href="{% static "css/dm1_admin.css" %}" />{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">{% trans 'Myotonic Dystrophy' %} ({% version_number 'dm1' %})</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
