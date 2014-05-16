@@ -45,7 +45,7 @@ setup(name='django-smaregistry',
     package_data=data_files,
     zip_safe=False,
     install_requires=[
-        'Django==1.5.4',
+        'Django==1.6.5',
         'django-picklefield==0.1.9',
         'django-templatetag-sugar==0.1',
         'pyparsing==1.5.6',
@@ -63,6 +63,7 @@ setup(name='django-smaregistry',
         'django-reversion',
         'sure==1.2.1',
         'django-iprestrict==0.2',
+		'six',
 	'django-sql-explorer'
     ],
     dependency_links = [
