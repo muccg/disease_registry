@@ -48,7 +48,7 @@ setup(name='django-dm1registry',
     package_data=data_files,
     zip_safe=False,
     install_requires=[
-        'Django==1.5.4',
+        'Django==1.6.5',
         'django-picklefield==0.1.9',
         'django-templatetag-sugar==0.1',
         'pyparsing==1.5.6',
@@ -63,7 +63,8 @@ setup(name='django-dm1registry',
         'django-nose',
         'sure==1.2.1',
         'django-admin-views',
-        'django-iprestrict==0.2'
+        'django-iprestrict==0.2',
+		'six'
     ],
     dependency_links = [
         "http://repo.ccgapps.com.au",
