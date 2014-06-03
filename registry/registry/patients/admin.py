@@ -50,6 +50,8 @@ class PatientAdmin(AdminViews, admin.ModelAdmin):
             patient_link = 'explorer/%s/download' % patient_obj.id
         except Query.DoesNotExist:
             patient_link = ''
+        except Query.MultipleObjectsReturned:
+            patient_link = ''
     except ImportError:
         patient_link = 'reports/patient'
     
