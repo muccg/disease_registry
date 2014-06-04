@@ -2,7 +2,7 @@
 #
 
 # break on error
-set -e 
+set -e
 
 ACTION="$1"
 REGISTRY="$2"
@@ -15,7 +15,8 @@ TARGET_DIR="/usr/local/src/${PROJECT_NAME}"
 CLOSURE="/usr/local/closure/compiler.jar"
 TESTING_MODULES="pyvirtualdisplay nose selenium"
 MODULES="psycopg2==2.4.6 Werkzeug flake8 ${TESTING_MODULES}"
-PIP_OPTS='--download-cache ~/.pip/cache --index-url=https://simple.crate.io'
+PIP_OPTS='--download-cache ~/.pip/cache'
+PIP5_OPTS="${PIP_OPTS} --process-dependency-links"
 
 
 function usage() {
@@ -223,14 +224,12 @@ function installapp() {
     which virtualenv >/dev/null
 
     echo "Install ${REGISTRY}"
-    virtualenv --system-site-packages virt_${REGISTRY}
+    virtualenv virt_${REGISTRY}
+    virt_${REGISTRY}/bin/pip install ${PIP_OPTS} --upgrade 'pip>=1.5,<1.6'
     pushd ${REGISTRY}
-    ../virt_${REGISTRY}/bin/pip install ${PIP_OPTS} -e .
+    ../virt_${REGISTRY}/bin/pip install ${PIP5_OPTS} -e .
     popd
-    virt_${REGISTRY}/bin/pip install ${PIP_OPTS} ${MODULES}
-
-    mkdir -p ${HOME}/bin
-    ln -sf ${VIRTUALENV}/bin/python ${HOME}/bin/vpython-${REGISTRY}
+    virt_${REGISTRY}/bin/pip install ${PIP5_OPTS} ${MODULES}
 }
 
 
