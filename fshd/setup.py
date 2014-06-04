@@ -10,8 +10,8 @@ for package in ('fshd', 'fshd_questionnaire'):
     data_files['fshd.' + package] = []
     os.chdir(os.path.join('fshd', package))
     for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags', 'features', 'management'):
-	    data_files['fshd.' + package].extend(
-	        [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files])
+        data_files['fshd.' + package].extend(
+            [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files])
     os.chdir(start_dir)
 
 # Include common disease registry modules from registry sibling directory
@@ -54,19 +54,20 @@ setup(name='django-fshdregistry',
         'pyparsing==1.5.6',
         'wsgiref==0.1.2',
         'python-memcached==1.48',
-        'South==0.8.2',
+        'South==0.8.4',
         'django-extensions>=0.7.1',
-        'ccg-auth==0.3.2',
-        'ccg-extras==0.1.6',
+        'ccg-auth==0.3.3',
+        'ccg-extras==0.1.9',
         'django-userlog==0.2.1',
         'django-nose',
         'django-admin-views',
         'django-iprestrict==0.2',
-		'six'
+        'six'
     ],
     dependency_links = [
-        "http://repo.ccgapps.com.au",
-        "https://bitbucket.org/ccgmurdoch/django-userlog/downloads/django_userlog-0.2.1.tar.gz",
-        "https://bitbucket.org/ccgmurdoch/ccg-django-extras/downloads/django-iprestrict-0.2.tar.gz"
+        'https://bitbucket.org/ccgmurdoch/ccg-django-extras/downloads/ccg-extras-0.1.9.tar.gz',
+        'https://bitbucket.org/ccgmurdoch/ccg-django-extras/downloads/ccg-auth-0.3.3.tar.gz',
+        'https://bitbucket.org/ccgmurdoch/django-userlog/downloads/django_userlog-0.2.1.tar.gz',
+        'https://bitbucket.org/ccgmurdoch/ccg-django-extras/downloads/django-iprestrict-0.2.tar.gz'
     ],
 )
