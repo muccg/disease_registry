@@ -46,7 +46,7 @@ setup(name='django-dmdregistry',
     package_data=data_files,
     zip_safe=False,
     install_requires=[
-        'Django==1.6.5',
+        'Django==1.5.4',
         'django-picklefield==0.1.9',
         'django-templatetag-sugar==0.1',
         'pyparsing==1.5.6',
