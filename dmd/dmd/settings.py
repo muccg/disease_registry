@@ -229,6 +229,9 @@ LOGGING = {
 
 EXPLORER_SQL_WHITELIST = ('UPDATE',)
 
+EXPLORER_PERMISSION_VIEW = lambda u: u.is_superuser
+EXPLORER_PERMISSION_CHANGE = lambda u: u.is_superuser
+
 INTERNAL_IPS = ('127.0.0.1', '172.16.2.1')
 
 ALLOWED_HOSTS = [

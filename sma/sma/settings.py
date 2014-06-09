@@ -238,6 +238,9 @@ LOGGING = {
 
 EXPLORER_SQL_WHITELIST = ('UPDATE',)
 
+EXPLORER_PERMISSION_VIEW = lambda u: u.is_superuser
+EXPLORER_PERMISSION_CHANGE = lambda u: u.is_superuser
+
 ALLOWED_HOSTS = [
     'localhost'
 ]
