@@ -9,14 +9,12 @@ import json
 class PatientStatsView(View):
 
     def get(self, request):
-        patients = Patient.objects.values('working_group__name').annotate(Count("id")).order_by()
+        patients = Patient.objects.values('working_group__name').annotate(count=Count("id")).order_by()
         result = []
         
         for patient in patients:
             result.append(patient)
             
-        result.append({'total' : Patient.objects.count() })
-        
         jsonp_response = "%s(%s)" % (request.GET.get("callback"), json.dumps(result))
         
         response = HttpResponse(jsonp_response, content_type='application/json')
