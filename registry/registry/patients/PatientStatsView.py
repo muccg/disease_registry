@@ -17,5 +17,7 @@ class PatientStatsView(View):
             
         result.append({'total' : Patient.objects.count() })
         
-        response = HttpResponse(json.dumps(result), content_type='application/javascript')
+        jsonp_response = "%s(%s)" % (request.GET.get("callback"), json.dumps(result))
+        
+        response = HttpResponse(jsonp_response, content_type='application/json')
         return response
