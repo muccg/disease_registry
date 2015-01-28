@@ -65,7 +65,7 @@ setup(name='django-dmdregistry',
         'sure==1.2.1',
         'django-templatetag-handlebars==1.2.0',
         'django-iprestrict==0.2',
-        'django-sql-explorer',
+        'django-sql-explorer==0.5.0',
         'six'
     ],
     dependency_links = [
