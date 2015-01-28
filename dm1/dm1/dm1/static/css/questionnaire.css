@@ -1,0 +1,295 @@
+/*
+#container {
+    margin-top: 5em;
+}
+*/
+#blurb {
+    font-style: italic;
+    margin-bottom: 1em;
+}
+
+#consent-title {
+    text-align: center;
+}
+
+#patient-information {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    padding-left: 0.5em;
+    margin-bottom: 1em;
+    -webkit-margin-after: 1em;
+    background-color: #99FFFF;
+}
+
+#consent h4 {
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 0.1em;
+}
+
+#consent p, #consent div {
+    -webkit-margin-before: 0.1em;
+    -webkit-margin-after: 0.7em;
+    text-align: justify;
+}
+
+p#patient-information-p {
+    -webkit-margin-before: 1em;
+    margin-top: 1em;
+}
+
+#consent #footnotes p, #footnotes h4, #consent ul {
+    -webkit-margin-before: 0.5em;
+    -webkit-margin-after: 0.5em;
+}
+
+form {
+    display: table; /* IE6,7 doesn't understand this */
+    margin-bottom: 1em;
+}
+
+form .row {
+    display: table-row; /* IE6,7 doesn't understand this */
+}
+
+form .row.required label {
+    font-weight: bold;
+}
+
+/*form .cell, form label {*/
+form .cell {
+    display: table-cell;
+    vertical-align: top;
+    padding: 0.6ex 0.6ex;
+}
+
+form label {
+    padding-left: .5em;
+    padding-right: .5em;
+}
+/*
+form label:after {
+    content: ":";
+}
+*/
+form .help-text {
+    font-size: 80%;
+    color: #444; /* FJ was #888 */
+}
+
+form .row.odd {
+    background: #eee;
+}
+
+form .row.error .cell, form .row.error label {
+    padding-top: 0;
+}
+
+form .row.error input, form .row.error select, form .row.error textarea {
+    border: solid 2px #400;
+}
+
+form .row.error-message {
+    border-bottom: none;
+    color: #400;
+    font-style: italic;
+}
+
+form .row.error-message .cell {
+    padding-bottom: 0;
+}
+
+form fieldset {
+    margin-bottom: 1em;
+}
+
+div.patient {
+    margin-bottom: 1em;
+    font-size: 1.1em;
+}
+
+div.patient span.familyname, div.patient span.givennames {
+    font-weight: bold;
+}
+
+div.subform {
+    width: 100%;
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+    border: 1px solid grey;
+}
+div.subform div.label {
+    padding: 3px;
+    background-color: #DDD;
+    border-bottom: 1px solid grey;
+    font-weight: bold;
+}
+div.subform div.content div.row {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+div.requirednote {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    font-size: 0.9em;
+}
+
+div.requirednote span {
+    font-weight: bold;
+}
+
+
+ul.errorlist li {
+    color: #400;
+    font-style: italic;
+}
+
+/*
+form#consent-form {
+    width: 100%;
+}
+*/
+
+table#informed-consent, table#signature {
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+table#signature {
+    border-spacing: 0px;
+}
+
+table#informed-consent caption {
+    background-color: #99FFFF;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding-top: 6px;
+    padding-bottom: 4px;
+    font-weight: bold;
+}
+
+table#informed-consent td {
+    border: solid grey 1px;
+    padding: 5px;
+}
+
+/*
+table#signature td {
+    padding: 0px;
+}
+*/
+table#signature input, table#doctors input {
+    padding-top: 3px;
+    padding-bottom: 2px;
+}
+
+table#informed-consent td.numbered {
+    vertical-align: top;
+}
+
+table#informed-consent label {
+    white-space: nowrap;
+    padding-left: 3px;
+}
+
+table#informed-consent ul, table#signature ul {
+    color: black;
+    background-color: #FF6347;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    padding-left: 7px;
+    padding-right:0;
+    list-style-type: none;
+    padding-bottom: 4px;
+    padding-top: 4px;
+    font-style: italic;
+}
+
+table#informed-consent li, table#signature li {
+    color: black;
+}
+
+table#signature td.fieldlabel {
+    text-align: right;
+}
+
+table#doctors td.fieldlabel {
+    text-align: right;
+    vertical-align: top;
+}
+
+form#consent-form input, form#consent-form textarea {
+    border: solid 1px #BBBBBB;
+}
+
+/* to display the form validation error at the top of the index.html form */
+div#validation-errors {
+    background-color: #FF6347;
+    font-weight: bold;
+    font-size: 1.4em;
+    padding-left: 10px;
+    padding-bottom: 4px;
+    padding-top: 4px;
+}
+
+div.row label {
+    display: block; /* otherwise the second line of the label doesn't have a margin pr padding */
+    text-indent: 0;
+    padding-left: 0.4em;
+}
+
+
+
+    .actionbutton {
+
+        -moz-box-shadow:inset 0px 1px 0px 0px #cf866c;
+        -webkit-box-shadow:inset 0px 1px 0px 0px #cf866c;
+        box-shadow:inset 0px 1px 0px 0px #cf866c;
+
+        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #d0451b), color-stop(1, #bc3315));
+        background:-moz-linear-gradient(top, #d0451b 5%, #bc3315 100%);
+        background:-webkit-linear-gradient(top, #d0451b 5%, #bc3315 100%);
+        background:-o-linear-gradient(top, #d0451b 5%, #bc3315 100%);
+        background:-ms-linear-gradient(top, #d0451b 5%, #bc3315 100%);
+        background:linear-gradient(to bottom, #d0451b 5%, #bc3315 100%);
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#d0451b', endColorstr='#bc3315',GradientType=0);
+
+        background-color:#d0451b;
+
+        -moz-border-radius:3px;
+        -webkit-border-radius:3px;
+        border-radius:3px;
+
+        border:1px solid #942911;
+
+        display:inline-block;
+        color:#ffffff;
+        font-family:arial;
+        font-size:13px;
+        font-weight:normal;
+        padding:6px 24px;
+        text-decoration:none;
+
+        text-shadow:0px 1px 0px #854629;
+
+    }
+    .actionbutton:hover {
+
+        background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #bc3315), color-stop(1, #d0451b));
+        background:-moz-linear-gradient(top, #bc3315 5%, #d0451b 100%);
+        background:-webkit-linear-gradient(top, #bc3315 5%, #d0451b 100%);
+        background:-o-linear-gradient(top, #bc3315 5%, #d0451b 100%);
+        background:-ms-linear-gradient(top, #bc3315 5%, #d0451b 100%);
+        background:linear-gradient(to bottom, #bc3315 5%, #d0451b 100%);
+        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#bc3315', endColorstr='#d0451b',GradientType=0);
+
+        background-color:#bc3315;
+    }
+    .actionbutton:active {
+        position:relative;
+        top:1px;
+    }
+
+/* vim: set nocin ai et ts=4 sw=4: */
