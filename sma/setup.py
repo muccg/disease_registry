@@ -64,7 +64,7 @@ setup(name='django-smaregistry',
         'sure==1.2.1',
         'django-iprestrict==0.2',
         'six',
-        'django-sql-explorer'
+        'django-sql-explorer==0.5.0'
     ],
     dependency_links = [
         'https://bitbucket.org/ccgmurdoch/ccg-django-extras/downloads/ccg-extras-0.1.9.tar.gz',
