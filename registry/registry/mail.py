@@ -1,4 +1,4 @@
-from django.core.mail import send_mail
+from django.core.mail import send_mass_mail
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -17,12 +17,15 @@ def sendNewPatientEmail(recipients, from_email=None):
     template = getNewPatientEmailTemplate()
     groups = template.groups.all()
     to_email = recipients.filter(user__groups__in=groups).distinct().values_list("user__email", flat=True)
-
     subject = '%s: new patient registered' % settings.INSTALL_NAME.upper()
     body = template.body
 
     try:
-        send_mail(subject, body, from_email, to_email, fail_silently = False)
+        mass_email = []
+        for email in to_email:
+            mass_email.append( (subject, body, from_email, [email]) )
+
+        send_mass_mail(mass_email)
     except Exception, e:
         print 'Error sending mail to user: ',to_email , ':', str(e)
 
