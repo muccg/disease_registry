@@ -171,7 +171,7 @@ jslint() {
     make_virtualenv
     pip install 'closure-linter==2.3.13'
     JSFILES="${REGISTRY}/${REGISTRY}/${REGISTRY}/static/js/*.js"
-    EXCLUDES='-x dd/dd/dd/static/js/digitalspaghetti.password.js,dd/dd/dd/static/js/json2.js'
+    EXCLUDES='-x digitalspaghetti.password.js,json2.js'
     for JS in $JSFILES
     do
         gjslint ${EXCLUDES} --disable 0131,0110 --nojsdoc $JS
