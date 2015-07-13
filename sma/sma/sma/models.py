@@ -209,18 +209,15 @@ def signal_patient_post_save(sender, **kwargs):
         patient = kwargs['instance']
         diagnosis, created = Diagnosis.objects.get_or_create(patient=patient)
         logger.debug("Diagnosis record %s" % ("created" if created else "already existed"))
+        if kwargs['created']:
+            wg = diagnosis.patient.working_group
+            recipients = User.objects.filter(working_groups=wg)
+            sendNewPatientEmail(recipients)            
     except Exception, e:
         logger.critical(e)
         logger.critical(traceback.format_exc())
         raise
 
 
-def signal_diagnosis_post_save(sender, **kwargs):
-    diagnosis = kwargs['instance']
-    wg = diagnosis.patient.working_group
-    recipients = User.objects.filter(working_groups=wg)
-    sendNewPatientEmail(recipients)
-
 # connect up django signals
 post_save.connect(signal_patient_post_save, sender=Patient)
-post_save.connect(signal_diagnosis_post_save, sender=Diagnosis)
