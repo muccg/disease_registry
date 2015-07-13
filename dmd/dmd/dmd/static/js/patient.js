@@ -1,5 +1,5 @@
-(function () {
-    var init = function () {
+(function() {
+    var init = function() {
         /* This is pretty ugly, and pretty specific to how Django Admin builds
          * forms. */
 
@@ -30,7 +30,7 @@
             var link = document.createElement("a");
             link.href = "#";
             link.appendChild(document.createTextNode("Copy contact details from patient"));
-            link.onclick = function () {
+            link.onclick = function() {
                 /* An object with the IDs of the elements to copy as the keys
                  * and the IDs to copy to as values. */
                 var copy = {
@@ -68,7 +68,7 @@
     if (window.onload) {
         var onload = window.onload;
 
-        window.onload = function () {
+        window.onload = function() {
             onload();
             init();
         };
