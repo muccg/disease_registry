@@ -26,7 +26,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Prefix: %{_prefix}
 BuildArch: x86_64
 Vendor: Centre for Comparative Genomics <web@ccg.murdoch.edu.au>
-BuildRequires: python-setuptools postgresql94-devel
+BuildRequires: python-setuptools postgresql94-devel python-devel
 Requires: httpd mod_wsgi postgresql94-libs
 
 %description
@@ -66,6 +66,7 @@ echo "build.user=\"$USER\"" >> build-number.txt
 echo "build.host=\"$HOSTNAME\"" >> build-number.txt
 cp build-number.txt %{buildinstalldir}/
 
+export PATH=$PATH:/usr/pgsql-9.4/bin
 export PYTHONPATH=%{buildinstalldir}/lib
 easy_install -O1 --prefix %{buildinstalldir} --install-dir %{buildinstalldir}/lib .
 
