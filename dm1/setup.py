@@ -64,7 +64,8 @@ setup(name='django-dm1registry',
         'sure==1.2.1',
         'django-admin-views',
         'django-iprestrict==0.2',
-        'six'
+        'six',
+        'psycopg2==2.5.5',
     ],
     dependency_links = [
         'https://bitbucket.org/ccgmurdoch/ccg-django-extras/downloads/ccg-extras-0.1.9.tar.gz',

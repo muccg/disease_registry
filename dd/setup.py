@@ -64,7 +64,8 @@ setup(name='django-ddregistry',
         'django-iprestrict==0.2',
         'six',
         'django-reversion==1.7.1',
-        'python-dateutil'
+        'python-dateutil',
+        'psycopg2==2.5.5',
     ],
     dependency_links = [
         'https://bitbucket.org/ccgmurdoch/ccg-django-extras/downloads/ccg-extras-0.1.9.tar.gz',
