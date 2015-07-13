@@ -26,11 +26,11 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Prefix: %{_prefix}
 BuildArch: x86_64
 Vendor: Centre for Comparative Genomics <web@ccg.murdoch.edu.au>
-BuildRequires: python-setuptools postgresql93-devel
-Requires: httpd mod_wsgi postgresql93-libs
+BuildRequires: python-setuptools postgresql94-devel
+Requires: httpd mod_wsgi postgresql94-libs
 
 %description
-Django iVEC Allocation web application
+Django RDRF web application
 
 %prep
 #%setup -n %{name}-%{unmangled_version} -n %{name}-%{unmangled_version}
