@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 
 # break on error
@@ -9,22 +9,26 @@ REGISTRY="$2"
 PARAM="$3"
 
 PROJECT_NAME='disease_registry'
-AWS_BUILD_INSTANCE='aws_old_rpmbuild_centos6'
 AWS_STAGING_INSTANCE='aws-syd-registry-staging'
 TARGET_DIR="/usr/local/src/${PROJECT_NAME}"
 CLOSURE="/usr/local/closure/compiler.jar"
 TESTING_MODULES="pyvirtualdisplay nose selenium"
-MODULES="psycopg2==2.4.6 Werkzeug flake8 ${TESTING_MODULES}"
+MODULES="psycopg2==2.4.6 Werkzeug flake8 docker-compose ${TESTING_MODULES}"
 PIP_OPTS='--download-cache ~/.pip/cache'
 PIP5_OPTS="${PIP_OPTS} --process-dependency-links"
 
 
-function usage() {
-    echo 'Usage ./develop.sh (test|lint|jslint|start|install|clean|purge|pipfreeze|pythonversion|dropdb|loaddata|ci_remote_build|ci_remote_destroy|ci_rpm_publish|ci_staging|ci_staging_selenium|ci_staging_tests) (dd|dmd|dm1|sma|fshd)'
+usage() {
+    echo 'Usage ./develop.sh (test|lint|jslint)'
+    echo '                   (start|install|clean|purge)'
+    echo '                   (pipfreeze|pythonversion)'
+    echo '                   (dropdb|loaddata)'
+    echo '                   (rpmbuild|ci_rpm_publish)'
+    echo '                   (ci_staging|ci_staging_selenium|ci_staging_tests) (dd|dmd|dm1|sma|fshd)'
 }
 
 
-function registry_needed() {
+registry_needed() {
     if ! test ${REGISTRY}; then
         usage
         exit 1
@@ -32,53 +36,40 @@ function registry_needed() {
 }
 
 
-function settings() {
+settings() {
     registry_needed
     export DJANGO_SETTINGS_MODULE="${REGISTRY}.settings"
 }
 
 
 # ssh setup, make sure our ccg commands can run in an automated environment
-function ci_ssh_agent() {
+ci_ssh_agent() {
     ssh-agent > /tmp/agent.env.sh
     source /tmp/agent.env.sh
     ssh-add ~/.ssh/ccg-syd-staging.pem
 }
 
 
-# build RPMs on a remote host from ci environment
-function ci_remote_build() {
-    registry_needed
+# build RPM
+rpmbuild() {
+    mkdir -p data/rpmbuild
+    chmod o+rwx data/rpmbuild
 
-    time ccg ${AWS_BUILD_INSTANCE} puppet
-    time ccg ${AWS_BUILD_INSTANCE} shutdown:50
+    make_virtualenv
 
-    EXCLUDES="('bootstrap'\, '.hg*'\, 'virt*'\, '*.log'\, '*.rpm'\, 'build'\, 'dist'\, '*/build'\, '*/dist')"
-    SSH_OPTS="-o StrictHostKeyChecking\=no"
-    RSYNC_OPTS="-l"
-    time ccg ${AWS_BUILD_INSTANCE} rsync_project:local_dir=./,remote_dir=${TARGET_DIR}/,ssh_opts="${SSH_OPTS}",extra_opts="${RSYNC_OPTS}",exclude="${EXCLUDES}",delete=True
-    time ccg ${AWS_BUILD_INSTANCE} build_rpm:centos/${REGISTRY}/${REGISTRY}.spec,src=${TARGET_DIR}
-
-    mkdir -p build
-    ccg ${AWS_BUILD_INSTANCE} getfile:rpmbuild/RPMS/x86_64/${REGISTRY}*.rpm,build/
+    docker-compose --project-name ${PROJECT_NAME} -f fig-rpmbuild-${REGISTRY}.yml up
 }
 
 
 # publish rpms 
-function ci_rpm_publish() {
+ci_rpm_publish() {
     registry_needed
     time ccg publish_testing_rpm:build/${REGISTRY}*.rpm,release=6
 }
 
 
-# destroy our ci build server
-function ci_remote_destroy() {
-    ccg ${AWS_BUILD_INSTANCE} destroy
-}
-
-
 # puppet up staging which will install the latest rpm for each registry
-function ci_staging() {
+ci_staging() {
     ccg ${AWS_STAGING_INSTANCE} boot
     ccg ${AWS_STAGING_INSTANCE} puppet
     ccg ${AWS_STAGING_INSTANCE} shutdown:120
@@ -86,7 +77,7 @@ function ci_staging() {
 
 
 # staging seleinium test
-function ci_staging_selenium() {
+ci_staging_selenium() {
     ccg ${AWS_STAGING_INSTANCE} dsudo:'dbus-uuidgen --ensure'
     ccg ${AWS_STAGING_INSTANCE} dsudo:'chown apache:apache /var/www'
 
@@ -133,7 +124,7 @@ function ci_staging_selenium() {
 }
 
 # gets the manage.py command for a registry
-function django_admin() {
+django_admin() {
     case $1 in
         dd)
             echo "registrydd"
@@ -145,7 +136,7 @@ function django_admin() {
 }
 
 # run tests on staging
-function ci_staging_tests() {
+ci_staging_tests() {
     registry_needed
 
     # /tmp is used for test results because the apache user has
@@ -169,25 +160,27 @@ function ci_staging_tests() {
 
 
 # lint using flake8
-function lint() {
-    registry_needed
-    virt_${REGISTRY}/bin/flake8 ${REGISTRY} --ignore=E501 --count 
+lint() {
+    make_virtualenv
+    flake8 ${REGISTRY} --ignore=E501 --count 
 }
 
 
 # lint js, assumes closure compiler
-function jslint() {
-    registry_needed
+jslint() {
+    make_virtualenv
+    pip install 'closure-linter==2.3.13'
     JSFILES="${REGISTRY}/${REGISTRY}/${REGISTRY}/static/js/*.js"
+    EXCLUDES='-x dd/dd/dd/static/js/digitalspaghetti.password.js,dd/dd/dd/static/js/json2.js'
     for JS in $JSFILES
     do
-        java -jar ${CLOSURE} --js $JS --js_output_file output.js --warning_level DEFAULT --summary_detail_level 3
+        gjslint ${EXCLUDES} --disable 0131,0110 --nojsdoc $JS
     done
 }
 
 
 # some db commands I use
-function dropdb() {
+dropdb() {
     registry_needed
     # assumes postgres, user registryapp exists, appropriate pg_hba.conf
     echo "Drop the dev database manually:"
@@ -196,7 +189,7 @@ function dropdb() {
 
 
 # run the tests using nose
-function nosetests() {
+nosetests() {
     registry_needed
     source virt_${REGISTRY}/bin/activate
     virt_${REGISTRY}/bin/nosetests --with-xunit --xunit-file=tests.xml -v -w ${REGISTRY}
@@ -204,38 +197,47 @@ function nosetests() {
 
 
 # run the tests using django-admin.py
-function djangotests() {
+djangotests() {
     registry_needed
     source virt_${REGISTRY}/bin/activate
     virt_${REGISTRY}/bin/django-admin.py test ${REGISTRY} --noinput
 }
 
 # nose collect, untested
-function nose_collect() {
+nose_collect() {
     registry_needed
     source virt_${REGISTRY}/bin/activate
     virt_${REGISTRY}/bin/nosetests -v -w ${REGISTRY} --collect-only
 }
 
 
-# install virt for project
-function installapp() {
+make_virtualenv() {
     registry_needed
     # check requirements
-    which virtualenv >/dev/null
+    which virtualenv > /dev/null
+    if [ ! -e virt_${REGISTRY} ]; then
+        virtualenv virt_${REGISTRY}
+    fi
+    . virt_${REGISTRY}/bin/activate
+    which pip
+    pip --version
+    pip install ${MODULES}
+}
 
-    echo "Install ${REGISTRY}"
-    virtualenv virt_${REGISTRY}
-    virt_${REGISTRY}/bin/pip install ${PIP_OPTS} --upgrade 'pip>=1.5,<1.6'
+
+# install virt for project
+installapp() {
+    registry_needed
+    make_virtualenv
+
     pushd ${REGISTRY}
-    ../virt_${REGISTRY}/bin/pip install ${PIP5_OPTS} -e .
+    pip install ${PIP5_OPTS} -e .
     popd
-    virt_${REGISTRY}/bin/pip install ${PIP5_OPTS} ${MODULES}
 }
 
 
 # django syncdb, migrate and collect static
-function syncmigrate() {
+syncmigrate() {
     registry_needed
     echo "syncdb"
     virt_${REGISTRY}/bin/django-admin.py syncdb --noinput --settings=${DJANGO_SETTINGS_MODULE} 1> syncdb-develop.log
@@ -245,14 +247,14 @@ function syncmigrate() {
     virt_${REGISTRY}/bin/django-admin.py collectstatic --noinput --settings=${DJANGO_SETTINGS_MODULE} 1> collectstatic-develop.log
 }
 
-function loaddata() {
+loaddata() {
     registry_needed
     echo "loaddata"
     virt_${REGISTRY}/bin/django-admin.py loaddata ${PARAM} --settings=${DJANGO_SETTINGS_MODULE} 1> loaddata-develop.log
 }
 
 # chooses a tcp port number for the debug server
-function port() {
+port() {
     # this could be an associative array, but they aren't compatible
     # with bash3
     case $1 in
@@ -275,35 +277,35 @@ function port() {
 }
 
 # start runserver
-function startserver() {
+startserver() {
     registry_needed
     virt_${REGISTRY}/bin/django-admin.py runserver_plus 0.0.0.0:$(port ${REGISTRY})
 }
 
 
 # debug for ci
-function pythonversion() {
+pythonversion() {
     registry_needed
     virt_${REGISTRY}/bin/python -V
 }
 
 
 # debug for ci
-function pipfreeze() {
+pipfreeze() {
     registry_needed
     virt_${REGISTRY}/bin/pip freeze
 }
 
 
 # remove pyc
-function clean() {
+clean() {
     registry_needed
     find ${REGISTRY} -name "*.pyc" -exec rm -rf {} \;
 }
 
 
 # clean, delete virts and logs
-function purge() {
+purge() {
     registry_needed
     clean
     rm -rf virt_${REGISTRY}
@@ -312,7 +314,7 @@ function purge() {
 
 
 # tests
-function runtest() {
+runtest() {
     #nosetests
     djangotests
 }
@@ -351,9 +353,8 @@ install)
     settings
     installapp
     ;;
-ci_remote_build)
-    ci_ssh_agent
-    ci_remote_build
+rpmbuild)
+    rpmbuild
     ;;
 ci_remote_destroy)
     ci_ssh_agent
