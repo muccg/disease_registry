@@ -23,15 +23,15 @@ usage() {
     echo '                   (start|install|clean|purge)'
     echo '                   (pipfreeze|pythonversion)'
     echo '                   (dropdb|loaddata)'
-    echo '                   (rpmbuild|ci_rpm_publish)'
+    echo '                   (rpmbuild|rpm_publish)'
     echo '                   (ci_staging|ci_staging_selenium|ci_staging_tests) (dd|dmd|dm1|sma|fshd)'
+    exit 1
 }
 
 
 registry_needed() {
     if ! test ${REGISTRY}; then
         usage
-        exit 1
     fi
 }
 
@@ -62,9 +62,9 @@ rpmbuild() {
 
 
 # publish rpms 
-ci_rpm_publish() {
+rpm_publish() {
     registry_needed
-    time ccg publish_testing_rpm:build/${REGISTRY}*.rpm,release=6
+    time ccg publish_testing_rpm:data/rpmbuild/RPMS/x86_64/${REGISTRY}*.rpm,release=6
 }
 
 
@@ -360,9 +360,9 @@ ci_remote_destroy)
     ci_ssh_agent
     ci_remote_destroy
     ;;
-ci_rpm_publish)
+rpm_publish)
     ci_ssh_agent
-    ci_rpm_publish
+    rpm_publish
     ;;
 ci_staging)
     ci_ssh_agent
