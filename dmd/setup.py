@@ -65,7 +65,8 @@ setup(name='django-dmdregistry',
         'django-templatetag-handlebars==1.2.0',
         'django-iprestrict==0.2',
         'django-sql-explorer==0.5.0',
-        'six'
+        'six',
+        'psycopg2==2.5.5',
     ],
     dependency_links = [
         'https://bitbucket.org/ccgmurdoch/ccg-django-extras/downloads/ccg-extras-0.1.9.tar.gz',

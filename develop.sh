@@ -13,7 +13,7 @@ AWS_STAGING_INSTANCE='aws-syd-registry-staging'
 TARGET_DIR="/usr/local/src/${PROJECT_NAME}"
 CLOSURE="/usr/local/closure/compiler.jar"
 TESTING_MODULES="pyvirtualdisplay nose selenium"
-MODULES="psycopg2==2.4.6 Werkzeug flake8 docker-compose ${TESTING_MODULES}"
+MODULES="Werkzeug flake8 docker-compose ${TESTING_MODULES}"
 PIP_OPTS='--download-cache ~/.pip/cache'
 PIP5_OPTS="${PIP_OPTS} --process-dependency-links"
 
