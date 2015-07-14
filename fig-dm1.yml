@@ -1,0 +1,34 @@
+# data only container pattern
+data:
+  image: muccg/debian8-base:latest
+  volumes:
+    - .:/app
+    - data/dev:/data
+
+db:
+  image: postgres:9.4
+  environment:
+    - POSTGRES_USER=registryapp
+    - POSTGRES_PASSWORD=registryapp
+  ports:
+    - ":5432"
+
+cache:
+  image: memcached:1.4
+
+dm1web:
+  build: .
+  dockerfile: Dockerfile-dm1
+  command: runserver
+  environment:
+    - DJANGO_SETTINGS_MODULE=dm1.settings
+    - DBUSER=registryapp
+    - WAIT_FOR_DB=1
+    - WAIT_FOR_CACHE=1
+  volumes_from:
+    - data
+  ports:
+    - "8000:8000"
+  links:
+    - db
+    - cache
