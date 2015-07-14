@@ -230,22 +230,9 @@ installapp() {
     registry_needed
     make_virtualenv
 
-    pushd ${REGISTRY}
-    pip install ${PIP5_OPTS} -e .
-    popd
+    docker-compose -f fig-${REGISTRY}.yml build
 }
 
-
-# django syncdb, migrate and collect static
-syncmigrate() {
-    registry_needed
-    echo "syncdb"
-    virt_${REGISTRY}/bin/django-admin.py syncdb --noinput --settings=${DJANGO_SETTINGS_MODULE} 1> syncdb-develop.log
-    echo "migrate"
-    virt_${REGISTRY}/bin/django-admin.py migrate --settings=${DJANGO_SETTINGS_MODULE} 1> migrate-develop.log
-    echo "collectstatic"
-    virt_${REGISTRY}/bin/django-admin.py collectstatic --noinput --settings=${DJANGO_SETTINGS_MODULE} 1> collectstatic-develop.log
-}
 
 loaddata() {
     registry_needed
@@ -279,7 +266,9 @@ port() {
 # start runserver
 startserver() {
     registry_needed
-    virt_${REGISTRY}/bin/django-admin.py runserver_plus 0.0.0.0:$(port ${REGISTRY})
+    make_virtualenv
+
+    docker-compose -f fig-${REGISTRY}.yml up
 }
 
 
