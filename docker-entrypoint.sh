@@ -83,8 +83,6 @@ wait_for_services
 if [ "$1" = 'runserver' ]; then
     echo "[Run] Starting runserver"
 
-    celery_defaults
-
     : ${RUNSERVER_OPTS="runserver_plus 0.0.0.0:${WEBPORT} --settings=${DJANGO_SETTINGS_MODULE}"}
     echo "RUNSERVER_OPTS is ${RUNSERVER_OPTS}"
 
