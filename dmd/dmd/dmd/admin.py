@@ -79,8 +79,11 @@ class DiagnosisAdmin(AdminViews, reversion.VersionAdmin):
     from explorer.models import Query
     try:
         nmd_link = Query.objects.filter(title__icontains="NMD").order_by("title")
-        nmd_au_link = 'explorer/%s/download?params={%%22jurisdiction%%22:%%22Western%%20Australia%%22}' % nmd_link[0].id
-        nmd_nz_link = 'explorer/%s/download?params={%%22jurisdiction%%22:%%22New%%20Zealand%%22}' % nmd_link[0].id
+        nmd_au_link = ""
+        nmd_nz_link = ""
+        if nmd_link:
+            nmd_au_link = 'explorer/%s/download?params={%%22jurisdiction%%22:%%22Western%%20Australia%%22}' % nmd_link[0].id
+            nmd_nz_link = 'explorer/%s/download?params={%%22jurisdiction%%22:%%22New%%20Zealand%%22}' % nmd_link[0].id
     except Query.DoesNotExist:
         nmd_au_link = ''
         nmd_nz_link = ''
