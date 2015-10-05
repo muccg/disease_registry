@@ -1,0 +1,163 @@
+[
+    {
+        "dmd.diagnosis": [
+            "id", 
+            "patient_id", 
+            "diagnosis", 
+            "muscle_biopsy", 
+            "created", 
+            "updated"
+        ]
+    }, 
+    {
+        "dmd.motorfunction": [
+            "id", 
+            "diagnosis_id", 
+            "walk", 
+            "sit", 
+            "wheelchair_use", 
+            "wheelchair_usage_age"
+        ]
+    }, 
+    {
+        "dmd.steroids": [
+            "id", 
+            "diagnosis_id", 
+            "current", 
+            "previous"
+        ]
+    }, 
+    {
+        "dmd.surgery": [
+            "id", 
+            "diagnosis_id", 
+            "surgery"
+        ]
+    }, 
+    {
+        "dmd.heart": [
+            "id", 
+            "diagnosis_id", 
+            "current", 
+            "failure", 
+            "lvef", 
+            "lvef_date"
+        ]
+    }, 
+    {
+        "dmd.heartmedication": [
+            "id", 
+            "diagnosis_id", 
+            "drug", 
+            "status"
+        ]
+    }, 
+    {
+        "dmd.respiratory": [
+            "id", 
+            "diagnosis_id", 
+            "non_invasive_ventilation", 
+            "invasive_ventilation", 
+            "fvc", 
+            "fvc_date"
+        ]
+    }, 
+    {
+        "dmd.clinicaltrials": [
+            "id", 
+            "diagnosis_id", 
+            "drug_name", 
+            "trial_name", 
+            "trial_sponsor", 
+            "trial_phase"
+        ]
+    }, 
+    {
+        "dmd.otherregistries": [
+            "id", 
+            "diagnosis_id", 
+            "registry"
+        ]
+    }, 
+    {
+        "dmd.familymember": [
+            "id", 
+            "diagnosis_id", 
+            "registry_patient_id", 
+            "sex", 
+            "relationship", 
+            "family_member_diagnosis"
+        ]
+    }, 
+    {
+        "dmd.notes": [
+            "id", 
+            "diagnosis_id", 
+            "notes"
+        ]
+    }, 
+    {
+        "genetic.gene": [
+            "id", 
+            "symbol", 
+            "hgnc_id", 
+            "name", 
+            "status", 
+            "chromosome", 
+            "accession_numbers", 
+            "refseq_id"
+        ]
+    }, 
+    {
+        "genetic.moleculardata": [
+            "patient_id"
+        ]
+    }, 
+    {
+        "genetic.moleculardatasma": [
+            "patient_id"
+        ]
+    }, 
+    {
+        "genetic.variation": [
+            "id", 
+            "molecular_data_id", 
+            "gene_id", 
+            "exon", 
+            "exon_validation_override", 
+            "dna_variation", 
+            "dna_variation_validation_override", 
+            "rna_variation", 
+            "rna_variation_validation_override", 
+            "protein_variation", 
+            "protein_variation_validation_override", 
+            "technique", 
+            "deletion_all_exons_tested", 
+            "duplication_all_exons_tested", 
+            "exon_boundaries_known", 
+            "point_mutation_all_exons_sequenced", 
+            "all_exons_in_male_relative"
+        ]
+    }, 
+    {
+        "genetic.variationsma": [
+            "id", 
+            "molecular_data_id", 
+            "gene_id", 
+            "technique", 
+            "exon_7_smn1_deletion", 
+            "exon_7_sequencing", 
+            "dna_variation"
+        ]
+    }, 
+    {
+        "genetic.laboratory": [
+            "id", 
+            "name", 
+            "address", 
+            "contact_name", 
+            "contact_email", 
+            "contact_phone"
+        ]
+    }
+]

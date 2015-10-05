@@ -10,6 +10,7 @@ db:
   environment:
     - POSTGRES_USER=registryapp
     - POSTGRES_PASSWORD=registryapp
+    - POSTGRES_DB=sma
   ports:
     - ":5432"
 
