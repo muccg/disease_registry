@@ -32,7 +32,7 @@ DATABASES = {
         'USER': 'registryapp',
         'NAME': 'sma',
         'PASSWORD': 'registryapp',
-        'HOST': '',
+        'HOST': 'db',
         'PORT': '',
     }
 }
