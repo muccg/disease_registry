@@ -1,6 +1,8 @@
 from django.conf.urls import *
 from django.contrib import admin
 
+from PatientStatsView import PatientStatsView
+
 urlpatterns = patterns('',
-    #(r'^admin/', include(admin.site.urls), {}),
+    (r'^stats$', PatientStatsView.as_view())
 )

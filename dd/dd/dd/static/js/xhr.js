@@ -2,7 +2,7 @@
  * for most browsers these days that just means instantiating the object, but
  * older IE versions require a little more magic. */
 var XHR = {
-    create: function () {
+    create: function() {
         if (typeof XMLHttpRequest == "undefined") {
             try {
                 return new ActiveXObject("Msxml2.XMLHTTP.6.0");
@@ -41,7 +41,7 @@ function getCookie(name) {
         }
     }
     return cookieValue;
-};
+}
 
 function sameOrigin(url) {
     // url could be relative or scheme relative or absolute
@@ -64,7 +64,7 @@ function safeMethod(method) {
 //The name of the cookie that will be set for CSRF should have been
 //set as a global JS var called CSRF_COOKIE_NAME, otherwise you can pass it in
 //yourself as settings.csrfname
-function prepare_xhr(xhr, settings){
+function prepare_xhr(xhr, settings) {
     var method = settings.method;
     var url = settings.url;
     var cookiename = typeof(settings.csrfname) == "undefined" ? CSRF_COOKIE_NAME : settings.csrfname;

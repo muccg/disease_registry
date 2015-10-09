@@ -11,7 +11,6 @@ urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)),
     (r'', include("dmd.dmd.urls")),
     (r'', include(common_urls, namespace="registry")),
-    (r'^qbe/', include('django_qbe.urls')),
     (r'^iprestrict/', include('iprestrict.urls')),
     (r'^explorer/', include('explorer.urls')),
 )
