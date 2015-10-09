@@ -8,8 +8,8 @@ for package in ['sma']:
     data_files['sma.' + package] = []
     os.chdir(os.path.join('sma', package))
     for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'features', 'templatetags', 'management'):
-	    data_files['sma.' + package].extend(
-	        [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files])
+        data_files['sma.' + package].extend(
+            [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files])
     os.chdir('../..')
 
 # Include common disease registry modules from registry sibling directory
@@ -45,29 +45,32 @@ setup(name='django-smaregistry',
     package_data=data_files,
     zip_safe=False,
     install_requires=[
-        'Django==1.5.4',
+        'Django==1.5.12',
         'django-picklefield==0.1.9',
         'django-templatetag-sugar==0.1',
         'pyparsing==1.5.6',
         'wsgiref==0.1.2',
         'python-memcached==1.48',
-        'South==0.8.2',
+        'South==0.8.4',
         'django-extensions>=0.7.1',
         'django-messages-ui==0.2.6',
-        'ccg-auth==0.3.2',
-        'ccg-extras==0.1.6',
-        'django-userlog==0.2.1',
-        'django_qbe',
+        'ccg-auth==0.3.3',
+        'ccg-extras==0.1.9',
+        'django-userlog==2.0.0',
         'django_nose',
-        'django-admin-views',
-        'django-reversion',
+        'django-admin-views==0.1.4',
+        'django-reversion==1.8.0',
         'sure==1.2.1',
         'django-iprestrict==0.2',
-	'django-sql-explorer'
+        'six',
+        'django-sql-explorer==0.5.0',
+        'psycopg2==2.5.5',
+        "Werkzeug"
     ],
     dependency_links = [
-        "http://repo.ccgapps.com.au",
-        "https://bitbucket.org/ccgmurdoch/django-userlog/downloads/django_userlog-0.2.1.tar.gz",
-        "https://bitbucket.org/ccgmurdoch/ccg-django-extras/downloads/django-iprestrict-0.2.tar.gz"
+        'https://bitbucket.org/ccgmurdoch/ccg-django-extras/downloads/ccg-extras-0.1.9.tar.gz',
+        'https://bitbucket.org/ccgmurdoch/ccg-django-extras/downloads/ccg-auth-0.3.3.tar.gz',
+        'https://github.com/muccg/django-userlog/archive/2.0.0.tar.gz#egg=django-userlog-2.0.0',
+        'https://bitbucket.org/ccgmurdoch/ccg-django-extras/downloads/django-iprestrict-0.2.tar.gz'
     ],
 )

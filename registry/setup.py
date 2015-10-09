@@ -8,8 +8,8 @@ for package in ('common', 'patients', 'genetic', 'groups', 'humangenome', 'confi
     data_files['registry.' + package] = []
     os.chdir(os.path.join('registry', package))
     for data_dir in ('templates', 'static', 'migrations', 'fixtures', 'templatetags', 'features', 'management'):
-	   data_files['registry.' + package].extend(
-	       [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files])
+       data_files['registry.' + package].extend(
+           [os.path.join(subdir,f) for (subdir, dirs, files) in os.walk(data_dir) for f in files])
     os.chdir(start_dir)
 
 # Include common disease registry modules from registry sibling directory
@@ -45,7 +45,7 @@ setup(name='django-diseaseregistry',
     package_data=data_files,
     zip_safe=False,
     install_requires=[
-        'South>=0.7.3',
+        'South==0.8.4',
         'django-messages-ui>=0.1.0'
     ],
 )

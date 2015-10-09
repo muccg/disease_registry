@@ -32,7 +32,7 @@ DATABASES = {
         'USER': 'registryapp',
         'NAME': 'sma',
         'PASSWORD': 'registryapp',
-        'HOST': '',
+        'HOST': 'db',
         'PORT': '',
     }
 }
@@ -45,7 +45,7 @@ TEMPLATE_LOADERS = [
 # see: https://docs.djangoproject.com/en/dev/ref/settings/#middleware-classes
 MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
-    'iprestrict.middleware.IPRestrictMiddleware',
+#    'iprestrict.middleware.IPRestrictMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -71,8 +71,6 @@ INSTALLED_APPS = [
     'registry.genetic',
     'registry.common',
     'registry.configuration',
-    'django_qbe',
-    'django_qbe.savedqueries',
     'sma.sma',
     'django.contrib.admin',
     'admin_views',
@@ -237,6 +235,9 @@ LOGGING = {
 ################################################################################
 
 EXPLORER_SQL_WHITELIST = ('UPDATE',)
+
+EXPLORER_PERMISSION_VIEW = lambda u: u.is_superuser
+EXPLORER_PERMISSION_CHANGE = lambda u: u.is_superuser
 
 ALLOWED_HOSTS = [
     'localhost'

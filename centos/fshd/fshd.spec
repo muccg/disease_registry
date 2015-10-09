@@ -1,6 +1,6 @@
 %define name fshd
-%define version 1.7.2
-%define unmangled_version 1.7.2
+%define version 1.8.4
+%define unmangled_version 1.8.4
 %define release 1
 %define webapps /usr/local/webapps
 %define installdir %{webapps}/%{name}
@@ -26,11 +26,11 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Prefix: %{_prefix}
 BuildArch: x86_64
 Vendor: Centre for Comparative Genomics <web@ccg.murdoch.edu.au>
-BuildRequires: python-setuptools postgresql93-devel
-Requires: httpd mod_wsgi postgresql93-libs
+BuildRequires: python-setuptools postgresql94-devel python-devel
+Requires: httpd mod_wsgi postgresql94-libs
 
 %description
-Django iVEC Allocation web application
+Django RDRF web application
 
 %prep
 #%setup -n %{name}-%{unmangled_version} -n %{name}-%{unmangled_version}
@@ -66,6 +66,7 @@ echo "build.user=\"$USER\"" >> build-number.txt
 echo "build.host=\"$HOSTNAME\"" >> build-number.txt
 cp build-number.txt %{buildinstalldir}/
 
+export PATH=$PATH:/usr/pgsql-9.4/bin
 export PYTHONPATH=%{buildinstalldir}/lib
 easy_install -O1 --prefix %{buildinstalldir} --install-dir %{buildinstalldir}/lib .
 

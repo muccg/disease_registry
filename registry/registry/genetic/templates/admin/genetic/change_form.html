@@ -1,6 +1,8 @@
 {% extends "admin/change_form.html" %}
 
 {% load overrides %}
+{% load static %}
+
 {% block extrahead %}
 {{ block.super }}
 
@@ -31,4 +33,11 @@ var ValidationOverrides = {
 var CSRF_COOKIE_NAME = "{{ CSRF_COOKIE_NAME }}"
 
 </script>
+{% endblock %}
+
+{% block content %}
+    <p style="background: #b0f6a0; padding: 5px; border: 1px solid grey;">
+        Please read the guidelines before proceeding with the form. The guidelines are available from <a href="{% static 'DMD_Molecular_Data_Entry_Guidelines.docx' %}">here</a>.
+    </p>
+    {{ block.super }}
 {% endblock %}
