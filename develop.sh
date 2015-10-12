@@ -8,6 +8,7 @@ ACTION="$1"
 REGISTRY="$2"
 PARAM="$3"
 
+DATE=`date +%Y.%m.%d`
 PROJECT_NAME='disease_registry'
 AWS_STAGING_INSTANCE='aws-syd-registry-staging'
 TARGET_DIR="/usr/local/src/${PROJECT_NAME}"
@@ -24,6 +25,7 @@ usage() {
     echo '                   (pipfreeze|pythonversion)'
     echo '                   (dropdb|loaddata)'
     echo '                   (rpmbuild|rpm_publish)'
+    echo '                   (dockerbuild)'
     echo '                   (ci_staging|ci_staging_selenium|ci_staging_tests) (dd|dmd|dm1|sma|fshd)'
     exit 1
 }
@@ -47,6 +49,38 @@ ci_ssh_agent() {
     ssh-agent > /tmp/agent.env.sh
     source /tmp/agent.env.sh
     ssh-add ~/.ssh/ccg-syd-staging-2014.pem
+}
+
+
+# docker build and push in CI
+dockerbuild() {
+    make_virtualenv
+
+    image="muccg/${PROJECT_NAME}:${REGISTRY}"
+    hgtag=`hg log -r "." --template "{latesttag}\n" 2> /dev/null`
+    template="$(cat docker/Dockerfile.in)"
+
+    # log the Dockerfile
+    echo "########################################"
+    sed -e "s/TAG/${hgtag}/g" docker/Dockerfile.in
+    echo "########################################"
+
+    # attempt to warm up docker cache
+    docker pull ${image} || true
+
+    sed -e "s/TAG/${hgtag}/g" -e "s/REGISTRY/${REGISTRY}/g" docker/Dockerfile.in | docker build --pull=true -t ${image} -
+    sed -e "s/TAG/${hgtag}/g" -e "s/REGISTRY/${REGISTRY}/g" docker/Dockerfile.in | docker build -t ${image}-${DATE} -
+
+    if [ -z ${hgtag+x} ]; then
+        echo "No tag set"
+    else
+        echo "hg tag ${hgtag}"
+        sed -e "s/TAG/${hgtag}/g" -e "s/REGISTRY/${REGISTRY}/g" docker/Dockerfile.in | docker build -t ${image}-${hgtag} -
+        #docker push ${image}:${hgtag}
+    fi
+
+    #docker push ${image}
+    #docker push ${image}-${DATE}
 }
 
 
@@ -341,6 +375,9 @@ start)
 install)
     settings
     installapp
+    ;;
+dockerbuild)
+    dockerbuild
     ;;
 rpmbuild)
     rpmbuild

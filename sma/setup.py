@@ -65,7 +65,10 @@ setup(name='django-smaregistry',
         'six',
         'django-sql-explorer==0.5.0',
         'psycopg2==2.5.5',
-        "Werkzeug"
+        'Werkzeug',
+        'pyinotify==0.9.4',
+        'uwsgi==2.0.8',
+        'uwsgitop',
     ],
     dependency_links = [
         'https://bitbucket.org/ccgmurdoch/ccg-django-extras/downloads/ccg-extras-0.1.9.tar.gz',
