@@ -1,0 +1,14 @@
+[
+{
+    "pk": 1, 
+    "model": "genetic.variationsma", 
+    "fields": {
+        "exon_7_smn1_deletion": 1, 
+        "exon_7_sequencing": true, 
+        "technique": "MLPA", 
+        "molecular_data": 4, 
+        "dna_variation": "ded", 
+        "gene": 19
+    }
+}
+]

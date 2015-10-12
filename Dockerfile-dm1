@@ -1,0 +1,39 @@
+#
+FROM muccg/python-base:ubuntu14.04-2.7
+MAINTAINER https://bitbucket.org/ccgmurdoch/disease_registry/
+
+ENV DEBIAN_FRONTEND noninteractive
+
+# Project specific deps
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  libpcre3 \
+  libpcre3-dev \
+  libpq-dev \
+  libssl-dev \
+  libxml2-dev \
+  libxslt1-dev \
+  libssl-dev \
+  libsasl2-dev \
+  libyaml-dev \
+  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN env --unset=DEBIAN_FRONTEND
+
+# install python deps
+WORKDIR /app
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+# Copy code and install the app itself
+COPY . /app
+RUN pip install --process-dependency-links -e dm1
+
+EXPOSE 8000 9000 9001 9100 9101
+VOLUME ["/app", "/data"]
+
+ENV HOME /data
+WORKDIR /data
+
+# entrypoint shell script that by default starts runserver
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["runserver"]

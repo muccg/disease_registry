@@ -1,0 +1,58 @@
+WSGISocketPrefix run/wsgi
+WSGIDaemonProcess dd processes=2 threads=15 display-name=%{GROUP}
+
+<VirtualHost *:80>
+  DocumentRoot /var/www/html
+  ServerName localhost.localdomain
+  ErrorLog logs/dd.error_log
+  CustomLog logs/dd.access_log combined
+  RewriteLogLevel 3
+  RewriteLog logs/dd.rewrite_log
+
+  <Directory "/var/www/html">
+    Options Indexes FollowSymLinks
+    AllowOverride All
+    Order allow,deny
+    Allow from all
+  </Directory>
+
+  <Location /dd>
+    WSGIProcessGroup dd
+  </Location>
+
+  Alias /dd/static /usr/local/webapps/dd/static
+  Alias /dd/images /usr/local/webapps/dd/static/images
+  WSGIScriptAlias /dd /usr/local/webapps/dd/django.wsgi
+</VirtualHost>
+
+<VirtualHost *:443>
+  DocumentRoot /var/www/html
+  ServerName localhost.localdomain:443
+  ErrorLog logs/dd.ssl_error_log
+  TransferLog logs/dd.ssl_access_log
+  
+  SSLEngine on
+
+  # From other config
+  #SSLProtocol all -SSLv2
+  #SSLCipherSuite ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:+MEDIUM:+LOW
+
+  SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL
+  SSLCertificateFile /etc/pki/tls/certs/localhost.crt
+  SSLCertificateKeyFile /etc/pki/tls/private/localhost.key
+
+  SetEnvIf User-Agent ".*MSIE.*" \
+         nokeepalive ssl-unclean-shutdown \
+         downgrade-1.0 force-response-1.0
+
+  CustomLog /etc/httpd/logs/ssl_request_log \
+          "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
+
+  <Location /dd>
+    WSGIProcessGroup dd
+  </Location>
+
+  Alias /dd/static /usr/local/webapps/dd/static
+  Alias /dd/images /usr/local/webapps/dd/static/images
+  WSGIScriptAlias /dd /usr/local/webapps/dd/django.wsgi
+</VirtualHost>
