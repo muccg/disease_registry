@@ -26,7 +26,7 @@ usage() {
     echo '                   (dropdb|loaddata)'
     echo '                   (rpmbuild|rpm_publish)'
     echo '                   (dockerbuild)'
-    echo '                   (ci_staging|ci_staging_selenium|ci_staging_tests) (dd|dmd|dm1|sma|fshd)'
+    echo '                   (ci_staging|ci_staging_selenium|ci_staging_tests) (dd|dmd|sma|fshd)'
     exit 1
 }
 
@@ -62,7 +62,7 @@ dockerbuild() {
 
     # log the Dockerfile
     echo "########################################"
-    sed -e "s/TAG/${hgtag}/g" docker/Dockerfile.in
+    sed -e "s/TAG/${hgtag}/g" -e "s/REGISTRY/${REGISTRY}/g" docker/Dockerfile.in
     echo "########################################"
 
     # attempt to warm up docker cache
@@ -116,7 +116,6 @@ ci_staging_selenium() {
     ccg ${AWS_STAGING_INSTANCE} dsudo:'chown apache:apache /var/www'
 
 
-#    ccg ${AWS_STAGING_INSTANCE} dsudo:'yum remove dmd dd dm1 sma fshd -y'
     ccg ${AWS_STAGING_INSTANCE} dsudo:'yum remove dmd sma -y'
     ccg ${AWS_STAGING_INSTANCE} dsudo:'yum --enablerepo\=ccg-testing clean all'
 
@@ -136,24 +135,6 @@ ci_staging_selenium() {
     ccg ${AWS_STAGING_INSTANCE} dsudo:'yum remove sma -y'
     ccg ${AWS_STAGING_INSTANCE} dsudo:'rm /tmp/sma_site_url'
     
-#    ccg ${AWS_STAGING_INSTANCE} dsudo:'yum install dm1 -y'
-#    ccg ${AWS_STAGING_INSTANCE} dsudo:'killall httpd || true'
-#    ccg ${AWS_STAGING_INSTANCE} dsudo:'service httpd start'
-#    ccg ${AWS_STAGING_INSTANCE} dsudo:'echo http://localhost/dm1 > /tmp/dm1_site_url'
-#    ccg ${AWS_STAGING_INSTANCE} dsudo:'dm1 run_lettuce --app-name dm1 --with-xunit --xunit-file\=/tmp/tests-dm1.xml || true'
-#    ccg ${AWS_STAGING_INSTANCE} dsudo:'yum remove dm1 -y'
-#    ccg ${AWS_STAGING_INSTANCE} dsudo:'rm /tmp/dm1_site_url'
-    
-#    ccg ${AWS_STAGING_INSTANCE} dsudo:'yum install dd -y'
-#    ccg ${AWS_STAGING_INSTANCE} dsudo:'killall httpd || true'
-#    ccg ${AWS_STAGING_INSTANCE} dsudo:'service httpd start'
-#    ccg ${AWS_STAGING_INSTANCE} dsudo:'echo http://localhost/dd > /tmp/dd_site_url'
-#    ccg ${AWS_STAGING_INSTANCE} dsudo:'registrydd run_lettuce --app-name dd --with-xunit --xunit-file\=/tmp/tests-dd.xml || true'
-#    ccg ${AWS_STAGING_INSTANCE} dsudo:'rm /tmp/dd_site_url'
-
-#    ccg ${AWS_STAGING_INSTANCE} getfile:/tmp/tests-dmd.xml,./
-#    ccg ${AWS_STAGING_INSTANCE} getfile:/tmp/tests-sma.xml,./
-    ccg ${AWS_STAGING_INSTANCE} getfile:/tmp/tests-dm1.xml,./
     ccg ${AWS_STAGING_INSTANCE} getfile:/tmp/tests-dd.xml,./
 }
 
@@ -284,9 +265,6 @@ port() {
             ;;
         sma)
             echo "8002"
-            ;;
-        dm1)
-            echo "8003"
             ;;
         dd)
             echo "8004"

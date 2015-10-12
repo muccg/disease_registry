@@ -73,10 +73,7 @@ class Parent(models.Model):
         return '%s %s of %s' % (self.parent_given_names, self.parent_family_name, self.parent_place_of_birth)
 
 class Patient(models.Model):
-    if settings.INSTALL_NAME == 'dm1':   # Trac #16 item 9
-        SEX_CHOICES = ( ("M", "Male"), ("F", "Female") )
-    else:
-        SEX_CHOICES = ( ("M", "Male"), ("F", "Female"), ("X", "Other/Intersex") )
+    SEX_CHOICES = ( ("M", "Male"), ("F", "Female"), ("X", "Other/Intersex") )
 
     working_group = models.ForeignKey(registry.groups.models.WorkingGroup, null=False, blank=False)
     consent = models.BooleanField(null=False, blank=False, help_text="Consent must be given for the patient to be entered on the registry", verbose_name="consent given")
