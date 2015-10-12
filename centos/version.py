@@ -1,7 +1,7 @@
 import sys
 import os
 
-apps = ['dd', 'dm1', 'dmd', 'fshd', 'sma']
+apps = ['dd', 'dmd', 'fshd', 'sma']
 
 if len(sys.argv) <> 3:
     print "version.py <old_version> <new_version>"
