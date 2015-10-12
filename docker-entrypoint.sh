@@ -56,7 +56,7 @@ function django_defaults {
     : ${STATIC_ROOT="/data/static"}
     : ${MEDIA_ROOT="/data/static/media"}
     : ${LOG_DIRECTORY="/data/log"}
-    : ${DJANGO_SETTINGS_MODULE="django.settings"}
+    : ${DJANGO_SETTINGS_MODULE="${APP}.settings"}
 
     echo "DEPLOYMENT is ${DEPLOYMENT}"
     echo "PRODUCTION is ${PRODUCTION}"
@@ -79,6 +79,21 @@ defaults
 django_defaults
 wait_for_services
 
+# uwsgi entrypoint
+if [ "$1" = 'uwsgi' ]; then
+    echo "[Run] Starting uwsgi"
+
+    : ${UWSGI_OPTS="/app/uwsgi/docker.ini"}
+    echo "UWSGI_OPTS is ${UWSGI_OPTS}"
+
+    django-admin.py collectstatic --noinput --settings=${DJANGO_SETTINGS_MODULE} 2>&1 | tee /data/uwsgi-collectstatic.log
+    django-admin.py syncdb  --settings=${DJANGO_SETTINGS_MODULE} 2>&1 | tee /data/uwsgi-syncdb.log
+    django-admin.py migrate  --settings=${DJANGO_SETTINGS_MODULE} 2>&1 | tee /data/uwsgi-migrate.log
+
+    uwsgi --ini ${UWSGI_OPTS} 2>&1 | tee /data/uwsgi.log
+    exit $?
+fi
+
 # runserver entrypoint
 if [ "$1" = 'runserver' ]; then
     echo "[Run] Starting runserver"
@@ -93,7 +108,9 @@ if [ "$1" = 'runserver' ]; then
     exit $?
 fi
 
-echo "[RUN]: Builtin command not provided [runserver]"
+
+
+echo "[RUN]: Builtin command not provided [uwsgi|runserver]"
 echo "[RUN]: $@"
 
 exec "$@"
