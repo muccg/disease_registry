@@ -56,7 +56,7 @@ ci_ssh_agent() {
 dockerbuild() {
     make_virtualenv
 
-    image="muccg/${PROJECT_NAME}:${REGISTRY}"
+    image="muccg/disease-registry:${REGISTRY}"
     hgtag=`hg log -r "." --template "{latesttag}\n" 2> /dev/null`
     template="$(cat docker/Dockerfile.in)"
 
@@ -76,11 +76,11 @@ dockerbuild() {
     else
         echo "hg tag ${hgtag}"
         sed -e "s/TAG/${hgtag}/g" -e "s/REGISTRY/${REGISTRY}/g" docker/Dockerfile.in | docker build -t ${image}-${hgtag} -
-        #docker push ${image}:${hgtag}
+        docker push ${image}:${hgtag}
     fi
 
-    #docker push ${image}
-    #docker push ${image}-${DATE}
+    docker push ${image}
+    docker push ${image}-${DATE}
 }
 
 
