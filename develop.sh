@@ -76,7 +76,7 @@ dockerbuild() {
     else
         echo "hg tag ${hgtag}"
         sed -e "s/TAG/${hgtag}/g" -e "s/REGISTRY/${REGISTRY}/g" docker/Dockerfile.in | docker build -t ${image}-${hgtag} -
-        docker push ${image}:${hgtag}
+        docker push ${image}-${hgtag}
     fi
 
     docker push ${image}
