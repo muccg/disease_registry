@@ -24,6 +24,8 @@ smaweb:
   environment:
     - DJANGO_SETTINGS_MODULE=sma.settings
     - DBUSER=registryapp
+    - DBNAME=sma
+    - INSTALLED_APPS=sma.sma
     - WAIT_FOR_DB=1
     - WAIT_FOR_CACHE=1
   volumes_from:
