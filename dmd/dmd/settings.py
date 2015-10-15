@@ -15,6 +15,7 @@ WEBAPP_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # General site config
 PRODUCTION = env.get("production", False)
 DEBUG = env.get("debug", not PRODUCTION)
+TEMPLATE_DEBUG = DEBUG
 DEV_SERVER = env.get("dev_server", not PRODUCTION)
 SITE_ID = 1
 APPEND_SLASH = env.get("append_slash", True)
@@ -114,7 +115,12 @@ STATIC_SERVER_PATH = os.path.join(WEBAPP_ROOT, "static")
 
 # a directory that will be writable by the webserver, for storing various files...
 WRITABLE_DIRECTORY = env.get("writable_directory", "/tmp")
-TEMPLATE_DEBUG = DEBUG
+try:
+    if not os.path.exists(WRITABLE_DIRECTORY):
+        os.mkdir(WRITABLE_DIRECTORY)
+except:
+    pass
+os.path.exists(WRITABLE_DIRECTORY), "No writable directory, please create one: %s" % WRITABLE_DIRECTORY
 
 # session and cookies
 SESSION_COOKIE_AGE = env.get("session_cookie_age", 60 * 60)
@@ -129,7 +135,7 @@ CSRF_COOKIE_NAME = env.get("csrf_cookie_name", "csrf_{0}".format(SESSION_COOKIE_
 # see https://docs.djangoproject.com/en/dev/ref/settings/#session-engine
 # https://docs.djangoproject.com/en/1.3/ref/settings/#std:setting-SESSION_FILE_PATH
 # in production we would suggest using memcached for your session engine
-SESSION_ENGINE = 'django.contrib.sessions.backends.file'
+SESSION_ENGINE = env.get("session_engine", 'django.contrib.sessions.backends.file')
 SESSION_FILE_PATH = WRITABLE_DIRECTORY
 
 # Testing settings
