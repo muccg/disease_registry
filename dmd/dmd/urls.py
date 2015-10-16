@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include
 from django.contrib import admin
 from django.shortcuts import render_to_response
+from django.conf import settings
 
 import registry.urls as common_urls
 from registry.common import views
@@ -14,6 +15,11 @@ urlpatterns = patterns('',
     (r'^iprestrict/', include('iprestrict.urls')),
     (r'^explorer/', include('explorer.urls')),
 )
+
+urlpatterns += patterns('',
+                        (r'^static/(?P<path>.*)$', 'django.views.static.serve',
+                        {'document_root': settings.STATIC_ROOT, 'show_indexes': True}))
+
 
 def handler404(request):
     return render_to_response("error/404.html")
