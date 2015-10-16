@@ -69,11 +69,13 @@ setup(name='django-smaregistry',
         'pyinotify==0.9.4',
         'uwsgi==2.0.8',
         'uwsgitop',
+        'ccg-django-utils==0.3.1',
     ],
     dependency_links = [
         'https://bitbucket.org/ccgmurdoch/ccg-django-extras/downloads/ccg-extras-0.1.9.tar.gz',
         'https://bitbucket.org/ccgmurdoch/ccg-django-extras/downloads/ccg-auth-0.3.3.tar.gz',
         'https://github.com/muccg/django-userlog/archive/2.0.0.tar.gz#egg=django-userlog-2.0.0',
-        'https://bitbucket.org/ccgmurdoch/ccg-django-extras/downloads/django-iprestrict-0.2.tar.gz'
+        'https://bitbucket.org/ccgmurdoch/ccg-django-extras/downloads/django-iprestrict-0.2.tar.gz',
+        'https://bitbucket.org/ccgmurdoch/ccg-django-utils/downloads/ccg-django-utils-0.3.1.tar.gz',
     ],
 )
