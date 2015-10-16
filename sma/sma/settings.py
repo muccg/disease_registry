@@ -104,10 +104,10 @@ ADMINS = [
 MANAGERS = ADMINS
 
 
-STATIC_ROOT = os.path.join(WEBAPP_ROOT, 'static')
+STATIC_ROOT = env.get('static_root', os.path.join(WEBAPP_ROOT, 'static'))
 STATIC_URL = '{0}/static/'.format(SCRIPT_NAME)
 
-MEDIA_ROOT = os.path.join(WEBAPP_ROOT, 'media')
+MEDIA_ROOT = env.get('media_root', os.path.join(WEBAPP_ROOT, 'static', 'media'))
 MEDIA_URL = '{0}/static/media/'.format(SCRIPT_NAME)
 
 # for local development, this is set to the static serving directory. For deployment use Apache Alias
