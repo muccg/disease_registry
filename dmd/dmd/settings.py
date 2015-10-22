@@ -124,7 +124,7 @@ os.path.exists(WRITABLE_DIRECTORY), "No writable directory, please create one: %
 
 # session and cookies
 SESSION_COOKIE_AGE = env.get("session_cookie_age", 60 * 60)
-SESSION_COOKIE_PATH = '{0}/'.format("SCRIPT_NAME")
+SESSION_COOKIE_PATH = '{0}/'.format(SCRIPT_NAME)
 SESSION_SAVE_EVERY_REQUEST = env.get("session_save_every_request", True)
 SESSION_COOKIE_HTTPONLY = env.get("session_cookie_httponly", True)
 SESSION_COOKIE_SECURE = env.get("session_cookie_secure", PRODUCTION)
